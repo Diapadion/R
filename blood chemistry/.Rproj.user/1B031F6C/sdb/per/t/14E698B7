@@ -1,0 +1,17 @@
+{
+    "contents" : "# fresh take on regressions, using 'fullcast', from make_data.R & uncompressed_make.R\n\n\n### NOTE / TODO - is this necessary or even working?\nfullcast$chimp <- as.factor(fullcast$chimp)\n\n\nattach(fullcast)\n\nmodel_t <- lmer(diastolic ~ ageDays + sex + BMI\n                  +chimp_Agr_CZ+chimp_Con_CZ+chimp_Dom_CZ+chimp_Ext_CZ+chimp_Neu_CZ+chimp_Opn_CZ\n                + (1 | chimp), data = fullcast\n                )\n\nmodel_t1 <- lmer(systolic ~ sex + BMI + (1 | chimp), data = fullcast)\n\nmodel_t2 <- lmer(systolic ~ chimp_Agr_CZ + chimp_Con_CZ + chimp_Dom_CZ + chimp_Ext_CZ\n                 + (1 | chimp) + (1 | ageDays), data = fullcast)\n\n\nmodel_t2 <- lmer(systolic ~ chimp_Agr_CZ + chimp_Con_CZ + chimp_Dom_CZ + chimp_Ext_CZ\n                 + (ageDays | chimp), data = fullcast)\n\n\nmodel_t3 <- lmer(systolic ~ sex + BMI\n                 + cholesterol \n                # + triglycerides + Glucose + wbc + monos + lymph\n               #  + chimp_Agr_CZ+chimp_Con_CZ+chimp_Dom_CZ+chimp_Ext_CZ+chimp_Neu_CZ+chimp_Opn_CZ                 \n               #  + (1 | chimp               \n               + (1 | triglycerides)\n              #   + (1+cholesterol+triglycerides+Glucose+wbc+monos+lymph | ageDays), data = fullcast\n              )\n\n\n\nmodel_t4 <- lm(cholesterol ~ sex + BMI\n                 +chimp_Agr_CZ+chimp_Con_CZ+chimp_Dom_CZ+chimp_Ext_CZ+chimp_Neu_CZ+chimp_Opn_CZ                 \n                # + (1 | chimp)\n               , na.action = na.omit\n               ) \n\n\n\nmodel_t5 <- lmer(\n  #cholesterol \n  #Glucose\n  #monos\n  wbc\n  #diastolic\n  ~ sex + BMI + DoB\n               +chimp_Agr_CZ+chimp_Con_CZ+chimp_Dom_CZ+chimp_Ext_CZ+chimp_Neu_CZ+chimp_Opn_CZ                 \n               + (1 | chimp)\n)\nAnova(model_t5)\n\n\n\n\nmodel_t6 <- lmer(\n  diastolic ~ sex + BMI + DoB\n  +chimp_Agr_CZ+chimp_Con_CZ+chimp_Dom_CZ+chimp_Ext_CZ+chimp_Neu_CZ+chimp_Opn_CZ\n  + (1 | chimp) \n  )\nsummary(model_t6)\n\n\n\n#model_t7 <- lm(Glucose ~ cholesterol + triglycerides, na.action = na.omit)\n\nmodel_t7 <- lmer(\n  Glucose ~ sex + BMI\n  +chimp_Agr_CZ+chimp_Con_CZ+chimp_Dom_CZ+chimp_Ext_CZ+chimp_Neu_CZ+chimp_Opn_CZ\n  + (1 | chimp) \n)\n\nsummary(model_t7)\n\n  \n  \n  \n\n\n\n\ndetach(fullcast)\n\n\n",
+    "created" : 1407424869124.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3110724278",
+    "id" : "14E698B7",
+    "lastKnownWriteTime" : 1407850548,
+    "path" : "C:/Users/s1229179/Dropbox/R/blood chemistry/Drew version/uncomp_models.R",
+    "project_path" : "Drew version/uncomp_models.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}

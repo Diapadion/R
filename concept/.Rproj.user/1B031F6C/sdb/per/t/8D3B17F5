@@ -1,0 +1,22 @@
+{
+    "contents" : "",
+    "created" : 1403096142132.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "8D3B17F5",
+    "lastKnownWriteTime" : 7741240722073845761,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "caption" : "coltRaw",
+        "contentUrl" : "content?title=coltRaw&file=767942f15325400689bd63977d90289f.htm",
+        "displayedObservations" : "1000",
+        "displayedVariables" : 46,
+        "totalObservations" : "3080",
+        "variables" : "46"
+    },
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}

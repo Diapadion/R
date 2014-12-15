@@ -1,0 +1,21 @@
+{
+    "contents" : "",
+    "created" : 1381847274242.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "87CC9881",
+    "lastKnownWriteTime" : 7741240723082584096,
+    "path" : null,
+    "properties" : {
+        "caption" : "adjlist",
+        "contentUrl" : "content?title=adjlist&file=943c9b2ee5634e319a06a4d51d88cbe4.htm",
+        "displayedObservations" : 48,
+        "displayedVariables" : 3,
+        "totalObservations" : 48,
+        "variables" : 3
+    },
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}

@@ -1,0 +1,246 @@
+warnings
+warnings()
+lowtrials
+hightrials
+medtrials
+source("/Users/drew/Documents/R/DataImport.R")
+source("/Users/drew/Documents/R/BinomBayes.R")
+hightrials
+source("/Users/drew/Documents/R/DataImport.R")
+hightrials
+lowtrials
+source("/Users/drew/Documents/R/DataImport.R")
+lowtrials
+hightrials
+allData
+allData[4]
+allData[7]
+allData[5]
+source("/Users/drew/Documents/R/DataImport.R")
+allData[7]
+hightrials
+l
+m
+n
+allData[7]
+allData[5]
+source("/Users/drew/Documents/R/scratch.R")
+ht
+hit
+allData
+source("/Users/drew/Documents/R/scratch.R")
+hit
+source("/Users/drew/Documents/R/scratch.R")
+hit
+allData[5,6]
+allData[7,6]
+allData[100,7]
+allData[100,5]
+allData[100,7]
+help(cbind)
+source("/Users/drew/Documents/R/scratch.R")
+hit
+hit[1]
+hit[1,1}
+hit[1,1]
+allData[50,5]
+hit = cbind(hit,allData[50,5])
+hit
+hit = cbind(hit,allData[50,5])
+hit
+allData[50,5]
+ins = 0
+hit = cbind(hit,ins)
+hit = cbind(hit,ins)hit
+hit
+hit = cbind(hit,0)
+hit
+hit = cbind(hit,1)
+hit
+hit = NULL
+source("/Users/drew/Documents/R/scratch.R")
+hit
+hit = cbind(hit,0)
+hit
+allData[50,5]
+source("/Users/drew/Documents/R/DataImport.R")
+hightrials
+source("/Users/drew/Documents/R/scratch.R")
+hit
+c(allData[1,5],allData[2,5])
+source("/Users/drew/Documents/R/DataImport.R")
+hightrials
+hightrials[1,1]
+hightrials[1,2]
+hightrials[1,3]
+hightrials[2,3]
+source("/Users/drew/Documents/R/DataImport.R")
+hightrials
+dim(hightrials)
+hightrials
+source("/Users/drew/Documents/R/DataImport.R")
+hightrials
+source("/Users/drew/Documents/R/DataImport.R")
+medtrials
+lowtrials
+hightrials
+source("/Users/drew/Documents/R/DataImport.R")
+lowtrials
+medtrials
+source("/Users/drew/Documents/R/BinomBayes.R")
+nHi
+source("/Users/drew/Documents/R/BinomBayes.R")
+warnings)
+warnings()
+source("/Users/drew/Documents/R/BinomBayes.R")
+bic2b
+chi2b3
+chi1_3
+bic3
+bic1
+source("/Users/drew/Documents/R/DataImport.R")
+source("/Users/drew/Documents/R/BinomBayes.R")
+chi2b3
+bic3
+bic2b
+bic2a
+bic2c
+source("/Users/drew/Documents/R/DataImport.R")
+source("/Users/drew/Documents/R/BinomBayes.R")
+chi2b3
+bic2b
+bic3
+source("/Users/drew/Documents/R/DataImport.R")
+source("/Users/drew/Documents/R/BinomBayes.R")
+chi2b3
+bic2b
+bic3
+help(write.table)
+source("/Users/drew/Documents/R/BinomBayes.R")
+["chi","chi"]
+(chi)
+("chi)")
+("chi")
+("chi","chi")
+source("/Users/drew/Documents/R/BinomBayes.R")
+out
+source("/Users/drew/Documents/R/BinomBayes.R")
+out
+1
+chi
+source("/Users/drew/Documents/R/BinomBayes.R")
+out
+source("/Users/drew/Documents/R/BinomBayes.R")
+out
+source("/Users/drew/Documents/R/BinomBayes.R")
+out
+write.table(out, file="lash1pro.txt")
+source("/Users/drew/Documents/R/DataImport.R")
+source("/Users/drew/Documents/R/BinomBayes.R")
+write.table(out, file="ebbi1pro.txt")
+source("/Users/drew/Documents/R/DataImport.R")
+source("/Users/drew/Documents/R/BinomBayes.R")
+write.table(out, file="lash1retro(last10d).txt")
+source("/Users/drew/Documents/R/DataImport.R")
+source("/Users/drew/Documents/R/BinomBayes.R")
+write.table(out, file="lash1retro(last10d).txt")
+source("/Users/drew/Documents/R/DataImport.R")
+source("/Users/drew/Documents/R/BinomBayes.R")
+write.table(out, file="lash1retro(first10d).txt")
+source("/Users/drew/Documents/R/DataImport.R")
+source("/Users/drew/Documents/R/BinomBayes.R")
+write.table(out, file="ebbi1retro(final).txt")
+source("/Users/drew/Documents/R/DataImport.R")
+source("/Users/drew/Documents/R/BinomBayes.R")
+write.table(out, file="ebbi2pro.txt")
+source("/Users/drew/Documents/R/DataImport.R")
+source("/Users/drew/Documents/R/BinomBayes.R")
+write.table(out, file="ebbi2pro.txt")
+source("/Users/drew/Documents/R/DataImport.R")
+source("/Users/drew/Documents/R/BinomBayes.R")
+write.table(out, file="ebbi1pro(first10d).txt")
+source("/Users/drew/Documents/R/DataImport.R")
+source("/Users/drew/Documents/R/BinomBayes.R")
+write.table(out, file="lash1pro(first10d).txt")
+source("/Users/drew/Documents/R/DataImport.R")
+source("/Users/drew/Documents/R/BinomBayes.R")
+write.table(out, file="ebbi1pro(first10d).txt")
+exit
+quit
+source("/Users/drew/Documents/R/DataImport.R")
+source("/Users/drew/Documents/R/BinomBayes.R")
+write.table(out, file="Lash5dayTrain(test).txt")
+source("/Users/drew/Documents/R/DataImport.R")
+source("/Users/drew/Documents/R/BinomBayes.R")
+source("/Users/drew/Documents/R/DataImport.R")
+source("/Users/drew/Documents/R/BinomBayes.R")
+write.table(out, file="Lash5+dayTrain(test).txt")
+source("/Users/drew/Documents/R/DataImport.R")
+write.table(out, file="Lash5+dayTrain(test).txt")
+source("/Users/drew/Documents/R/BinomBayes.R")
+write.table(out, file="Lash5+dayTrain(test).txt")
+source("/Users/drew/Documents/R/DataImport.R")
+source("/Users/drew/Documents/R/BinomBayes.R")
+write.table(out, file="Lash7dayTrain(test).txt")
+source("/Users/drew/Documents/R/DataImport.R")
+source("/Users/drew/Documents/R/BinomBayes.R")
+write.table(out, file="lash1retro(first10d).txt)
+""
+''
+q
+thosuheuot
+cugcreou 8292879
+248732
+)
+stop
+stop()
+help()
+null
+uoe
+system(clear)
+source("/Users/drew/Documents/R/DataImport.R")
+source("/Users/drew/Documents/R/BinomBayes.R")
+write.table(out, file="lash1retro(first10d).txt")
+source("/Users/drew/Documents/R/DataImport.R")
+source("/Users/drew/Documents/R/BinomBayes.R")
+write.table(out, file="lash10daysMetaPrev-0.txt")
+medtrials(0)
+medtrials[0]
+medtrials[1]
+source("/Users/drew/Documents/R/DataImport.R")
+source("/Users/drew/Documents/R/BinomBayes.R")
+help(binconf)
+help()
+source("/Users/drew/Documents/R/BinomBayes.R")
+succL
+succL[1]
+succM
+succM[1]
+hightrials
+hightrials[10]
+source("/Users/drew/Documents/R/BinomBayes.R")
+warnings()
+hconf
+hConf
+hightrials
+succH
+totHi
+source("/Users/drew/Documents/R/BinomBayes.R")
+lconf
+lConf
+mConf
+hConf
+source("/Users/drew/Documents/R/DataImport.R")
+source("/Users/drew/Documents/R/BinomBayes.R")
+write.table(out, file="lash1pro(all).txt")
+write.table(out, file="lash1pro(first10d).txt")
+source("/Users/drew/Documents/R/DataImport.R")
+source("/Users/drew/Documents/R/BinomBayes.R")
+write.table(out, file="ebbi1pro(first10d).txt")
+source("/Users/drew/Documents/R/DataImport.R")
+source("/Users/drew/Documents/R/BinomBayes.R")
+write.table(out, file="ebbi1retro(final).txt")
+source("/Users/drew/Documents/R/DataImport.R")
+source("/Users/drew/Documents/R/BinomBayes.R")
+write.table(out, file="ebbi2pro.txt")
+source("/Users/drew/Dropbox/R/Personality/excelRead.R")

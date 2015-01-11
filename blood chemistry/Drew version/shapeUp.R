@@ -102,13 +102,33 @@ BMI = dmdob$BMI
 # use "bchem"
 trig <- cbind(dmdob$triglicerides,dmdob$triglicerides.1,dmdob$triglicerides.2,dmdob$triglicerides.3)
 chol <- cbind(dmdob$cholesterol,dmdob$cholesterol.1,dmdob$cholesterol.2,dmdob$cholesterol.3)
-
 glucose <- cbind(dmdob$Glucose,dmdob$Glucose.1,dmdob$Glucose.2,dmdob$Glucose.3)
 
 # use "bcell"
 mono <- cbind(dmdob$monos,dmdob$mono2,dmdob$mono3)
 lymph <- cbind(dmdob$lymph,dmdob$lymp2,dmdob$lymp3)
 wbc <- cbind(dmdob$wbc,dmdob$wbc2,dmdob$wbc3)
+
+# more (added 01/09/15)
+protein <- cbind(dmdob$Protein,dmdob$Protein.1,dmdob$Protein.2,dmdob$Protein.3)
+albumin <- cbind(dmdob$Albumn,dmdob$Albumn.1,dmdob$Albumn.2,dmdob$Albumn.3)
+calcium <- cbind(dmdob$calcium,dmdob$calcium.1,dmdob$calcium.2,dmdob$calcium.3)
+phos <- cbind(dmdob$phosphate,dmdob$phosphate.1,dmdob$phosphate.2,dmdob$phosphate.3)
+sodium <- cbind(dmdob$sodium,dmdob$sodium.1,dmdob$sodium.2,dmdob$sodium.3)
+potas <- cbind(dmdob$potassium,dmdob$potassium.1,dmdob$potassium.2,dmdob$potassium.3)
+chlor <- cbind(dmdob$chloride,dmdob$chloride.1,dmdob$chloride.2,dmdob$chloride.3)
+globulin <- cbind(dmdob$globulin,dmdob$globulin.1,dmdob$globulin.2,dmdob$globulin.3)
+GGT <- cbind(dmdob$ggtp,dmdob$ggtp.1,dmdob$ggtp.2,dmdob$ggtp.3)
+osmolality <- cbind(dmdob$osmolal,dmdob$osmolal.1,dmdob$osmolal.2,dmdob$osmolal.3)
+ALP <- cbind(dmdob$alkphos,dmdob$alkphos.1,dmdob$alkphos.2,dmdob$alkphos.3)
+creatinine <- cbind(dmdob$Creatine,dmdob$Creatin.1,dmdob$Creatin.2,dmdob$Creatin.3)
+BUN <- cbind(dmdob$BUN,dmdob$BUN.1,dmdob$BUN.2,dmdob$BUN.3)
+#A/G ratio?
+hct <- cbind(dmdob$hct,dmdob$hct2,dmdob$hct3)
+hgb <- cbind(dmdob$hgb,dmdob$hgb2,dmdob$hgb3)
+eos <- cbind(dmdob$eos,dmdob$eos2,dmdob$eos3)
+rbc <- cbind(dmdob$rbc,dmdob$rbc2,dmdob$rbc3)
+
 
 
 #as.Date(as.character(dmdob$DOB.x[10]),format = "%m/%d/%y")
@@ -200,28 +220,48 @@ diastolic <- cbind(diastolic.1,diastolic.2,diastolic.3)
 
 # putting it all together
 
-mmdat <- data.frame(dmdob$chimp,sex,BMI,DoB,(as.Date("2014-04-15")-DoB), # to get current age
+age <- as.Date("2014-04-15")-DoB
+
+mmdat <- data.frame(dmdob$chimp,sex,BMI,DoB,age, # to get current age
                     compare_data$chimp_Dom_CZ,compare_data$chimp_Ext_CZ,compare_data$chimp_Con_CZ,
                     compare_data$chimp_Agr_CZ,compare_data$chimp_Neu_CZ,compare_data$chimp_Opn_CZ,
                     trig[,1], chol[,1], glucose[,1],
                     mono[,1],lymph[,1],wbc[,1],
+                    protein[,1],albumin[,1],calcium[,1],phos[,1],sodium[,1],potas[,1],
+                    chlor[,1],globulin[,1],GGT[,1],osmolality[,1],ALP[,1],creatinine[,1],
+                    BUN[,1],rbc[,1],hct[,1],hgb[,1],eos[,1],systolic[,1],diastolic[,1],
                     trig[,2], chol[,2], glucose[,2],
                     mono[,2],lymph[,2],wbc[,2],
+                    protein[,2],albumin[,2],calcium[,2],phos[,2],sodium[,2],potas[,2],
+                    chlor[,2],globulin[,2],GGT[,2],osmolality[,2],ALP[,2],creatinine[,2],
+                    BUN[,2],rbc[,2],hct[,2],hgb[,2],eos[,2],systolic[,2],diastolic[,2],
                     trig[,3], chol[,3], glucose[,3],
                     mono[,3],lymph[,3],wbc[,3],
+                    protein[,3],albumin[,3],calcium[,3],phos[,3],sodium[,3],potas[,3],
+                    chlor[,3],globulin[,3],GGT[,3],osmolality[,3],ALP[,3],creatinine[,3],
+                    BUN[,3],rbc[,3],hct[,3],hgb[,3],eos[,3],systolic[,3],diastolic[,3]
                     #trig[,4], chol[,4], glucose[,4],
                            
-                    
-                    apply(systolic,1,mean,na.rm=TRUE),
-                    apply(diastolic,1,mean,na.rm=TRUE)
+                    #apply(systolic,1,mean,na.rm=TRUE),apply(diastolic,1,mean,na.rm=TRUE)
                     )
 
 colnames(mmdat) <- c('chimp','sex','BMI','DoB','age','dom','ext','con','agr','neu','opn',
                      'trig.1','chol.1','glucose.1','mono.1','lymph.1','wbc.1',
+                     'protein.1','albumin.1','calcium,1','phos.1','sodium.1','potas.1',
+                     'chlor.1','globulin.1','GGT.1','osmolality.1','ALP.1','creatinine.1',
+                     'BUN.1','rbc.1','hct.1','hgb.1','eos.1','sys.1','dias.1',
                      'trig.2','chol.2','glucose.2','mono.2','lymph.2','wbc.2',
+                     'protein.2','albumin.2','calcium,2','phos.2','sodium.2','potas.2',
+                     'chlor.2','globulin.2','GGT.2','osmolality.2','ALP.2','creatinine.2',
+                     'BUN.2','rbc.2','hct.2','hgb.2','eos.2','sys.2','dias.2',
                      'trig.3','chol.3','glucose.3','mono.3','lymph.3','wbc.3',
+                     'protein.3','albumin.3','calcium,3','phos.3','sodium.3','potas.3',
+                     'chlor.3','globulin.3','GGT.3','osmolality.3','ALP.3','creatinine.3',
+                     'BUN.3','rbc.3','hct.3','hgb.3','eos.3','sys.3','dias.3'
+                     
                      #'trig.4','chol.4','glucose.4',                   
-                     'sys','dias')
+                     #'sys','dias'
+                     )
 
 meandat <- data.frame(dmdob$chimp,dmdob$sex,dmdob$BMI,DoB,(as.Date("2014-04-15")-DoB), # to get current age
                     compare_data$chimp_Dom_CZ,compare_data$chimp_Ext_CZ,compare_data$chimp_Con_CZ,
@@ -247,11 +287,18 @@ detach(fulldata)
 output <- reshape(mmdat, 
                   idvar = "chimp",
                   #idvar=c(colnames(mmdat)[1:11],'sys','dias'), 
-                  varying=colnames(mmdat)[12:29], 
-                  v.names=c("trig","chol","glucose","wbc","mono","lymph"),
+                  varying=colnames(mmdat)[12:86], 
+                  v.names=c("trig","chol","glucose","wbc","mono","lymph","protein","albumin","calcium","phos","sodium","potas",
+                            "chlor","globulin","GGT","osmolality","ALP","creatinine","BUN","rbc","hct","hgb","eos","sys","dias"
+                  ),
                   #sep=".",
                   direction="long")
-attach(output)
+# now scale and center it
+scoutput <- cbind(output[,1:2],scale(output[,3]),output[4:12],scale(output[,13:37]))
+colnames(scoutput)[3] <- 'BMI'
+
+
+attach(scoutput)
 # model1 <- lmer(sys ~ chimp + time + sex + BMI + age + dom + ext + con + agr + neu + opn +
 #      #(time | trig) + 
 #      (time | chol) + (time | glucose) + (time | wbc) + (time | mono) + (time | lymph),
@@ -259,7 +306,7 @@ attach(output)
 #      control = lmerControl(check.nobs.vs.nRE = "warning"))
 
 #
-sex=output$sex 
+# sex=output$sex 
 #
 
 model2 <- lmer (dias ~ age + time + (1 | chimp), data = output)
@@ -338,7 +385,7 @@ model_aa <- lmer(sys ~ age + sex + BMI + dom + ext + agr + neu + opn + con + (1 
 
 #longmmdat <- reshape(meltedat, idvar = colnames(meltedat)[1:13], direction = 'wide',varying = 14 )
 
-detach(output)
+detach(scoutput)
 
 #attach(meandat)
 
@@ -359,7 +406,7 @@ model_d <- lmer(glucose ~ dom + ext + neu + con + opn + agr + age + BMI + sex + 
 
 model_e <- lmer(lymph ~ dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | chimp), data = output)
 
-model_fu <- lmer(trig ~ dom + ext + neu + con + opn + agr + age + BMI + (1 | sex), data = meandat)
+model_fu <- lmer(trig ~ dom + ext + neu + con + opn + agr + age + BMI + (1 | sex) + (1 | chimp), data = output)
 summary(model_fu)
 confint(model_fu)
 # pay close attention to what is going on in the above models
@@ -371,4 +418,83 @@ confint(model_fu)
 
 
 #detach(meandat)
+
+detach(scoutput)
+
+#######
+# 01/09/15 - fresh models for The Burn presentation
+
+# BP: according to FHS 1971, sys is generally a better predictor of heart disease
+
+
+# sys is a better predictor here... wonder why (see below)
+m_1 <- lmer(sys ~ dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | chimp), 
+                                   data = scoutput)
+
+m_2a <- lmer(chol ~ dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | chimp), 
+            data = scoutput)
+
+m_2b <- lmer(trig ~ dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | chimp), 
+            data = scoutput)
+
+m_2c <- lmer(glucose ~ dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | chimp), 
+            data = scoutput)
+
+m_2d <- lmer(wbc ~ dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | chimp), 
+                            data = scoutput)
+
+# hematology - no effect from blood factors
+m_2e <- lmer(lymph ~ dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | chimp), 
+            data = scoutput)
+
+m_2f <- lmer(mono ~ dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | chimp), 
+            data = scoutput)
+
+m_2g <- lmer(eos ~ dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | chimp), 
+             data = scoutput)
+
+m2h <- lmer(hgb ~ dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | chimp), 
+            data = scoutput)
+
+m2i <- lmer(hct ~ dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | chimp), 
+            data = scoutput)
+
+m2j <- lmer(rbc ~ dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | chimp), 
+                 data = scoutput)
+
+# ions
+m2k <- lmer(potas ~ dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | chimp), 
+            data = scoutput)
+
+m2l <- lmer(calcium ~ dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | chimp), 
+            data = scoutput)
+
+m2m <- lmer(chlor ~ dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | chimp), 
+            data = scoutput)
+
+m2n <- lmer(sodium ~ dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | chimp), 
+            data = scoutput)
+
+m2o <- lmer(osmolality ~ dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | chimp), 
+            data = scoutput)
+
+m2p <- lmer(phos ~ dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | chimp), 
+            data = scoutput)
+
+
+
+# dias works better here... sort of/not really (after scaling)
+m_3dias <- lmer(dias ~ trig + chol + wbc + lymph + mono + glucose + 
+              BUN + protein + albumin + calcium + phos + sodium + potas + chlor + globulin + GGT + osmolality +
+              ALP + creatinine + rbc + hct + hgb + eos +
+              age + sex + BMI + (1 | chimp), 
+                data = scoutput)
+
+m_3sys <- lmer(sys ~ trig + chol + wbc + lymph + mono + glucose + 
+                  #BUN + protein + albumin + calcium + phos + sodium + potas + chlor + globulin + GGT + osmolality +
+                  #ALP + creatinine + rbc + hct + hgb + eos +
+                  age + sex + BMI + (1 | chimp), 
+                data = scoutput)
+
+m_3a <- lmer(sys ~ trig + age + sex + BMI + (1 | chimp), data = scoutput) 
 

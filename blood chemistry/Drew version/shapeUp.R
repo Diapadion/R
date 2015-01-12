@@ -427,23 +427,73 @@ detach(scoutput)
 # BP: according to FHS 1971, sys is generally a better predictor of heart disease
 
 
-# sys is a better predictor here... wonder why (see below)
+# sys is a better predictor here (there's nothing to see with dias)... wonder why (see below)
 m_1 <- lmer(sys ~ dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | chimp), 
                                    data = scoutput)
+# opn: 0.48 (+), agr: 0.001 (-)
+vif.mer(m_1)
+
+# interactions?
+m1a <- lmer(sys ~ dom + ext + neu + con + agr:opn + age + BMI + sex + (1 | chimp), 
+            data = scoutput)
+# ... no, none here
+
+# but wait, what about the direct effects on BMI?
+m_1z <- lmer(BMI ~ dom + ext + neu + con + opn + agr + age +  sex + (1 | chimp), 
+             data = scoutput)
+
+relgrad <- with(m_1a@optinfo$derivs,solve(Hessian,gradient))
+max(abs(relgrad))
+# Nope.
 
 m_2a <- lmer(chol ~ dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | chimp), 
             data = scoutput)
+# dom: 0.00866 (-), ext: 0.022 (+), agr: 0.007 (-)
+# cholesterol is diet influenced, but other factors are more important
+# again, interactions?
+m2a1 <- lmer(chol ~ + dom:agr + dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | chimp), 
+             data = scoutput)
+summary(m2a1)
+AIC(m_2a,m2a1)
+vif.mer(m_2a)
+vif.mer(m2a1)
 
 m_2b <- lmer(trig ~ dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | chimp), 
-            data = scoutput)
+            data = scoutput) # there's nothing here...
+# triglycerides indicate immediate diet
 
 m_2c <- lmer(glucose ~ dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | chimp), 
             data = scoutput)
+# neu: 0.0045 (-), con: 0.011 (+)
+
+# ... some model fit tests
+m2c1 <- lmer(glucose ~ dom + ext + neu + 
+                       opn + agr + age + BMI + sex + (1 | chimp), 
+                     data = scoutput)
+m2c2 <- lmer(glucose ~ dom + ext + con + 
+                       opn + agr + age + BMI + sex + (1 | chimp), 
+                     data = scoutput)
+AIC(m_2c,m2c1,m2c2)
+# first model is a better fir than both... so there's something legit here
+m2c3 <- lmer(glucose ~ dom + ext + con:neu + 
+                           opn + agr + age + BMI + sex + (1 | chimp), 
+                         data = scoutput)
+AIC(m2c3)
+
+# residuals and vif
+# resid(m_2c) # probably not needed with vif's
+# vif requires mer-utils.R
+vif.mer(m_2c)
+vif.mer(m2c1)
+vif.mer(m2c2)
+vif.mer(m2c3)
+
+
+# hematology - no effect from blood factors
 
 m_2d <- lmer(wbc ~ dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | chimp), 
                             data = scoutput)
 
-# hematology - no effect from blood factors
 m_2e <- lmer(lymph ~ dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | chimp), 
             data = scoutput)
 
@@ -481,6 +531,30 @@ m2o <- lmer(osmolality ~ dom + ext + neu + con + opn + agr + age + BMI + sex + (
 m2p <- lmer(phos ~ dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | chimp), 
             data = scoutput)
 
+#proteins
+m2q <- lmer(protein ~ dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | chimp), 
+            data = scoutput)
+
+m2r <- lmer(BUN ~ dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | chimp), 
+            data = scoutput)
+
+m2s <- lmer(albumin ~ dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | chimp), 
+            data = scoutput)
+
+m2t <- lmer(GGT ~ dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | chimp), 
+            data = scoutput)
+
+m2u <- lmer(creatinine ~ dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | chimp), 
+            data = scoutput)
+
+m2v <- lmer(globulin ~ dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | chimp), 
+            data = scoutput)
+
+m2w <- lmer(ALP ~ dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | chimp), 
+            data = scoutput)
+
+
+
 
 
 # dias works better here... sort of/not really (after scaling)
@@ -496,5 +570,12 @@ m_3sys <- lmer(sys ~ trig + chol + wbc + lymph + mono + glucose +
                   age + sex + BMI + (1 | chimp), 
                 data = scoutput)
 
-m_3a <- lmer(sys ~ trig + age + sex + BMI + (1 | chimp), data = scoutput) 
+m_3a <- lmer(sys ~ chol + trig + glucose + age + sex + BMI + (1 | chimp), data = scoutput) 
 
+
+# reverse BP biomarker
+m_4a <- lmer(glucose ~ sys + BMI + age + sex + (1|chimp),
+                              data = scoutput)
+
+# useful correlation checks
+cor(output$neu,output$dom, use='complete')

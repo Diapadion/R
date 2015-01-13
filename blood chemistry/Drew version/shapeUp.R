@@ -220,7 +220,7 @@ diastolic <- cbind(diastolic.1,diastolic.2,diastolic.3)
 
 # putting it all together
 
-age <- as.Date("2014-04-15")-DoB
+age <- as.numeric(as.Date("2014-04-15")-DoB)
 
 mmdat <- data.frame(dmdob$chimp,sex,BMI,DoB,age, # to get current age
                     compare_data$chimp_Dom_CZ,compare_data$chimp_Ext_CZ,compare_data$chimp_Con_CZ,
@@ -239,9 +239,10 @@ mmdat <- data.frame(dmdob$chimp,sex,BMI,DoB,age, # to get current age
                     mono[,3],lymph[,3],wbc[,3],
                     protein[,3],albumin[,3],calcium[,3],phos[,3],sodium[,3],potas[,3],
                     chlor[,3],globulin[,3],GGT[,3],osmolality[,3],ALP[,3],creatinine[,3],
-                    BUN[,3],rbc[,3],hct[,3],hgb[,3],eos[,3],systolic[,3],diastolic[,3]
+                    BUN[,3],rbc[,3],hct[,3],hgb[,3],eos[,3],systolic[,3],diastolic[,3],
                     #trig[,4], chol[,4], glucose[,4],
-                           
+                    dmdob$depr.z
+                    
                     #apply(systolic,1,mean,na.rm=TRUE),apply(diastolic,1,mean,na.rm=TRUE)
                     )
 
@@ -257,8 +258,8 @@ colnames(mmdat) <- c('chimp','sex','BMI','DoB','age','dom','ext','con','agr','ne
                      'trig.3','chol.3','glucose.3','mono.3','lymph.3','wbc.3',
                      'protein.3','albumin.3','calcium,3','phos.3','sodium.3','potas.3',
                      'chlor.3','globulin.3','GGT.3','osmolality.3','ALP.3','creatinine.3',
-                     'BUN.3','rbc.3','hct.3','hgb.3','eos.3','sys.3','dias.3'
-                     
+                     'BUN.3','rbc.3','hct.3','hgb.3','eos.3','sys.3','dias.3',
+                     'depressed'
                      #'trig.4','chol.4','glucose.4',                   
                      #'sys','dias'
                      )
@@ -438,6 +439,9 @@ m1a <- lmer(sys ~ dom + ext + neu + con + agr:opn + age + BMI + sex + (1 | chimp
             data = scoutput)
 # ... no, none here
 
+m1d <- lmer(sys ~ depressed + dom + neu + con + opn + agr + age + BMI + sex + (1 | chimp), 
+             data = scoutput)
+
 # but wait, what about the direct effects on BMI?
 m_1z <- lmer(BMI ~ dom + ext + neu + con + opn + agr + age +  sex + (1 | chimp), 
              data = scoutput)
@@ -451,8 +455,13 @@ m_2a <- lmer(chol ~ dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | c
 # dom: 0.00866 (-), ext: 0.022 (+), agr: 0.007 (-)
 # cholesterol is diet influenced, but other factors are more important
 # again, interactions?
-m2a1 <- lmer(chol ~ + dom:agr + dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | chimp), 
+m2a1 <- lmer(chol ~ dom:agr + dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | chimp), 
              data = scoutput)
+#Nope.
+m2a2 <- lmer(chol ~ depressed + dom + neu + con + opn + agr + age + BMI + sex + (1 | chimp), 
+             data = scoutput)
+
+
 summary(m2a1)
 AIC(m_2a,m2a1)
 vif.mer(m_2a)
@@ -462,11 +471,16 @@ m_2b <- lmer(trig ~ dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | c
             data = scoutput) # there's nothing here...
 # triglycerides indicate immediate diet
 
+
 m_2c <- lmer(glucose ~ dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | chimp), 
             data = scoutput)
 # neu: 0.0045 (-), con: 0.011 (+)
 
 # ... some model fit tests
+m2c0 <- lmer(glucose ~ dom + ext + con:neu + con + neu +
+                opn + agr + age + BMI + sex + (1 | chimp), 
+              data = scoutput)
+
 m2c1 <- lmer(glucose ~ dom + ext + neu + 
                        opn + agr + age + BMI + sex + (1 | chimp), 
                      data = scoutput)
@@ -478,7 +492,7 @@ AIC(m_2c,m2c1,m2c2)
 m2c3 <- lmer(glucose ~ dom + ext + con:neu + 
                            opn + agr + age + BMI + sex + (1 | chimp), 
                          data = scoutput)
-AIC(m2c3)
+AIC(m_2c,m2c1,m2c2,m2c3)
 
 # residuals and vif
 # resid(m_2c) # probably not needed with vif's
@@ -487,6 +501,15 @@ vif.mer(m_2c)
 vif.mer(m2c1)
 vif.mer(m2c2)
 vif.mer(m2c3)
+
+m2c4 <- lmer(glucose ~ depressed + dom + ext + neu:con + opn + agr + age + BMI + sex + (1 | chimp), 
+              data = scoutput)
+
+AIC(m2c3,m2c4)
+vif.mer(m2c4)
+
+m2c5 <- lmer(glucose ~ depressed + dom + neu:con + opn + agr + age + BMI + sex + (1 | chimp), 
+             data = scoutput)
 
 
 # hematology - no effect from blood factors

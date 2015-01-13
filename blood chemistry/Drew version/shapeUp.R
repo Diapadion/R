@@ -601,4 +601,11 @@ m_4a <- lmer(glucose ~ sys + BMI + age + sex + (1|chimp),
                               data = scoutput)
 
 # useful correlation checks
-cor(output$neu,output$dom, use='complete')
+cor(output$con,output$neu, use='complete')
+cor(output$chol,output$glucose, use='complete')
+
+
+# scatterplot3d(output$con, output$neu, output$glucose)
+
+plot(effect(term="con:neu",mod=m2c3,multiline = TRUE))
+          

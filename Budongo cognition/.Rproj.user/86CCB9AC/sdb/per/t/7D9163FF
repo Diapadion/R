@@ -1,0 +1,22 @@
+{
+    "contents" : "",
+    "created" : 1421690303117.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "7D9163FF",
+    "lastKnownWriteTime" : 7741240722073845761,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "caption" : "EDdata",
+        "contentUrl" : "content?title=EDdata&file=10e3d1eadc004c71930db9d464d772b9.htm",
+        "displayedObservations" : 114,
+        "displayedVariables" : 14,
+        "totalObservations" : 114,
+        "variables" : 13
+    },
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}

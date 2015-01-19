@@ -1,0 +1,17 @@
+{
+    "contents" : "# script for importing excel files\n\n\n\nsetwd('Z:/chimp cognitive data/raw/')\n\ntemp = list.files(pattern=\"*.csv\")\n\n# Emma\nEMlist = grep('em',temp,ignore.case=TRUE)\n\nEMdata = read.csv(temp[EMlist[1]], header=TRUE)\nEMlist = EMlist[-1]\nfor (i in 1:length(EMlist)){\n  EMdata <- rbind(EMdata,read.csv(temp[EMlist[i]]), header=FALSE) \n}\nEMattempt <- subset(EMdata, EMdata[ , 1] < 1)\nEMdata <- subset(EMdata, EMdata[ , 1] > 0)\n\n# Edith\nEDlist = grep('ed',temp,ignore.case=TRUE)\n\nEDdata = read.csv(temp[EDlist[1]], header=TRUE)\nEDlist = EDlist[-1]\nfor (i in 1:length(EDlist)){\n  EDdata <- rbind(EDdata,read.csv(temp[EDlist[i]]), header=FALSE) \n}\nEDattempt <- subset(EDdata, EDdata[ , 1] < 1)\nEDdata <- subset(EDdata, EDdata[ , 1] > 0)\n\n\n\n\nfor (i in 1:length(temp)) assign(temp[i], read.csv(temp[i]))\n\nobjects()\n\n\n\n\n\n\n\n\n# Misc BS\n\n#11/14/2014, 9:37:01 AM GMT+0:00\n\n#1415957821.25373+549.6891090869904+26.198975086212158\n#1415958397.14\n#1415958397.141814173203\n#11/14/2014, 9:46:37 AM GMT+0:00",
+    "created" : 1421679371147.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1999594895",
+    "id" : "CC93EB17",
+    "lastKnownWriteTime" : 1421690189,
+    "path" : "C:/Users/s1229179/git-repos/R/Budongo cognition/fileLoader.R",
+    "project_path" : "fileLoader.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}

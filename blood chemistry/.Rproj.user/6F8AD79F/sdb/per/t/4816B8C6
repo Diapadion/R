@@ -1,0 +1,22 @@
+{
+    "contents" : "",
+    "created" : 1421881915479.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "4816B8C6",
+    "lastKnownWriteTime" : 1,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "caption" : "mmdat",
+        "contentUrl" : "content?title=mmdat&file=144be0fafbd04d85ac9a465dd510f6a9.htm",
+        "displayedObservations" : 175,
+        "displayedVariables" : 90,
+        "totalObservations" : 175,
+        "variables" : 90
+    },
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}

@@ -33,5 +33,9 @@ princomp(na.omit(faggad),scores=TRUE)
 fa(na.omit(faggad),nfactors = 7,rotate='oblimin')
 fa(na.omit(faggad),nfactors = 5,rotate='oblimin')
 
-principal(na.omit(faggad),nfactors = 7,rotate='varimax')
+principal(na.omit(faggad),nfactors = 7,rotate='varimax') #check out RC4
   
+
+#############################3
+
+scree(na.omit(scoutputd))

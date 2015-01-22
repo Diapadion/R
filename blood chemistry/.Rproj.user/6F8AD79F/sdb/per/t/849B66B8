@@ -1,0 +1,16 @@
+{
+    "contents" : "# start with a factor analysis\n# using 'aggador'\nlibrary(psych)\n\n#some sex bs that needs fixing\naggador$Group.1[is.nan(aggador[,52])]\nwhich(is.nan(aggador[,52]) %in% 'TRUE')\naggador$sex[c(15,156,157)]=0\naggador$sex[c(90,107,132,134)]=1\n\n#head(aggador[,-1:-3])\n\nfaggad <- sapply(aggador[c(-1,-2,-3             # subject name, DoB, etc\n                           ,-39:-44             # physical characteristics stuff\n                           ,-45,-46,-47         # add. height measures & BP\n                           ,-48                 # weight\n                           ,-49:-51             # group size, MomAge, etc\n                           ,-53:-95\n                           )],as.numeric)\n\n\n\nfaggad[is.nan(faggad)] = NA\n\nscree(na.omit(faggad))\nparan(na.omit(faggad))\nvss(na.omit(faggad))\n\n\n#princomp(faggad, na.action = 'na.omit')\nprincomp(na.omit(faggad),scores=TRUE)\n\nfa(na.omit(faggad),nfactors = 7,rotate='oblimin')\nfa(na.omit(faggad),nfactors = 5,rotate='oblimin')\n\nprincipal(na.omit(faggad),nfactors = 7,rotate='varimax') #check out RC4\n  \n\n#############################3\n\nscree(na.omit(scoutputd))\n",
+    "created" : 1421882482477.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2612851316",
+    "id" : "849B66B8",
+    "lastKnownWriteTime" : 1421882771,
+    "path" : "~/GitHub/R/blood chemistry/Drew version/path_analysis.R",
+    "project_path" : "Drew version/path_analysis.R",
+    "properties" : {
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}

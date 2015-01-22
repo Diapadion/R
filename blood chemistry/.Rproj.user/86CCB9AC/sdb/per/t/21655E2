@@ -1,0 +1,17 @@
+{
+    "contents" : "# power analysis of MMs\n\nlibrary(longpower)\n\nsummary(m_1)\n\nlmmpower(m_1, sig.level = 0.01, pct.change = -0.4067, n = 3)\n",
+    "created" : 1421233087118.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "907564241",
+    "id" : "21655E2",
+    "lastKnownWriteTime" : 1421325134,
+    "path" : "C:/Users/s1229179/git-repos/R/blood chemistry/MMpowers.R",
+    "project_path" : "MMpowers.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}

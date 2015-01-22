@@ -1,0 +1,22 @@
+{
+    "contents" : "",
+    "created" : 1421689882020.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "5CE944EE",
+    "lastKnownWriteTime" : 7741240722073845761,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "caption" : "EMattempt",
+        "contentUrl" : "content?title=EMattempt&file=9c2a4b5a5825438989a51633be8416ba.htm",
+        "displayedObservations" : 34,
+        "displayedVariables" : 14,
+        "totalObservations" : 34,
+        "variables" : 13
+    },
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}

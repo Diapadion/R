@@ -1,0 +1,22 @@
+{
+    "contents" : "",
+    "created" : 1423156166441.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "F8C384E5",
+    "lastKnownWriteTime" : 7741240722073845761,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "caption" : "cz_bin_pers",
+        "contentUrl" : "content?title=cz_bin_pers&file=804791055964483cb91a7f5b7f23dbef.htm",
+        "displayedObservations" : 1000,
+        "displayedVariables" : 21,
+        "totalObservations" : 1864,
+        "variables" : 20
+    },
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}

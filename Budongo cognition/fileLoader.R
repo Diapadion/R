@@ -1,5 +1,7 @@
 # script for importing excel files
 
+library(Rcpp)
+library(plyr)
 
 rbind.all.columns <- function(x, y) {
   
@@ -15,9 +17,25 @@ rbind.all.columns <- function(x, y) {
                ))
 }
 
+### 
+# personality
+###
 
+
+
+
+
+###
+# cognition
+###
+
+setwd('C:/Users/s1229179/git-repos/R/Budongo cognition/')
+pers <- read.csv('EDIpersonality.csv',header=TRUE)
 
 setwd('Z:/chimp cognitive data/raw/')
+
+
+
 
 temp = list.files(pattern="*.csv")
 
@@ -168,27 +186,32 @@ PAdata <- subset(PAdata, PAdata[ , 1] > 0)
 # Qafzeh
 Qlist = grep('Q',temp,ignore.case=TRUE)
 #needs to be done semi-manually
-Qdata = read.csv(temp[Qlist[1]], header=TRUE)
-Qlist = Qlist[-1]
-Qdata = rbind(Qdata,read.csv(temp[Qlist[1]], header=FALSE))
-Qlist = Qlist[-1]
-Qdata = rbind(Qdata,read.csv(temp[Qlist[1]], header=FALSE))
-Qlist = Qlist[-1]
-Qdata = rbind(Qdata,read.csv(temp[Qlist[1]], header=FALSE))
+Qdata = read.csv(temp[Qlist[3]], header=TRUE)
+Qlist = Qlist[-3]
+# Qdata = rbind.data.frame(Qdata,read.csv(temp[Qlist[1]], header=FALSE))
+# Qlist = Qlist[-1]
+# Qdata = rbind.data.frame(Qdata,read.csv(temp[Qlist[1]], header=FALSE))
+# Qlist = Qlist[-1]
+# Qdata = rbind.data.frame(Qdata,read.csv(temp[Qlist[1]], header=FALSE))
 # dimsQ <- NULL
 # for (i in 1:length(Qlist)){
-#   dimsQ <- cbind(dims, dim(read.csv(temp[EDlist[i]])))
+#   dimsQ <- cbind(dims, dim(read.csv(temp[Qlist[i]])))
 #   #Qdata <- rbind(Qdata,read.csv(temp[Qlist[i]]), header=FALSE)
 #   Qdata <- rbind.all.columns(Qdata,read.csv(temp[Qlist[i]])) 
 # }
 
 # need an alternative for this
-Qlist = grep('Q',temp,ignore.case=TRUE)
+# Qlist = grep('Q',temp,ignore.case=TRUE)
 dimsQ <- NULL
 for (i in 1:length(Qlist)){  
   dimsQ <- cbind(dimsQ, dim(read.csv(temp[Qlist[i]])))
 }  
 Qattempts <- table(dimsQ)[1]
+
+#rewmoving BS
+#Qdata <- subset(Qdata, Qdata$V2 != 'Accuracy')
+colnames(Qdata) <- colnames(LBdata[,1:13])
+
 
 # Louis
 LOlist = grep('LO',temp,ignore.case=TRUE)
@@ -231,13 +254,10 @@ EDattempts <- table(dimsED)[1]
 
 
 
+# what is this?
 for (i in 1:length(temp)) assign(temp[i], read.csv(temp[i]))
 
 objects()
-
-
-
-
 
 
 

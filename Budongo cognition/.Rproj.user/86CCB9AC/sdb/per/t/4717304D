@@ -1,0 +1,22 @@
+{
+    "contents" : "",
+    "created" : 1423233754200.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "4717304D",
+    "lastKnownWriteTime" : 7741240722073845761,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "caption" : "aggPers",
+        "contentUrl" : "content?title=aggPers&file=1c2328ac6003430da9c71fad38690453.htm",
+        "displayedObservations" : 18,
+        "displayedVariables" : 9,
+        "totalObservations" : 18,
+        "variables" : 8
+    },
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}

@@ -4,8 +4,9 @@
 
 s <- function(x) {scale(x)}
 
-###
-#some correlations
+outliers <- function(obs, x = 2.5)
+  abs(obs - mean(obs, na.rm = T)) > (sd(obs, na.rm = T) * x)
+
 
 
 # first we need an average performance matrix
@@ -59,6 +60,8 @@ plot(1:length(PEdata$Accuracy),PEdata$Accuracy)
 
 
 
+####### Accuracy #######
+library(lme4)
 
 
 # GLM (first attempt)
@@ -98,6 +101,7 @@ anova(mod.gm1,mod.gm2,mod.gm3,mod.gm4
       ) # so gm2 is the best model
 # stepwise it
 library(lmerTest)
+library(car)
 #mod.gm2s <- step(mod.gm2) # errrrgggh this would be awful nice
 mod.gm2.1 <- glmer(Accuracy ~ dom + con + Trial + (1 | Group.1),
                                family = binomial, data=cz_bin_pers 
@@ -141,6 +145,50 @@ cor(accu_pers$acc_mean, accu_pers$opn)
 cor.test(accu_pers$acc_mean, accu_pers$con)
 
 # LDA
-boxM(accu_pers[,-1], accu_pers[,1])
+#boxM(accu_pers[,-1], accu_pers[,1])
 #mod.l <- lda(LBdata$Accuracy ~ LBlong)
 mod.l <- lda()
+
+
+
+####### Processing Time #######
+cz_bin_pers$inspecTime = cz_bin_pers$SampleSelect - cz_bin_pers$SampleOn
+cz_bin_pers$procTime = cz_bin_pers$ChoiceSelect - cz_bin_pers$ChoiceOn
+
+# remove upper outliers
+cz_bin_pers$procTime[outliers(cz_bin_pers$procTime,1)] <- NA
+#outliers(cz_bin_pers$procTime, 2.5)
+cz_bin_pers$inspecTime[outliers(cz_bin_pers$inspecTime,1)] <- NA
+
+
+#shapiro.test(cz_bin_pers$procTime) # doesn't make sense, RT is never normal
+
+mod.pt1 <- lmer(procTime ~ dom + neu + opn + agr + con + ext + (1 | Group.1)
+                , data=cz_bin_pers
+)
+mod.pt2 <- lmer(procTime ~ Trial + dom + neu + opn + agr + con + ext + (1 | Group.1)
+               , data=cz_bin_pers
+               )
+mod.pt3 <- lmer(procTime ~ Trial + (1 | Group.1)
+                , data=cz_bin_pers
+)
+
+
+mod.it1 <- lmer(inspecTime ~ dom + neu + opn + agr + con + ext + (1 | Group.1)
+                , data=cz_bin_pers
+)
+mod.it2 <- lmer(inspecTime ~ dom + neu + opn + agr + con + ext + Trial + (1 | Group.1)
+                , data=cz_bin_pers
+)
+mod.it3 <- lmer(inspecTime ~ Trial + (1 | Group.1)
+                , data=cz_bin_pers
+)
+
+pBLUP = ranef(mod.pt3)
+pBLUP = cbind(pBLUP$Group.1, accu_pers[c(1,3:12),])
+corrgram(pBLUP)
+
+iBLUP = ranef(mod.it3)
+iBLUP = cbind(iBLUP$Group.1, accu_pers[c(1,3:12),])
+corrgram(iBLUP)
+

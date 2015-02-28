@@ -1,0 +1,22 @@
+{
+    "contents" : "",
+    "created" : 1425142745875.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "B82031E9",
+    "lastKnownWriteTime" : 7741240723082584096,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "caption" : "bracket14",
+        "contentUrl" : "content?title=bracket14&file=b9b87d59a91a46d7b7641324ca478e6b.htm",
+        "displayedObservations" : "64",
+        "displayedVariables" : 32,
+        "totalObservations" : "64",
+        "variables" : "32"
+    },
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}

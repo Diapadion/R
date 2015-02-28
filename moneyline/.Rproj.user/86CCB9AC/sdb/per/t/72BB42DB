@@ -1,0 +1,22 @@
+{
+    "contents" : "",
+    "created" : 1425143944653.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "72BB42DB",
+    "lastKnownWriteTime" : 7741240723082584096,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "caption" : "kp14",
+        "contentUrl" : "content?title=kp14&file=3144bf605a9c4886ae340e3c1b713adc.htm",
+        "displayedObservations" : "64",
+        "displayedVariables" : 21,
+        "totalObservations" : "64",
+        "variables" : "21"
+    },
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}

@@ -1,5 +1,18 @@
 # script for importing Vanessa's scan data from .csv
 
+# new 20/02/15
+# (- date and time for all)
+# - who vomits
+# - who eats faeces
+#
+# and then from Grooming
+# - if Y
+# 	then actor, recipient druation
+#
+# and from Aggression
+# - if Y
+#	all 8 columns before notes	
+
 
 
 scans = read.csv("combined old style corrected KS 210513 1558.csv", header=TRUE)

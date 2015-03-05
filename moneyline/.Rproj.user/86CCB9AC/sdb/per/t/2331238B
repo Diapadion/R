@@ -1,21 +1,21 @@
 {
     "contents" : "",
-    "created" : 1425143944653.000,
+    "created" : 1425582120706.000,
     "dirty" : false,
     "encoding" : "",
     "folds" : "",
     "hash" : "0",
-    "id" : "72BB42DB",
+    "id" : "2331238B",
     "lastKnownWriteTime" : 7741240723082584096,
     "path" : null,
     "project_path" : null,
     "properties" : {
-        "caption" : "kp14",
-        "contentUrl" : "content?title=kp14&file=09522dcc108e47daa76830c197e6c808.htm",
-        "displayedObservations" : "64",
+        "caption" : "kpDiffs13",
+        "contentUrl" : "content?title=kpDiffs13&file=139baf3c5dc744fb8d661ef4e85c53a7.htm",
+        "displayedObservations" : 32,
         "displayedVariables" : 21,
-        "totalObservations" : "64",
-        "variables" : "22"
+        "totalObservations" : 32,
+        "variables" : 20
     },
     "source_on_save" : false,
     "type" : "r_dataframe"

@@ -1,0 +1,22 @@
+{
+    "contents" : "",
+    "created" : 1425162847127.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "6BA07C13",
+    "lastKnownWriteTime" : 27303364806049904,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "caption" : "kp11",
+        "contentUrl" : "content?title=kp11&file=5e291ff90bc44220bb148a33f4351bbf.htm",
+        "displayedObservations" : "64",
+        "displayedVariables" : 22,
+        "totalObservations" : "64",
+        "variables" : "21"
+    },
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}

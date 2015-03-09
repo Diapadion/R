@@ -1,0 +1,22 @@
+{
+    "contents" : "",
+    "created" : 1425730210358.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "6A705E68",
+    "lastKnownWriteTime" : 8225952758430965861,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "caption" : "kpDiffs14",
+        "contentUrl" : "content?title=kpDiffs14&file=cddf09aa5e7b48b587fe777f1ae19f16.htm",
+        "displayedObservations" : 32,
+        "displayedVariables" : 22,
+        "totalObservations" : 32,
+        "variables" : 21
+    },
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}

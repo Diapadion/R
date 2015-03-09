@@ -16,11 +16,11 @@ victDiffs14 <- NULL
 
 for (i in seq(1,dim(kp14)[1],2)){
   if (kp14$result[i] == 'W'){
-    kpdat = kp14[i,5:21]-kp14[i+1,5:21]
+    kpdat = kp14[i,c(1,5:21)]-kp14[i+1,c(1,5:21)]
     vdrow = cbind.data.frame(winner=kp14$Team[i], loser=kp14$Team[i+1],kpdat)
   }
   else {
-    kpdat = kp14[i+1,5:21]-kp14[i,5:21]
+    kpdat = kp14[i+1,c(1,5:21)]-kp14[i,c(1,5:21)]
     vdrow = cbind.data.frame(winner=kp14$Team[i+1], loser=kp14$Team[i],kpdat)
   }
   
@@ -31,6 +31,7 @@ for (i in seq(1,dim(kp14)[1],2)){
 
 ### some t-tests to see if any of these difference vars differ from null, and by how much
 
+library(lsr)
 # 
 t.test(victDiffs14$Pyth) # p < 0.00005
 cohensD(victDiffs14$Pyth) # 0.844
@@ -66,19 +67,35 @@ t.test(victDiffs14$NCSoS.Pyth) # p = 0.9116
 kpDiffs14 <- NULL
 
 for (i in seq(1,dim(kp14)[1],2)){
-  kpdat = kp14[i+1,5:21]-kp14[i,5:21]
+  kpdat = kp14[i+1,c(1,5:21)]-kp14[i,c(1,5:21)]
   vdrow = cbind.data.frame(ref.team=kp14$Team[i+1], opponent=kp14$Team[i],kpdat,result=kp14$result[i+1])
     
   kpDiffs14 <- rbind.data.frame(kpDiffs14, vdrow)
   
 }
 
-gm.diff <- glm(result ~ Pyth + AdjO + AdjD + AdjT + SoS.Pyth + OppO + OppD + NCSoS.Pyth, data = kpDiffs14, family = "binomial")
+gm.diff14 <- glm(result ~ SoS.Pyth + OppO
+                #  + Pyth + AdjO + AdjD + OppD
+                 #+ AdjT + NCSoS.Pyth
+                 + Rank
+                 , data = kpDiffs14, family = "binomial")
 
-gm.diff.sp <- step(gm.diff)
+gm.diff14.sp <- step(gm.diff14)
 
-gm.diff2 <- glm(result ~ Pyth + AdjO + AdjD + SoS.Pyth + OppO, data = kpDiffs14, family = "binomial")
+#gm.diff14_2 <- glm(result ~ Pyth + AdjO + AdjD + SoS.Pyth + OppO, data = kpDiffs14, family = "binomial")
 
+gm.diff14_3 <- glm(result ~ Rank, data=kpDiffs14, family = 'binomial')
+
+- OppO      1   22.749 30.749
+- AdjD      1   24.102 32.102
+- SoS.Pyth  1   25.273 33.273
+- AdjO      1   33.315 41.315
+
+- Pyth      1   13.592 23.592
+- OppD      1   14.780 24.780
+- Rank      1   15.343 25.343
+- SoS.Pyth  1   16.254 26.254
+- OppO      1   16.404 26.404
 
 
 
@@ -98,11 +115,11 @@ victDiffs13 <- NULL
 
 for (i in seq(1,dim(kp13)[1],2)){
   if (kp13$result[i] == 'W'){
-    kpdat = kp13[i,5:21]-kp13[i+1,5:21]
+    kpdat = kp13[i,c(1,5:21)]-kp13[i+1,c(1,5:21)]
     vdrow = cbind.data.frame(winner=kp13$Team[i], loser=kp13$Team[i+1],kpdat)
   }
   else {
-    kpdat = kp13[i+1,5:21]-kp13[i,5:21]
+    kpdat = kp13[i+1,c(1,5:21)]-kp13[i,c(1,5:21)]
     vdrow = cbind.data.frame(winner=kp13$Team[i+1], loser=kp13$Team[i],kpdat)
   }
   
@@ -113,14 +130,14 @@ for (i in seq(1,dim(kp13)[1],2)){
 kpDiffs13 <- NULL
 
 for (i in seq(1,dim(kp13)[1],2)){
-  kpdat = kp13[i+1,5:21]-kp13[i,5:21]
+  kpdat = kp13[i+1,c(1,5:21)]-kp13[i,c(1,5:21)]
   vdrow = cbind.data.frame(ref.team=kp13$Team[i+1], opponent=kp13$Team[i],kpdat,result=kp13$result[i+1])
   
   kpDiffs13 <- rbind.data.frame(kpDiffs13, vdrow)
   
 }
 
-gm.diff13 <- glm(result ~ Pyth + AdjO + AdjD + AdjT + SoS.Pyth + OppO + OppD + NCSoS.Pyth, data = kpDiffs13, family = "binomial")
+gm.diff13 <- glm(result ~ Rank + Pyth + AdjO + AdjD + AdjT + SoS.Pyth + OppO + OppD + NCSoS.Pyth, data = kpDiffs13, family = "binomial")
 
 gm.diff13.sp <- step(gm.diff13)
 

@@ -1,0 +1,17 @@
+{
+    "contents" : "### this file follows directly from matchup.R ...\n\n### its purpose is to test the variance being accounted for my progressive models\n### to make sure that fit and prediction power is actually increasing with refinement\n\n\nlibrary(car)\n\n# 2014\n\nsummary(gm.diff14)\nsummary(gm.diff14.stp)\nsummary(gm.diff14_3)\nsummary(gm.diff14_2)\nsummary(gm.diff14_4)\n\ngm.diff14_5 <- glm(result ~ Rank + sagRating + Pyth + OppO + AdjO + AdjD, data=kpDiffs14, family = 'binomial')\nsummary(gm.diff14_5)\nAnova(gm.diff14_5)\n\ngm.diff14_5.stp <- step(gm.diff14_5)\n\n# not sure what R is...\n#gm.diff14_3$R\n#gm.diff14$R\n\nanova(gm.diff14_4,gm.diff14.stp)\n\nAnova(gm.diff14.stp)\nAnova(gm.diff14_5.stp)\n\n# comparing these two, what happens if we throw in sagRank and sagRating to 14_5.stp\ngm.diff14_6 <- glm(result ~ Rank + sagRank + sagRating + Pyth + OppO, data=kpDiffs14, family = 'binomial')\nsummary(gm.diff14_6)\ngm.diff14_6.stp <- step(gm.diff14_6) # only has the sag vars left\n\nanova(gm.diff14_4,gm.diff14.stp,gm.diff14_5,gm.diff14_5.stp,gm.diff14_6, gm.diff14_6.stp)\n\n\n\n",
+    "created" : 1426074024022.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2994721966",
+    "id" : "B3C44AB7",
+    "lastKnownWriteTime" : 1426102846,
+    "path" : "C:/Users/s1229179/git-repos/R/moneyline/modelQuality.R",
+    "project_path" : "modelQuality.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}

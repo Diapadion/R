@@ -133,6 +133,8 @@ kp12 <- read.csv('KP2012.csv')
 
 kp12$Team = gsub("\\ [0-9]*$", "", kp12$Team)
 
+order12 = bracket12$Team
+
 
 
 
@@ -244,3 +246,42 @@ mod11.st <- step(mod11)
 #            * kp11$X * kp11$AdjD * kp11$X.1 * kp11$AdjT * kp11$X.2 * kp11$Luck * kp11$X.3
 #            * kp11$SoS.Pyth * kp11$X.4 * kp11$OppO * kp11$X.5 * kp11$OppD * kp11$X.6
 #            * kp11$NCSoS.Pyth * kp11$X.7)
+
+
+
+### more stats sources to include
+
+# Jeff Goodman, pundit
+# Jerry Palm, pundit
+# Joe Lunardi, pundit
+# Jeff Borzello, pundit
+# Jay Bilas, pundit
+
+# Jeff Sagarin, stats
+# Massey, stats
+# ESPN BPI, stats
+# Nate Silver, stats
+# Sonny Moore, stats
+# LRMC Rank, stats
+
+# scoring margin
+# AdjO
+# AdjD
+
+### also compare predictions we make to
+# Nate Silver
+# TeamRankings
+#   most likely upsets
+# Massey
+
+
+
+## add Sagarin stats
+sag14 <- read.csv('sag2014.csv') # this has an issue with third digits in later columns being misplaced
+
+sag14 <- sag14[sag14$Team %in% bracket14$Team,] 
+sag14 <- sag14[with(sag14, order(sag14$Team)),]
+
+
+
+

@@ -1,0 +1,17 @@
+{
+    "contents" : "### take the MIDUS combined file and analyze it\n\n#midus_c <- read.table()\n\n# vars of interest\n# $M2ID\n# $B1PBYEAR\n# $B1PRSEX\n# \n# $B1SOPEN\n# $B1SAGREE\n# $B1SCONS2\n# $B1SNEURO\n# $B1SEXTRA\n#\n# $B4ZCOMPY - year of collection of biomarker data\n\n# $B4PBMI - BMI\n# $B4BCHOL - total cholesterol\n# $B4BTRIGL - triglycerides\n# $B4BSCREA - creatinine\n# $B4BSBAP - alkaline phosphatase\n# $B4BGLUC\n# $B4P1GS - average sitting systolic\n# $B4P1GD - average sitting diastolic\n\nmidus_c$ageAtBloodDraw <- midus_c$B4ZCOMPY - midus_c$B1PBYEAR\n\n# cleaning & scaling\n\nattach(midus_c)\nageAtBloodDraw[outliers(ageAtBloodDraw,3)]<-NA\nB1SOPEN[outliers(B1SOPEN,3)]<-NA\nB1SAGREE[outliers(B1SAGREE,3)]<-NA\nB1SCONS2[outliers(B1SCONS2,3)]<-NA\nB1SNEURO[outliers(B1SNEURO,3)]<-NA\nB1SEXTRA[outliers(B1SEXTRA,3)]<-NA\nB4PBMI[outliers(B4PBMI,3)]<-NA\nB4BCHOL[outliers(B4BCHOL,3)]<-NA\nB4BTRIGL[outliers(B4BTRIGL,3)]<-NA\nB4BSCREA[outliers(B4BSCREA,3)]<-NA\nB4BSBAP[outliers(B4BSBAP,3)]<-NA\nB4BGLUC[outliers(B4BGLUC,3)]<-NA\nB4P1GS[outliers(B4P1GS,3)]<-NA\nB4P1GD[outliers(B4P1GD,3)]<-NA\n\ndetach(midus_c)\n\n\nmidus_cs <- with(midus_c,data.frame(M2ID,B1PRSEX, age=s(ageAtBloodDraw),\n                               open=s(B1SOPEN),agree=s(B1SAGREE),cons=s(B1SCONS2),\n                               neuro=s(B1SNEURO),extra=s(B1SEXTRA),bmi=s(B4PBMI),\n                               chol=s(B4BCHOL),trig=s(B4BTRIGL),creat=s(B4BSCREA),\n                               alp=s(B4BSBAP),glucose=s(B4BGLUC),\n                               sys=s(B4P1GS),dias=s(B4P1GD)))\n\n\n\nm.sys <- lm(sys ~ age + B1PRSEX + bmi\n            + open + agree + cons + neuro + extra, data = midus_cs)\n\nm.dias <- lm(dias ~ age + B1PRSEX + bmi\n             + open + agree + cons + neuro + extra, data = midus_cs)\n\nm.chol <- lm(chol ~ age + B1PRSEX + bmi\n             + open + agree + cons + neuro + extra, data = midus_cs)\n# see m_2a\n\n#m.trig <- lm(trig ~ age + B1PRSEX + bmi\n#             + open + agree + cons + neuro + extra, data = midus_cs)\n# see m_2b\n#leave out?\n\nm.creat <- lm(creat ~ age + B1PRSEX + bmi \n              + open + agree + cons + neuro + extra, data = midus_cs)\n# see m2u\n\nm.alp <- lm(chol ~ age + B1PRSEX + bmi\n              + open + agree + cons + neuro + extra, data = midus_cs)\n# see m2w\n\nm.gluc <- lm(glucose ~ age + B1PRSEX + bmi\n              + open + agree + cons + neuro + extra, data = midus_cs)\n# see m_2c ++\n\n\n### chol on BP?\n\ncor.BPfromChol <- cor(midus_cs$sys,midus_cs$chol)\n",
+    "created" : 1427125703408.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2760424199",
+    "id" : "A57F8DE6",
+    "lastKnownWriteTime" : 1427133420,
+    "path" : "C:/Users/s1229179/git-repos/R/blood chemistry/Drew version/midusRegs.R",
+    "project_path" : "Drew version/midusRegs.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}

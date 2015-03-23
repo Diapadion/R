@@ -1,0 +1,22 @@
+{
+    "contents" : "",
+    "created" : 1427129169901.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "6B58ACF1",
+    "lastKnownWriteTime" : 28429462274048001,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "caption" : "midus_cs",
+        "contentUrl" : "content?title=midus_cs&file=6930b4ec66ba48d5b69a8ff92b7ff530.htm",
+        "displayedObservations" : "993",
+        "displayedVariables" : 16,
+        "totalObservations" : "993",
+        "variables" : "16"
+    },
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}

@@ -1,0 +1,17 @@
+{
+    "contents" : "\nlibrary(texreg)\n\ntbl1 = htmlreg(m_1)\nprint.texregTable(tbl1)\n\ntbl2a = htmlreg(m_2a)\nprint.texregTable(tbl2a)\n\ntbl2b = htmlreg(m_2b)\nprint.texregTable(tbl2b)\n\n#---\n\ntbl2c1 = htmlreg(m_2c)\nprint.texregTable(tbl2c1)\n\ntbl2c2 = htmlreg(c(m_2c,m2c1,m2c2))\nprint.texregTable(tbl2c2)\n\ntbl2c3 = htmlreg(c(m_2c,m2c1,m2c2,m2c0))\nprint.texregTable(tbl2c3)\n\ntbl2c4 = htmlreg(c(m_2c,m2c1,m2c2,m2c0,m2c3))\nprint.texregTable(tbl2c4)\n",
+    "created" : 1421171063116.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2530792082",
+    "id" : "224DA4A1",
+    "lastKnownWriteTime" : 1421325135,
+    "path" : "C:/Users/s1229179/git-repos/R/blood chemistry/visualize.R",
+    "project_path" : "visualize.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}

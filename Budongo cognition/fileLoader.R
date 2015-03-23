@@ -255,11 +255,11 @@ EDattempts <- table(dimsED)[1]
 
 
 # what is this?
-for (i in 1:length(temp)) assign(temp[i], read.csv(temp[i]))
-
-objects()
-
-
+# for (i in 1:length(temp)) assign(temp[i], read.csv(temp[i]))
+# 
+# objects()
+# 
+# 
 
 
 # Misc BS

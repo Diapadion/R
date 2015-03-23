@@ -30,21 +30,24 @@ wmat <- rbind(cbind("FEARFUL",-1,0,0,0,0,0),cbind("SUBMISSIVE",-1,0,0,0,0,0),
 
 compare_data <- NULL
 
-compare_data$chimp <- pers$chimpname
+compare_data <- data.frame(chimp = pers$chimpname)
 
 compare_data$dom <-
   (pers$Dom - pers$Fear - pers$Subm - pers$Tim - pers$Caut - pers$Depd + pers$Indp - pers$Vuln + 
      pers$Decs + pers$Intll + pers$Pers + pers$Buly + pers$Stngy + pers$Manp - pers$Anx 
+   + 7*8
    ) / 15
 
 compare_data$ext <-
   (pers$Actv + pers$Play + pers$Soc + pers$Frdy + pers$Affc + pers$Imit 
    - pers$Sol - pers$Lazy - pers$Indv - pers$Depr     
+   + 4*8
      ) / 10
   
 compare_data$con <-
   (pers$Pred - pers$Impl - pers$Defn - pers$Reckl - pers$Errc - pers$Irri - pers$Aggr - pers$Jeals
    - pers$Dsor - pers$Thotl - pers$Dist - pers$Unper - pers$Quit - pers$Clmy
+   + 13*8
    ) / 14
 
 #  (-dmdob$impl.z-dmdob$defn.z-dmdob$reckl.z-dmdob$errc.z-dmdob$irri.z+dmdob$pred.z-dmdob$aggr.z-dmdob$jeals.z-dmdob$dsor.z+64)/9
@@ -56,8 +59,9 @@ compare_data$agr <-
   #(dmdob$symp.z+dmdob$help.z+dmdob$sens.z+dmdob$prot.z+dmdob$gntl.z)/5
 
 compare_data$neu <-
-  (pers$Exct + pers$Aut - pers$Stbl - pers$Cool
-   ) / 4
+  (pers$Exct + pers$Aut - pers$Stbl - pers$Cool - pers$Unem
+   + 3*8
+   ) / 5
   #(-dmdob$stbl.z+dmdob$exct.z-dmdob$unem.z+16)/3
 
 compare_data$opn <-
@@ -67,6 +71,9 @@ compare_data$opn <-
 
 # ddply(compare_data,~chimp,summarise,mean=
 #           na.action = na.omit)
+
+# remove data from 2005 sampling
+compare_data = compare_data[25:99,]
 
 aggPers <- aggregate(compare_data, by=list(compare_data$chimp), FUN=mean, na.rm=TRUE,na.action = na.omit)
 

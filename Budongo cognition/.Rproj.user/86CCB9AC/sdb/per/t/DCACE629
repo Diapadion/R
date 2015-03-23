@@ -1,0 +1,22 @@
+{
+    "contents" : "",
+    "created" : 1426771810821.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "DCACE629",
+    "lastKnownWriteTime" : 7741240722073845761,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "caption" : "aggPers",
+        "contentUrl" : "content?title=aggPers&file=0dd9a7dfae2b40eea8696922e2014a6b.htm",
+        "displayedObservations" : "18",
+        "displayedVariables" : 8,
+        "totalObservations" : "18",
+        "variables" : "7"
+    },
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}

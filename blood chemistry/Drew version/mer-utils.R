@@ -1,3 +1,9 @@
+outliers <- function(obs, x = 2.5)
+  abs(obs - mean(obs, na.rm = T)) > (sd(obs, na.rm = T) * x)
+
+s <- function(x) {scale(x)}
+
+
 
 vif.mer <- function (fit) {
   ## adapted from rms::vif

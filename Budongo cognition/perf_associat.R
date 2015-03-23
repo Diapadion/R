@@ -2,6 +2,7 @@
 # fileLoader.R
 # perscoring_chimp.R
 
+
 s <- function(x) {scale(x)}
 
 outliers <- function(obs, x = 2.5)
@@ -99,10 +100,10 @@ mod.gm2a <- glmer(Accuracy ~ dom + neu + agr + ext + con + opn + Trial + s(Sessi
 anova(mod.gm1,mod.gm2,mod.gm3,mod.gm4
       #,mod.gm2a
       ) # so gm2 is the best model
-# stepwise it
+# can't step is with lme4
 library(lmerTest)
 library(car)
-#mod.gm2s <- step(mod.gm2) # errrrgggh this would be awful nice
+#mod.gm2s <- step(mod.gm2a) # errrrgggh this would be awful nice
 mod.gm2.1 <- glmer(Accuracy ~ dom + con + Trial + (1 | Group.1),
                                family = binomial, data=cz_bin_pers 
 )
@@ -136,6 +137,9 @@ cor(blup.gm4$Group.1[,2], accu_pers$opn[c(1,3:12)])
 cor(blup.gm4$Group.1[,2], accu_pers$con[c(1,3:12)])
 cor.test(blup.gm4$Group.1[,2], accu_pers$ext[c(1,3:12)])
 
+cor.test(blup.gm4$Group.1[,2], accu_pers$dom[c(1,3:12)])
+cor.test(blup.gm4$Group.1[,2], accu_pers$neu[c(1,3:12)])
+
 ### cor checks of accuracy vs. personality
 cor.test(accu_pers$acc_mean, accu_pers$dom)
 cor(accu_pers$acc_mean, accu_pers$agr)
@@ -145,6 +149,7 @@ cor(accu_pers$acc_mean, accu_pers$opn)
 cor.test(accu_pers$acc_mean, accu_pers$con)
 
 # LDA
+library(MASS)
 #boxM(accu_pers[,-1], accu_pers[,1])
 #mod.l <- lda(LBdata$Accuracy ~ LBlong)
 mod.l <- lda()
@@ -155,34 +160,52 @@ mod.l <- lda()
 cz_bin_pers$inspecTime = cz_bin_pers$SampleSelect - cz_bin_pers$SampleOn
 cz_bin_pers$procTime = cz_bin_pers$ChoiceSelect - cz_bin_pers$ChoiceOn
 
+
 # remove upper outliers
-cz_bin_pers$procTime[outliers(cz_bin_pers$procTime,1)] <- NA
+cz_bin_pers$procTime[outliers(cz_bin_pers$procTime,2.5)] <- NA
 #outliers(cz_bin_pers$procTime, 2.5)
-cz_bin_pers$inspecTime[outliers(cz_bin_pers$inspecTime,1)] <- NA
+cz_bin_pers$inspecTime[outliers(cz_bin_pers$inspecTime,2.5)] <- NA
+
+# log transfoooooooorrrmm
+cz_bin_pers$logprocTime <- log(cz_bin_pers$procTime)
+cz_bin_pers$loginspecTime <- log(cz_bin_pers$inspecTime)
 
 
-#shapiro.test(cz_bin_pers$procTime) # doesn't make sense, RT is never normal
+shapiro.test(cz_bin_pers$logprocTime) # doesn't make sense untransformed, RT is never normal
+qqnorm(cz_bin_pers$logprocTime)
+qqline(cz_bin_pers$logprocTime)
 
-mod.pt1 <- lmer(procTime ~ dom + neu + opn + agr + con + ext + (1 | Group.1)
+shapiro.test(cz_bin_pers$loginspecTime)
+qqnorm(cz_bin_pers$loginspecTime)
+qqline(cz_bin_pers$loginspecTime)
+
+#cz_bin_pers$logprocTime[outliers(cz_bin_pers$logprocTime,2.5)] <- NA
+#cz_bin_pers$loginspecTime[outliers(cz_bin_pers$loginspecTime,2.5)] <- NA
+
+
+mod.pt1 <- lmer(log(procTime) ~ dom + neu + opn + agr + con + ext + (1 | Group.1)
                 , data=cz_bin_pers
 )
-mod.pt2 <- lmer(procTime ~ Trial + dom + neu + opn + agr + con + ext + (1 | Group.1)
+mod.pt2 <- lmer(log(procTime) ~ Trial + dom + neu + opn + agr + con + ext + (1 | Group.1)
                , data=cz_bin_pers
                )
-mod.pt3 <- lmer(procTime ~ Trial + (1 | Group.1)
+mod.pt3 <- lmer(logprocTime ~ Trial + (1 | Group.1)
                 , data=cz_bin_pers
 )
 
 
-mod.it1 <- lmer(inspecTime ~ dom + neu + opn + agr + con + ext + (1 | Group.1)
+mod.it1 <- lmer(log(inspecTime) ~ dom + neu + opn + agr + con + ext + (1 | Group.1)
                 , data=cz_bin_pers
 )
-mod.it2 <- lmer(inspecTime ~ dom + neu + opn + agr + con + ext + Trial + (1 | Group.1)
+mod.it2 <- lmer(log(inspecTime) ~ dom + neu + opn + agr + con + ext + Trial + (1 | Group.1)
                 , data=cz_bin_pers
 )
-mod.it3 <- lmer(inspecTime ~ Trial + (1 | Group.1)
+mod.it3 <- lmer(loginspecTime ~ Trial + (1 | Group.1)
                 , data=cz_bin_pers
 )
+
+
+library(corrgram)
 
 pBLUP = ranef(mod.pt3)
 pBLUP = cbind(pBLUP$Group.1, accu_pers[c(1,3:12),])
@@ -192,3 +215,15 @@ iBLUP = ranef(mod.it3)
 iBLUP = cbind(iBLUP$Group.1, accu_pers[c(1,3:12),])
 corrgram(iBLUP)
 
+cor.test(pBLUP[,12],pBLUP[,6])
+
+cor.test(iBLUP[,12],pBLUP[,9])
+
+
+# RT medians
+
+medLogProcT <- aggregate(cz_bin_pers$logprocTime, by=list(cz_bin_pers$Group.1), FUN=median, na.rm=TRUE)
+medLogInspecT <- aggregate(cz_bin_pers$loginspecTime, by=list(cz_bin_pers$Group.1), FUN=median, na.rm = TRUE)
+
+pBLUP = cbind(pBLUP, medLogProcT)
+iBLUP = cbind(iBLUP, medLogInspecT)

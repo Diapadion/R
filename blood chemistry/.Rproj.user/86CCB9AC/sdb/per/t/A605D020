@@ -1,12 +1,12 @@
 {
-    "contents" : "### MIDUS II data\n\nsetwd(\"C:/Users/s1229179/git-repos/R/blood chemistry/Drew version/\")\n#midusIn <- read.table(\"midus-Data.csv\")\n# right now, the manual load of the .rda file is working best for the biomarkers\n# tho I've no idea why\nlibrary(Hmisc)\nlibrary(SAScii)\nmidusP1 <- read.SAScii('04652-0001-Data.txt','04652-0001-Setup.sas')\n#midusP1 <- read.table(\"midus-p1.tsv\")\n\nmidusBio <- da29282.0001[da29282.0001$B4ZBLOOD=='(3) COMPLETE',] # complete cases only\nmidusBio <- midusBio[midusBio$SAMPLMAJ!='(13) MILWAUKEE',] # don't have access to Milwaukee data\n\nmidusP1byBio <- midusP1[midusP1$M2ID %in% midusBio$M2ID,]\nmidusP1byBio <- midusP1byBio[match(midusBio$M2ID,midusP1byBio$M2ID),]\n\n# let's put together what we need from the two\nmidus_c <- cbind(midusP1byBio,midusBio)\n\nwrite.csv(midus_c, file='comboMIDUSpersBio.csv',sep=',')\n\nrm(midusBio,midusIn,midusP1,midusP1byBio)\n\n",
+    "contents" : "### MIDUS II data\n\nsetwd(\"C:/Users/s1229179/git-repos/R/blood chemistry/Drew version/\")\n#midusIn <- read.table(\"midus-Data.csv\")\n# right now, the manual load of the .rda file is working best for the biomarkers\n# tho I've no idea why\nlibrary(Hmisc)\nlibrary(SAScii)\nmidusP1 <- read.SAScii('04652-0001-Data.txt','04652-0001-Setup.sas')\n#midusP1 <- read.table(\"midus-p1.tsv\")\n\nmidusBio <- da29282.0001[da29282.0001$B4ZBLOOD=='(3) COMPLETE',] # complete cases only\nmidusBio <- midusBio[midusBio$SAMPLMAJ!='(13) MILWAUKEE',] # don't have access to Milwaukee data\n\nmidusP1byBio <- midusP1[midusP1$M2ID %in% midusBio$M2ID,]\nmidusP1byBio <- midusP1byBio[match(midusBio$M2ID,midusP1byBio$M2ID),]\n\n# let's put together what we need from the two\nmidus_c <- cbind(midusP1byBio,midusBio)\n\nwrite.csv(midus_c, file='comboMIDUSpersBio.csv',sep=',')\n\nrm(midusBio,midusIn,midusP1,midusP1byBio)\n\n\n\n### MIDJA\n\nmidja <- read.SAScii('30822-0001-Data.txt','30822-0001-Setup.sas')\nmidjaBio <- read.SAScii('34969-0001-Data.txt','34969-0001-Setup.sas')\n\n#midjaBio <- midjaBio[midjaBio$BLooD ...?\n\nmidjaByBio <- midja[midja$MIDJA_IDS %in% midjaBio$MIDJA_IDS,]\nmidjaByBio <- midjaByBio[match(midjaBio$MIDJA_IDS,midjaByBio$MIDJA_IDS),]\n\nmidja_c <- cbind(midjaByBio,midjaBio)\n\nwrite.csv(midja_c, file='comboMIDJApersBio.csv',sep=',')\n\nrm(midja,midjaBio,midjaByBio)\n",
     "created" : 1426857194469.000,
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "1363903273",
+    "hash" : "3036790321",
     "id" : "A605D020",
-    "lastKnownWriteTime" : 1427124502,
+    "lastKnownWriteTime" : 1427215009,
     "path" : "C:/Users/s1229179/git-repos/R/blood chemistry/Drew version/midusImport.R",
     "project_path" : "Drew version/midusImport.R",
     "properties" : {

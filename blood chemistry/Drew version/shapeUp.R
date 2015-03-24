@@ -93,9 +93,7 @@ for (i in 1:(dim(dmdob)[1])){
 sex = dmdob$Sex.x
 
 # BMI
-
 BMI = dmdob$BMI
-
 
 # blood stuff
 
@@ -130,6 +128,31 @@ eos <- cbind(dmdob$eos,dmdob$eos2,dmdob$eos3)
 rbc <- cbind(dmdob$rbc,dmdob$rbc2,dmdob$rbc3)
 
 
+# outliers (added 24/03/15)
+BMI[outliers(BMI,3.5)]<-NA
+trig[outliers(trig,3.5)]<-NA
+chol[outliers(chol,3.5)]<-NA
+glucose[outliers(glucose,3.5)]<-NA
+mono[outliers(mono,3.5)]<-NA
+lymph[outliers(lymph,3.5)]<-NA
+eos[outliers(eos,3.5)]<-NA
+wbc[outliers(wbc,3.5)]<-NA
+rbc[outliers(rbc,3.5)]<-NA
+hgb[outliers(hgb,3.5)]<-NA
+hct[outliers(hct,3.5)]<-NA
+BUN[outliers(BUN,3.5)]<-NA
+creatinine[outliers(creatinine,3.5)]<-NA
+ALP[outliers(ALP,3.5)]<-NA
+osmolality[outliers(osmolality,3.5)]<-NA
+GGT[outliers(GGT,3.5)]<-NA
+globulin[outliers(globulin,3.5)]<-NA
+chlor[outliers(chlor,3.5)]<-NA
+potas[outliers(potas,3.5)]<-NA
+sodium[outliers(sodium,3.5)]<-NA
+phos[outliers(phos,3.5)]<-NA
+calcium[outliers(calcium,3.5)]<-NA
+albumin[outliers(albumin,3.5)]<-NA
+protein[outliers(protein,3.5)]<-NA
 
 #as.Date(as.character(dmdob$DOB.x[10]),format = "%m/%d/%y")
 
@@ -214,13 +237,16 @@ for (i in 1:dim(dmdob)[1]){
 }
 
 systolic <- cbind(systolic.1,systolic.2,systolic.3)
+systolic[outliers(systolic,3.5)]<-NA
 diastolic <- cbind(diastolic.1,diastolic.2,diastolic.3)
+diastolic[outliers(diastolic,3.5)]<-NA
 
 
 
 # putting it all together
 
-age <- as.numeric(as.Date("2014-04-15")-DoB)
+#age <- as.numeric(as.Date(dmdob$DOPR.x,format="%m/%d/%Y")-DoB)
+age <- as.numeric(as.Date('01/01/2000')-DoB)
 
 mmdat <- data.frame(dmdob$chimp,sex,BMI,DoB,age, # to get current age
                     compare_data$chimp_Dom_CZ,compare_data$chimp_Ext_CZ,compare_data$chimp_Con_CZ,
@@ -246,7 +272,7 @@ mmdat <- data.frame(dmdob$chimp,sex,BMI,DoB,age, # to get current age
                     #apply(systolic,1,mean,na.rm=TRUE),apply(diastolic,1,mean,na.rm=TRUE)
                     )
 
-colnames(mmdat) <- c('chimp','sex','BMI','DoB','age','dom','ext','con','agr','neu','opn',
+colnames(mmdat) <- c('chimp','sex','BMI','DoB','age','dom','extra','cons','agree','neuro','open',
                      'trig.1','chol.1','glucose.1','mono.1','lymph.1','wbc.1',
                      'protein.1','albumin.1','calcium,1','phos.1','sodium.1','potas.1',
                      'chlor.1','globulin.1','GGT.1','osmolality.1','ALP.1','creatinine.1',
@@ -264,7 +290,7 @@ colnames(mmdat) <- c('chimp','sex','BMI','DoB','age','dom','ext','con','agr','ne
                      #'sys','dias'
                      )
 
-meandat <- data.frame(dmdob$chimp,dmdob$sex,dmdob$BMI,DoB,(as.Date("2014-04-15")-DoB), # to get current age
+meandat <- data.frame(dmdob$chimp,dmdob$sex,dmdob$BMI,DoB,age, # to get current age
                     compare_data$chimp_Dom_CZ,compare_data$chimp_Ext_CZ,compare_data$chimp_Con_CZ,
                     compare_data$chimp_Agr_CZ,compare_data$chimp_Neu_CZ,compare_data$chimp_Opn_CZ,
                       apply(trig,1,mean,na.rm=TRUE),
@@ -273,12 +299,15 @@ meandat <- data.frame(dmdob$chimp,dmdob$sex,dmdob$BMI,DoB,(as.Date("2014-04-15")
                       apply(mono,1,mean,na.rm=TRUE),
                       apply(wbc,1,mean,na.rm=TRUE),
                       apply(glucose,1,mean,na.rm=TRUE),
+                      apply(ALP,1,mean,na.rm=TRUE),
+                      apply(creatinine,1,mean,na.rm=TRUE),
                       apply(systolic,1,mean,na.rm=TRUE),
                       apply(diastolic,1,mean,na.rm=TRUE)
 )
 
-colnames(meandat) <- c('chimp','sex','BMI','DoB','age','dom','ext','con','agr','neu','opn',
-                     'trig','chol','lymph','mono','wbc','glucose',                                       
+colnames(meandat) <- c('chimp','sex','BMI','DoB','age','dom','extra','cons','agree','neuro','open',
+                     'trig','chol','lymph','mono','wbc','glucose',
+                     'ALP','creatinine',
                      'sys','dias')
 
 
@@ -294,8 +323,10 @@ output <- reshape(mmdat,
                   ),
                   #sep=".",
                   direction="long")
+
 # now scale and center it
-scoutput <- cbind(output[,1:2],scale(output[,3]),output[4:12],scale(output[,13:37]))
+scoutput <- cbind(output[,1:2],scale(output[,3]),output[,4],scale(output[,5:12]),
+                                output[,13],scale(output[,14:38]))
 colnames(scoutput)[3] <- 'BMI'
 
 
@@ -312,34 +343,34 @@ attach(scoutput)
 
 model2 <- lmer (dias ~ age + time + (1 | chimp), data = output)
 
-# model3 <- lm(dias ~ age + dom + ext + con + agr + neu + opn 
+# model3 <- lm(dias ~ age + dom + extra + cons + agree + neuro + open 
 #              + BMI + trig + chol + glucose + wbc + mono + lymph, na.action = na.exclude)
 
-model4 <- lm(sys ~ age + dom + ext + con + agr + neu + opn)
+model4 <- lm(sys ~ age + dom + extra + cons + agree + neuro + open)
 
-model5 <- lmer(dias ~ time + age + dom + ext + con + agr + neu + opn + BMI +
+model5 <- lmer(dias ~ time + age + dom + extra + cons + agree + neuro + open + BMI +
                  (1 + time | chimp) + (1 + time|chol), data = output)
 
-model6 <- lmer(dias ~ time + age + (dom | chimp) + (ext | chimp) + (agr | chimp), data = output) 
+model6 <- lmer(dias ~ time + age + (dom | chimp) + (extra | chimp) + (agree | chimp), data = output) 
 
 
-model7 <- lmer(dias ~ time + sex + dom + ext + agr + neu + opn + con + BMI +
+model7 <- lmer(dias ~ time + sex + dom + extra + agree + neuro + open + cons + BMI +
                  chol + trig + glucose + (chol|chimp) +
                  (1|chimp), data = output)
 
 model8 <- lmer(dias ~ time + output$sex + age + (1 + time|chimp) + (BMI|chimp)
               # + (chimp|BMI)        
-               + dom + ext + agr + neu + opn + con
+               + dom + extra + agree + neuro + open + cons
               , data = output)
 
-# model9 <- lme(chol ~ age + sex + dom + ext + agr + neu + opn + con, random= ~1 | chimp,  na.action = na.exclude)
+# model9 <- lme(chol ~ age + sex + dom + extra + agree + neuro + open + cons, random= ~1 | chimp,  na.action = na.exclude)
 
 
 # model10 <- lmer(chol ~ time + age + sex + BMI + (1 | chimp), data = output)
 
 with(meandat, {
   model11 <- lmer(sys ~ DoB + BMI + sex
-                +dom+ext+agr+neu+opn+con
+                +dom+extra+agree+neuro+open+cons
                 +(1 | chimp)
                   )
   Anova(model11)
@@ -351,13 +382,13 @@ with(meandat, {
 # from slightly older code
 # model_null <- lmer(dias ~ age + sex + BMI + (1 | chimp), data = output)
 # 
-# model_a <- lmer(dias ~ age + sex + BMI + dom + ext + agr + neu + opn + con + (1 | chimp), data = output)
-# model_aa <- lmer(sys ~ age + sex + BMI + dom + ext + agr + neu + opn + con + (1 | chimp), data = output)
+# model_a <- lmer(dias ~ age + sex + BMI + dom + extra + agree + neuro + open + cons + (1 | chimp), data = output)
+# model_aa <- lmer(sys ~ age + sex + BMI + dom + extra + agree + neuro + open + cons + (1 | chimp), data = output)
 
 model_null <- lmer(dias ~ age + sex + BMI + (1 | chimp), data = meandat)
 
-model_a <- lmer(dias ~ age + sex + BMI + dom + ext + agr + neu + opn + con + (1 | chimp), data = output)
-model_aa <- lmer(sys ~ age + sex + BMI + dom + ext + agr + neu + opn + con + (1 | chimp), data = output)
+model_a <- lmer(dias ~ age + sex + BMI + dom + extra + agree + neuro + open + cons + (1 | chimp), data = output)
+model_aa <- lmer(sys ~ age + sex + BMI + dom + extra + agree + neuro + open + cons + (1 | chimp), data = output)
 
 
 # some CI math, from results borrowed from poster... 
@@ -390,32 +421,32 @@ detach(scoutput)
 
 #attach(meandat)
 
-model_b <- lmer(chol ~ dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | chimp), 
+model_b <- lmer(chol ~ dom + extra + neuro + cons + open + agree + age + BMI + sex + (1 | chimp), 
                 data = output)
                 #data = meandat)
 
-model_c <- lmer(trig ~ dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | chimp), data = output)
+model_c <- lmer(trig ~ dom + extra + neuro + cons + open + agree + age + BMI + sex + (1 | chimp), data = output)
                 #data = meandat)
 
-#model_c <- lmer(trig ~ dom + ext + neu + con + opn + agr + (1 | chimp), data = output) # shit
+#model_c <- lmer(trig ~ dom + extra + neuro + cons + open + agree + (1 | chimp), data = output) # shit
 
-#model_b <- lmer(chol ~  age + sex + BMI + dom + ext + agr + neu + opn + con + (1 | chimp) + glucose + wbc + mono + lymph, data = meandat)
+#model_b <- lmer(chol ~  age + sex + BMI + dom + extra + agree + neuro + open + cons + (1 | chimp) + glucose + wbc + mono + lymph, data = meandat)
 
-model_c <- lmer(trig ~ age + sex + BMI + dom + ext + agr + neu + opn + con + (1 | chimp) + chol + glucose + wbc + mono + lymph, data = output)
+model_c <- lmer(trig ~ age + sex + BMI + dom + extra + agree + neuro + open + cons + (1 | chimp) + chol + glucose + wbc + mono + lymph, data = output)
 
-model_d <- lmer(glucose ~ dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | chimp), data = output)
+model_d <- lmer(glucose ~ dom + extra + neuro + cons + open + agree + age + BMI + sex + (1 | chimp), data = output)
 
-model_e <- lmer(lymph ~ dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | chimp), data = output)
+model_e <- lmer(lymph ~ dom + extra + neuro + cons + open + agree + age + BMI + sex + (1 | chimp), data = output)
 
-model_fu <- lmer(trig ~ dom + ext + neu + con + opn + agr + age + BMI + (1 | sex) + (1 | chimp), data = output)
+model_fu <- lmer(trig ~ dom + extra + neuro + cons + open + agree + age + BMI + (1 | sex) + (1 | chimp), data = output)
 summary(model_fu)
-confint(model_fu)
+consfint(model_fu)
 # pay close attention to what is going on in the above models
 
 
 
-#model_e <- lmer(dias ~ age + BMI + dom + ext + agr + neu + opn + con + (1 | sex), data = output)
-#model_e <- lmer(dias ~ DoB + BMI + dom + ext + agr + neu + opn + con + (1 | sex), data = output)
+#model_e <- lmer(dias ~ age + BMI + dom + extra + agree + neuro + open + cons + (1 | sex), data = output)
+#model_e <- lmer(dias ~ DoB + BMI + dom + extra + agree + neuro + open + cons + (1 | sex), data = output)
 
 
 #detach(meandat)
@@ -429,36 +460,36 @@ detach(scoutput)
 
 
 # sys is a better predictor here (there's nothing to see with dias)... wonder why (see below)
-m_1 <- lmer(sys ~ dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | chimp), 
+m_1 <- lmer(sys ~ dom + extra + neuro + cons + open + agree + age + BMI + sex + (1 | chimp), 
                                    data = scoutput)
-# opn: 0.48 (+), agr: 0.001 (-)
+# open: 0.48 (+), agree: 0.001 (-)
 vif.mer(m_1)
 
 # interactions?
-m1a <- lmer(sys ~ dom + ext + neu + con + agr:opn + age + BMI + sex + (1 | chimp), 
+m1a <- lmer(sys ~ dom + extra + neuro + cons + agree:open + age + BMI + sex + (1 | chimp), 
             data = scoutput)
 # ... no, none here
 
-m1d <- lmer(sys ~ depressed + dom + neu + con + opn + agr + age + BMI + sex + (1 | chimp), 
+m1d <- lmer(sys ~ depressed + dom + neuro + cons + open + agree + age + BMI + sex + (1 | chimp), 
              data = scoutput)
 
 # but wait, what about the direct effects on BMI?
-m_1z <- lmer(BMI ~ dom + ext + neu + con + opn + agr + age +  sex + (1 | chimp), 
+m_1z <- lmer(BMI ~ dom + extra + neuro + cons + open + agree + age +  sex + (1 | chimp), 
              data = scoutput)
 
 relgrad <- with(m_1a@optinfo$derivs,solve(Hessian,gradient))
 max(abs(relgrad))
 # Nope.
 
-m_2a <- lmer(chol ~ dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | chimp), 
+m_2a <- lmer(chol ~ dom + extra + neuro + cons + open + agree + age + BMI + sex + (1 | chimp), 
             data = scoutput)
-# dom: 0.00866 (-), ext: 0.022 (+), agr: 0.007 (-)
+# dom: 0.00866 (-), extra: 0.022 (+), agree: 0.007 (-)
 # cholesterol is diet influenced, but other factors are more important
 # again, interactions?
-m2a1 <- lmer(chol ~ dom:agr + dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | chimp), 
+m2a1 <- lmer(chol ~ dom:agree + dom + extra + neuro + cons + open + agree + age + BMI + sex + (1 | chimp), 
              data = scoutput)
 #Nope.
-m2a2 <- lmer(chol ~ depressed + dom + neu + con + opn + agr + age + BMI + sex + (1 | chimp), 
+m2a2 <- lmer(chol ~ depressed + dom + neuro + cons + open + agree + age + BMI + sex + (1 | chimp), 
              data = scoutput)
 
 
@@ -467,30 +498,30 @@ AIC(m_2a,m2a1)
 vif.mer(m_2a)
 vif.mer(m2a1)
 
-m_2b <- lmer(trig ~ dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | chimp), 
+m_2b <- lmer(trig ~ dom + extra + neuro + cons + open + agree + age + BMI + sex + (1 | chimp), 
             data = scoutput) # there's nothing here...
 # triglycerides indicate immediate diet
 
 
-m_2c <- lmer(glucose ~ dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | chimp), 
+m_2c <- lmer(glucose ~ dom + extra + neuro + cons + open + agree + age + BMI + sex + (1 | chimp), 
             data = scoutput)
-# neu: 0.0045 (-), con: 0.011 (+)
+# neuro: 0.0045 (-), cons: 0.011 (+)
 
 # ... some model fit tests
-m2c0 <- lmer(glucose ~ dom + ext + con:neu + con + neu +
-                opn + agr + age + BMI + sex + (1 | chimp), 
+m2c0 <- lmer(glucose ~ dom + extra + cons:neuro + cons + neuro +
+                open + agree + age + BMI + sex + (1 | chimp), 
               data = scoutput)
 
-m2c1 <- lmer(glucose ~ dom + ext + neu + 
-                       opn + agr + age + BMI + sex + (1 | chimp), 
+m2c1 <- lmer(glucose ~ dom + extra + neuro + 
+                       open + agree + age + BMI + sex + (1 | chimp), 
                      data = scoutput)
-m2c2 <- lmer(glucose ~ dom + ext + con + 
-                       opn + agr + age + BMI + sex + (1 | chimp), 
+m2c2 <- lmer(glucose ~ dom + extra + cons + 
+                       open + agree + age + BMI + sex + (1 | chimp), 
                      data = scoutput)
 AIC(m_2c,m2c1,m2c2)
 # first model is a better fir than both... so there's something legit here
-m2c3 <- lmer(glucose ~ dom + ext + con:neu + 
-                           opn + agr + age + BMI + sex + (1 | chimp), 
+m2c3 <- lmer(glucose ~ dom + extra + cons:neuro + 
+                           open + agree + age + BMI + sex + (1 | chimp), 
                          data = scoutput)
 AIC(m_2c,m2c1,m2c2,m2c3)
 
@@ -502,78 +533,78 @@ vif.mer(m2c1)
 vif.mer(m2c2)
 vif.mer(m2c3)
 
-m2c4 <- lmer(glucose ~ depressed + dom + ext + neu:con + opn + agr + age + BMI + sex + (1 | chimp), 
+m2c4 <- lmer(glucose ~ depressed + dom + extra + neuro:cons + open + agree + age + BMI + sex + (1 | chimp), 
               data = scoutput)
 
 AIC(m2c3,m2c4)
 vif.mer(m2c4)
 
-m2c5 <- lmer(glucose ~ depressed + dom + neu:con + opn + agr + age + BMI + sex + (1 | chimp), 
+m2c5 <- lmer(glucose ~ depressed + dom + neuro:cons + open + agree + age + BMI + sex + (1 | chimp), 
              data = scoutput)
 
 
 # hematology - no effect from blood factors
 
-m_2d <- lmer(wbc ~ dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | chimp), 
+m_2d <- lmer(wbc ~ dom + extra + neuro + cons + open + agree + age + BMI + sex + (1 | chimp), 
                             data = scoutput)
 
-m_2e <- lmer(lymph ~ dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | chimp), 
+m_2e <- lmer(lymph ~ dom + extra + neuro + cons + open + agree + age + BMI + sex + (1 | chimp), 
             data = scoutput)
 
-m_2f <- lmer(mono ~ dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | chimp), 
+m_2f <- lmer(mono ~ dom + extra + neuro + cons + open + agree + age + BMI + sex + (1 | chimp), 
             data = scoutput)
 
-m_2g <- lmer(eos ~ dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | chimp), 
+m_2g <- lmer(eos ~ dom + extra + neuro + cons + open + agree + age + BMI + sex + (1 | chimp), 
              data = scoutput)
 
-m2h <- lmer(hgb ~ dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | chimp), 
+m2h <- lmer(hgb ~ dom + extra + neuro + cons + open + agree + age + BMI + sex + (1 | chimp), 
             data = scoutput)
 
-m2i <- lmer(hct ~ dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | chimp), 
+m2i <- lmer(hct ~ dom + extra + neuro + cons + open + agree + age + BMI + sex + (1 | chimp), 
             data = scoutput)
 
-m2j <- lmer(rbc ~ dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | chimp), 
+m2j <- lmer(rbc ~ dom + extra + neuro + cons + open + agree + age + BMI + sex + (1 | chimp), 
                  data = scoutput)
 
 # ions
-m2k <- lmer(potas ~ dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | chimp), 
+m2k <- lmer(potas ~ dom + extra + neuro + cons + open + agree + age + BMI + sex + (1 | chimp), 
             data = scoutput)
 
-m2l <- lmer(calcium ~ dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | chimp), 
+m2l <- lmer(calcium ~ dom + extra + neuro + cons + open + agree + age + BMI + sex + (1 | chimp), 
             data = scoutput)
 
-m2m <- lmer(chlor ~ dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | chimp), 
+m2m <- lmer(chlor ~ dom + extra + neuro + cons + open + agree + age + BMI + sex + (1 | chimp), 
             data = scoutput)
 
-m2n <- lmer(sodium ~ dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | chimp), 
+m2n <- lmer(sodium ~ dom + extra + neuro + cons + open + agree + age + BMI + sex + (1 | chimp), 
             data = scoutput)
 
-m2o <- lmer(osmolality ~ dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | chimp), 
+m2o <- lmer(osmolality ~ dom + extra + neuro + cons + open + agree + age + BMI + sex + (1 | chimp), 
             data = scoutput)
 
-m2p <- lmer(phos ~ dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | chimp), 
+m2p <- lmer(phos ~ dom + extra + neuro + cons + open + agree + age + BMI + sex + (1 | chimp), 
             data = scoutput)
 
 #proteins
-m2q <- lmer(protein ~ dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | chimp), 
+m2q <- lmer(protein ~ dom + extra + neuro + cons + open + agree + age + BMI + sex + (1 | chimp), 
             data = scoutput)
 
-m2r <- lmer(BUN ~ dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | chimp), 
+m2r <- lmer(BUN ~ dom + extra + neuro + cons + open + agree + age + BMI + sex + (1 | chimp), 
             data = scoutput)
 
-m2s <- lmer(albumin ~ dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | chimp), 
+m2s <- lmer(albumin ~ dom + extra + neuro + cons + open + agree + age + BMI + sex + (1 | chimp), 
             data = scoutput)
 
-m2t <- lmer(GGT ~ dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | chimp), 
+m2t <- lmer(GGT ~ dom + extra + neuro + cons + open + agree + age + BMI + sex + (1 | chimp), 
             data = scoutput)
 
-m2u <- lmer(creatinine ~ dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | chimp), 
+m2u <- lmer(creatinine ~ dom + extra + neuro + cons + open + agree + age + BMI + sex + (1 | chimp), 
             data = scoutput)
 
-m2v <- lmer(globulin ~ dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | chimp), 
+m2v <- lmer(globulin ~ dom + extra + neuro + cons + open + agree + age + BMI + sex + (1 | chimp), 
             data = scoutput)
 
-m2w <- lmer(ALP ~ dom + ext + neu + con + opn + agr + age + BMI + sex + (1 | chimp), 
+m2w <- lmer(ALP ~ dom + extra + neuro + cons + open + agree + age + BMI + sex + (1 | chimp), 
             data = scoutput)
 
 
@@ -601,11 +632,11 @@ m_4a <- lmer(glucose ~ sys + BMI + age + sex + (1|chimp),
                               data = scoutput)
 
 # useful correlation checks
-cor(output$con,output$neu, use='complete')
+cor(output$cons,output$neuro, use='complete')
 cor(output$chol,output$glucose, use='complete')
 
 
-# scatterplot3d(output$con, output$neu, output$glucose)
+# scatterplot3d(output$cons, output$neuro, output$glucose)
 
-plot(effect(term="con:neu",mod=m2c3,multiline = TRUE))
+plot(effect(term="cons:neuro",mod=m2c3,multiline = TRUE))
           

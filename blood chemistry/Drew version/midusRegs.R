@@ -12,9 +12,10 @@
 # $B1SCONS2
 # $B1SNEURO
 # $B1SEXTRA
+# $B1SAGENC
 #
 # $B4ZCOMPY - year of collection of biomarker data
-
+#
 # $B4PBMI - BMI
 # $B4BCHOL - total cholesterol
 # $B4BTRIGL - triglycerides
@@ -43,47 +44,60 @@ B4BSBAP[outliers(B4BSBAP,3)]<-NA
 B4BGLUC[outliers(B4BGLUC,3)]<-NA
 B4P1GS[outliers(B4P1GS,3)]<-NA
 B4P1GD[outliers(B4P1GD,3)]<-NA
+B1SAGENC[outliers(B1SAGENC,3.5)]<-NA
 
 detach(midus_c)
 
 
-midus_cs <- with(midus_c,data.frame(M2ID,B1PRSEX, age=s(ageAtBloodDraw),
+midus_cs <- with(midus_c,data.frame(M2ID,sex=B1PRSEX, age=s(ageAtBloodDraw),
                                open=s(B1SOPEN),agree=s(B1SAGREE),cons=s(B1SCONS2),
-                               neuro=s(B1SNEURO),extra=s(B1SEXTRA),bmi=s(B4PBMI),
+                               neuro=s(B1SNEURO),extra=s(B1SEXTRA),
+                               dom=s(B1SAGENC),
                                chol=s(B4BCHOL),trig=s(B4BTRIGL),creat=s(B4BSCREA),
-                               alp=s(B4BSBAP),glucose=s(B4BGLUC),
+                               alp=s(B4BSBAP),glucose=s(B4BGLUC),BMI=s(B4PBMI),
                                sys=s(B4P1GS),dias=s(B4P1GD)))
 
 
+### models
+### add Agency personality (24/03/15)
 
-m.sys <- lm(sys ~ age + B1PRSEX + bmi
-            + open + agree + cons + neuro + extra, data = midus_cs)
+m.sys <- lm(sys ~ age + sex + BMI
+            + dom + open + agree + cons + neuro + extra, data = midus_cs)
+# see m_1
 
-m.dias <- lm(dias ~ age + B1PRSEX + bmi
-             + open + agree + cons + neuro + extra, data = midus_cs)
+m.dias <- lm(dias ~ age +sex + BMI
+             + dom + open + agree + cons + neuro + extra, data = midus_cs)
 
-m.chol <- lm(chol ~ age + B1PRSEX + bmi
-             + open + agree + cons + neuro + extra, data = midus_cs)
+m.chol <- lm(chol ~ age +sex + BMI
+             + dom + open + agree + cons + neuro + extra, data = midus_cs)
 # see m_2a
 
-#m.trig <- lm(trig ~ age + B1PRSEX + bmi
-#             + open + agree + cons + neuro + extra, data = midus_cs)
+m.trig <- lm(trig ~ age +sex + BMI
+             + dom + open + agree + cons + neuro + extra, data = midus_cs)
 # see m_2b
 #leave out?
 
-m.creat <- lm(creat ~ age + B1PRSEX + bmi 
-              + open + agree + cons + neuro + extra, data = midus_cs)
+m.creat <- lm(creat ~ age +sex + BMI 
+              + dom + open + agree + cons + neuro + extra, data = midus_cs)
 # see m2u
 
-m.alp <- lm(chol ~ age + B1PRSEX + bmi
-              + open + agree + cons + neuro + extra, data = midus_cs)
+m.alp <- lm(chol ~ age +sex + BMI
+            + dom + open + agree + cons + neuro + extra, data = midus_cs)
 # see m2w
 
-m.gluc <- lm(glucose ~ age + B1PRSEX + bmi
-              + open + agree + cons + neuro + extra, data = midus_cs)
+m.gluc <- lm(glucose ~ age +sex + BMI
+             + dom + open + agree + cons + neuro + extra, data = midus_cs)
 # see m_2c ++
 
 
 ### chol on BP?
 
 cor.BPfromChol <- cor(midus_cs$sys,midus_cs$chol)
+
+
+
+
+### plots (24/03/25)
+#library(stargazer)
+#stargazer()
+

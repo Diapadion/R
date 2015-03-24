@@ -1,12 +1,12 @@
 {
-    "contents" : "\nlibrary(texreg)\n\ntbl1 = htmlreg(m_1)\nprint.texregTable(tbl1)\n\ntbl2a = htmlreg(m_2a)\nprint.texregTable(tbl2a)\n\ntbl2b = htmlreg(m_2b)\nprint.texregTable(tbl2b)\n\n#---\n\ntbl2c1 = htmlreg(m_2c)\nprint.texregTable(tbl2c1)\n\ntbl2c2 = htmlreg(c(m_2c,m2c1,m2c2))\nprint.texregTable(tbl2c2)\n\ntbl2c3 = htmlreg(c(m_2c,m2c1,m2c2,m2c0))\nprint.texregTable(tbl2c3)\n\ntbl2c4 = htmlreg(c(m_2c,m2c1,m2c2,m2c0,m2c3))\nprint.texregTable(tbl2c4)\n",
+    "contents" : "\nlibrary(texreg)\n\ntbl1 = htmlreg(m_1)\nprint.texregTable(tbl1)\n\ntbl2a = htmlreg(m_2a)\nprint.texregTable(tbl2a)\n\ntbl2b = htmlreg(m_2b)\nprint.texregTable(tbl2b)\n\n#---\n\ntbl2c1 = htmlreg(m_2c)\nprint.texregTable(tbl2c1)\n\ntbl2c2 = htmlreg(c(m_2c,m2c1,m2c2))\nprint.texregTable(tbl2c2)\n\ntbl2c3 = htmlreg(c(m_2c,m2c1,m2c2,m2c0))\nprint.texregTable(tbl2c3)\n\ntbl2c4 = htmlreg(c(m_2c,m2c1,m2c2,m2c0,m2c3))\nprint.texregTable(tbl2c4)\n\n#--- 24/03/2015\n\nsys.tbl = htmlreg(list(m.sys,m_1))\nwrite(sys.tbl,\"sys.html\")\n\nchol.tbl = htmlreg(list(m.chol,m_2a))\nwrite(chol.tbl,\"chol.html\")\n\ntrig.tbl = htmlreg(list(m.trig,m_2b))\nwrite(trig.tbl,\"trig.html\")\n\ngluco.tbl = htmlreg(list(m.gluc,m_2c))\nwrite(gluco.tbl,\"gluco.html\")\n\ncreat.tbl = htmlreg(list(m.creat,m2u))\nwrite(creat.tbl,\"creat.html\")\n\nalkphos.tbl = htmlreg(list(m.alp,m2w))\nwrite(alkphos.tbl,\"alkphos.html\")\n\n\nprint.texregTable(tbl2c3)\n\n\n#--- for 27/03/2015\n\n#sys.tbl\n\nsys.tbl = htmlreg(list(m.sys,mj.sys,m1a), custom.model.names=c('Americans','Japanese','Chimpanzees'), ci.force=TRUE)\nwrite(sys.tbl,\"sys.html\")\n\ntrig.tbl = htmlreg(list(m.trig,mj.trig,m2.trig), custom.model.names=c('Americans','Japanese','Chimpanzees'), ci.force=TRUE)\nwrite(trig.tbl,\"trig.html\")\n\nchol.tbl = htmlreg(list(m.chol,mj.chol,m2.chol), custom.model.names=c('Americans','Japanese','Chimpanzees'), ci.force=TRUE)\nwrite(chol.tbl,\"chol.html\")\n\ncreat.tbl = htmlreg(list(m.creat,mj.creat,m2.creat), custom.model.names=c('Americans','Japanese','Chimpanzees'), ci.force=TRUE)\nwrite(creat.tbl,\"creat.html\")\n",
     "created" : 1421171063116.000,
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "2530792082",
+    "hash" : "2213863104",
     "id" : "224DA4A1",
-    "lastKnownWriteTime" : 1421325135,
+    "lastKnownWriteTime" : 1427222671,
     "path" : "C:/Users/s1229179/git-repos/R/blood chemistry/visualize.R",
     "project_path" : "visualize.R",
     "properties" : {

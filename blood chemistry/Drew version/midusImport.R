@@ -22,3 +22,20 @@ write.csv(midus_c, file='comboMIDUSpersBio.csv',sep=',')
 
 rm(midusBio,midusIn,midusP1,midusP1byBio)
 
+
+
+### MIDJA
+
+midja <- read.SAScii('30822-0001-Data.txt','30822-0001-Setup.sas')
+midjaBio <- read.SAScii('34969-0001-Data.txt','34969-0001-Setup.sas')
+
+#midjaBio <- midjaBio[midjaBio$BLooD ...?
+
+midjaByBio <- midja[midja$MIDJA_IDS %in% midjaBio$MIDJA_IDS,]
+midjaByBio <- midjaByBio[match(midjaBio$MIDJA_IDS,midjaByBio$MIDJA_IDS),]
+
+midja_c <- cbind(midjaByBio,midjaBio)
+
+write.csv(midja_c, file='comboMIDJApersBio.csv',sep=',')
+
+rm(midja,midjaBio,midjaByBio)

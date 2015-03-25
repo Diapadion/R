@@ -9,6 +9,8 @@ mmc.chol <- lm(chol ~ age + dom + extra + cons + agree + neuro + open + sex + BM
 
 mmc.trig <- lm(trig ~ age + dom + extra + cons + agree + neuro + open + sex + BMI,
               data=meandat,na.action = na.exclude)
+# above not worth the attempt
+
 
 ### lmer's, with ML
 m1a <- lmer(sys ~ dom + extra + neuro + cons + open + agree + age + BMI + sex + (1 | chimp), 

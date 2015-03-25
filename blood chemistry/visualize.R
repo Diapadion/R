@@ -1,4 +1,16 @@
 
+median.quartile <- function(x){
+  out <- quantile(x, probs = c(0.25,0.5,0.75))
+  names(out) <- c("ymin","y","ymax")
+  return(out) 
+}
+median.line <- function(x){
+  out <- quantile(x, probs = 0.5)
+  names(out) <- "y"
+  return(out) 
+}
+
+
 library(texreg)
 
 tbl1 = htmlreg(m_1)
@@ -63,3 +75,128 @@ write(chol.tbl,"chol.html")
 
 creat.tbl = htmlreg(list(m.creat,mj.creat,m2.creat), custom.model.names=c('Americans','Japanese','Chimpanzees'), ci.force=TRUE)
 write(creat.tbl,"creat.html")
+
+### ggplot 
+library(ggplot2)
+
+#first try - personality dimension distributions, side by side violin/bean plots
+
+vpers<-data.frame(Sample=character(),Dimension=character(),Score=numeric())
+
+vpers = rbind(
+  cbind(Sample="Yerkes", Dimension="Dominance", Score=(((output$dom - 1) / 2) + 1)),
+  cbind(Sample="Yerkes", Dimension="Neuroticism", Score=(((output$neuro - 1) / 2) + 1)),
+  cbind(Sample="Yerkes", Dimension="Extraversion", Score=(((output$extra - 1) / 2) + 1)),
+  cbind(Sample="Yerkes", Dimension="Agreeableness", Score=(((output$agree - 1) / 2) + 1)),
+  cbind(Sample="Yerkes", Dimension="Conscientiousness", Score=(((output$cons - 1) / 2) + 1)),
+  cbind(Sample="Yerkes", Dimension="Openness", Score=(((output$open - 1) / 2) + 1)),
+  cbind(Sample="MIDUS", Dimension="Neuroticism", Score=midus_c$B1SNEURO),
+  cbind(Sample="MIDUS", Dimension="Dominance", Score=midus_c$B1SAGENC),
+  cbind(Sample="MIDUS", Dimension="Agreeableness", Score=midus_c$B1SAGREE),
+  cbind(Sample="MIDUS", Dimension="Conscientiousness", Score=midus_c$B1SCONS2),
+  cbind(Sample="MIDUS", Dimension="Extraversion", Score=midus_c$B1SEXTRA),
+  cbind(Sample="MIDUS", Dimension="Openness", Score=midus_c$B1SOPEN),
+  cbind(Sample="MIDJA", Dimension="Agreeableness", Score=midja_c$J1SAGREE),
+  cbind(Sample="MIDJA", Dimension="Neuroticism", Score=midja_c$J1SNEURO),
+  cbind(Sample="MIDJA", Dimension="Conscientiousness", Score=midja_c$J1SCONS2),
+  cbind(Sample="MIDJA", Dimension="Extraversion", Score=midja_c$J1SEXTRA),
+  cbind(Sample="MIDJA", Dimension="Dominance", Score=midja_c$J1SAGENC),
+  cbind(Sample="MIDJA", Dimension="Openness", Score=midja_c$J1SOPEN))
+vpers<-data.frame(Sample=vpers[,1],Dimension=vpers[,2],Score=as.numeric(as.character(vpers[,3])))
+  
+violpers <- ggplot(vpers, aes(x=Sample, y=Score, group=Sample)) + geom_violin(trim=TRUE, aes(fill = factor(Sample))) +
+  facet_wrap(~Dimension) + 
+  stat_summary(fun.y=median.quartile,geom='point') + 
+  stat_summary(fun.y=median.line,geom='point') +
+  geom_segment(aes(x=Sample-0.1, xend=Sample+0.1, y=Score, yend=Score), colour='white')
+
+vbio <- NULL
+# vbio <- rbind(
+#   cbind(Sample="Yerkes",Marker="Diastolic BP",Value=output$dias),
+#   cbind(Sample="Yerkes",Marker='Systolic BP',)
+#   cbind(Sample="Yerkes",Marker='BMI',
+#   cbind(Sample="Yerkes",Marker='Cholesterol',
+#   cbind(Sample="Yerkes",Marker='Triglycerides',
+#   cbind(Sample="Yerkes",Marker='Creatinine',
+#   cbind(Sample="MIDUS",Marker='Diastolic BP',
+#   )
+  
+library(reshape2)
+# vmregs <- reshape(midus_cs, direction="long", varying=NULL,
+#                   v.names=c('Dominance','Extraversion','Openness',
+#                             'Conscientiousness','Agreeableness','Neuroticism'))
+vmregs <- melt(midus_cs[,1:15], id.vars=c('M2ID','sex','age','chol','creat','trig','BMI','sys','dias'))
+vmregs$Sample = 'MIDUS'
+vjregs <- melt(midja_cs[,1:15], id.vars=c('MIDJA_IDS','sex','age','chol','creat','trig','BMI','sys','dias'))
+vjregs$Sample = 'MIDJA'
+colnames(vjregs)[1]<-'M2ID'
+#vmjregs <- merge(vmregs,vjregs,by=c('M2ID','age','sex','chol','creat','BMI','sys','dias','trig','variable','value'))
+vmjregs <- rbind(vmregs,vjregs)
+colnames(vmjregs)[2:11]<-c('Sex','Age','Cholesterol','Creatinine','Triglycerides',
+                           'BMI','Systolic BP','Diastolic BP','Personality','Score')
+
+# one each for all the biomarkers ... i.e. long format
+
+vcregs <- with(data=meandat,data.frame(Chimp=chimp,Sex=sex,Age=age,
+                                       Cholesterol=chol,Creatinine=creatinine,Triglycerides=trig,
+                                       BMI=BMI,Systolic=sys,Diastolic=dias,
+                                       Dominance=dom,Extraversion=extra,Openness=open,
+                                       Conscientiousness=cons,Agreeableness=agree,Neuroticism=neuro))
+                                       
+
+
+### let the ggplotting fuck begin
+
+
+vregs <- ggplot(vmjregs, aes(y=Cholesterol,x=Score,colour=Sample)) + 
+  geom_smooth(method=lm) + facet_wrap(~Personality)
+vregs #+ geom_point()
+# vregs + geom_line(data=meandat, 
+#               aes(ymin=lwr,ymax=upr)
+  
+
+# new predictions for lmer's
+
+
+cForPreds <-  data.frame(scoutput[,6:11]
+  #,scoutput$age,scoutput$BMI,scoutput$sex
+  )
+cForPreds = data.frame(dom=scoutput$dom)
+
+cchol.d.preds = predict(m2.chol
+                        #scoutput[,6:11])
+                        #expand.grid(scoutput[,6:11],scoutput$age,scoutput$BMI,scoutput$sex)) # BE CAREFUL
+    #                    , newdata=cForPreds
+                        )
+
+
+
+
+cchol.preds = data.frame(
+  rbind(
+    cbind(Cholesterol=cchol.preds,lwr=cchol.preds-fixef(m2.chol)[2],upr=cchol.preds+fixef(m2.chol)[2],Dimension="Dominance"),
+    cbind(Cholesterol=cchol.preds,lwr=cchol.preds-fixef(m2.chol)[3],upr=cchol.preds+fixef(m2.chol)[3],Dimension="Extraversion")
+  ))
+
+
+vregs + geom_smooth(data=cchol.preds, aes(ymin=lwr,ymax=upr,fill='Yerkes'),alpha=0.3) #+              
+             
+              
+
+vregs <- ggplot(, aes(y=carat, x=price)) + facet_grid(. ~ cut)
+c + stat_smooth(method=lm, fullrange = TRUE) + geom_point()
+c + stat_smooth(method=lm) + geom_point
+  
+
+
+#library(ez)
+#cchol.preds = ezPredict(m2.chol)
+cchol.preds = confint(m2.chol)
+
+library(effects)
+        
+              
+
+fixed.chol = data.frame(fixef(m2.chol))
+
+vregs + geom_abline(intercept=fixed.chol[1,1],slope=fixed.chol[5,1] + theme_bw())

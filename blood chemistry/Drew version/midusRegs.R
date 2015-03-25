@@ -30,32 +30,37 @@ midus_c$ageAtBloodDraw <- midus_c$B4ZCOMPY - midus_c$B1PBYEAR
 # cleaning & scaling
 
 attach(midus_c)
-ageAtBloodDraw[outliers(ageAtBloodDraw,3)]<-NA
-B1SOPEN[outliers(B1SOPEN,3)]<-NA
-B1SAGREE[outliers(B1SAGREE,3)]<-NA
-B1SCONS2[outliers(B1SCONS2,3)]<-NA
-B1SNEURO[outliers(B1SNEURO,3)]<-NA
-B1SEXTRA[outliers(B1SEXTRA,3)]<-NA
-B4PBMI[outliers(B4PBMI,3)]<-NA
-B4BCHOL[outliers(B4BCHOL,3)]<-NA
-B4BTRIGL[outliers(B4BTRIGL,3)]<-NA
-B4BSCREA[outliers(B4BSCREA,3)]<-NA
-B4BSBAP[outliers(B4BSBAP,3)]<-NA
-B4BGLUC[outliers(B4BGLUC,3)]<-NA
-B4P1GS[outliers(B4P1GS,3)]<-NA
-B4P1GD[outliers(B4P1GD,3)]<-NA
-B1SAGENC[outliers(B1SAGENC,3.5)]<-NA
-
+ageAtBloodDraw[outliers(ageAtBloodDraw,3.5]<-NA
+#B1SOPEN[outliers(B1SOPEN,3.5)]<-NA
+#B1SAGREE[outliers(B1SAGREE,3.5)]<-NA
+#B1SCONS2[outliers(B1SCONS2,3.5)]<-NA
+#B1SNEURO[outliers(B1SNEURO,3.5)]<-NA
+#B1SEXTRA[outliers(B1SEXTRA,3.5)]<-NA
+B4PBMI[outliers(B4PBMI,3.5)]<-NA
+B4BCHOL[outliers(B4BCHOL,3.5)]<-NA
+B4BTRIGL[outliers(B4BTRIGL,3.5)]<-NA
+B4BSCREA[outliers(B4BSCREA,3.5)]<-NA
+B4BSBAP[outliers(B4BSBAP,3.5)]<-NA
+B4BGLUC[outliers(B4BGLUC,3.5)]<-NA
+B4P1GS[outliers(B4P1GS,3.5)]<-NA
+B4P1GD[outliers(B4P1GD,3.5)]<-NA
+#B1SAGENC[outliers(B1SAGENC,3.5)]<-NA
 detach(midus_c)
+ageAtBloodDraw[outliers(ageAtBloodDraw,3.5)]<-NA
+midus_c$B1SOPEN[midus_c$B1SOPEN==8]<-NA
+midus_c$B1SAGREE[midus_c$B1SAGREE==8]<-NA
+midus_c$B1SCONS2[midus_c$B1SCONS2==8]<-NA
+midus_c$B1SNEURO[midus_c$B1SNEURO==8]<-NA
+midus_c$B1SEXTRA[midus_c$B1SEXTRA==8]<-NA
+midus_c$B1SAGENC[midus_c$B1SAGENC==8]<-NA
 
 
 midus_cs <- with(midus_c,data.frame(M2ID,sex=B1PRSEX, age=s(ageAtBloodDraw),
-                               open=s(B1SOPEN),agree=s(B1SAGREE),cons=s(B1SCONS2),
-                               neuro=s(B1SNEURO),extra=s(B1SEXTRA),
-                               dom=s(B1SAGENC),
-                               chol=s(B4BCHOL),trig=s(B4BTRIGL),creat=s(B4BSCREA),
-                               alp=s(B4BSBAP),glucose=s(B4BGLUC),BMI=s(B4PBMI),
-                               sys=s(B4P1GS),dias=s(B4P1GD)))
+                                    Dominance=s(B1SAGENC),Extraversion=s(B1SEXTRA),Openness=s(B1SOPEN),
+                                    Conscientiousness=s(B1SCONS2),Agreeableness=s(B1SAGREE),Neuroticism=s(B1SNEURO),                               
+                                    BMI=s(B4PBMI),chol=s(B4BCHOL),creat=s(B4BSCREA),trig=s(B4BTRIGL),
+                                    sys=s(B4P1GS),dias=s(B4P1GD),
+                                    alp=s(B4BSBAP),glucose=s(B4BGLUC)))
 
 
 ### models

@@ -1,0 +1,22 @@
+{
+    "contents" : "",
+    "created" : 1427321877728.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "5D4464D3",
+    "lastKnownWriteTime" : 34058961815863411,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "caption" : "vmjcregs",
+        "contentUrl" : "content?title=vmjcregs&file=7b1471551b354a9c87fcf27c282a81c7.htm",
+        "displayedObservations" : 1000,
+        "displayedVariables" : 12,
+        "totalObservations" : 9300,
+        "variables" : 12
+    },
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}

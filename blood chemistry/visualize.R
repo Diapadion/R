@@ -132,28 +132,44 @@ vjregs$Sample = 'MIDJA'
 colnames(vjregs)[1]<-'M2ID'
 #vmjregs <- merge(vmregs,vjregs,by=c('M2ID','age','sex','chol','creat','BMI','sys','dias','trig','variable','value'))
 vmjregs <- rbind(vmregs,vjregs)
-colnames(vmjregs)[2:11]<-c('Sex','Age','Cholesterol','Creatinine','Triglycerides',
+
+simp_mean=cbind(imp_mean$imputations$imp7[,1:2],apply(imp_mean$imputations$imp7[,3:20], c(2), scale))
+
+vcregs <- melt(simp_mean[,1:15], id.vars=c('Chimp','sex','age','chol','creat','trig','BMI','sys','dias'))
+vcregs$Sample = 'Yerkes'
+colnames(vcregs)[1]<-'M2ID'
+
+vmjcregs <- rbind(vmjregs,vcregs)
+              
+colnames(vmjcregs)[2:11]<-c('Sex','Age','Cholesterol','Creatinine','Triglycerides',
                            'BMI','Systolic BP','Diastolic BP','Personality','Score')
 
 # one each for all the biomarkers ... i.e. long format
 
-vcregs <- with(data=meandat,data.frame(Chimp=chimp,Sex=sex,Age=age,
-                                       Cholesterol=chol,Creatinine=creatinine,Triglycerides=trig,
-                                       BMI=BMI,Systolic=sys,Diastolic=dias,
-                                       Dominance=dom,Extraversion=extra,Openness=open,
-                                       Conscientiousness=cons,Agreeableness=agree,Neuroticism=neuro))
-                                       
+# vcregs <- with(data=meandat,data.frame(Chimp=chimp,Sex=sex,Age=age,
+#                                        Cholesterol=chol,Creatinine=creatinine,Triglycerides=trig,
+#                                        BMI=BMI,Systolic=sys,Diastolic=dias,
+#                                        Dominance=dom,Extraversion=extra,Openness=open,
+#                                        Conscientiousness=cons,Agreeableness=agree,Neuroticism=neuro))
+#                                        
 
 
 ### let the ggplotting fuck begin
 
 
-vregs <- ggplot(vmjregs, aes(y=Cholesterol,x=Score,colour=Sample)) + 
-  geom_smooth(method=lm) + facet_wrap(~Personality)
-vregs #+ geom_point()
+vregs <- ggplot(vmjcregs, aes(y=Cholesterol,x=Score,colour=Sample)) + 
+  stat_smooth(method=lm 
+            #  , formula="Cholesterol ~ Dominance + Neuroticism + Agreeableness + Extraversion + Conscientiousness + Openness
+            #  + Sex + BMI + Age + 1"
+              ) #+ 
+  facet_wrap(~Personality)
+
+vregs + geom_point()
 # vregs + geom_line(data=meandat, 
 #               aes(ymin=lwr,ymax=upr)
   
+#vregs + geom_abline(aes(intercept=coef(m.chol[1])), slope = coef(m.chol[5]))
+
 
 # new predictions for lmer's
 

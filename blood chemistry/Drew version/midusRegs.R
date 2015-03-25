@@ -30,7 +30,7 @@ midus_c$ageAtBloodDraw <- midus_c$B4ZCOMPY - midus_c$B1PBYEAR
 # cleaning & scaling
 
 attach(midus_c)
-ageAtBloodDraw[outliers(ageAtBloodDraw,3.5]<-NA
+ageAtBloodDraw[outliers(ageAtBloodDraw,3.5)]<-NA
 #B1SOPEN[outliers(B1SOPEN,3.5)]<-NA
 #B1SAGREE[outliers(B1SAGREE,3.5)]<-NA
 #B1SCONS2[outliers(B1SCONS2,3.5)]<-NA

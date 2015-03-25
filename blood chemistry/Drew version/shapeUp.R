@@ -290,29 +290,37 @@ colnames(mmdat) <- c('chimp','sex','BMI','DoB','age','dom','extra','cons','agree
                      #'sys','dias'
                      )
 
-meandat <- data.frame(dmdob$chimp,dmdob$sex,dmdob$BMI,DoB,age, # to get current age
-                    compare_data$chimp_Dom_CZ,compare_data$chimp_Ext_CZ,compare_data$chimp_Con_CZ,
-                    compare_data$chimp_Agr_CZ,compare_data$chimp_Neu_CZ,compare_data$chimp_Opn_CZ,
-                      apply(trig,1,mean,na.rm=TRUE),
-                      apply(chol,1,mean,na.rm=TRUE),
-                      apply(lymph,1,mean,na.rm=TRUE),
-                      apply(mono,1,mean,na.rm=TRUE),
-                      apply(wbc,1,mean,na.rm=TRUE),
-                      apply(glucose,1,mean,na.rm=TRUE),
-                      apply(ALP,1,mean,na.rm=TRUE),
-                      apply(creatinine,1,mean,na.rm=TRUE),
+meandat <- data.frame(dmdob$chimp,sex,age,DoB, # to get current age
+                    compare_data$chimp_Dom_CZ,compare_data$chimp_Ext_CZ,compare_data$chimp_Opn_CZ,
+                    compare_data$chimp_Con_CZ,compare_data$chimp_Agr_CZ,compare_data$chimp_Neu_CZ,                
+                    apply(chol,1,mean,na.rm=TRUE),
+                    apply(creatinine,1,mean,na.rm=TRUE),
+                    apply(trig,1,mean,na.rm=TRUE),                                      
                       apply(systolic,1,mean,na.rm=TRUE),
-                      apply(diastolic,1,mean,na.rm=TRUE)
+                      apply(diastolic,1,mean,na.rm=TRUE),
+                    apply(ALP,1,mean,na.rm=TRUE),
+                    apply(glucose,1,mean,na.rm=TRUE),
+                    apply(lymph,1,mean,na.rm=TRUE),
+                    apply(mono,1,mean,na.rm=TRUE),
+                    apply(wbc,1,mean,na.rm=TRUE)                    
+                    
 )
 
-colnames(meandat) <- c('chimp','sex','BMI','DoB','age','dom','extra','cons','agree','neuro','open',
-                     'trig','chol','lymph','mono','wbc','glucose',
-                     'ALP','creatinine',
-                     'sys','dias')
-
+colnames(meandat) <- c('Chimp','sex','age','DoB','Dominance','Extraversion','Openness',
+                       'Conscientiousness','Agreeableness','Neuroticism','BMI',
+                       'chol','creat','trig','sys','dias',
+                       'ALP','glucose',
+                     'lymph','mono','wbc'
+                     )
 
 
 detach(fulldata)
+
+library(Amelia)
+
+#imp_mean = mice(meandat[,c(-4)])
+imp_mean = amelia(meandat[,c(-4)],idvars="Chimp",m=10)
+
              
 output <- reshape(mmdat, 
                   idvar = "chimp",

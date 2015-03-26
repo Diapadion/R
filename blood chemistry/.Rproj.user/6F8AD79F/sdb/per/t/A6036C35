@@ -1,12 +1,12 @@
 {
-    "contents" : "### chimp models\n\n# with mean data... big problem is missing BMI data\nmmc.sys <- lm(sys ~ age + dom + extra + cons + agree + neuro + open + sex + BMI,\n              data=meandat,na.action = na.exclude)\n\nmmc.chol <- lm(chol ~ age + dom + extra + cons + agree + neuro + open + sex + BMI,\n              data=meandat,na.action = na.exclude)\n\nmmc.trig <- lm(trig ~ age + dom + extra + cons + agree + neuro + open + sex + BMI,\n              data=meandat,na.action = na.exclude)\n# above not worth the attempt\n\n\n### lmer's, with ML\nm1a <- lmer(sys ~ dom + extra + neuro + cons + open + agree + age + BMI + sex + (1 | chimp), \n            data = scoutput,REML=FALSE)\n\nm2.trig <- lmer(trig ~ dom + extra + neuro + cons + open + agree + age + BMI + sex + (1 | chimp), \n                data = scoutput,REML=FALSE)\n\nm2.chol <- lmer(chol ~ dom + extra + neuro + cons + open + agree + age + BMI + sex + (1 | chimp), \n                data = scoutput,REML=FALSE)\n\nm2.creat <- lmer(creatinine ~ dom + extra + neuro + cons + open + agree + age + BMI + sex + (1 | chimp), \n                 data = scoutput,REML=FALSE)\n",
+    "contents" : "### chimp models\n\n# with mean data... big problem is missing BMI data\nmmc.sys <- lm(sys ~ age + dom + extra + cons + agree + neuro + open + sex + BMI,\n              data=meandat,na.action = na.exclude)\n\nmmc.chol <- lm(chol ~ age + dom + extra + cons + agree + neuro + open + sex + BMI,\n              data=meandat,na.action = na.exclude)\n\nmmc.trig <- lm(trig ~ age + dom + extra + cons + agree + neuro + open + sex + BMI,\n              data=meandat,na.action = na.exclude)\n# above not worth the attempt\n\n\n### lmer's, with ML\nm1a <- lmer(sys ~ Dominance + Extraversion + Neuroticism + Conscientiousness + Openness + Agreeableness + age + BMI + sex + (1 | chimp), \n            data = scoutput,REML=FALSE)\nm1b <- lmer(dias ~ Dominance + Extraversion + Neuroticism + Conscientiousness + Openness + Agreeableness + age + BMI + sex + (1 | chimp), \n            data = scoutput,REML=FALSE)\n\nm2.trig <- lmer(trig ~ Dominance + Extraversion + Neuroticism + Conscientiousness + Openness + Agreeableness + age + BMI + sex + (1 | chimp), \n                data = scoutput,REML=FALSE)\n\nm2.chol <- lmer(chol ~ Dominance + Extraversion + Neuroticism + Conscientiousness + Openness + Agreeableness + age + BMI + sex + (1 | chimp), \n                data = scoutput,REML=FALSE)\n\nm2.creat <- lmer(creatinine ~ Dominance + Extraversion + Neuroticism + Conscientiousness + Openness + Agreeableness + age + BMI + sex + (1 | chimp), \n                 data = scoutput,REML=FALSE)\n",
     "created" : 1427319445540.000,
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "1009281219",
+    "hash" : "1200273025",
     "id" : "A6036C35",
-    "lastKnownWriteTime" : 1427315736,
+    "lastKnownWriteTime" : 1427389894,
     "path" : "~/GitHub/R/blood chemistry/Drew version/chimpRegs.R",
     "project_path" : "Drew version/chimpRegs.R",
     "properties" : {

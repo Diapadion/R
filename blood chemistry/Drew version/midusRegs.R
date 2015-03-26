@@ -68,31 +68,31 @@ midus_cs <- with(midus_c,data.frame(M2ID,sex=B1PRSEX, age=s(ageAtBloodDraw),
 ### add Agency personality (24/03/15)
 
 m.sys <- lm(sys ~ age + sex + BMI
-            + dom + open + agree + cons + neuro + extra, data = midus_cs)
+            + Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion, data = midus_cs)
 # see m_1
 
 m.dias <- lm(dias ~ age +sex + BMI
-             + dom + open + agree + cons + neuro + extra, data = midus_cs)
+             + Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion, data = midus_cs)
 
 m.chol <- lm(chol ~ age +sex + BMI
-             + dom + open + agree + cons + neuro + extra, data = midus_cs)
+             + Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion, data = midus_cs)
 # see m_2a
 
 m.trig <- lm(trig ~ age +sex + BMI
-             + dom + open + agree + cons + neuro + extra, data = midus_cs)
+             + Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion, data = midus_cs)
 # see m_2b
 #leave out?
 
 m.creat <- lm(creat ~ age +sex + BMI 
-              + dom + open + agree + cons + neuro + extra, data = midus_cs)
+              + Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion, data = midus_cs)
 # see m2u
 
 m.alp <- lm(chol ~ age +sex + BMI
-            + dom + open + agree + cons + neuro + extra, data = midus_cs)
+            + Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion, data = midus_cs)
 # see m2w
 
 m.gluc <- lm(glucose ~ age +sex + BMI
-             + dom + open + agree + cons + neuro + extra, data = midus_cs)
+             + Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion, data = midus_cs)
 # see m_2c ++
 
 

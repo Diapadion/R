@@ -366,6 +366,8 @@ output$dias = c(mmdat$dias.1,mmdat$dias.2,mmdat$dias.3)
 scoutput <- cbind(output[,1:2],scale(output[,3]),output[,4],scale(output[,5:12]),
                                 output[,13],scale(output[,14:38]))
 colnames(scoutput)[3] <- 'BMI'
+colnames(scoutput)[6:11]<- c('Dominance','Extraversion','Conscientiousness',
+                             'Agreeableness','Neuroticism','Openness')
 
 #slongput <- reshape(scoutput, idvar = "chimp"
 #                    )

@@ -44,15 +44,18 @@ midja_cs <- with(midja_c,data.frame(MIDJA_IDS, sex=J1SQ1, age=s(J1SQ2AGE),
                           ))
                           
 mj.sys <- lm(sys ~ age + sex + BMI
-          + dom + open + agree + cons + neuro + extra, data = midja_cs)
+          + Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion, data = midja_cs)
                           
 mj.chol <- lm(chol ~ age + sex + BMI
-           + dom + open + agree + cons + neuro + extra, data = midja_cs)              
+           + Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion, data = midja_cs)              
 mj.to_chol <- lm(tokyo_ch ~ age + sex + BMI
-              + dom + open + agree + cons + neuro + extra, data = midja_cs)   
+              + Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion, data = midja_cs)   
 
 mj.trig <- lm(trig ~ age + sex + BMI
-              + dom + open + agree + cons + neuro + extra, data = midja_cs)          
+              + Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion, data = midja_cs)          
 
 mj.creat <- lm(creat ~ age + sex + BMI 
-              + dom + open + agree + cons + neuro + extra, data = midja_cs)          
+              + Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion, data = midja_cs)          
+
+mj.dias <- lm(dias ~ age + sex + BMI
+                     + Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion, data = midja_cs)

@@ -12,7 +12,7 @@ median.line <- function(x){
 
 
 library(texreg)
-setwd("C:/Users/s1229179/git-repos/R/blood chemistry/Drew version/")
+setwd("./Drew version/")
 
 tbl1 = htmlreg(m_1)
 print.texregTable(tbl1)
@@ -74,9 +74,24 @@ write(trig.tbl,"trig.html")
 chol.tbl = htmlreg(list(m.chol,mj.chol,m2.chol), custom.model.names=c('Americans','Japanese','Chimpanzees'), ci.force=TRUE)
 write(chol.tbl,"chol.html")
 
-creat.tbl = htmlreg(list(m.creat,mj.creat,m2.creat), custom.model.names=c('Americans','Japanese','Chimpanzees'), ci.force=TRUE)
+ext.m2.creat=extract(m1b, include.aic = FALSE, include.bic=FALSE, include.dic=FALSE,
+                include.deviance=FALSE, include.loglik=FALSE,include.nobs=FALSE,
+                include.groups=FALSE,include.variance=FALSE)
+
+creat.tbl = htmlreg(list(m.creat,mj.creat,ext.m2.creat), custom.model.names=c('Americans','Japanese','Chimpanzees'), ci.force=TRUE,
+                    caption = "", groups=NULL, digits=3)
 write(creat.tbl,"creat.html")
 
+
+ext.m1b=extract(m1b, include.aic = FALSE, include.bic=FALSE, include.dic=FALSE,
+              include.deviance=FALSE, include.loglik=FALSE,include.nobs=FALSE,
+              include.groups=FALSE,include.variance=FALSE)
+  
+dias.tbl = htmlreg(list(m.dias,mj.dias,ext.m1b), custom.model.names=c('Americans','Japanese','Chimpanzees'), ci.force=TRUE,
+                    caption = "", groups=NULL, digits=3)
+write(dias.tbl,"dias.html")
+
+                   
 ### ggplot 
 library(ggplot2)
 
@@ -190,8 +205,8 @@ vregs <- ggplot(vmjcregs, aes(y=Cholesterol,x=Score,colour=Sample)) +
             #  , formula="Cholesterol ~ Dominance + Neuroticism + Agreeableness + Extraversion + Conscientiousness + Openness
             #  + Sex + BMI + Age + 1"
               ) #+ 
-  facet_wrap(~Personality)
-
+  +facet_wrap(~Personality)
+vregs
 vregs + geom_point()
 # vregs + geom_line(data=meandat, 
 #               aes(ymin=lwr,ymax=upr)

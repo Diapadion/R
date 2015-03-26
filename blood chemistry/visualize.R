@@ -293,9 +293,9 @@ c.sys.co=fixef(m1a)[2:7]
 m.sys.co=m.sys$coefficients[5:10]
 j.sys.co=mj.sys$coefficients[5:10]
 
-c.sys.prd = confint(m1a)[4:9,]
-m.sys.prd = confint(m.sys)[5:10,]
-j.sys.prd = confint(mj.sys)[5:10,]
+c.sys.prd = confint(m1a, level=0.90)[4:9,]
+m.sys.prd = confint(m.sys, level=0.90)[5:10,]
+j.sys.prd = confint(mj.sys, level=0.90)[5:10,]
 
 sys.ci = data.frame(
   Coefficients=c(j.sys.co,m.sys.co,c.sys.co),rbind(j.sys.prd,m.sys.prd,c.sys.prd),sample_vect,Dimension=rep(rownames(m.sys.prd),3)
@@ -316,9 +316,9 @@ c.dias.co=fixef(m1b)[2:7]
 m.dias.co=m.dias$coefficients[5:10]
 j.dias.co=mj.dias$coefficients[5:10]
 
-c.dias.prd = confint(m1b)[4:9,]
-m.dias.prd = confint(m.dias)[5:10,]
-j.dias.prd = confint(mj.dias)[5:10,]
+c.dias.prd = confint(m1b, level=0.90)[4:9,]
+m.dias.prd = confint(m.dias, level=0.90)[5:10,]
+j.dias.prd = confint(mj.dias, level=0.90)[5:10,]
 
 dias.ci = data.frame(
   Coefficients=c(j.dias.co,m.dias.co,c.dias.co),rbind(j.dias.prd,m.dias.prd,c.dias.prd),sample_vect,Dimension=rep(rownames(m.dias.prd),3)
@@ -339,9 +339,9 @@ c.trig.co=fixef(m2.trig)[2:7]
 m.trig.co=m.trig$coefficients[5:10]
 j.trig.co=mj.trig$coefficients[5:10]
 
-c.trig.prd = confint(m2.trig)[4:9,]
-m.trig.prd = confint(m.trig)[5:10,]
-j.trig.prd = confint(mj.trig)[5:10,]
+c.trig.prd = confint(m2.trig, level=0.90)[4:9,]
+m.trig.prd = confint(m.trig, level=0.90)[5:10,]
+j.trig.prd = confint(mj.trig, level=0.90)[5:10,]
 
 trig.ci = data.frame(
   Coefficients=c(j.trig.co,m.trig.co,c.trig.co),rbind(j.trig.prd,m.trig.prd,c.trig.prd),sample_vect,Dimension=rep(rownames(m.trig.prd),3)
@@ -362,9 +362,9 @@ c.chol.co=fixef(m2.chol)[2:7]
 m.chol.co=m.chol$coefficients[5:10]
 j.chol.co=mj.chol$coefficients[5:10]
 
-c.chol.prd = confint(m2.chol)[4:9,]
-m.chol.prd = confint(m.chol)[5:10,]
-j.chol.prd = confint(mj.chol)[5:10,]
+c.chol.prd = confint(m2.chol, level=0.90)[4:9,]
+m.chol.prd = confint(m.chol, level=0.90)[5:10,]
+j.chol.prd = confint(mj.chol, level=0.90)[5:10,]
 
 chol.ci = data.frame(
   Coefficients=c(j.chol.co,m.chol.co,c.chol.co),rbind(j.chol.prd,m.chol.prd,c.chol.prd),sample_vect,Dimension=rep(rownames(m.chol.prd),3)
@@ -385,9 +385,9 @@ c.creat.co=fixef(m2.creat)[2:7]
 m.creat.co=m.creat$coefficients[5:10]
 j.creat.co=mj.creat$coefficients[5:10]
 
-c.creat.prd = confint(m2.creat)[4:9,]
-m.creat.prd = confint(m.creat)[5:10,]
-j.creat.prd = confint(mj.creat)[5:10,]
+c.creat.prd = confint(m2.creat, level=0.90)[4:9,]
+m.creat.prd = confint(m.creat, level=0.90)[5:10,]
+j.creat.prd = confint(mj.creat, level=0.90)[5:10,]
 
 creat.ci = data.frame(
   Coefficients=c(j.creat.co,m.creat.co,c.creat.co),rbind(j.creat.prd,m.creat.prd,c.creat.prd),sample_vect,Dimension=rep(rownames(m.creat.prd),3)

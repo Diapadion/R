@@ -12,6 +12,7 @@ median.line <- function(x){
 
 
 library(texreg)
+setwd("C:/Users/s1229179/git-repos/R/blood chemistry/Drew version/")
 
 tbl1 = htmlreg(m_1)
 print.texregTable(tbl1)
@@ -108,19 +109,46 @@ violpers <- ggplot(vpers, aes(x=Sample, y=Score, group=Sample)) + geom_violin(tr
   facet_wrap(~Dimension) + 
   stat_summary(fun.y=median.quartile,geom='point') + 
   stat_summary(fun.y=median.line,geom='point') +
-  geom_segment(aes(x=Sample-0.1, xend=Sample+0.1, y=Score, yend=Score), colour='white')
+  geom_segment(aes(x=Sample-0.1, xend=Sample+0.1, y=Score, yend=Score), colour='white') + theme_bw()
+
 
 vbio <- NULL
-# vbio <- rbind(
-#   cbind(Sample="Yerkes",Marker="Diastolic BP",Value=output$dias),
-#   cbind(Sample="Yerkes",Marker='Systolic BP',)
-#   cbind(Sample="Yerkes",Marker='BMI',
-#   cbind(Sample="Yerkes",Marker='Cholesterol',
-#   cbind(Sample="Yerkes",Marker='Triglycerides',
-#   cbind(Sample="Yerkes",Marker='Creatinine',
-#   cbind(Sample="MIDUS",Marker='Diastolic BP',
-#   )
-  
+vbio <- rbind(
+  cbind(Sample="Yerkes",Marker="Diastolic BP",Value=output$dias),
+  cbind(Sample="Yerkes",Marker='Systolic BP',Value=output$sys),
+  cbind(Sample="Yerkes",Marker='BMI',Value=output$BMI),
+  cbind(Sample="Yerkes",Marker='Cholesterol',Value=output$chol),
+  cbind(Sample="Yerkes",Marker='Triglycerides',Value=output$trig),
+  cbind(Sample="Yerkes",Marker='Creatinine',Value=output$creatinine),
+  cbind(Sample="MIDUS",Marker='Diastolic BP',Value=midus_c$B4P1GD),
+  cbind(Sample="MIDUS",Marker='Systolic BP',Value=midus_c$B4P1GS),
+  cbind(Sample="MIDUS",Marker='BMI',Value=midus_c$B4PBMI),
+  cbind(Sample="MIDUS",Marker='Cholesterol',Value=midus_c$B4BCHOL),
+  cbind(Sample="MIDUS",Marker='Triglycerides',Value=midus_c$B4BTRIGL),
+  cbind(Sample="MIDUS",Marker='Creatinine',Value=midus_c$B4BSCREA),
+  cbind(Sample="MIDJA",Marker='Diastolic BP',Value=midja_c$J2CBPS23),
+  cbind(Sample="MIDJA",Marker='Systolic BP',Value=midja_c$J2CBPD23),
+  cbind(Sample="MIDJA",Marker='BMI',Value=midja_c$J2CBMI),
+  cbind(Sample="MIDJA",Marker='Cholesterol',Value=midja_c$J2BCHOL),
+  cbind(Sample="MIDJA",Marker='Triglycerides',Value=midja_c$J2CTRIG),
+  cbind(Sample="MIDJA",Marker='Creatinine',Value=midja_c$J2BSCREA)
+  )
+vbio<-data.frame(Sample=vbio[,1],Marker=vbio[,2],Value=as.numeric(as.character(vbio[,3])))
+
+vbpbio <- ggplot(vbio, aes(x=Sample, y=Value, group=Sample)) + geom_boxplot(trim=TRUE, aes(fill = factor(Sample)))
+  + stat_summary(fun.y=median.quartile,geom='point') + 
+  stat_summary(fun.y=median.line,geom='point') +
+  geom_segment(aes(x=Sample-0.1, xend=Sample+0.1, y=Value, yend=Value), colour='white')
+vbpbio + facet_wrap(~ Marker, scales = "free_y") + theme_bw()
+vbpbio
+
+# violtest <- ggplot(diamonds, aes(x=color, y=depth, group=color)) +
+#   geom_boxplot(trim=TRUE, aes(fill = factor(color))) +
+#   facet_wrap(~ clarity, scales = "free_y") + theme_bw()
+# 
+# violtest
+
+
 library(reshape2)
 # vmregs <- reshape(midus_cs, direction="long", varying=NULL,
 #                   v.names=c('Dominance','Extraversion','Openness',
@@ -216,3 +244,13 @@ library(effects)
 fixed.chol = data.frame(fixef(m2.chol))
 
 vregs + geom_abline(intercept=fixed.chol[1,1],slope=fixed.chol[5,1] + theme_bw())
+
+
+library(arm)
+sim.m2.chol = sim(m2.chol)
+coefplot(sim.m2.chol)
+
+
+install.packages("coefplot2",
+                 repos="http://www.math.mcmaster.ca/bolker/R",
+                 type="source")

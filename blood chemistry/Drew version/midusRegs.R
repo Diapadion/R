@@ -53,6 +53,7 @@ midus_c$B1SCONS2[midus_c$B1SCONS2==8]<-NA
 midus_c$B1SNEURO[midus_c$B1SNEURO==8]<-NA
 midus_c$B1SEXTRA[midus_c$B1SEXTRA==8]<-NA
 midus_c$B1SAGENC[midus_c$B1SAGENC==8]<-NA
+midus_c$B4BTRIGL[outliers(midus_c$B4BTRIGL,3.5)]<-NA
 
 
 midus_cs <- with(midus_c,data.frame(M2ID,sex=B1PRSEX, age=s(ageAtBloodDraw),

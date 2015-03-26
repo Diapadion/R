@@ -31,6 +31,7 @@ midja_c$J1SCONS2[midja_c$J1SCONS2==8]<-NA
 midja_c$J1SOPEN[midja_c$J1SOPEN==8]<-NA
 midja_c$J1SAGREE[midja_c$J1SAGREE==8]<-NA
 midja_c$J1SNEURO[midja_c$J1SNEURO==8]<-NA
+midja_c$J2CTRIG[outliers(midja_c$J2CTRIG,3.5)]<-NA
 
 
 

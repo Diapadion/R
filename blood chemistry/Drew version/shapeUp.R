@@ -240,6 +240,8 @@ systolic <- cbind(systolic.1,systolic.2,systolic.3)
 systolic[outliers(systolic,3.5)]<-NA
 diastolic <- cbind(diastolic.1,diastolic.2,diastolic.3)
 diastolic[outliers(diastolic,3.5)]<-NA
+#
+diastolic[diastolic==8]<-NA
 
 
 
@@ -292,7 +294,8 @@ colnames(mmdat) <- c('chimp','sex','BMI','DoB','age','dom','extra','cons','agree
 
 meandat <- data.frame(dmdob$chimp,sex,age,DoB, # to get current age
                     compare_data$chimp_Dom_CZ,compare_data$chimp_Ext_CZ,compare_data$chimp_Opn_CZ,
-                    compare_data$chimp_Con_CZ,compare_data$chimp_Agr_CZ,compare_data$chimp_Neu_CZ,                
+                    compare_data$chimp_Con_CZ,compare_data$chimp_Agr_CZ,compare_data$chimp_Neu_CZ, 
+                    BMI,
                     apply(chol,1,mean,na.rm=TRUE),
                     apply(creatinine,1,mean,na.rm=TRUE),
                     apply(trig,1,mean,na.rm=TRUE),                                      
@@ -321,16 +324,43 @@ library(Amelia)
 #imp_mean = mice(meandat[,c(-4)])
 imp_mean = amelia(meandat[,c(-4)],idvars="Chimp",m=10)
 
-             
+             ### see just below
 output <- reshape(mmdat, 
                   idvar = "chimp",
                   #idvar=c(colnames(mmdat)[1:11],'sys','dias'), 
                   varying=colnames(mmdat)[12:86], 
                   v.names=c("trig","chol","glucose","wbc","mono","lymph","protein","albumin","calcium","phos","sodium","potas",
-                            "chlor","globulin","GGT","osmolality","ALP","creatinine","BUN","rbc","hct","hgb","eos","sys","dias"
+                           "chlor","globulin","GGT","osmolality","ALP","creatinine","BUN","rbc","hct","hgb","eos","sys","dias"
                   ),
-                  #sep=".",
+                  sep=".",
                   direction="long")
+# 
+# tout <- reshape(data.frame(mmdat$chimp,mmdat$dom,
+#                            dias.1=mmdat$dias.1,dias.2=mmdat$dias.2,dias.3=mmdat$dias.3),
+#                 idvar="chimp",varying=list('dias.1','dias.2','dias.3'),
+#                 v.names=c('dias'),
+#                 direction='long')
+
+# so reshape is fucking broken, and messing up my systolic and diastolic variables
+# we need a new package 
+library(reshape2)
+melt_dat <- melt(mmdat, id.vars = c("chimp",'dom','extra','neuro','agree','open','cons',
+                                  'age','sex','BMI','DoB')
+               #,measure.vars=c("trig","chol","glucose","wbc","mono","lymph","protein","albumin","calcium","phos","sodium","potas",
+              #           "chlor","globulin","GGT","osmolality","ALP","creatinine","BUN","rbc","hct","hgb","eos","sys","dias"
+            #  )
+          )
+
+# 'Dominance','Extraversion','Openness','Agreeableness','Conscientiousness','Neuroticism',
+                
+               
+               ) 
+
+# fucking balls we'll do it live
+output$trig = c(mmdat$trig.1,mmdat$trig.2,mmdat$trig.3)
+output$dias = c(mmdat$dias.1,mmdat$dias.2,mmdat$dias.3)
+
+
 
 # now scale and center it
 scoutput <- cbind(output[,1:2],scale(output[,3]),output[,4],scale(output[,5:12]),

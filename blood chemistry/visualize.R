@@ -65,28 +65,38 @@ print.texregTable(tbl2c3)
 
 #sys.tbl
 
-sys.tbl = htmlreg(list(m.sys,mj.sys,m1a), custom.model.names=c('Americans','Japanese','Chimpanzees'), ci.force=TRUE)
+ext.m1a=extract(m1a, include.aic = FALSE, include.bic=FALSE, include.dic=FALSE,
+                include.deviance=FALSE, include.loglik=FALSE,include.nobs=FALSE,
+                include.groups=FALSE,include.variance=FALSE)
+
+sys.tbl = htmlreg(list(m.sys,mj.sys,ext.m1a), custom.model.names=c('Americans','Japanese','Chimpanzees'), ci.force=TRUE,
+                  caption = "", groups=NULL, digits=3)
 write(sys.tbl,"sys.html")
 
-trig.tbl = htmlreg(list(m.trig,mj.trig,m2.trig), custom.model.names=c('Americans','Japanese','Chimpanzees'), ci.force=TRUE)
+ext.trig=extract(m2.trig, include.aic = FALSE, include.bic=FALSE, include.dic=FALSE,
+                include.deviance=FALSE, include.loglik=FALSE,include.nobs=FALSE,
+                include.groups=FALSE,include.variance=FALSE)
+trig.tbl = htmlreg(list(m.trig,mj.trig,ext.trig), custom.model.names=c('Americans','Japanese','Chimpanzees'), ci.force=TRUE,
+                   caption = "", groups=NULL, digits=3)
 write(trig.tbl,"trig.html")
 
-chol.tbl = htmlreg(list(m.chol,mj.chol,m2.chol), custom.model.names=c('Americans','Japanese','Chimpanzees'), ci.force=TRUE)
+ext.chol=extract(m2.chol, include.aic = FALSE, include.bic=FALSE, include.dic=FALSE,
+                include.deviance=FALSE, include.loglik=FALSE,include.nobs=FALSE,
+                include.groups=FALSE,include.variance=FALSE)
+chol.tbl = htmlreg(list(m.chol,mj.chol,ext.chol), custom.model.names=c('Americans','Japanese','Chimpanzees'), ci.force=TRUE,
+                   caption = "", groups=NULL, digits=3)
 write(chol.tbl,"chol.html")
 
 ext.m2.creat=extract(m1b, include.aic = FALSE, include.bic=FALSE, include.dic=FALSE,
                 include.deviance=FALSE, include.loglik=FALSE,include.nobs=FALSE,
                 include.groups=FALSE,include.variance=FALSE)
-
 creat.tbl = htmlreg(list(m.creat,mj.creat,ext.m2.creat), custom.model.names=c('Americans','Japanese','Chimpanzees'), ci.force=TRUE,
                     caption = "", groups=NULL, digits=3)
 write(creat.tbl,"creat.html")
 
-
 ext.m1b=extract(m1b, include.aic = FALSE, include.bic=FALSE, include.dic=FALSE,
               include.deviance=FALSE, include.loglik=FALSE,include.nobs=FALSE,
-              include.groups=FALSE,include.variance=FALSE)
-  
+              include.groups=FALSE,include.variance=FALSE)  
 dias.tbl = htmlreg(list(m.dias,mj.dias,ext.m1b), custom.model.names=c('Americans','Japanese','Chimpanzees'), ci.force=TRUE,
                     caption = "", groups=NULL, digits=3)
 write(dias.tbl,"dias.html")
@@ -250,7 +260,6 @@ c + stat_smooth(method=lm) + geom_point
 
 #library(ez)
 #cchol.preds = ezPredict(m2.chol)
-cchol.preds = confint(m2.chol)
 
 library(effects)
         
@@ -269,3 +278,15 @@ coefplot(sim.m2.chol)
 install.packages("coefplot2",
                  repos="http://www.math.mcmaster.ca/bolker/R",
                  type="source")
+
+
+#####
+
+cchol.preds = confint(m2.chol)
+
+
+m1a$
+m.sys$coefficients[1]
+m.sys.preds = confint(m.sys)
+
+

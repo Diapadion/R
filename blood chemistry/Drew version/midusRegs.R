@@ -22,8 +22,8 @@
 # $B4BSCREA - creatinine
 # $B4BSBAP - alkaline phosphatase
 # $B4BGLUC
-# $B4P1GS - average sitting systolic
-# $B4P1GD - average sitting diastolic
+# $B4P1GS23 - average sitting systolic (2nd + 3rd measures)
+# $B4P1GD23 - average sitting diastolic
 
 midus_c$ageAtBloodDraw <- midus_c$B4ZCOMPY - midus_c$B1PBYEAR
 
@@ -42,11 +42,11 @@ B4BTRIGL[outliers(B4BTRIGL,3.5)]<-NA
 B4BSCREA[outliers(B4BSCREA,3.5)]<-NA
 B4BSBAP[outliers(B4BSBAP,3.5)]<-NA
 B4BGLUC[outliers(B4BGLUC,3.5)]<-NA
-B4P1GS[outliers(B4P1GS,3.5)]<-NA
-B4P1GD[outliers(B4P1GD,3.5)]<-NA
+B4P1GS23[outliers(B4P1GS23,3.5)]<-NA
+B4P1GD23[outliers(B4P1GD23,3.5)]<-NA
 #B1SAGENC[outliers(B1SAGENC,3.5)]<-NA
 detach(midus_c)
-ageAtBloodDraw[outliers(ageAtBloodDraw,3.5)]<-NA
+midus_c$ageAtBloodDraw[outliers(midus_c$ageAtBloodDraw,3.5)]<-NA
 midus_c$B1SOPEN[midus_c$B1SOPEN==8]<-NA
 midus_c$B1SAGREE[midus_c$B1SAGREE==8]<-NA
 midus_c$B1SCONS2[midus_c$B1SCONS2==8]<-NA
@@ -54,14 +54,22 @@ midus_c$B1SNEURO[midus_c$B1SNEURO==8]<-NA
 midus_c$B1SEXTRA[midus_c$B1SEXTRA==8]<-NA
 midus_c$B1SAGENC[midus_c$B1SAGENC==8]<-NA
 midus_c$B4BTRIGL[outliers(midus_c$B4BTRIGL,3.5)]<-NA
+midus_c$B4PBMI[outliers(midus_c$B4PBMI,3.5)]<-NA
+midus_c$B4BCHOL[outliers(midus_c$B4BCHOL,3.5)]<-NA
+midus_c$B4BSCREA[outliers(midus_c$B4BSCREA,3.5)]<-NA
+midus_c$B4BSBAP[outliers(midus_c$B4BSBAP,3.5)]<-NA
+midus_c$B4BGLUC[outliers(midus_c$B4BGLUC,3.5)]<-NA
+midus_c$B4P1GS23[outliers(midus_c$B4P1GS23,3.5)]<-NA
+midus_c$B4P1GD23[outliers(midus_c$B4P1GD23,3.5)]<-NA
 
 
 midus_cs <- with(midus_c,data.frame(M2ID,sex=B1PRSEX, age=s(ageAtBloodDraw),
                                     Dominance=s(B1SAGENC),Extraversion=s(B1SEXTRA),Openness=s(B1SOPEN),
                                     Conscientiousness=s(B1SCONS2),Agreeableness=s(B1SAGREE),Neuroticism=s(B1SNEURO),                               
                                     BMI=s(B4PBMI),chol=s(B4BCHOL),creat=s(B4BSCREA),trig=s(B4BTRIGL),
-                                    sys=s(B4P1GS),dias=s(B4P1GD),
-                                    alp=s(B4BSBAP),glucose=s(B4BGLUC)))
+                                    sys=s(B4P1GS23),dias=s(B4P1GD23),
+                                    alp=s(B4BSBAP),glucose=s(B4BGLUC),
+                                    sys_all = s(B4P1GS), dias_all = s(B4P1GD)))
 
 
 ### models
@@ -87,13 +95,26 @@ m.creat <- lm(creat ~ age +sex + BMI
               + Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion, data = midus_cs)
 # see m2u
 
-m.alp <- lm(chol ~ age +sex + BMI
+m.alp <- lm(alp ~ age +sex + BMI
             + Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion, data = midus_cs)
 # see m2w
 
 m.gluc <- lm(glucose ~ age +sex + BMI
              + Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion, data = midus_cs)
 # see m_2c ++
+
+m.BMI <- lm(BMI ~ age +sex
+                      + Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion, data = midus_cs)
+# see m3.BMIc
+
+
+### hmm so does the first BP get thrown by people being nervous?
+
+m.sys.all = lm(sys_all ~ age + sex + BMI
+   + Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion, data = midus_cs)
+
+m.dias.all = lm(dias_all ~ age + sex + BMI
+              + Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion, data = midus_cs)
 
 
 ### chol on BP?

@@ -19,8 +19,15 @@ midusP1byBio <- midusP1byBio[match(midusBio$M2ID,midusP1byBio$M2ID),]
 midus_c <- cbind(midusP1byBio,midusBio)
 
 write.csv(midus_c, file='comboMIDUSpersBio.csv',sep=',')
+midusP1$B1SOPEN[midusP1$B1SOPEN==8]<-NA
+midusP1$B1SAGREE[midusP1$B1SAGREE==8]<-NA
+midusP1$B1SCONS2[midusP1$B1SCONS2==8]<-NA
+midusP1$B1SNEURO[midusP1$B1SNEURO==8]<-NA
+midusP1$B1SEXTRA[midusP1$B1SEXTRA==8]<-NA
+midusP1$B1SAGENC[midusP1$B1SAGENC==8]<-NA
+write.csv(midusP1,file='midusP1cc.csv', sep=',')
 
-rm(midusBio,midusIn,midusP1,midusP1byBio)
+rm(midusP1,midusBio,midusP1byBio)
 
 
 
@@ -37,5 +44,21 @@ midjaByBio <- midjaByBio[match(midjaBio$MIDJA_IDS,midjaByBio$MIDJA_IDS),]
 midja_c <- cbind(midjaByBio,midjaBio)
 
 write.csv(midja_c, file='comboMIDJApersBio.csv',sep=',')
+midja$J1SAGENC[midja$J1SAGENC==8]<-NA
+midja$J1SEXTRA[midja$J1SEXTRA==8]<-NA
+midja$J1SCONS2[midja$J1SCONS2==8]<-NA
+midja$J1SOPEN[midja$J1SOPEN==8]<-NA
+midja$J1SAGREE[midja$J1SAGREE==8]<-NA
+midja$J1SNEURO[midja$J1SNEURO==8]<-NA
+write.csv(midja, file='midja_cc.csv')
 
 rm(midja,midjaBio,midjaByBio)
+
+
+### avoid these
+midusP1 <- read.csv('midusP1cc.csv')
+midja <- read.csv('midja_cc.csv')
+
+midus_c <- read.csv('comboMIDUSpersBio.csv')
+
+

@@ -59,3 +59,6 @@ mj.creat <- lm(creat ~ age + sex + BMI
 
 mj.dias <- lm(dias ~ age + sex + BMI
                      + Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion, data = midja_cs)
+
+mj.BMI <- lm(BMI ~ age + sex
+              + Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion, data = midja_cs)

@@ -325,7 +325,7 @@ library(Amelia)
 imp_mean = amelia(meandat[,c(-4)],idvars="Chimp",m=10)
 
              ### see just below
-output <- reshape(mmdat, 
+output <- reshape(mmdat[,1:86], 
                   idvar = "chimp",
                   #idvar=c(colnames(mmdat)[1:11],'sys','dias'), 
                   varying=colnames(mmdat)[12:86], 
@@ -359,12 +359,17 @@ melt_dat <- melt(mmdat, id.vars = c("chimp",'dom','extra','neuro','agree','open'
 # fucking balls we'll do it live
 output$trig = c(mmdat$trig.1,mmdat$trig.2,mmdat$trig.3)
 output$dias = c(mmdat$dias.1,mmdat$dias.2,mmdat$dias.3)
+output$sys = c(mmdat$sys.1,mmdat$sys.2,mmdat$sys.3)
+output$chol = c(mmdat$chol.1,mmdat$chol.2,mmdat$chol.3)
+output$creatinine = c(mmdat$creatinine.1,mmdat$creatinine.2,mmdat$creatinine.3)
 
 
 
 # now scale and center it
 scoutput <- cbind(output[,1:2],scale(output[,3]),output[,4],scale(output[,5:12]),
-                                output[,13],scale(output[,14:38]))
+                              #  output[,13],
+                  scale(output[,13:37]))
+
 colnames(scoutput)[3] <- 'BMI'
 colnames(scoutput)[6:11]<- c('Dominance','Extraversion','Conscientiousness',
                              'Agreeableness','Neuroticism','Openness')

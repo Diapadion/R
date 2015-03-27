@@ -70,39 +70,39 @@ ext.m1a=extract(m1a, include.aic = FALSE, include.bic=FALSE, include.dic=FALSE,
                 include.groups=FALSE,include.variance=FALSE)
 
 sys.tbl = htmlreg(list(m.sys,mj.sys,ext.m1a), custom.model.names=c('Americans','Japanese','Chimpanzees'), ci.force=TRUE,
-                  caption = "", groups=NULL, digits=3)
+                  caption = "", groups=NULL, digits=3, ci.force.level = 0.90)
 write(sys.tbl,"sys.html")
 
 ext.trig=extract(m2.trig, include.aic = FALSE, include.bic=FALSE, include.dic=FALSE,
                 include.deviance=FALSE, include.loglik=FALSE,include.nobs=FALSE,
                 include.groups=FALSE,include.variance=FALSE)
 trig.tbl = htmlreg(list(m.trig,mj.trig,ext.trig), custom.model.names=c('Americans','Japanese','Chimpanzees'), ci.force=TRUE,
-                   caption = "", groups=NULL, digits=3)
+                   caption = "", groups=NULL, digits=3, ci.force.level = 0.90)
 write(trig.tbl,"trig.html")
 
 ext.chol=extract(m2.chol, include.aic = FALSE, include.bic=FALSE, include.dic=FALSE,
                 include.deviance=FALSE, include.loglik=FALSE,include.nobs=FALSE,
                 include.groups=FALSE,include.variance=FALSE)
 chol.tbl = htmlreg(list(m.chol,mj.chol,ext.chol), custom.model.names=c('Americans','Japanese','Chimpanzees'), ci.force=TRUE,
-                   caption = "", groups=NULL, digits=3)
+                   caption = "", groups=NULL, digits=3, ci.force.level = 0.90)
 write(chol.tbl,"chol.html")
 
-ext.m2.creat=extract(m1b, include.aic = FALSE, include.bic=FALSE, include.dic=FALSE,
+ext.m2.creat=extract(m2.creat, include.aic = FALSE, include.bic=FALSE, include.dic=FALSE,
                 include.deviance=FALSE, include.loglik=FALSE,include.nobs=FALSE,
                 include.groups=FALSE,include.variance=FALSE)
 creat.tbl = htmlreg(list(m.creat,mj.creat,ext.m2.creat), custom.model.names=c('Americans','Japanese','Chimpanzees'), ci.force=TRUE,
-                    caption = "", groups=NULL, digits=3)
+                    caption = "", groups=NULL, digits=3, ci.force.level = 0.90)
 write(creat.tbl,"creat.html")
 
 ext.m1b=extract(m1b, include.aic = FALSE, include.bic=FALSE, include.dic=FALSE,
               include.deviance=FALSE, include.loglik=FALSE,include.nobs=FALSE,
               include.groups=FALSE,include.variance=FALSE)  
 dias.tbl = htmlreg(list(m.dias,mj.dias,ext.m1b), custom.model.names=c('Americans','Japanese','Chimpanzees'), ci.force=TRUE,
-                    caption = "", groups=NULL, digits=3)
+                    caption = "", groups=NULL, digits=3, ci.force.level = 0.90)
 write(dias.tbl,"dias.html")
 
                    
-### ggplot 
+### ggplot (s)
 library(ggplot2)
 
 #first try - personality dimension distributions, side by side violin/bean plots
@@ -129,14 +129,61 @@ vpers = rbind(
   cbind(Sample="MIDJA", Dimension="Dominance", Score=midja_c$J1SAGENC),
   cbind(Sample="MIDJA", Dimension="Openness", Score=midja_c$J1SOPEN))
 vpers<-data.frame(Sample=vpers[,1],Dimension=vpers[,2],Score=as.numeric(as.character(vpers[,3])))
-  
+
 violpers <- ggplot(vpers, aes(x=Sample, y=Score, group=Sample)) + geom_violin(trim=TRUE, aes(fill = factor(Sample))) +
   facet_wrap(~Dimension) + 
   stat_summary(fun.y=median.quartile,geom='point') + 
   stat_summary(fun.y=median.line,geom='point') +
   geom_segment(aes(x=Sample-0.1, xend=Sample+0.1, y=Score, yend=Score), colour='white') + theme_bw()
 
+ggsave(filename = 'viol_pers.png', plot = violpers, 
+       scale = 1, width = 12, height = 10,
+       dpi = 300, limitsize = TRUE)
 
+# some chi sq tests to accompany
+with(vpers,chisq.test(table(Score[(Dimension=='Dominance')&(Sample=='MIDUS')]),
+                      table(Score[(Dimension=='Dominance')&(Sample=='Yerkes')])))
+                      
+  Score[Dimension=='Dominance'&&Sample=='MIDUS'])
+
+
+### now with the entire data set's worth of personality
+vpersFull<-data.frame(Sample=character(),Dimension=character(),Score=numeric())
+
+vpersFull = rbind(
+  cbind(Sample="Yerkes", Dimension="Dominance", Score=(((output$dom - 1) / 2) + 1)),
+  cbind(Sample="Yerkes", Dimension="Neuroticism", Score=(((output$neuro - 1) / 2) + 1)),
+  cbind(Sample="Yerkes", Dimension="Extraversion", Score=(((output$extra - 1) / 2) + 1)),
+  cbind(Sample="Yerkes", Dimension="Agreeableness", Score=(((output$agree - 1) / 2) + 1)),
+  cbind(Sample="Yerkes", Dimension="Conscientiousness", Score=(((output$cons - 1) / 2) + 1)),
+  cbind(Sample="Yerkes", Dimension="Openness", Score=(((output$open - 1) / 2) + 1)),
+  cbind(Sample="MIDUS", Dimension="Neuroticism", Score=midusP1$B1SNEURO),
+  cbind(Sample="MIDUS", Dimension="Dominance", Score=midusP1$B1SAGENC),
+  cbind(Sample="MIDUS", Dimension="Agreeableness", Score=midusP1$B1SAGREE),
+  cbind(Sample="MIDUS", Dimension="Conscientiousness", Score=midusP1$B1SCONS2),
+  cbind(Sample="MIDUS", Dimension="Extraversion", Score=midusP1$B1SEXTRA),
+  cbind(Sample="MIDUS", Dimension="Openness", Score=midusP1$B1SOPEN),
+  cbind(Sample="MIDJA", Dimension="Agreeableness", Score=midja$J1SAGREE),
+  cbind(Sample="MIDJA", Dimension="Neuroticism", Score=midja$J1SNEURO),
+  cbind(Sample="MIDJA", Dimension="Conscientiousness", Score=midja$J1SCONS2),
+  cbind(Sample="MIDJA", Dimension="Extraversion", Score=midja$J1SEXTRA),
+  cbind(Sample="MIDJA", Dimension="Dominance", Score=midja$J1SAGENC),
+  cbind(Sample="MIDJA", Dimension="Openness", Score=midja$J1SOPEN))
+vpersFull<-data.frame(Sample=vpersFull[,1],Dimension=vpersFull[,2],Score=as.numeric(as.character(vpersFull[,3])))
+
+violpFull <- ggplot(vpersFull, aes(x=Sample, y=Score, group=Sample)) + geom_violin(trim=TRUE, aes(fill = factor(Sample))) +
+  facet_wrap(~Dimension) + 
+  stat_summary(fun.y=median.quartile,geom='point') + 
+  stat_summary(fun.y=median.line,geom='point') +
+  geom_segment(aes(x=Sample-0.1, xend=Sample+0.1, y=Score, yend=Score), colour='white') + theme_bw()
+#violpFull
+
+ggsave(filename = 'viol_fullpers.png', plot = violpFull, 
+       scale = 1, width = 12, height = 10,
+       dpi = 300, limitsize = TRUE)
+
+
+### framing and plotting of biomarker distrs
 vbio <- NULL
 vbio <- rbind(
   cbind(Sample="Yerkes",Marker="Diastolic BP",Value=output$dias),
@@ -161,11 +208,12 @@ vbio <- rbind(
 vbio<-data.frame(Sample=vbio[,1],Marker=vbio[,2],Value=as.numeric(as.character(vbio[,3])))
 
 vbpbio <- ggplot(vbio, aes(x=Sample, y=Value, group=Sample)) + geom_boxplot(trim=TRUE, aes(fill = factor(Sample)))
-  + stat_summary(fun.y=median.quartile,geom='point') + 
+  #+ stat_summary(fun.y=median.quartile,geom='point') + 
   stat_summary(fun.y=median.line,geom='point') +
   geom_segment(aes(x=Sample-0.1, xend=Sample+0.1, y=Value, yend=Value), colour='white')
-vbpbio + facet_wrap(~ Marker, scales = "free_y") + theme_bw()
+vbpbio + facet_wrap(~ Marker, scales = "free_y") + theme_bw() 
 vbpbio
+
 
 # violtest <- ggplot(diamonds, aes(x=color, y=depth, group=color)) +
 #   geom_boxplot(trim=TRUE, aes(fill = factor(color))) +
@@ -305,10 +353,14 @@ colnames(sys.ci)<-c("Coefficients",'lower',"upper","Sample","Dimension")
 sys.cf.gg = ggplot(sys.ci, aes(Sample,Coefficients, color=Sample)) +
   geom_point(aes(shape=Sample),size=4, position=pd) + 
 #  scale_color_manual(name="Sample",values=c("coral","steelblue")) + 
-  theme_bw() + 
+  theme_bw() + theme(legend.position='none') +
 #  scale_x_continuous("Sample", breaks=1:length(Sample), labels=Sample) + 
   scale_y_continuous("Regression coefficients")   + 
   geom_errorbar(aes(ymin=lower,ymax=upper),width=0.1,position=pd) + facet_wrap(~ Dimension, ncol=2)
+
+ggsave(filename = 'sys.png', plot = sys.cf.gg, 
+       scale = 1, width = 7, height = 10,
+       dpi = 300, limitsize = TRUE)
 
 
 # Diastolic CF plots
@@ -328,10 +380,14 @@ colnames(dias.ci)<-c("Coefficients",'lower',"upper","Sample","Dimension")
 dias.cf.gg <- ggplot(dias.ci, aes(Sample,Coefficients, color=Sample)) +
   geom_point(aes(shape=Sample),size=4, position=pd) + 
   #  scale_color_manual(name="Sample",values=c("coral","steelblue")) + 
-  theme_bw() + 
+  theme_bw() + theme(legend.position='none') +
   #  scale_x_continuous("Sample", breaks=1:length(Sample), labels=Sample) + 
   scale_y_continuous("Regression coefficients")   + 
   geom_errorbar(aes(ymin=lower,ymax=upper),width=0.1,position=pd) + facet_wrap(~ Dimension, ncol=2)
+
+ggsave(filename = 'dias.png', plot = dias.cf.gg, 
+       scale = 1, width = 7, height = 10,
+       dpi = 300, limitsize = TRUE)
 
 
 # Triglyceride CF plots
@@ -351,10 +407,14 @@ colnames(trig.ci)<-c("Coefficients",'lower',"upper","Sample","Dimension")
 trig.cf.gg <- ggplot(trig.ci, aes(Sample,Coefficients, color=Sample)) +
   geom_point(aes(shape=Sample),size=4, position=pd) + 
   #  scale_color_manual(name="Sample",values=c("coral","steelblue")) + 
-  theme_bw() + 
+  theme_bw() + theme(legend.position='none') +
   #  scale_x_continuous("Sample", breaks=1:length(Sample), labels=Sample) + 
   scale_y_continuous("Regression coefficients")   + 
   geom_errorbar(aes(ymin=lower,ymax=upper),width=0.1,position=pd) + facet_wrap(~ Dimension, ncol=2)
+
+ggsave(filename = 'trig.png', plot = trig.cf.gg, 
+       scale = 1, width = 7, height = 10,
+       dpi = 300, limitsize = TRUE)
 
 
 # Cholesterol CF plots
@@ -374,10 +434,14 @@ colnames(chol.ci)<-c("Coefficients",'lower',"upper","Sample","Dimension")
 chol.cf.gg <- ggplot(chol.ci, aes(Sample,Coefficients, color=Sample)) +
   geom_point(aes(shape=Sample),size=4, position=pd) + 
   #  scale_color_manual(name="Sample",values=c("coral","steelblue")) + 
-  theme_bw() + 
+  theme_bw() + theme(legend.position='none') +
   #  scale_x_continuous("Sample", breaks=1:length(Sample), labels=Sample) + 
   scale_y_continuous("Regression coefficients")   + 
   geom_errorbar(aes(ymin=lower,ymax=upper),width=0.1,position=pd) + facet_wrap(~ Dimension, ncol=2)
+
+ggsave(filename = 'chol.png', plot = chol.cf.gg, 
+       scale = 1, width = 7, height = 10,
+       dpi = 300, limitsize = TRUE)
 
 
 # Creatinine CF plots
@@ -397,7 +461,7 @@ colnames(creat.ci)<-c("Coefficients",'lower',"upper","Sample","Dimension")
 creat.cf.gg <- ggplot(creat.ci, aes(Sample,Coefficients, color=Sample)) +
   geom_point(aes(shape=Sample),size=4, position=pd) + 
   #  scale_color_manual(name="Sample",values=c("coral","steelblue")) + 
-  theme_bw() + 
+  theme_bw() + theme(legend.position='none') +
   #  scale_x_continuous("Sample", breaks=1:length(Sample), labels=Sample) + 
   scale_y_continuous("Regression coefficients")   + 
   geom_errorbar(aes(ymin=lower,ymax=upper),width=0.1,position=pd) + facet_wrap(~ Dimension, ncol=2)
@@ -405,3 +469,30 @@ creat.cf.gg <- ggplot(creat.ci, aes(Sample,Coefficients, color=Sample)) +
 ggsave(filename = 'creat.png', plot = creat.cf.gg, 
        scale = 1, width = 7, height = 10,
        dpi = 300, limitsize = TRUE)
+
+
+
+
+
+#BMI reg CF plots
+# beware - can't use this until fix the BMI lmer
+c.BMI.co=fixef(m3.BMI)[2:7]
+m.BMI.co=m.BMI$coefficients[4:9]
+j.BMI.co=mj.BMI$coefficients[4:9]
+
+c.BMI.prd = confint(m3.BMI, level=0.90)[4:9,]
+m.BMI.prd = confint(m.BMI, level=0.90)[5:10,]
+j.BMI.prd = confint(mj.BMI, level=0.90)[5:10,]
+
+BMI.ci = data.frame(
+  Coefficients=c(j.BMI.co,m.BMI.co,c.BMI.co),rbind(j.BMI.prd,m.BMI.prd,c.BMI.prd),sample_vect,Dimension=rep(rownames(m.BMI.prd),3)
+)
+colnames(BMI.ci)<-c("Coefficients",'lower',"upper","Sample","Dimension")
+
+BMI.cf.gg <- ggplot(BMI.ci, aes(Sample,Coefficients, color=Sample)) +
+  geom_point(aes(shape=Sample),size=4, position=pd) + 
+  #  scale_color_manual(name="Sample",values=c("coral","steelblue")) + 
+  theme_bw() + 
+  #  scale_x_continuous("Sample", breaks=1:length(Sample), labels=Sample) + 
+  scale_y_continuous("Regression coefficients")   + 
+  geom_errorbar(aes(ymin=lower,ymax=upper),width=0.1,position=pd) + facet_wrap(~ Dimension, ncol=2)

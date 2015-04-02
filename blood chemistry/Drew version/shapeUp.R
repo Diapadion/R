@@ -18,9 +18,6 @@ dmdob <- fulldata[DOBrm,]
 DoB <- as.Date(as.character(dmdob$DOB.x),format = "%m/%d/%Y")
 
 
-
-
-
 bchemt1 <- structure(numeric(dim(dmdob)[1]), class="Date")
 bchemt2 <- structure(numeric(dim(dmdob)[1]), class="Date")
 bchemt3 <- structure(numeric(dim(dmdob)[1]), class="Date")
@@ -85,12 +82,20 @@ for (i in 1:(dim(dmdob)[1])){
 }
 
 
+#age <- as.numeric(as.Date(dmdob$DOPR.x,format="%m/%d/%Y")-DoB)
+#age <- as.numeric(as.Date('01/01/2000')-DoB)
+
+age <- as.numeric(bchemt1-DoB)
+
+
 # sex
 
 #IS THIS NEEDED???
-#dmdob$sex[104]=0 # seems to be lolita - uncelar what problem is
+#dmdob$sex[104]=0 # seems to be lolita - unclear what problem is
+# 31/03/15 - fixed???
 
 sex = dmdob$Sex.x
+
 
 # BMI
 BMI = dmdob$BMI
@@ -248,7 +253,7 @@ diastolic[diastolic==8]<-NA
 # putting it all together
 
 #age <- as.numeric(as.Date(dmdob$DOPR.x,format="%m/%d/%Y")-DoB)
-age <- as.numeric(as.Date('01/01/2000')-DoB)
+#age <- as.numeric(as.Date('01/01/2000')-DoB) # adjusted - see above if issues
 
 mmdat <- data.frame(dmdob$chimp,sex,BMI,DoB,age, # to get current age
                     compare_data$chimp_Dom_CZ,compare_data$chimp_Ext_CZ,compare_data$chimp_Con_CZ,
@@ -319,10 +324,15 @@ colnames(meandat) <- c('Chimp','sex','age','DoB','Dominance','Extraversion','Ope
 
 detach(fulldata)
 
+### Imputation
+### (so far, this is just used for having BMI be a dependent var in regressions)
 library(Amelia)
 
+
 #imp_mean = mice(meandat[,c(-4)])
-imp_mean = amelia(meandat[,c(-4)],idvars="Chimp",m=10)
+imp_mean = amelia(meandat[,c(-4)],idvars="Chimp",m=100, p2s=0)
+imp_mm = amelia(mmdat[,c(-4,-(12:87))],idvars="chimp",m=100,p2s=0)
+
 
              ### see just below
 output <- reshape(mmdat[,1:86], 
@@ -354,7 +364,7 @@ melt_dat <- melt(mmdat, id.vars = c("chimp",'dom','extra','neuro','agree','open'
 # 'Dominance','Extraversion','Openness','Agreeableness','Conscientiousness','Neuroticism',
                 
                
-               ) 
+           
 
 # fucking balls we'll do it live
 output$trig = c(mmdat$trig.1,mmdat$trig.2,mmdat$trig.3)
@@ -362,13 +372,14 @@ output$dias = c(mmdat$dias.1,mmdat$dias.2,mmdat$dias.3)
 output$sys = c(mmdat$sys.1,mmdat$sys.2,mmdat$sys.3)
 output$chol = c(mmdat$chol.1,mmdat$chol.2,mmdat$chol.3)
 output$creatinine = c(mmdat$creatinine.1,mmdat$creatinine.2,mmdat$creatinine.3)
+output$age2 = (output$age)^2
 
 
 
 # now scale and center it
 scoutput <- cbind(output[,1:2],scale(output[,3]),output[,4],scale(output[,5:12]),
                               #  output[,13],
-                  scale(output[,13:37]))
+                  scale(output[,13:38]))
 
 colnames(scoutput)[3] <- 'BMI'
 colnames(scoutput)[6:11]<- c('Dominance','Extraversion','Conscientiousness',

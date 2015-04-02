@@ -4,7 +4,7 @@
 
 # vars of interest
 # MIDJA_IDS
-# J1SQ2AGE
+# J2CAGE - Age at clinic visit
 # J1SQ1 - gender
 # 
 # J1SAGENC
@@ -33,9 +33,11 @@ midja_c$J1SAGREE[midja_c$J1SAGREE==8]<-NA
 midja_c$J1SNEURO[midja_c$J1SNEURO==8]<-NA
 midja_c$J2CTRIG[outliers(midja_c$J2CTRIG,3.5)]<-NA
 
+midja_c$J2CAGE2 = (midja_c$J2CAGE)^2
 
 
-midja_cs <- with(midja_c,data.frame(MIDJA_IDS, sex=J1SQ1, age=s(J1SQ2AGE), 
+
+midja_cs <- with(midja_c,data.frame(MIDJA_IDS, sex=J1SQ1, age=s(J2CAGE), age2=s(J2CAGE2),
                           Dominance=s(J1SAGENC),Extraversion=s(J1SEXTRA),Openness=s(J1SOPEN),
                           Conscientiousness=s(J1SCONS2),Agreeableness=s(J1SAGREE),Neuroticism=s(J1SNEURO),
                           BMI=s(J2CBMI),chol=s(J2BCHOL),creat=s(J2BSCREA),trig=s(J2CTRIG),
@@ -62,3 +64,25 @@ mj.dias <- lm(dias ~ age + sex + BMI
 
 mj.BMI <- lm(BMI ~ age + sex
               + Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion, data = midja_cs)
+
+
+### with age^2
+
+mj.sys.a2 <- lm(sys ~ age + sex + BMI
+             + Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion + age2, data = midja_cs)
+
+mj.chol.a2 <- lm(chol ~ age + sex + BMI
+              + Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion + age2, data = midja_cs)              
+
+mj.trig.a2 <- lm(trig ~ age + sex + BMI
+              + Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion + age2, data = midja_cs)          
+
+mj.creat.a2 <- lm(creat ~ age + sex + BMI 
+               + Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion + age2, data = midja_cs)          
+
+mj.dias.a2 <- lm(dias ~ age + sex + BMI
+              + Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion + age2, data = midja_cs)
+
+mj.BMI.a2 <- lm(BMI ~ age + sex
+             + Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion + age2, data = midja_cs)
+

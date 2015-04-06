@@ -81,12 +81,12 @@ lliks <- sort(sapply(aa.OK,logLik))
 
 
 ### with age^2
-m1a.a2 <- lmer(sys ~ Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion + age + BMI + sex + age2 + (1 | chimp), 
+m1a.a2 <- lmer(sys ~ Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion + age + BMI + sex + I(age^2) + (1 | chimp), 
             data = scoutput,REML=FALSE)
-m1b.a2 <- lmer(dias ~ Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion + age + BMI + sex + age2 + (1 | chimp), 
+m1b.a2 <- lmer(dias ~ Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion + age + BMI + sex + I(age^2) + (1 | chimp), 
             data = scoutput,REML=FALSE)
 
-m2.trig.a2 <- lmer(trig ~ Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion + age + BMI + sex + age2 + (1 | chimp), 
+m2.trig.a2 <- lmer(trig ~ Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion + age + BMI + sex + I(age^2) + (1 | chimp), 
                 data = scoutput,REML=FALSE)
 
 m2.chol.a2 <- lmer(chol ~ Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion + age + BMI + sex + age2 + (1 | chimp), 
@@ -96,7 +96,8 @@ m2.creat.a2 <- lmer(creatinine ~ Dominance + Openness + Agreeableness + Conscien
                  data = scoutput,REML=FALSE)
 
 # check convergence issues on this one, BMI unscaled?
-m3.BMI.a2 <- lmer(BMI ~ Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion + age + s(sex) + age2 + (1 | chimp), 
+library(optimx)
+m3.BMI.a2 <- lmer(BMI ~ Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion + age + sex + I(age^2) + (1 | chimp), 
                data = scoutput, REML=FALSE, control=lmerControl(optimizer = "optimx", 
                                                                 optCtrl=list(maxfun=1000, 
                                                                              method='nlminb')))
@@ -156,7 +157,7 @@ b.m1a.a2 <- blmer(sys ~ Dominance + Openness + Agreeableness + Conscientiousness
                data = scoutput,REML=FALSE)
 
 library(optimx)
-b.m3.BMI.a2 <- blmer(BMI ~ Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion + age + s(sex) + age2 + (1 | chimp), 
+b.m3.BMI.a2 <- blmer(BMI ~ Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion + age + sex + age2 + (1 | chimp), 
                   data = scoutput, REML=FALSE, control=lmerControl(optimizer = "optimx", 
                                                                    optCtrl=list(maxfun=1000, 
                                                                                 #method='nlminb'

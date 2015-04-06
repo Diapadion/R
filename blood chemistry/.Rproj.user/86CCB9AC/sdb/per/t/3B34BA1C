@@ -1,0 +1,22 @@
+{
+    "contents" : "",
+    "created" : 1428323054843.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "3B34BA1C",
+    "lastKnownWriteTime" : 7741240723082584096,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "caption" : "scoutput",
+        "contentUrl" : "content?title=scoutput&file=3ec43d00c5054ce1b366adc78a5eef34.htm",
+        "displayedObservations" : 525,
+        "displayedVariables" : 38,
+        "totalObservations" : 525,
+        "variables" : 37
+    },
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}

@@ -85,6 +85,7 @@ for (i in 1:(dim(dmdob)[1])){
 #age <- as.numeric(as.Date(dmdob$DOPR.x,format="%m/%d/%Y")-DoB)
 #age <- as.numeric(as.Date('01/01/2000')-DoB)
 
+library(pastecs)
 age <- as.numeric(bchemt1-DoB)
 
 
@@ -95,6 +96,9 @@ age <- as.numeric(bchemt1-DoB)
 # 31/03/15 - fixed???
 
 sex = dmdob$Sex.x
+# sex factor is 0 for females, 1 for males
+# this needs to be changed to 2 and 1 to jive with MIDUS etc
+sex[sex==0]=2
 
 
 # BMI
@@ -372,8 +376,9 @@ output$dias = c(mmdat$dias.1,mmdat$dias.2,mmdat$dias.3)
 output$sys = c(mmdat$sys.1,mmdat$sys.2,mmdat$sys.3)
 output$chol = c(mmdat$chol.1,mmdat$chol.2,mmdat$chol.3)
 output$creatinine = c(mmdat$creatinine.1,mmdat$creatinine.2,mmdat$creatinine.3)
-output$age2 = (output$age)^2
-
+#output$age2 = (output$age)^2
+# I'm not sure what the problem is with doing it this way, but it's not good
+# this needs to be applied in the other data sets as well
 
 
 # now scale and center it

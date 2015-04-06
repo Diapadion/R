@@ -5,7 +5,7 @@
 # vars of interest
 # MIDJA_IDS
 # J2CAGE - Age at clinic visit
-# J1SQ1 - gender
+# J1SQ1 - "gender" (1 = male, 2 = female)
 # 
 # J1SAGENC
 # J1SEXTRA
@@ -84,5 +84,5 @@ mj.dias.a2 <- lm(dias ~ age + sex + BMI
               + Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion + age2, data = midja_cs)
 
 mj.BMI.a2 <- lm(BMI ~ age + sex
-             + Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion + age2, data = midja_cs)
+             + Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion + I(age^2), data = midja_cs)
 

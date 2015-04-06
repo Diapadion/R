@@ -5,7 +5,7 @@
 # vars of interest
 # $M2ID
 # $B4ZAGE - respondent age at P4 data collection
-# $B1PRSEX
+# $B1PRSEX - "gender" (1 = male, 2 = female)
 # 
 # $B1SOPEN
 # $B1SAGREE
@@ -145,9 +145,9 @@ m.trig.a2 <- lm(trig ~ age + sex + BMI
 #leave out?
 
 m.creat.a2 <- lm(creat ~ age + sex + BMI 
-              + Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion + age2, data = midus_cs)
+              + Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion + I(age^2), data = midus_cs)
 # see m2u
 
 m.BMI.a2 <- lm(BMI ~ age + sex
-            + Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion + age2, data = midus_cs)
+            + Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion + I(age^2), data = midus_cs)
 # see m3.BMIc

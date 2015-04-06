@@ -102,34 +102,73 @@ dias.tbl = htmlreg(list(m.dias,mj.dias,ext.m1b), custom.model.names=c('Americans
 write(dias.tbl,"dias.html")
 
                    
-### ggplot (s)
-library(ggplot2)
+### (gg?)plot(s)
 
 #first try - personality dimension distributions, side by side violin/bean plots
 
-vpers<-data.frame(Sample=character(),Dimension=character(),Score=numeric())
+vpers<-data.frame(Sample=character(),Dimension=character(),Score=numeric(), Sex=factor)
 
 vpers = rbind(
-  cbind(Sample="Yerkes", Dimension="Dominance", Score=(((output$dom - 1) / 2) + 1)),
-  cbind(Sample="Yerkes", Dimension="Neuroticism", Score=(((output$neuro - 1) / 2) + 1)),
-  cbind(Sample="Yerkes", Dimension="Extraversion", Score=(((output$extra - 1) / 2) + 1)),
-  cbind(Sample="Yerkes", Dimension="Agreeableness", Score=(((output$agree - 1) / 2) + 1)),
-  cbind(Sample="Yerkes", Dimension="Conscientiousness", Score=(((output$cons - 1) / 2) + 1)),
-  cbind(Sample="Yerkes", Dimension="Openness", Score=(((output$open - 1) / 2) + 1)),
-  cbind(Sample="MIDUS", Dimension="Neuroticism", Score=midus_c$B1SNEURO),
-  cbind(Sample="MIDUS", Dimension="Dominance", Score=midus_c$B1SAGENC),
-  cbind(Sample="MIDUS", Dimension="Agreeableness", Score=midus_c$B1SAGREE),
-  cbind(Sample="MIDUS", Dimension="Conscientiousness", Score=midus_c$B1SCONS2),
-  cbind(Sample="MIDUS", Dimension="Extraversion", Score=midus_c$B1SEXTRA),
-  cbind(Sample="MIDUS", Dimension="Openness", Score=midus_c$B1SOPEN),
-  cbind(Sample="MIDJA", Dimension="Agreeableness", Score=midja_c$J1SAGREE),
-  cbind(Sample="MIDJA", Dimension="Neuroticism", Score=midja_c$J1SNEURO),
-  cbind(Sample="MIDJA", Dimension="Conscientiousness", Score=midja_c$J1SCONS2),
-  cbind(Sample="MIDJA", Dimension="Extraversion", Score=midja_c$J1SEXTRA),
-  cbind(Sample="MIDJA", Dimension="Dominance", Score=midja_c$J1SAGENC),
-  cbind(Sample="MIDJA", Dimension="Openness", Score=midja_c$J1SOPEN))
-vpers<-data.frame(Sample=vpers[,1],Dimension=vpers[,2],Score=as.numeric(as.character(vpers[,3])))
+  cbind(Sample="Yerkes", Dimension="Dominance", Score=(((output$dom - 1) / 2) + 1),Sex=output$sex),
+  cbind(Sample="Yerkes", Dimension="Neuroticism", Score=(((output$neuro - 1) / 2) + 1),Sex=output$sex),
+  cbind(Sample="Yerkes", Dimension="Extraversion", Score=(((output$extra - 1) / 2) + 1),Sex=output$sex),
+  cbind(Sample="Yerkes", Dimension="Agreeableness", Score=(((output$agree - 1) / 2) + 1),Sex=output$sex),
+  cbind(Sample="Yerkes", Dimension="Conscientiousness", Score=(((output$cons - 1) / 2) + 1),Sex=output$sex),
+  cbind(Sample="Yerkes", Dimension="Openness", Score=(((output$open - 1) / 2) + 1),Sex=output$sex),
+  cbind(Sample="MIDUS", Dimension="Neuroticism", Score=midus_c$B1SNEURO,Sex=midus_c$B1PRSEX),
+  cbind(Sample="MIDUS", Dimension="Dominance", Score=midus_c$B1SAGENC,Sex=midus_c$B1PRSEX),
+  cbind(Sample="MIDUS", Dimension="Agreeableness", Score=midus_c$B1SAGREE,Sex=midus_c$B1PRSEX),
+  cbind(Sample="MIDUS", Dimension="Conscientiousness", Score=midus_c$B1SCONS2,Sex=midus_c$B1PRSEX),
+  cbind(Sample="MIDUS", Dimension="Extraversion", Score=midus_c$B1SEXTRA,Sex=midus_c$B1PRSEX),
+  cbind(Sample="MIDUS", Dimension="Openness", Score=midus_c$B1SOPEN,Sex=midus_c$B1PRSEX),
+  cbind(Sample="MIDJA", Dimension="Agreeableness", Score=midja_c$J1SAGREE,Sex=midja_c$J1SQ1),
+  cbind(Sample="MIDJA", Dimension="Neuroticism", Score=midja_c$J1SNEURO,Sex=midja_c$J1SQ1),
+  cbind(Sample="MIDJA", Dimension="Conscientiousness", Score=midja_c$J1SCONS2,Sex=midja_c$J1SQ1),
+  cbind(Sample="MIDJA", Dimension="Extraversion", Score=midja_c$J1SEXTRA,Sex=midja_c$J1SQ1),
+  cbind(Sample="MIDJA", Dimension="Dominance", Score=midja_c$J1SAGENC,Sex=midja_c$J1SQ1),
+  cbind(Sample="MIDJA", Dimension="Openness", Score=midja_c$J1SOPEN,Sex=midja_c$J1SQ1))
+vpers<-data.frame(Sample=vpers[,1],Dimension=vpers[,2],Score=as.numeric(as.character(vpers[,3])),Sex=as.factor(vpers[,4]))
 
+library(beanplot)
+beanpers <- with(data=vpers[vpers$Dimension=='Dominance',], beanplot(Score ~ Sex * Sample, side = 'both', bw = 0.3, cutmax = 4, cutmin = 1,
+                                                                     overallline = "median", beanlines = 'median', what = c(0,1,1,0), boxwex=0.9,
+                                                                     col = list("cadetblue3", "cadetblue1", "royalblue3", "royalblue1","slateblue","slateblue1"))
+)
+
+beanpers <- with(data=vpers[vpers$Dimension=='Agreeableness',], beanplot(Score ~ Sex * Sample, side = 'both', bw = 0.3, cutmax = 4, cutmin = 1,
+                                                                         overallline = "median", beanlines = 'median', what = c(0,1,1,0), boxwex=0.9,
+                                                                         col = list("cadetblue3", "cadetblue1", "royalblue3", "royalblue1","slateblue","slateblue1"))
+)
+beanpers <- with(data=vpers[vpers$Dimension=='Neuroticism',], beanplot(Score ~ Sex * Sample, side = 'both', bw = 0.3, cutmax = 4, cutmin = 1,
+                                                                       overallline = "median", beanlines = 'median', what = c(0,1,1,0), boxwex=0.9,
+                                                                       col = list("cadetblue3", "cadetblue1", "royalblue3", "royalblue1","slateblue","slateblue1"))
+)
+beanpers <- with(data=vpers[vpers$Dimension=='Openness',], beanplot(Score ~ Sex * Sample, side = 'both', bw = 0.3, cutmax = 4, cutmin = 1,
+                                                                    overallline = "median", beanlines = 'median', what = c(0,1,1,0), boxwex=0.9,
+                                                                    col = list("cadetblue3", "cadetblue1", "royalblue3", "royalblue1","slateblue","slateblue1"))
+)
+
+beanpers <- with(data=vpers[vpers$Dimension=='Conscientiousness',], beanplot(Score ~ Sex * Sample, side = 'both', bw = 0.3, cutmax = 4, cutmin = 1,
+                                                                             overallline = "median", beanlines = 'median', what = c(0,1,1,0), boxwex=0.9,
+                                                                             col = list("cadetblue3", "cadetblue1", "royalblue3", "royalblue1","slateblue","slateblue1"))
+)
+
+beanpers <- with(data=vpers[vpers$Dimension=='Extraversion',], 
+                 beanplot(Score ~ Sex * Sample, side = 'both', bw = 0.3, cutmax = 4, cutmin = 1,
+                          overallline = "median", beanlines = 'median', what = c(0,1,1,0), boxwex=0.9,
+                          col = list("cadetblue3", "cadetblue1", "royalblue3", "royalblue1","slateblue","slateblue1"))
+)
+
+# library(vioplot)
+# library(devtools)
+# library(digest)
+#source_gist("https://gist.github.com/mbjoseph/5852613")
+
+
+
+
+
+library(ggplot2)
 violpers <- ggplot(vpers, aes(x=Sample, y=Score, group=Sample)) + geom_violin(trim=TRUE, aes(fill = factor(Sample))) +
   facet_wrap(~Dimension) + 
   stat_summary(fun.y=median.quartile,geom='point') + 
@@ -186,26 +225,61 @@ ggsave(filename = 'viol_fullpers.png', plot = violpFull,
 ### framing and plotting of biomarker distrs
 vbio <- NULL
 vbio <- rbind(
-  cbind(Sample="Yerkes",Marker="Diastolic BP",Value=output$dias),
-  cbind(Sample="Yerkes",Marker='Systolic BP',Value=output$sys),
-  cbind(Sample="Yerkes",Marker='BMI',Value=output$BMI),
-  cbind(Sample="Yerkes",Marker='Cholesterol',Value=output$chol),
-  cbind(Sample="Yerkes",Marker='Triglycerides',Value=output$trig),
-  cbind(Sample="Yerkes",Marker='Creatinine',Value=output$creatinine),
-  cbind(Sample="MIDUS",Marker='Diastolic BP',Value=midus_c$B4P1GD),
-  cbind(Sample="MIDUS",Marker='Systolic BP',Value=midus_c$B4P1GS),
-  cbind(Sample="MIDUS",Marker='BMI',Value=midus_c$B4PBMI),
-  cbind(Sample="MIDUS",Marker='Cholesterol',Value=midus_c$B4BCHOL),
-  cbind(Sample="MIDUS",Marker='Triglycerides',Value=midus_c$B4BTRIGL),
-  cbind(Sample="MIDUS",Marker='Creatinine',Value=midus_c$B4BSCREA),
-  cbind(Sample="MIDJA",Marker='Diastolic BP',Value=midja_c$J2CBPS23),
-  cbind(Sample="MIDJA",Marker='Systolic BP',Value=midja_c$J2CBPD23),
-  cbind(Sample="MIDJA",Marker='BMI',Value=midja_c$J2CBMI),
-  cbind(Sample="MIDJA",Marker='Cholesterol',Value=midja_c$J2BCHOL),
-  cbind(Sample="MIDJA",Marker='Triglycerides',Value=midja_c$J2CTRIG),
-  cbind(Sample="MIDJA",Marker='Creatinine',Value=midja_c$J2BSCREA)
+  cbind(Sample="Yerkes",Marker="Diastolic BP",Value=output$dias, Sex=output$sex),
+  cbind(Sample="Yerkes",Marker='Systolic BP',Value=output$sys,Sex=output$sex),
+  cbind(Sample="Yerkes",Marker='BMI',Value=output$BMI,Sex=output$sex),
+  cbind(Sample="Yerkes",Marker='Cholesterol',Value=output$chol,Sex=output$sex),
+  cbind(Sample="Yerkes",Marker='Triglycerides',Value=output$trig,Sex=output$sex),
+  cbind(Sample="Yerkes",Marker='Creatinine',Value=output$creatinine, Sex=output$sex),
+  cbind(Sample="MIDUS",Marker='Diastolic BP',Value=midus_c$B4P1GD,Sex=midus_c$B1PRSEX),
+  cbind(Sample="MIDUS",Marker='Systolic BP',Value=midus_c$B4P1GS,Sex=midus_c$B1PRSEX),
+  cbind(Sample="MIDUS",Marker='BMI',Value=midus_c$B4PBMI,Sex=midus_c$B1PRSEX),
+  cbind(Sample="MIDUS",Marker='Cholesterol',Value=midus_c$B4BCHOL,Sex=midus_c$B1PRSEX),
+  cbind(Sample="MIDUS",Marker='Triglycerides',Value=midus_c$B4BTRIGL,Sex=midus_c$B1PRSEX),
+  cbind(Sample="MIDUS",Marker='Creatinine',Value=midus_c$B4BSCREA,Sex=midus_c$B1PRSEX),
+  cbind(Sample="MIDJA",Marker='Diastolic BP',Value=midja_c$J2CBPD23,Sex=midja_c$J1SQ1),
+  cbind(Sample="MIDJA",Marker='Systolic BP',Value=midja_c$J2CBPS23,Sex=midja_c$J1SQ1),
+  cbind(Sample="MIDJA",Marker='BMI',Value=midja_c$J2CBMI,Sex=midja_c$J1SQ1),
+  cbind(Sample="MIDJA",Marker='Cholesterol',Value=midja_c$J2BCHOL,Sex=midja_c$J1SQ1),
+  cbind(Sample="MIDJA",Marker='Triglycerides',Value=midja_c$J2CTRIG,Sex=midja_c$J1SQ1),
+  cbind(Sample="MIDJA",Marker='Creatinine',Value=midja_c$J2BSCREA,Sex=midja_c$J1SQ1)
   )
-vbio<-data.frame(Sample=vbio[,1],Marker=vbio[,2],Value=as.numeric(as.character(vbio[,3])))
+vbio<-data.frame(Sample=vbio[,1],Marker=vbio[,2],Value=as.numeric(as.character(vbio[,3])),Sex=as.factor(vbio[,4]))
+
+beanBio <- with(data=vbio[vbio$Marker=='BMI',], beanplot(Value ~ Sex * Sample, side = 'both', log = '',
+                                                         #bw = 0.1, 
+                                                                     overallline = "median", beanlines = 'median', what = c(0,1,1,0), boxwex=0.9,
+                                                                     col = list("cadetblue3", "cadetblue1", "royalblue3", "royalblue1","slateblue","slateblue1"))
+)
+
+beanBio <- with(data=vbio[vbio$Marker=='Diastolic BP',], beanplot(Value ~ Sex * Sample, side = 'both', log = '',
+                                                                  #bw = 0.1, 
+                                                                         overallline = "median", beanlines = 'median', what = c(0,1,1,0), boxwex=0.9,
+                                                                         col = list("cadetblue3", "cadetblue1", "royalblue3", "royalblue1","slateblue","slateblue1"))
+)
+beanBio <- with(data=vbio[vbio$Marker=='Systolic BP',], beanplot(Value ~ Sex * Sample, side = 'both', log = '',
+                                                                 #bw = 0.1, 
+                                                                       overallline = "median", beanlines = 'median', what = c(0,1,1,0), boxwex=0.9,
+                                                                       col = list("cadetblue3", "cadetblue1", "royalblue3", "royalblue1","slateblue","slateblue1"))
+)
+beanBio <- with(data=vbio[vbio$Marker=='Cholesterol',], beanplot(Value ~ Sex * Sample, side = 'both', log = '',
+                                                                 #bw = 3.0, 
+                                                                    overallline = "median", beanlines = 'median', what = c(0,1,1,0), boxwex=0.9,
+                                                                    col = list("cadetblue3", "cadetblue1", "royalblue3", "royalblue1","slateblue","slateblue1"))
+)
+
+beanBio <- with(data=vbio[vbio$Marker=='Triglycerides',], beanplot(Value ~ Sex * Sample, side = 'both', log = '',
+                                                                   #bw = 0.2, 
+                                                                             overallline = "median", beanlines = 'median', what = c(0,1,1,0), boxwex=0.9,
+                                                                             col = list("cadetblue3", "cadetblue1", "royalblue3", "royalblue1","slateblue","slateblue1"))
+)
+
+beanBio <- with(data=vbio[vbio$Marker=='Creatinine',], 
+                 beanplot(Value ~ Sex * Sample, side = 'both', 
+                          bw = 0.1, log = '',
+                          overallline = "median", beanlines = 'median', what = c(0,1,1,0), boxwex=0.9,
+                          col = list("cadetblue3", "cadetblue1", "royalblue3", "royalblue1","slateblue","slateblue1"))
+)
 
 vbpbio <- ggplot(vbio, aes(x=Sample, y=Value, group=Sample)) + geom_boxplot(trim=TRUE, aes(fill = factor(Sample)))
   #+ stat_summary(fun.y=median.quartile,geom='point') + 
@@ -332,7 +406,8 @@ install.packages("coefplot2",
 
 #cchol.preds = confint(m2.chol)
 
-sample_vect = c((rep(c('Japanese'),6)),(rep(c('Americans'),6)),(rep(c('Yerkes'),6)))
+sample_vect = c((rep(c('Japanese'),9)),(rep(c('Americans'),9)),(rep(c('Yerkes'),9)))
+# 9: +3 for adding age, age^2, and BMI
 
 pd <- position_dodge(width=0.2,height=NULL)
 
@@ -476,16 +551,18 @@ ggsave(filename = 'creat.png', plot = creat.cf.gg,
 
 #BMI reg CF plots
 # beware - can't use this until fix the BMI lmer
-c.BMI.co=fixef(m3.BMI)[2:7]
-m.BMI.co=m.BMI$coefficients[4:9]
-j.BMI.co=mj.BMI$coefficients[4:9]
+c.BMI.co=fixef(m3.BMI.a2)[c(2:8,10)]
+m.BMI.co=m.BMI.a2$coefficients[c(2,4:10)]
+j.BMI.co=mj.BMI.a2$coefficients[c(2,4:10)]
 
-c.BMI.prd = confint(m3.BMI, level=0.90)[4:9,]
-m.BMI.prd = confint(m.BMI, level=0.90)[5:10,]
-j.BMI.prd = confint(mj.BMI, level=0.90)[5:10,]
+c.BMI.prd = confint(m3.BMI.a2, method='Wald',level=0.95)[c(2:8,10),]
+m.BMI.prd = confint(m.BMI.a2,level=0.95)[c(2,4:10),]
+j.BMI.prd = confint(mj.BMI.a2, level=0.95)[c(2,4:10),]
 
 BMI.ci = data.frame(
-  Coefficients=c(j.BMI.co,m.BMI.co,c.BMI.co),rbind(j.BMI.prd,m.BMI.prd,c.BMI.prd),sample_vect,Dimension=rep(rownames(m.BMI.prd),3)
+  Coefficients=c(j.BMI.co,m.BMI.co,c.BMI.co),rbind(j.BMI.prd,m.BMI.prd,c.BMI.prd),
+  c((rep(c('Japanese'),8)),(rep(c('Americans'),8)),(rep(c('Yerkes'),8))),
+  Dimension=rep(rownames(m.BMI.prd),3)
 )
 colnames(BMI.ci)<-c("Coefficients",'lower',"upper","Sample","Dimension")
 

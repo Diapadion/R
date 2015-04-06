@@ -247,7 +247,7 @@ vbio <- rbind(
 vbio<-data.frame(Sample=vbio[,1],Marker=vbio[,2],Value=as.numeric(as.character(vbio[,3])),Sex=as.factor(vbio[,4]))
 
 beanBio <- with(data=vbio[vbio$Marker=='BMI',], beanplot(Value ~ Sex * Sample, side = 'both', log = '',
-                                                         #bw = 0.1, 
+                                                         bw = 5, 
                                                                      overallline = "median", beanlines = 'median', what = c(0,1,1,0), boxwex=0.9,
                                                                      col = list("cadetblue3", "cadetblue1", "royalblue3", "royalblue1","slateblue","slateblue1"))
 )
@@ -551,11 +551,11 @@ ggsave(filename = 'creat.png', plot = creat.cf.gg,
 
 #BMI reg CF plots
 # beware - can't use this until fix the BMI lmer
-c.BMI.co=fixef(m3.BMI.a2)[c(2:8,10)]
+c.BMI.co=fixef(m3.BMI.a2)[c(2,4:10)]
 m.BMI.co=m.BMI.a2$coefficients[c(2,4:10)]
 j.BMI.co=mj.BMI.a2$coefficients[c(2,4:10)]
 
-c.BMI.prd = confint(m3.BMI.a2, method='Wald',level=0.95)[c(2:8,10),]
+c.BMI.prd = confint(m3.BMI.a2, method='Wald',level=0.95)[c(2,4:10),]
 m.BMI.prd = confint(m.BMI.a2,level=0.95)[c(2,4:10),]
 j.BMI.prd = confint(mj.BMI.a2, level=0.95)[c(2,4:10),]
 

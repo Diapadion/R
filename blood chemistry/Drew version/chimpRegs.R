@@ -97,7 +97,7 @@ m2.creat.a2 <- lmer(creatinine ~ Dominance + Openness + Agreeableness + Conscien
 
 # check convergence issues on this one, BMI unscaled?
 library(optimx)
-m3.BMI.a2 <- lmer(BMI ~ age + sex + Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion + I(age^2) + (1 | chimp), 
+m3.BMI.a2 <- lmer(BMI ~ age + I(age^2) + sex + Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion + (1 | chimp), 
                data = scoutput, REML=FALSE, control=lmerControl(optimizer = "optimx", 
                                                                 optCtrl=list(maxfun=1000, 
                                                                              method='nlminb')))

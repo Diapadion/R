@@ -11,9 +11,10 @@ median.line <- function(x){
 }
 
 
-library(texreg)
 setwd("./Drew version/")
+library(texreg)
 
+# Old chimp only models
 tbl1 = htmlreg(m_1)
 print.texregTable(tbl1)
 
@@ -22,9 +23,7 @@ print.texregTable(tbl2a)
 
 tbl2b = htmlreg(m_2b)
 print.texregTable(tbl2b)
-
 #---
-
 tbl2c1 = htmlreg(m_2c)
 print.texregTable(tbl2c1)
 
@@ -37,69 +36,7 @@ print.texregTable(tbl2c3)
 tbl2c4 = htmlreg(c(m_2c,m2c1,m2c2,m2c0,m2c3))
 print.texregTable(tbl2c4)
 
-#--- 24/03/2015
 
-sys.tbl = htmlreg(list(m.sys,m_1))
-write(sys.tbl,"sys.html")
-
-chol.tbl = htmlreg(list(m.chol,m_2a))
-write(chol.tbl,"chol.html")
-
-trig.tbl = htmlreg(list(m.trig,m_2b))
-write(trig.tbl,"trig.html")
-
-gluco.tbl = htmlreg(list(m.gluc,m_2c))
-write(gluco.tbl,"gluco.html")
-
-creat.tbl = htmlreg(list(m.creat,m2u))
-write(creat.tbl,"creat.html")
-
-alkphos.tbl = htmlreg(list(m.alp,m2w))
-write(alkphos.tbl,"alkphos.html")
-
-
-print.texregTable(tbl2c3)
-
-
-#--- for 27/03/2015
-
-#sys.tbl
-
-ext.m1a=extract(m1a, include.aic = FALSE, include.bic=FALSE, include.dic=FALSE,
-                include.deviance=FALSE, include.loglik=FALSE,include.nobs=FALSE,
-                include.groups=FALSE,include.variance=FALSE)
-
-sys.tbl = htmlreg(list(m.sys,mj.sys,ext.m1a), custom.model.names=c('Americans','Japanese','Chimpanzees'), ci.force=TRUE,
-                  caption = "", groups=NULL, digits=3, ci.force.level = 0.90)
-write(sys.tbl,"sys.html")
-
-ext.trig=extract(m2.trig, include.aic = FALSE, include.bic=FALSE, include.dic=FALSE,
-                include.deviance=FALSE, include.loglik=FALSE,include.nobs=FALSE,
-                include.groups=FALSE,include.variance=FALSE)
-trig.tbl = htmlreg(list(m.trig,mj.trig,ext.trig), custom.model.names=c('Americans','Japanese','Chimpanzees'), ci.force=TRUE,
-                   caption = "", groups=NULL, digits=3, ci.force.level = 0.90)
-write(trig.tbl,"trig.html")
-
-ext.chol=extract(m2.chol, include.aic = FALSE, include.bic=FALSE, include.dic=FALSE,
-                include.deviance=FALSE, include.loglik=FALSE,include.nobs=FALSE,
-                include.groups=FALSE,include.variance=FALSE)
-chol.tbl = htmlreg(list(m.chol,mj.chol,ext.chol), custom.model.names=c('Americans','Japanese','Chimpanzees'), ci.force=TRUE,
-                   caption = "", groups=NULL, digits=3, ci.force.level = 0.90)
-write(chol.tbl,"chol.html")
-
-ext.m2.creat=extract(m2.creat, include.aic = FALSE, include.bic=FALSE, include.dic=FALSE,
-                include.deviance=FALSE, include.loglik=FALSE,include.nobs=FALSE,
-                include.groups=FALSE,include.variance=FALSE)
-creat.tbl = htmlreg(list(m.creat,mj.creat,ext.m2.creat), custom.model.names=c('Americans','Japanese','Chimpanzees'), ci.force=TRUE,
-                    caption = "", groups=NULL, digits=3, ci.force.level = 0.90)
-write(creat.tbl,"creat.html")
-
-ext.m1b=extract(m1b, include.aic = FALSE, include.bic=FALSE, include.dic=FALSE,
-              include.deviance=FALSE, include.loglik=FALSE,include.nobs=FALSE,
-              include.groups=FALSE,include.variance=FALSE)  
-dias.tbl = htmlreg(list(m.dias,mj.dias,ext.m1b), custom.model.names=c('Americans','Japanese','Chimpanzees'), ci.force=TRUE,
-                    caption = "", groups=NULL, digits=3, ci.force.level = 0.90)
-write(dias.tbl,"dias.html")
 
                    
 ### (gg?)plot(s)
@@ -130,39 +67,52 @@ vpers = rbind(
 vpers<-data.frame(Sample=vpers[,1],Dimension=vpers[,2],Score=as.numeric(as.character(vpers[,3])),Sex=as.factor(vpers[,4]))
 
 library(beanplot)
-beanpers <- with(data=vpers[vpers$Dimension=='Dominance',], beanplot(Score ~ Sex * Sample, side = 'both', bw = 0.3, cutmax = 4, cutmin = 1,
+
+svg(filename="PersBSPID.svg",            
+    width=10, 
+    height=8, 
+    pointsize=12,
+    bg='white')
+par(mfrow=c(2,3),
+    oma = c(5,4,0,0) + 0.3,
+    mar = c(0,0,1,1) + 0.5)
+beanpersD <- with(data=vpers[vpers$Dimension=='Dominance',], beanplot(Score ~ Sex * Sample, side = 'both', bw = 0.3, cutmax = 4, cutmin = 1,
                                                                      overallline = "median", beanlines = 'median', what = c(0,1,1,0), boxwex=0.9,
-                                                                     col = list("cadetblue3", "cadetblue1", "royalblue3", "royalblue1","slateblue","slateblue1"))
+                                                                     col = list("cadetblue3", "cadetblue1", "royalblue3", "royalblue1","slateblue","slateblue1"),
+                                                                     main='Dominance' , show.names=FALSE)
 )
 
-beanpers <- with(data=vpers[vpers$Dimension=='Agreeableness',], beanplot(Score ~ Sex * Sample, side = 'both', bw = 0.3, cutmax = 4, cutmin = 1,
+beanpersA <- with(data=vpers[vpers$Dimension=='Agreeableness',], beanplot(Score ~ Sex * Sample, side = 'both', bw = 0.3, cutmax = 4, cutmin = 1,
                                                                          overallline = "median", beanlines = 'median', what = c(0,1,1,0), boxwex=0.9,
-                                                                         col = list("cadetblue3", "cadetblue1", "royalblue3", "royalblue1","slateblue","slateblue1"))
+                                                                         col = list("cadetblue3", "cadetblue1", "royalblue3", "royalblue1","slateblue","slateblue1"),
+                                                                         main='Agreeableness' , show.names=FALSE 
+                                                                         )
 )
-beanpers <- with(data=vpers[vpers$Dimension=='Neuroticism',], beanplot(Score ~ Sex * Sample, side = 'both', bw = 0.3, cutmax = 4, cutmin = 1,
+beanpersN <- with(data=vpers[vpers$Dimension=='Neuroticism',], beanplot(Score ~ Sex * Sample, side = 'both', bw = 0.3, cutmax = 4, cutmin = 1,
                                                                        overallline = "median", beanlines = 'median', what = c(0,1,1,0), boxwex=0.9,
-                                                                       col = list("cadetblue3", "cadetblue1", "royalblue3", "royalblue1","slateblue","slateblue1"))
+                                                                       col = list("cadetblue3", "cadetblue1", "royalblue3", "royalblue1","slateblue","slateblue1"),
+                                                                       main='Neuroticism' , show.names=FALSE)
 )
-beanpers <- with(data=vpers[vpers$Dimension=='Openness',], beanplot(Score ~ Sex * Sample, side = 'both', bw = 0.3, cutmax = 4, cutmin = 1,
+beanpersO <- with(data=vpers[vpers$Dimension=='Openness',], beanplot(Score ~ Sex * Sample, side = 'both', bw = 0.3, cutmax = 4, cutmin = 1,
                                                                     overallline = "median", beanlines = 'median', what = c(0,1,1,0), boxwex=0.9,
-                                                                    col = list("cadetblue3", "cadetblue1", "royalblue3", "royalblue1","slateblue","slateblue1"))
-)
+                                                                    col = list("cadetblue3", "cadetblue1", "royalblue3", "royalblue1","slateblue","slateblue1"),
+                                                                    main='Openness' 
+                                                                    ))
 
-beanpers <- with(data=vpers[vpers$Dimension=='Conscientiousness',], beanplot(Score ~ Sex * Sample, side = 'both', bw = 0.3, cutmax = 4, cutmin = 1,
+beanpersC <- with(data=vpers[vpers$Dimension=='Conscientiousness',], beanplot(Score ~ Sex * Sample, side = 'both', bw = 0.3, cutmax = 4, cutmin = 1,
                                                                              overallline = "median", beanlines = 'median', what = c(0,1,1,0), boxwex=0.9,
-                                                                             col = list("cadetblue3", "cadetblue1", "royalblue3", "royalblue1","slateblue","slateblue1"))
+                                                                             col = list("cadetblue3", "cadetblue1", "royalblue3", "royalblue1","slateblue","slateblue1")
+                                                                             , main='Conscientiousness'
+                                                                             )
 )
 
-beanpers <- with(data=vpers[vpers$Dimension=='Extraversion',], 
+beanpersE <- with(data=vpers[vpers$Dimension=='Extraversion',], 
                  beanplot(Score ~ Sex * Sample, side = 'both', bw = 0.3, cutmax = 4, cutmin = 1,
                           overallline = "median", beanlines = 'median', what = c(0,1,1,0), boxwex=0.9,
-                          col = list("cadetblue3", "cadetblue1", "royalblue3", "royalblue1","slateblue","slateblue1"))
-)
-
-# library(vioplot)
-# library(devtools)
-# library(digest)
-#source_gist("https://gist.github.com/mbjoseph/5852613")
+                          col = list("cadetblue3", "cadetblue1", "royalblue3", "royalblue1","slateblue","slateblue1")
+                          , main='Extraversion' #, yaxt=''
+                          ))
+dev.off()
 
 
 
@@ -246,40 +196,53 @@ vbio <- rbind(
   )
 vbio<-data.frame(Sample=vbio[,1],Marker=vbio[,2],Value=as.numeric(as.character(vbio[,3])),Sex=as.factor(vbio[,4]))
 
-beanBio <- with(data=vbio[vbio$Marker=='BMI',], beanplot(Value ~ Sex * Sample, side = 'both', log = '',
-                                                         bw = 5, 
+
+svg(filename="BiomarkBSPID.svg",            
+     width=10, 
+     height=8, 
+     pointsize=12,
+     bg='white')
+par(mfrow=c(2,3),
+    oma = c(5,4,0,0) + 0.3,
+    mar = c(0,0,1,1) + 0.5)
+beanBioBMI <- with(data=vbio[vbio$Marker=='BMI',], beanplot(Value ~ Sex * Sample, side = 'both', log = '',
+                                                         bw = 5, main='BMI', show.names=FALSE,
                                                                      overallline = "median", beanlines = 'median', what = c(0,1,1,0), boxwex=0.9,
                                                                      col = list("cadetblue3", "cadetblue1", "royalblue3", "royalblue1","slateblue","slateblue1"))
 )
 
-beanBio <- with(data=vbio[vbio$Marker=='Diastolic BP',], beanplot(Value ~ Sex * Sample, side = 'both', log = '',
-                                                                  #bw = 0.1, 
+beanBioDBP <- with(data=vbio[vbio$Marker=='Diastolic BP',], beanplot(Value ~ Sex * Sample, side = 'both', log = '',
+                                                                  bw = 5, main='Diastolic BP', show.names=FALSE,
                                                                          overallline = "median", beanlines = 'median', what = c(0,1,1,0), boxwex=0.9,
                                                                          col = list("cadetblue3", "cadetblue1", "royalblue3", "royalblue1","slateblue","slateblue1"))
 )
-beanBio <- with(data=vbio[vbio$Marker=='Systolic BP',], beanplot(Value ~ Sex * Sample, side = 'both', log = '',
-                                                                 #bw = 0.1, 
+beanBioSBP <- with(data=vbio[vbio$Marker=='Systolic BP',], beanplot(Value ~ Sex * Sample, side = 'both', log = '',
+                                                                 bw = 7, main='Systolic BP', show.names=FALSE,
                                                                        overallline = "median", beanlines = 'median', what = c(0,1,1,0), boxwex=0.9,
                                                                        col = list("cadetblue3", "cadetblue1", "royalblue3", "royalblue1","slateblue","slateblue1"))
 )
-beanBio <- with(data=vbio[vbio$Marker=='Cholesterol',], beanplot(Value ~ Sex * Sample, side = 'both', log = '',
-                                                                 #bw = 3.0, 
+beanBioChol <- with(data=vbio[vbio$Marker=='Cholesterol',], beanplot(Value ~ Sex * Sample, side = 'both', log = '',
+                                                                 bw = 10.0, main = 'Cholesterol',
                                                                     overallline = "median", beanlines = 'median', what = c(0,1,1,0), boxwex=0.9,
                                                                     col = list("cadetblue3", "cadetblue1", "royalblue3", "royalblue1","slateblue","slateblue1"))
 )
 
-beanBio <- with(data=vbio[vbio$Marker=='Triglycerides',], beanplot(Value ~ Sex * Sample, side = 'both', log = '',
-                                                                   #bw = 0.2, 
+beanBioTrig <- with(data=vbio[vbio$Marker=='Triglycerides',], beanplot(Value ~ Sex * Sample, side = 'both', log = '',
+                                                                   bw = 15.0, main='Triglycerides', 
                                                                              overallline = "median", beanlines = 'median', what = c(0,1,1,0), boxwex=0.9,
                                                                              col = list("cadetblue3", "cadetblue1", "royalblue3", "royalblue1","slateblue","slateblue1"))
 )
 
-beanBio <- with(data=vbio[vbio$Marker=='Creatinine',], 
+beanBioCreat <- with(data=vbio[vbio$Marker=='Creatinine',], 
                  beanplot(Value ~ Sex * Sample, side = 'both', 
-                          bw = 0.1, log = '',
+                          bw = 0.07, log = '', main='Creatinine' ,
                           overallline = "median", beanlines = 'median', what = c(0,1,1,0), boxwex=0.9,
                           col = list("cadetblue3", "cadetblue1", "royalblue3", "royalblue1","slateblue","slateblue1"))
 )
+
+
+dev.off()
+
 
 vbpbio <- ggplot(vbio, aes(x=Sample, y=Value, group=Sample)) + geom_boxplot(trim=TRUE, aes(fill = factor(Sample)))
   #+ stat_summary(fun.y=median.quartile,geom='point') + 
@@ -402,23 +365,23 @@ install.packages("coefplot2",
                  type="source")
 
 
-#####
+##### the plots below are where the regression visualization gets decent
 
 #cchol.preds = confint(m2.chol)
 
-sample_vect = c((rep(c('Japanese'),9)),(rep(c('Americans'),9)),(rep(c('Yerkes'),9)))
+sample_vect = c((rep(c('MIDJA'),9)),(rep(c('MIDUS'),9)),(rep(c('Yerkes'),9)))
 # 9: +3 for adding age, age^2, and BMI
 
 pd <- position_dodge(width=0.2,height=NULL)
 
 # Systolic CF plots
-c.sys.co=fixef(m1a)[2:7]
-m.sys.co=m.sys$coefficients[5:10]
-j.sys.co=mj.sys$coefficients[5:10]
+c.sys.co=fixef(m1a.a2)[2:7]
+m.sys.co=m.sys.a2$coefficients[5:10]
+j.sys.co=mj.sys.a2$coefficients[5:10]
 
-c.sys.prd = confint(m1a, level=0.90)[4:9,]
-m.sys.prd = confint(m.sys, level=0.90)[5:10,]
-j.sys.prd = confint(mj.sys, level=0.90)[5:10,]
+c.sys.prd = confint(m1a.a2, level=0.95, method='boot')[4:9,]
+m.sys.prd = confint(m.sys.a2, level=0.95, method='boot')[5:10,]
+j.sys.prd = confint(mj.sys.a2, level=0.95, method='boot')[5:10,]
 
 sys.ci = data.frame(
   Coefficients=c(j.sys.co,m.sys.co,c.sys.co),rbind(j.sys.prd,m.sys.prd,c.sys.prd),sample_vect,Dimension=rep(rownames(m.sys.prd),3)
@@ -427,7 +390,7 @@ colnames(sys.ci)<-c("Coefficients",'lower',"upper","Sample","Dimension")
 
 sys.cf.gg = ggplot(sys.ci, aes(Sample,Coefficients, color=Sample)) +
   geom_point(aes(shape=Sample),size=4, position=pd) + 
-#  scale_color_manual(name="Sample",values=c("coral","steelblue")) + 
+# scale_color_manual(name="Sample",values=c("cadetblue", "royalblue","slateblue")) + 
   theme_bw() + theme(legend.position='none') +
 #  scale_x_continuous("Sample", breaks=1:length(Sample), labels=Sample) + 
   scale_y_continuous("Regression coefficients")   + 
@@ -443,9 +406,9 @@ c.dias.co=fixef(m1b)[2:7]
 m.dias.co=m.dias$coefficients[5:10]
 j.dias.co=mj.dias$coefficients[5:10]
 
-c.dias.prd = confint(m1b, level=0.90)[4:9,]
-m.dias.prd = confint(m.dias, level=0.90)[5:10,]
-j.dias.prd = confint(mj.dias, level=0.90)[5:10,]
+c.dias.prd = confint(m1b, level=0.92, method='boot')[4:9,]
+m.dias.prd = confint(m.dias, level=0.92)[5:10,]
+j.dias.prd = confint(mj.dias, level=0.92)[5:10,]
 
 dias.ci = data.frame(
   Coefficients=c(j.dias.co,m.dias.co,c.dias.co),rbind(j.dias.prd,m.dias.prd,c.dias.prd),sample_vect,Dimension=rep(rownames(m.dias.prd),3)
@@ -470,9 +433,9 @@ c.trig.co=fixef(m2.trig)[2:7]
 m.trig.co=m.trig$coefficients[5:10]
 j.trig.co=mj.trig$coefficients[5:10]
 
-c.trig.prd = confint(m2.trig, level=0.90)[4:9,]
-m.trig.prd = confint(m.trig, level=0.90)[5:10,]
-j.trig.prd = confint(mj.trig, level=0.90)[5:10,]
+c.trig.prd = confint(m2.trig, level=0.92, method="Wald")[4:9,]
+m.trig.prd = confint(m.trig, level=0.92)[5:10,]
+j.trig.prd = confint(mj.trig, level=0.92)[5:10,]
 
 trig.ci = data.frame(
   Coefficients=c(j.trig.co,m.trig.co,c.trig.co),rbind(j.trig.prd,m.trig.prd,c.trig.prd),sample_vect,Dimension=rep(rownames(m.trig.prd),3)
@@ -573,3 +536,69 @@ BMI.cf.gg <- ggplot(BMI.ci, aes(Sample,Coefficients, color=Sample)) +
   #  scale_x_continuous("Sample", breaks=1:length(Sample), labels=Sample) + 
   scale_y_continuous("Regression coefficients")   + 
   geom_errorbar(aes(ymin=lower,ymax=upper),width=0.1,position=pd) + facet_wrap(~ Dimension, ncol=2)
+
+
+
+
+
+
+#--- Tables for 27/03/2015 and beyond
+library(texreg)
+
+#sys.tbl
+
+ext.m1a=extract(m1a, include.aic = FALSE, include.bic=FALSE, include.dic=FALSE,
+                include.deviance=FALSE, include.loglik=FALSE,include.nobs=FALSE,
+                include.groups=FALSE,include.variance=FALSE)
+
+sys.tbl = htmlreg(list(m.sys,mj.sys,ext.m1a), custom.model.names=c('Americans','Japanese','Chimpanzees'), ci.force=TRUE,
+                  caption = "", groups=NULL, digits=3, ci.force.level = 0.92)
+write(sys.tbl,"sys.html")
+
+ext.trig=extract(m2.trig, include.aic = FALSE, include.bic=FALSE, include.dic=FALSE,
+                 include.deviance=FALSE, include.loglik=FALSE,include.nobs=FALSE,
+                 include.groups=FALSE,include.variance=FALSE)
+trig.tbl = htmlreg(list(m.trig,mj.trig,ext.trig), custom.model.names=c('Americans','Japanese','Chimpanzees'), ci.force=TRUE,
+                   caption = "", groups=NULL, digits=3, ci.force.level = 0.92)
+write(trig.tbl,"trig.html")
+
+ext.chol=extract(m2.chol, include.aic = FALSE, include.bic=FALSE, include.dic=FALSE,
+                 include.deviance=FALSE, include.loglik=FALSE,include.nobs=FALSE,
+                 include.groups=FALSE,include.variance=FALSE)
+chol.tbl = htmlreg(list(m.chol,mj.chol,ext.chol), custom.model.names=c('Americans','Japanese','Chimpanzees'), ci.force=TRUE,
+                   caption = "", groups=NULL, digits=3, ci.force.level = 0.92)
+write(chol.tbl,"chol.html")
+
+ext.m2.creat=extract(m2.creat, include.aic = FALSE, include.bic=FALSE, include.dic=FALSE,
+                     include.deviance=FALSE, include.loglik=FALSE,include.nobs=FALSE,
+                     include.groups=FALSE,include.variance=FALSE)
+creat.tbl = htmlreg(list(m.creat,mj.creat,ext.m2.creat), custom.model.names=c('Americans','Japanese','Chimpanzees'), ci.force=TRUE,
+                    caption = "", groups=NULL, digits=3, ci.force.level = 0.92)
+write(creat.tbl,"creat.html")
+
+ext.m1b=extract(m1b.a2, include.aic = FALSE, include.bic=FALSE, include.dic=FALSE,
+                include.deviance=FALSE, include.loglik=FALSE,include.nobs=FALSE,
+                include.groups=FALSE,include.variance=FALSE)  
+dias.tbl = htmlreg(list(m.dias.a2,mj.dias.a2,ext.m1b), custom.model.names=c('Americans','Japanese','Chimpanzees'), ci.force=TRUE,
+                   caption = "", groups=NULL, digits=3, ci.force.level = 0.92, ci.test=NULL,
+                   bold=TRUE, custom.note = '',
+                   custom.coef.names=c(NA,"Age","Age^2","Sex",NA,NA,NA,NA,NA,NA,NA),
+                   #override.ci.low = list(c(0.1,0.1,0.1)),
+                   #override.ci.up = list(c(0.1,0.1,0.1))                                                           
+)
+write(dias.tbl,"dias.html")
+
+ext.m3.BMI = extract(m3.BMI.a2, include.aic = FALSE, include.bic=FALSE, include.dic=FALSE,
+                                  include.deviance=FALSE, include.loglik=FALSE,include.nobs=FALSE,
+                                  include.groups=FALSE,include.variance=FALSE)
+BMI.tbl = htmlreg(list(m.BMI.a2,mj.BMI.a2,ext.m3.BMI), custom.model.names=c('Americans','Japanese','Chimpanzees'), ci.force=TRUE,
+                   caption = "", groups=NULL, digits=3, ci.force.level = 0.92, ci.test=NULL,
+                   bold=TRUE, custom.note = '',
+                   custom.coef.names=c(NA,"Age","Age<sup>2</sup>","Sex",NA,NA,NA,NA,NA,NA)
+                  #custom.coef.names=expression(paste("c(NA,'Age', 'Age'"^"'2', 'Sex',NA,NA,NA,NA,NA,NA)")),
+                  #custom.coef.names=coef.a2
+                   #override.ci.low = list(c(0.1,0.1,0.1)),
+                   #override.ci.up = list(c(0.1,0.1,0.1))                                                           
+)
+write(BMI.tbl,"BMI.html")
+

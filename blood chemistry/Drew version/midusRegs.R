@@ -75,6 +75,9 @@ midus_cs <- with(midus_c,data.frame(M2ID,sex=B1PRSEX, age=s(B4ZAGE), age2=s(B4ZA
                                     sys_all = s(B4P1GS), dias_all = s(B4P1GD)))
 
 
+# implement this across datasets
+#sex=s(B1PRSEX,scale=FALSE)
+
 ### models
 ### add Agency personality (24/03/15)
 
@@ -128,26 +131,26 @@ cor.BPfromChol <- cor(midus_cs$sys,midus_cs$chol)
 
 ##### Age^2 examination
 
-m.sys.a2 <- lm(sys ~ age + sex + BMI
-            + Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion + age2, data = midus_cs)
+m.sys.a2 <- lm(sys ~ age + I(age^2) + sex + BMI
+            + Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion, data = midus_cs)
 # see m_1
 
-m.dias.a2 <- lm(dias ~ age + sex + BMI
-             + Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion + age2, data = midus_cs)
+m.dias.a2 <- lm(dias ~ age + I(age^2) + sex + BMI
+             + Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion, data = midus_cs)
 
-m.chol.a2 <- lm(chol ~ age + sex + BMI
-             + Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion + age2, data = midus_cs)
+m.chol.a2 <- lm(chol ~ age + I(age^2) + sex + BMI
+             + Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion, data = midus_cs)
 # see m_2a
 
-m.trig.a2 <- lm(trig ~ age + sex + BMI
-             + Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion + age2, data = midus_cs)
+m.trig.a2 <- lm(trig ~ age + I(age^2) + sex + BMI
+             + Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion, data = midus_cs)
 # see m_2b
 #leave out?
 
-m.creat.a2 <- lm(creat ~ age + sex + BMI 
-              + Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion + I(age^2), data = midus_cs)
+m.creat.a2 <- lm(creat ~ age + I(age^2) + sex + BMI 
+              + Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion, data = midus_cs)
 # see m2u
 
-m.BMI.a2 <- lm(BMI ~ age + sex
-            + Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion + I(age^2), data = midus_cs)
+m.BMI.a2 <- lm(BMI ~ age + I(age^2) + sex
+            + Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion, data = midus_cs)
 # see m3.BMIc

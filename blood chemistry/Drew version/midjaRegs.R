@@ -80,9 +80,9 @@ mj.trig.a2 <- lm(trig ~ age + sex + BMI
 mj.creat.a2 <- lm(creat ~ age + sex + BMI 
                + Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion + age2, data = midja_cs)          
 
-mj.dias.a2 <- lm(dias ~ age + sex + BMI
-              + Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion + age2, data = midja_cs)
+mj.dias.a2 <- lm(dias ~ age + I(age^2) + sex + BMI
+              + Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion, data = midja_cs)
 
-mj.BMI.a2 <- lm(BMI ~ age + sex
-             + Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion + I(age^2), data = midja_cs)
+mj.BMI.a2 <- lm(BMI ~ age + I(age^2) + sex
+             + Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion, data = midja_cs)
 

@@ -379,9 +379,9 @@ c.sys.co=fixef(m1a.a2)[2:7]
 m.sys.co=m.sys.a2$coefficients[5:10]
 j.sys.co=mj.sys.a2$coefficients[5:10]
 
-c.sys.prd = confint(m1a.a2, level=0.95, method='boot')[4:9,]
-m.sys.prd = confint(m.sys.a2, level=0.95, method='boot')[5:10,]
-j.sys.prd = confint(mj.sys.a2, level=0.95, method='boot')[5:10,]
+c.sys.prd = confint(m1a.a2, level=0.92, method='boot')[4:9,]
+m.sys.prd = confint(m.sys.a2, level=0.92, method='boot')[5:10,]
+j.sys.prd = confint(mj.sys.a2, level=0.92, method='boot')[5:10,]
 
 sys.ci = data.frame(
   Coefficients=c(j.sys.co,m.sys.co,c.sys.co),rbind(j.sys.prd,m.sys.prd,c.sys.prd),sample_vect,Dimension=rep(rownames(m.sys.prd),3)
@@ -406,7 +406,7 @@ c.dias.co=fixef(m1b)[2:7]
 m.dias.co=m.dias$coefficients[5:10]
 j.dias.co=mj.dias$coefficients[5:10]
 
-c.dias.prd = confint(m1b, level=0.92, method='boot')[4:9,]
+c.dias.prd = confint(m1b, level=0.92, method='Wald')[4:9,]
 m.dias.prd = confint(m.dias, level=0.92)[5:10,]
 j.dias.prd = confint(mj.dias, level=0.92)[5:10,]
 

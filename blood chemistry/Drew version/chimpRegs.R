@@ -81,18 +81,23 @@ lliks <- sort(sapply(aa.OK,logLik))
 
 
 ### with age^2
-m1a.a2 <- lmer(sys ~ Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion + age + BMI + sex + I(age^2) + (1 | chimp), 
+m1a.a2 <- lmer(sys ~ age + I(age^2) + sex + BMI +
+                 Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion + (1 | chimp), 
             data = scoutput,REML=FALSE)
-m1b.a2 <- lmer(dias ~ Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion + age + BMI + sex + I(age^2) + (1 | chimp), 
+m1b.a2 <- lmer(dias ~ age + I(age^2) + sex + BMI +
+                 Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion + (1 | chimp), 
             data = scoutput,REML=FALSE)
 
-m2.trig.a2 <- lmer(trig ~ Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion + age + BMI + sex + I(age^2) + (1 | chimp), 
+m2.trig.a2 <- lmer(trig ~ age + I(age^2) + sex + BMI + 
+                     Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion + (1 | chimp), 
                 data = scoutput,REML=FALSE)
 
-m2.chol.a2 <- lmer(chol ~ Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion + age + BMI + sex + age2 + (1 | chimp), 
+m2.chol.a2 <- lmer(chol ~ age + I(age^2) + sex + BMI +
+                     Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion + (1 | chimp), 
                 data = scoutput,REML=FALSE)
 
-m2.creat.a2 <- lmer(creatinine ~ Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion + age + BMI + sex + age2 + (1 | chimp), 
+m2.creat.a2 <- lmer(creatinine ~ age + I(age^2) + sex + BMI +
+                      Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion + (1 | chimp), 
                  data = scoutput,REML=FALSE)
 
 # check convergence issues on this one, BMI unscaled?

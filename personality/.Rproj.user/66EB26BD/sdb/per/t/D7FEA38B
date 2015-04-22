@@ -1,0 +1,22 @@
+{
+    "contents" : "",
+    "created" : 1429724431588.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "D7FEA38B",
+    "lastKnownWriteTime" : 578055781,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "caption" : "srt[-c(1, 6, 54), ]",
+        "contentUrl" : "content?title=srt%5B-c(1%2C+6%2C+54)%2C+%5D&file=8dab81f5736f467789ba8689209295c8.htm",
+        "displayedObservations" : 52,
+        "displayedVariables" : 4,
+        "totalObservations" : 52,
+        "variables" : 3
+    },
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}

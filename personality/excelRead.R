@@ -1,9 +1,11 @@
-setwd("/Users/drew/Dropbox/R/personality")
+#setwd("/Users/drew/Dropbox/R/personality")
+setwd("/Users/s1229179/git-repos/R/personality")
 
 pers <- NULL
 
 pers <- array(,dim=c(9,12,54))
 #12 for Greg
+
 
 
 for(i in 1:9){
@@ -102,4 +104,48 @@ for(i in 1:9){
 	detach(surveyIn)
 }
 
+
+### remove certain raters
+
+trimp = pers[,c(1:4,6:11),]
+trimp = trimp[,,-c(5,53)] # take out autistic and unperceptive
+
+# colname tracking
+srt <- srt$ADJECTIVE[2:55]
+srt <- srt[-c(5,53)]
+
+### Intraclass correlation
+library(psych)
+icc3 <- NULL
+for (i in 1:52){
+  icc3[i] =  ICC(trimp[,,i])$results
+}
+
+ICC(trimp[,,4])
+ticc = ICC(trimp[,,1])
+ticc$results$
+  
+  
+  
+## potential problems (some estimates and confint below 0):
+# 2 - affectionate
+# 4 - anxious
+# 7 - clumsy
+# 15 - disorganzied
+# 24 - imitative
+# 33 - jealous
+# 39 - protective
+# 42 - sensitive
+# 48 - sympathetic
+# 49 - thoughtless
+  
+## definite problems:
+# 6 - cautious
+# 12 - defiant
+# 26 - independent
+# 46 - stingy / greedy
+
+trimp = trimp[,,-c(6,12,26,46)]  # remove only the definite problems
+
+srt <- srt[-c(6,12,26,46)]
 

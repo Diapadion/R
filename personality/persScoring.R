@@ -26,6 +26,13 @@ for (i in 1:52){
 
 
 
+### 2015 revision on this approach
 
+# let's get the mean scores across raters
+mtrim = data.frame(apply(trimp,c(1,3),mean))
 
+colnames(mtrim) <- srt
+rownames(mtrim) <- c('Augustus','Benedict','Coltrane','Ebbinghaus','Horatio',
+                     'Lashley','MacDuff','Oberon','Prospero')
 
+mtrim = t(mtrim)

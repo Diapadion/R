@@ -1,0 +1,22 @@
+{
+    "contents" : "",
+    "created" : 1429725899399.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "9E54407",
+    "lastKnownWriteTime" : 1818846758,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "caption" : "mtrim",
+        "contentUrl" : "content?title=mtrim&file=03147e0afdcc478b93c8e5480353e081.htm",
+        "displayedObservations" : "48",
+        "displayedVariables" : 48,
+        "totalObservations" : "48",
+        "variables" : "9"
+    },
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}

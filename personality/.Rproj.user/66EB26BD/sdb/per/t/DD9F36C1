@@ -1,0 +1,22 @@
+{
+    "contents" : "",
+    "created" : 1429723059853.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "DD9F36C1",
+    "lastKnownWriteTime" : 644761977,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "caption" : "surveyIn",
+        "contentUrl" : "content?title=surveyIn&file=1677f3927004477aaf922d1d41227850.htm",
+        "displayedObservations" : 55,
+        "displayedVariables" : 3,
+        "totalObservations" : 55,
+        "variables" : 3
+    },
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}

@@ -1,4 +1,33 @@
 
+# 2015 revision
+
+library(xlsx)
+
+rbind.all.columns <- function(x, y) {
+  
+  x.diff <- setdiff(colnames(x), colnames(y))
+  y.diff <- setdiff(colnames(y), colnames(x))
+  
+  x[, c(as.character(y.diff))] <- NA
+  
+  y[, c(as.character(x.diff))] <- NA
+  
+  return(rbind(x, y))
+}
+
+#these data long time to run, so avoid repreating
+dataIn <- read.csv("AugArbitraryStim.csv",header=TRUE)
+
+dataIn <- rbind.all.columns(dataIn, read.csv("BenedArbitraryStim.csv",header=TRUE))
+
+dataIn <- rbind.all.columns(dataIn, read.csv("ColtArbitraryStim.csv",header=TRUE))
+
+dataIn <- rbind.all.columns(dataIn, read.csv("EbbiArbitraryStim.csv",header=TRUE))
+dataIn <- rbind.all.columns(dataIn, read.csv("HoratArbitraryStim.csv",header=TRUE))
+dataIn <- rbind.all.columns(dataIn, read.csv("LashArbitraryStim.csv",header=TRUE))
+dataIn <- rbind.all.columns(dataIn, read.csv("MacdArbitraryStim.csv",header=TRUE))
+dataIn <- rbind.all.columns(dataIn, read.csv("OberArbitraryStim.csv",header=TRUE))
+dataIn <- rbind.all.columns(dataIn, read.csv("ProspArbitraryStim.csv",header=TRUE))
 
 # now for some monkey data 
 

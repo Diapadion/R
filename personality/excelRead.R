@@ -149,3 +149,4 @@ trimp = trimp[,,-c(6,12,26,46)]  # remove only the definite problems
 
 srt <- srt[-c(6,12,26,46)]
 
+# so we've taken out Autistic, Unperceptive, Cautious (Cnf), Defiant(Dom), Independent(Dom), and Stingy/Greedy(Dom)

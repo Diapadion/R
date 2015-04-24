@@ -1,0 +1,22 @@
+{
+    "contents" : "",
+    "created" : 1429784412975.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "B9426E98",
+    "lastKnownWriteTime" : 645161316,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "caption" : "temp_dat",
+        "contentUrl" : "content?title=temp_dat&file=6da5d967011c48e899f02effdc3d5c00.htm",
+        "displayedObservations" : "26",
+        "displayedVariables" : 75,
+        "totalObservations" : "26",
+        "variables" : "88"
+    },
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}

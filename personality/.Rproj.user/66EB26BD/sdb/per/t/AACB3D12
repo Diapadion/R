@@ -1,0 +1,17 @@
+{
+    "contents" : "# non-linear models of performance\n\nlibrary(nlme)\n\n# y = L(x + P) /\n#     x + P + R\nL = 5\n\nnlm.err <- nlme(Error ~ (L * (Trial + P))/(Trial + P + R), data = trial.dat, fixed)\n\n\n\n# maybe still better with lmer\nlibrary(lme4)\n\n# (L / y - 1)^-1 = x/R + P/R  \n\ntrial.dat$Err.t = ((L / trial.dat$Error) - 1 )^-1\n|\nlmm.err <- lmer(Err.t ~ Trial + 1 + (1 + Trial | Subject), data = trial.dat)\n                  ",
+    "created" : 1429809742125.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1715115587",
+    "id" : "AACB3D12",
+    "lastKnownWriteTime" : 1429894919,
+    "path" : "C:/Users/s1229179/git-repos/R/personality/nlmods.R",
+    "project_path" : "nlmods.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}

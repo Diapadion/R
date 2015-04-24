@@ -25,8 +25,7 @@ for (i in 1:52){
 }
 
 
-
-### 2015 revision on this approach
+### 2015 revision of this approach
 
 # let's get the mean scores across raters
 mtrim = data.frame(apply(trimp,c(1,3),mean))
@@ -34,5 +33,34 @@ mtrim = data.frame(apply(trimp,c(1,3),mean))
 colnames(mtrim) <- srt
 rownames(mtrim) <- c('Augustus','Benedict','Coltrane','Ebbinghaus','Horatio',
                      'Lashley','MacDuff','Oberon','Prospero')
+colnames(mtrim)[11] <- 'DEPENDENT'
 
-mtrim = t(mtrim)
+#mtrim = t(mtrim)
+# actually, it's better left untransposed, to conform to wide format
+
+mtrim <- as.data.frame(mtrim)
+
+# let's calculate some domain scores
+mtrim = within(data = mtrim, {
+  Confidence = (-FEARFUL-SUBMISSIVE-TIMID+STABLE-DISTRACTIBLE
+       -DISORGANIZED-DEPENDENT-VULNERABLE + 7*8)/9
+  Openness = (VULNERABLE+INQUISITIVE+THOUGHTLESS+INNOVATIVE+INVENTIVE+CURIOUS+IMITATIVE+IMPULSIVE)/8
+  Dominance = (BULLYING+AGGRESSIVE+IRRITABLE+MANIPULATIVE+EXCITABLE+RECKLESS-GENTLE
+               +DOMINANT+INDIVIDUALISTIC + 1*8)/9
+  Friendliness = (HELPFUL+FRIENDLY+AFFECTIONATE+SOCIABLE+SENSITIVE-DEPRESSED+PROTECTIVE
+                  -SOLITARY+SYMPATHETIC+INTELLIGENT+PERSISTENT+DECISIVE + 2*8)/12
+  Activity = (-CONVENTIONAL-PREDICTABLE-LAZY+ACTIVE-CLUMSY+PLAYFUL + 4*8)/6
+  Anxiety = (-COOL+QUITTING+ANXIOUS+ERRATIC-UNEMOTIONAL+JEALOUS + 2*8)/6
+  })
+
+
+
+# some tests
+
+test.c = cor.test(scm,mtrim$Friendliness)
+test.o = cor.test(scm,mtrim$Openness)
+
+lm.m = lm(scm ~ mtrim$Friendliness + mtrim$Openness + mtrim$Anxiety + mtrim$Activity
+            +  mtrim$Dominance +mtrim$Confidence)
+
+

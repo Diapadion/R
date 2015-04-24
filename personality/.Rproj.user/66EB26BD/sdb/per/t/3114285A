@@ -1,0 +1,22 @@
+{
+    "contents" : "",
+    "created" : 1429890329379.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "3114285A",
+    "lastKnownWriteTime" : 1952539694,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "caption" : "trial.dat",
+        "contentUrl" : "content?title=trial.dat&file=5f1d13e9cd4d41a6af4aa9d1e0986c69.htm",
+        "displayedObservations" : 1000,
+        "displayedVariables" : 6,
+        "totalObservations" : 7240,
+        "variables" : 6
+    },
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}

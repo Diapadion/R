@@ -20,8 +20,14 @@ gg.p <- ggplot(trial.dat, aes(Trial,Progress))+geom_point()+
 gg.p + stat_summary(fun.data="mean_cl_boot",colour='green')
 
 
+gg.p.tr <-  ggplot(trial.dat, aes(Trial,Prog.t))+geom_point()+
+  facet_wrap(~Subject)
+gg.p.tr + stat_summary(fun.data="mean_cl_boot",colour='green') + stat_smooth(method='lm')
 
 ### PROGRESS
+
+library(lme4)
+library(car)
 
 # y = L(x + P) /
 #     x + P + R
@@ -29,7 +35,7 @@ L = 5
 
 # (L / y - 1)^-1 = x/R + P/R  
 
-trial.dat$Prog.t = ((L / trial.dat$Prog) - 1 )^-1
+trial.dat$Prog.t = ((L / trial.dat$Progress) - 1 )^-1
 
 
 # linear(ly transformed) models
@@ -63,6 +69,7 @@ lmm.Prog.an.main <- lmer(Prog.t ~ Trial + 1 + Trial + Anxiety + (1 + Trial| Subj
 
 lmm.Prog.fo.main <- lmer(Prog.t ~ Trial + 1 + Trial + Friendliness + Openness + (1 + Trial| Subject), data = trial.dat)
 
+# this isn't kosher since the equation does not have a quadratic term
 lmm.Prog.fo.mainint <- lmer(Prog.t ~ Trial + 1 + Trial + Friendliness * Openness + (1 + Trial| Subject), data = trial.dat)
 
 
@@ -70,12 +77,13 @@ anova(lmm.Prog.00,lmm.Prog.0,lmm.Prog.f.main,lmm.Prog.c.main,lmm.Prog.o.main,
             lmm.Prog.d.main,lmm.Prog.ac.main,lmm.Prog.an.main)
 
 prog.AICc <- AICctab(lmm.Prog.00,lmm.Prog.0,lmm.Prog.f.main,lmm.Prog.c.main,lmm.Prog.o.main,
-      lmm.Prog.d.main,lmm.Prog.ac.main,lmm.Prog.an.main,lmm.Prog.fo.main,lmm.Prog.fo.mainint,
+      lmm.Prog.d.main,lmm.Prog.ac.main,lmm.Prog.an.main,lmm.Prog.fo.main,#lmm.Prog.fo.mainint,
       logLik=TRUE, delta=TRUE,base=TRUE)
 
 ###
 
-prog.AIC <- AICtab(lmm.Prog.0,lmm.Prog.00,lmm.Prog.f,lmm.Prog.o,lmm.Prog.fo,lmm.Prog.all,
+library(bbmle) # for ICtab
+prog.AIC <- AICctab(lmm.Prog.0,lmm.Prog.00,lmm.Prog.f,lmm.Prog.o,lmm.Prog.fo,lmm.Prog.all,
                    lmm.Prog.c, lmm.Prog.ac,lmm.Prog.an,lmm.Prog.d,
                    #type=c("BIC","AIC","AICc","qAIC","qAICc"),
                    logLik=TRUE, delta=TRUE, base=TRUE, dispersion=TRUE)
@@ -97,6 +105,7 @@ cor.test(unlist(BLUP.prog$Subject[1]),mtrim$Confidence)
 # just P
 
 # slope: 1/R -> transform via 1/beta
+# this needs to be tested
 cor.test(1/unlist(BLUP.err$Subject[2]),mtrim$Friendliness)
 cor.test(1/unlist(BLUP.err$Subject[2]),mtrim$Openness)
 cor.test(1/unlist(BLUP.err$Subject[2]),mtrim$Confidence)
@@ -106,26 +115,12 @@ cor.test(1/unlist(BLUP.err$Subject[2]),mtrim$Confidence)
 
 ### ERROR
 
-
-
-library(nlme)
-
-# y = L(x + P) /
-#     x + P + R
-#L = 5
-
-nlm.err <- nlme(Error ~ (L * (Trial + P))/(Trial + P + R), data = trial.dat, fixed)
+# this one we can try with a quadratic fit
 
 
 
-# maybe still better with lmer
-library(lme4)
-library(car)
-library(bbmle) # for ICtab
 
-# (L / y - 1)^-1 = x/R + P/R  
-
-trial.dat$Err.t = ((L / trial.dat$Error) - 1 )^-1
+#trial.dat$Err.t = ((L / trial.dat$Error) - 1 )^-1
 # this transform makes regular OLS not a great approach
 # one alternative is Weighted LS, but ML is still good, and REML probably best
 

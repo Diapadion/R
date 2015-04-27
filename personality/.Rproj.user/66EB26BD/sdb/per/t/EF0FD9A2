@@ -1,0 +1,17 @@
+{
+    "contents" : "### initial correlation tests\n\n# summarizing the vars\n\np.summar = cbind(mtrim[,c(49:55)], aggregate(trial.dat[,c(3:5)],by=list(trial.dat$Subject), FUN=mean))\n\ncor.r_e = cor(p.summar$Correct,p.summar$Error)\ncor.r_p = cor(p.summar$Correct,p.summar$Progress)\ncor.p_e = cor(p.summar$Progress,p.summar$Error)\n                        \n\ncor.t.r_c = cor.test(p.summar$Correct,p.summar$Friendliness)\ncor.t.r_o = cor.test(p.summar$Correct,p.summar$Openness)\n\ncor.t.e_c = cor.test(p.summar$Error,p.summar$Friendliness)\ncor.t.e_o = cor.test(p.summar$Error,p.summar$Openness)\n\ncor.t.p_c = cor.test(p.summar$Progress,p.summar$Friendliness)\ncor.t.p_o = cor.test(p.summar$Progress,p.summar$Openness)\n\n\nlibrary(corrgram)\ncorrgram(p.summar)\n",
+    "created" : 1430149822283.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "139262063",
+    "id" : "EF0FD9A2",
+    "lastKnownWriteTime" : 1430153112,
+    "path" : "C:/Users/s1229179/git-repos/R/personality/initialCors.R",
+    "project_path" : "initialCors.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}

@@ -32,7 +32,7 @@ mtrim = data.frame(apply(trimp,c(1,3),mean))
 
 colnames(mtrim) <- srt
 rownames(mtrim) <- c('Augustus','Benedict','Coltrane','Ebbinghaus','Horatio',
-                     'Lashley','MacDuff','Oberon','Prospero')
+                     'Lashley','Macduff','Oberon','Prospero')
 colnames(mtrim)[11] <- 'DEPENDENT'
 
 #mtrim = t(mtrim)
@@ -54,13 +54,6 @@ mtrim = within(data = mtrim, {
   })
 
 
-
-# some tests
-
-test.c = cor.test(scm,mtrim$Friendliness)
-test.o = cor.test(scm,mtrim$Openness)
-
-lm.m = lm(scm ~ mtrim$Friendliness + mtrim$Openness + mtrim$Anxiety + mtrim$Activity
-            +  mtrim$Dominance +mtrim$Confidence)
+mtrim$Subject = rownames(mtrim)
 
 

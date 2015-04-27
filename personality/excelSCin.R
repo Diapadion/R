@@ -29,6 +29,10 @@ dataIn <- rbind.all.columns(dataIn, read.csv("MacdArbitraryStim.csv",header=TRUE
 dataIn <- rbind.all.columns(dataIn, read.csv("OberArbitraryStim.csv",header=TRUE))
 dataIn <- rbind.all.columns(dataIn, read.csv("ProspArbitraryStim.csv",header=TRUE))
 
+
+
+# the section below is no longer necessary
+
 # now for some monkey data 
 
 dataIn <- read.xls("AugArbitraryStim.xls",sheet=1,verbose=FALSE,method="tab")

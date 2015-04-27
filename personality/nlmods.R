@@ -45,13 +45,15 @@ lmm.Prog.00 <- lmer(Prog.t ~ (1 | Subject ), data=trial.dat)
 lmm.Prog.0 <- lmer(Prog.t ~ Trial + 1 + (1 + Trial| Subject), data = trial.dat)
 
 lmm.Prog.o.main <- lmer(Prog.t ~ Trial + 1 + Trial + Openness + (1 + Trial| Subject), data = trial.dat)
-lmm.Prog.o.mainint <- lmer(Prog.t ~ Trial + 1 + Trial*Openness + (1 + Trial| Subject), data = trial.dat)
+lmm.Prog.o.mainint <- lmer(Prog.t ~ Trial + 1*Openness + Trial*Openness + (1 + Trial| Subject), data = trial.dat)
 lmm.Prog.o.int <- lmer(Prog.t ~ Trial + 1 + Trial:Openness + (1 + Trial| Subject), data = trial.dat)
 # main+interaction is best
 
 lmm.Prog.f.main <- lmer(Prog.t ~ Trial + 1 + Trial + Friendliness + (1 + Trial| Subject), data = trial.dat)
 lmm.Prog.f.mainint <- lmer(Prog.t ~ Trial + 1 + Trial * Friendliness + (1 + Trial| Subject), data = trial.dat)
 anova(lmm.Prog.00,lmm.Prog.0,lmm.Prog.f.main,lmm.Prog.f.mainint)
+
+lmm.Prog.fo.all <-lmer(Prog.t ~ 1 + Trial + Openness + Friendliness + Openness:Trial + Friendliness:Trial + (1 + Trial| Subject), data = trial.dat )
 
 lmm.Prog.c.main <- lmer(Prog.t ~ Trial + 1 + Trial + Confidence + (1 + Trial| Subject), data = trial.dat)
 lmm.Prog.c.mainint <- lmer(Prog.t ~ Trial + 1 + Trial * Confidence + (1 + Trial| Subject), data = trial.dat)
@@ -79,6 +81,16 @@ anova(lmm.Prog.00,lmm.Prog.0,lmm.Prog.f.main,lmm.Prog.c.main,lmm.Prog.o.main,
 prog.AICc <- AICctab(lmm.Prog.00,lmm.Prog.0,lmm.Prog.f.main,lmm.Prog.c.main,lmm.Prog.o.main,
       lmm.Prog.d.main,lmm.Prog.ac.main,lmm.Prog.an.main,lmm.Prog.fo.main,#lmm.Prog.fo.mainint,
       logLik=TRUE, delta=TRUE,base=TRUE)
+
+
+lmm.Prog.all.mainint <- lmer(Prog.t ~ 1 + Trial + Openness + Friendliness + 
+                               Dominance + Confidence + Anxiety + Activity +
+                               Openness:Trial + Friendliness:Trial + 
+                               Dominance:Trial + Confidence:Trial + 
+                               Anxiety:Trial + Activity:Trial +
+                               (1 + Trial| Subject), data = trial.dat )
+
+
 
 ###
 

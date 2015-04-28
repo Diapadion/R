@@ -15,17 +15,17 @@
 ## If yes, how long OS for (total)?
 ## Does focal give or recieve aggression during focal? (column L), if column L = x, then aggression  = Y
 ## record total time and total time split into give/recieve/mutual - for aggression and for allogrooming 
-# If yes does focal reconcile after aggression? (columns BH-BV)
-# If yes record details of reconciliation (BH-BV)
-# If column F-N is empty for any row, then column R should be complete
+#* If yes does focal reconcile after aggression? (columns BH-BV)
+#* If yes record details of reconciliation (BH-BV)
+#* If column F-N is empty for any row, then column R should be complete
 
 # Columns O-Q: proximity/social data
 # Record total time spent with others during focal (column O)
 # Length of time for who they are with the most, dyadically (ie conspecific spent most time with)
-# Record total time spent allogrooming others during focal (column P)
-#  divide this into give, recieve, mutual (column I 'AG')
+## Record total time spent allogrooming others during focal (column P)
+## divide this into give, recieve, mutual (column I 'AG')
 # ID of main neighbour, dyadically (ie conspecific spent near to for longest)
-# Record total time spent near others during focal (column Q)
+## Record total time spent near others during focal (column Q)
 # ID of main conspecific groomed with, dyadically (ie conspecific spent most time with)
 
 # Event and response to event: column R onwards

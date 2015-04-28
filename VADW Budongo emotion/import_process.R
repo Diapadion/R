@@ -8,9 +8,13 @@ sheets = list.files(pattern="*.csv")
 
 behav_dat = NULL
 
+## Notes: variables need to be standardized for capitalization
+## (or can I do anything?)
+
 
 #i = 1 # David
 i = 4 # Lucy
+i = 5 # Pearl
 
 for (i in 1:length(sheets)){
   temp_dat = NULL
@@ -101,12 +105,20 @@ for (i in 1:length(sheets)){
     temp_dat$any.Ag = 'N'
   }
   
+  # Time spent (at all) _near_ others
+  temp_dat$total.near.others = sum(temp_dat$behav.length[temp_dat$X.Near.others.!=''])
+  
+  
+  # Time(s) spent grooming with conspecific
+  
+  
+  
+
 
   
   
 }
 
-i = 4
 
 temp_dat = read.csv(sheets[i], skip=1, header=TRUE)
 

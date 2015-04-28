@@ -11,11 +11,11 @@
     "project_path" : null,
     "properties" : {
         "caption" : "temp_dat",
-        "contentUrl" : "content?title=temp_dat&file=6da5d967011c48e899f02effdc3d5c00.htm",
-        "displayedObservations" : "26",
+        "contentUrl" : "content?title=temp_dat&file=51847f747cc94e9fa52403fa96e64ae5.htm",
+        "displayedObservations" : "38",
         "displayedVariables" : 75,
-        "totalObservations" : "26",
-        "variables" : "88"
+        "totalObservations" : "38",
+        "variables" : "97"
     },
     "source_on_save" : false,
     "type" : "r_dataframe"

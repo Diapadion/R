@@ -9,14 +9,17 @@ cor.r_p = cor(p.summar$Correct,p.summar$Progress)
 cor.p_e = cor(p.summar$Progress,p.summar$Error)
                         
 
-cor.t.r_c = cor.test(p.summar$Correct,p.summar$Friendliness)
+cor.t.r_f = cor.test(p.summar$Correct,p.summar$Friendliness)
 cor.t.r_o = cor.test(p.summar$Correct,p.summar$Openness)
+cor.t.r_c = cor.test(p.summar$Correct,p.summar$Confidence)
 
-cor.t.e_c = cor.test(p.summar$Error,p.summar$Friendliness)
+cor.t.e_f = cor.test(p.summar$Error,p.summar$Friendliness)
 cor.t.e_o = cor.test(p.summar$Error,p.summar$Openness)
+cor.t.e_c = cor.test(p.summar$Error,p.summar$Confidence)
 
-cor.t.p_c = cor.test(p.summar$Progress,p.summar$Friendliness)
+cor.t.p_f = cor.test(p.summar$Progress,p.summar$Friendliness)
 cor.t.p_o = cor.test(p.summar$Progress,p.summar$Openness)
+cor.t.p_c = cor.test(p.summar$Progress,p.summar$Confidence)
 
 
 library(corrgram)

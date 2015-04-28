@@ -10,7 +10,10 @@ library(ggplot2)
 gg.e <- ggplot(trial.dat, aes(Trial,Error))+geom_point()+
   facet_wrap(~Subject)
 
-gg.e + stat_summary(fun.data="mean_cl_boot",colour='red') + stat_smooth(method='glm') # this isn't very good
+gg.e + stat_summary(fun.data="mean_cl_boot",colour='red') #+ stat_smooth(method='glm') # this isn't very good
+
+gg.e <- ggplot(trial.dat, aes(Trial,Err.t))+geom_point()+
+  facet_wrap(~Subject) + stat_summary(fun.data="mean_cl_boot",colour='purple')
 
 
 
@@ -127,14 +130,32 @@ cor.test(1/unlist(BLUP.err$Subject[2]),mtrim$Confidence)
 
 ### ERROR
 
-# this one we can try with a quadratic fit
-
-
-
-
 #trial.dat$Err.t = ((L / trial.dat$Error) - 1 )^-1
-# this transform makes regular OLS not a great approach
+# the above transform makes regular OLS not a great approach
 # one alternative is Weighted LS, but ML is still good, and REML probably best
+
+
+# this one we can try with a quadratic fit
+library(coefplot)
+
+lmm.q.err.0 <- lmer(Error ~ I(Trial^2) + Trial + 1 + (1 + Trial + I(Trial^2)| Subject), data = trial.dat, REML=FALSE)
+# Yes, I think we want the slope in there (above)
+#lmm.q.err.01 <- lmer(Error ~ I(Trial^2) + 1 + (1 + I(Trial^2)| Subject), data = trial.dat)
+lmm.q.err.o <- lmer(Error ~ I(Trial^2) + Trial + 1 + 
+                      I(Trial^2):Openness + 
+                      (1 + Trial + I(Trial^2)| Subject), data = trial.dat, REML=FALSE)
+
+lmm.q.err.o <- lmer(Error ~ I(Trial^2) + Trial + 1 + 
+                      I(Trial^2):Openness + Openness +
+                      (1 + Trial + I(Trial^2)| Subject), data = trial.dat, REML=FALSE)
+
+lmm.q.err.f <- lmer(Error ~ I(Trial^2) + Trial + 1 + 
+                      I(Trial^2):Friendliness + Friendliness +
+                      (1 + Trial + I(Trial^2)| Subject), data = trial.dat, REML=FALSE)
+
+
+coefplot(lmm.err.0)
+
 
 #|
 

@@ -27,18 +27,180 @@ gg.p.tr <-  ggplot(trial.dat, aes(Trial,Prog.t))+geom_point()+
   facet_wrap(~Subject)
 gg.p.tr + stat_summary(fun.data="mean_cl_boot",colour='green') + stat_smooth(method='lm')
 
-### PROGRESS
+ ### PROGRESS
 
 library(lme4)
 library(car)
 
 # y = L(x + P) /
 #     x + P + R
-L = 5
+L = 4 #4.1
+
+## back to nlme's
+library(nlme)
+
+initVals <- getInitial(Progress ~ SSlogis(Trial, Asym, xmid, scal), data = trial.dat)
+nlm.0 <- nlme(Progress ~ SSlogis(Trial, Asym, xmid, scal),
+                 data = trial.dat,
+                 fixed = list(Asym ~ 1, xmid ~ 1, scal ~ 1),
+                 random = Asym + xmid ~ 1|Subject,
+                 start = initVals)
+# Scal seems like it should be a constant. What does it really mean? 
+# Should it have a random effect but no personality impact?
+
+
+nlm.dat = groupedData(Error ~ Trial | Subject, data=trial.dat , order.groups=0
+                      )
+
+nlm.dat$ran = runif(length(nlm.dat$Subject))
+
+nlm.0 <- nlme(Progress ~ SSlogis(Trial, Asym, xmid, scal),
+              data = nlm.dat,
+              fixed = list(Asym ~ 1, xmid ~ 1, scal ~ 1),
+              random = Asym + xmid ~ 1|Subject,
+              #groups = ~ Subject
+              #start = initVals
+)
+
+nlm.0rs <- nlme(Progress ~ SSlogis(Trial, Asym, xmid, scal),
+              data = nlm.dat,
+              fixed = list(Asym ~ 1, xmid ~ 1, scal ~ 1),
+              random = Asym + xmid + scal ~ 1|Subject,
+              #groups = ~ Subject
+              #start = initVals
+)
+
+control = nlmeControl(pnlsTol = 0.001, msVerbose = TRUE)
+nlm.0.o <- update(nlm.0, fixed=list(Asym ~ Openness, xmid ~ Openness, scal ~ 1)
+                #, start = c(fixef(nlm.0),fixef(nlm.0),fixef(nlm.0)))
+                , start = c(Asym = fixef(nlm.0)[1],xmid = fixef(nlm.0)[2], scal = fixef(nlm.0)[3],
+                            Openness=c(1,1)))
+
+nlm.0.f <- update(nlm.0, fixed=list(Asym ~ Friendliness, xmid ~ Friendliness, scal ~ 1)
+                  #, start = c(fixef(nlm.0),fixef(nlm.0),fixef(nlm.0)))
+                  , start = c(Asym = fixef(nlm.0)[1],xmid = fixef(nlm.0)[2], scal = fixef(nlm.0)[3],1,1))
+
+nlm.0.fo<- update(nlm.0, fixed=list(Asym ~ Friendliness + Openness, xmid ~ Friendliness + Openness, scal ~ 1)
+                  #, start = c(fixef(nlm.0),fixef(nlm.0),fixef(nlm.0)))
+                  , start = c(Asym = fixef(nlm.0)[1],xmid = fixef(nlm.0)[2], scal = fixef(nlm.0)[3],
+                              #fixef(nlm.0.f)[2],fixef(nlm.0.o)[2],fixef(nlm.0.f)[4],fixef(nlm.0.o)[4]))
+                              1,1,1,1))
+ 
+nlm.0rs.o <- update(nlm.0rs, fixed=list(Asym ~ Openness, xmid ~ Openness, scal ~ 1)
+                  #, start = c(fixef(nlm.0),fixef(nlm.0),fixef(nlm.0)))
+                  , start = c(Asym = fixef(nlm.0)[1],xmid = fixef(nlm.0)[2], scal = fixef(nlm.0)[3],
+                              Openness=c(1,1)))
+
+nlm.0rs.f <- update(nlm.0rs, fixed=list(Asym ~ Friendliness, xmid ~ Friendliness, scal ~ 1)
+                  #, start = c(fixef(nlm.0),fixef(nlm.0),fixef(nlm.0)))
+                  , start = c(Asym = fixef(nlm.0)[1],xmid = fixef(nlm.0)[2], scal = fixef(nlm.0)[3],1,1))
+
+nlm.0rs.fo<- update(nlm.0rs, fixed=list(Asym ~ Friendliness + Openness, xmid ~ Friendliness + Openness, scal ~ 1)
+                  #, start = c(fixef(nlm.0),fixef(nlm.0),fixef(nlm.0)))
+                  , start = c(Asym = fixef(nlm.0)[1],xmid = fixef(nlm.0)[2], scal = fixef(nlm.0)[3],
+                              #fixef(nlm.0.f)[2],fixef(nlm.0.o)[2],fixef(nlm.0.f)[4],fixef(nlm.0.o)[4]))
+                              1,1,1,1))
+
+
+# fit plots
+
+library(ggplot2)
+gg.p <- ggplot(trial.dat, aes(Trial,Progress))+stat_summary(fun.data="mean_cl_boot",colour='green')
+  
+gg.p + facet_wrap(~Subject)
+
+yPred=coef(nlm.0)
+
+# scal
+par(mfrow=c(2,2))
+
+plot(nlm.dat$Trial, nlm.dat$Progress)
+
+yPred = coef(nlm.0)
+ypred 
+plot(nlm.dat$Trial, 
+      yPred[1]/(1 + exp((yPred[2]-nlm.dat$Trial)/(yPred[3])))
+)
+plot(nlm.dat$Trial, 
+     yPred[1]/(1 + exp((yPred[2]-nlm.dat$Trial)/(2*yPred[3])))
+)
+plot(nlm.dat$Trial, 
+     yPred[1]/(1 + exp((yPred[2]-nlm.dat$Trial)/(1/2*yPred[3])))
+)
+
+#xmid
+par(mfrow=c(2,2))
+
+plot(nlm.dat$Trial, nlm.dat$Progress)
+
+yPred = fixef(nlm.0)
+plot(nlm.dat$Trial, 
+     yPred[1]/(1 + exp((yPred[2]-nlm.dat$Trial)/(yPred[3])))
+)
+plot(nlm.dat$Trial, 
+     yPred[1]/(1 + exp((2*yPred[2]-nlm.dat$Trial)/(yPred[3])))
+)
+plot(nlm.dat$Trial, 
+     yPred[1]/(1 + exp((1/2*yPred[2]-nlm.dat$Trial)/(yPred[3])))
+)
+
+      
+
+fixef(nlm.0)
+# this doesn't really work
+
+# Correlation tests with ranef's
+
+ran.prog = ranef(nlm.0,drop=TRUE)
+
+# with Asymptote
+cor.test(unlist(ran.prog[1]),mtrim$Friendliness)
+cor.test(unlist(ran.prog[1]),mtrim$Openness)
+cor.test(unlist(ran.prog[1]),mtrim$Anxiety)
+cor.test(unlist(ran.prog[1]),mtrim$Activity)
+cor.test(unlist(ran.prog[1]),mtrim$Dominance)
+cor.test(unlist(ran.prog[1]),mtrim$Confidence)
+
+# with xmid (slope rise)
+cor.test(unlist(ran.prog[2]),mtrim$Friendliness)
+cor.test(unlist(ran.prog[2]),mtrim$Openness)
+
+
+##
+
+thurstone <- function(x, L, P, R) (L*(x + P)/(x + P + R))
+
+thurstone <- deriv(~(4*(x + P)/(x + P + R)),
+                    c('P','R'), function(x, P, R){})
+
+nlm.0 <- nlme(Progress ~ thurstone(Trial, P, R),
+              data=nlm.dat,
+              fixed=list(P ~ 1, R ~ 1),
+              random = R + R ~ 1|Subject
+              , start = c(0.1,0.1)
+)
+
+
+nlm.o <- nlme(Progress ~ thurstone(Trial, P, R),
+              data=nlm.dat,
+              fixed=list(P ~ 1 + Openness, R ~ 1 + Openness),
+              random = R + R ~ 1|Subject
+              , start = c(0.01,0.01,0.01,0.01)
+)
+
+nlm.f <- nlme(Progress ~ thurstone(Trial, P, R),
+              data=nlm.dat,
+              fixed=list(P ~ 1 + Friendliness, R ~ 1 + Friendliness),
+              random = R + R ~ 1|Subject
+              , start = c(0.01,0.01,0.01,0.01)
+)
+
 
 # (L / y - 1)^-1 = x/R + P/R  
 
 trial.dat$Prog.t = ((L / trial.dat$Progress) - 1 )^-1
+
+trial.dat$Prog.t = exp(trial.dat$Progress)
 
 
 # linear(ly transformed) models
@@ -95,7 +257,7 @@ lmm.Prog.all.mainint <- lmer(Prog.t ~ 1 + Trial + Openness + Friendliness +
 
 
 
-###
+##
 
 library(bbmle) # for ICtab
 prog.AIC <- AICctab(lmm.Prog.0,lmm.Prog.00,lmm.Prog.f,lmm.Prog.o,lmm.Prog.fo,lmm.Prog.all,
@@ -124,6 +286,7 @@ cor.test(unlist(BLUP.prog$Subject[1]),mtrim$Confidence)
 cor.test(1/unlist(BLUP.err$Subject[2]),mtrim$Friendliness)
 cor.test(1/unlist(BLUP.err$Subject[2]),mtrim$Openness)
 cor.test(1/unlist(BLUP.err$Subject[2]),mtrim$Confidence)
+
 
 
 

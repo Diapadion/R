@@ -107,11 +107,17 @@ for (i in 1:length(sheets)){
   
   # Time spent (at all) _near_ others
   temp_dat$total.near.others = sum(temp_dat$behav.length[temp_dat$X.Near.others.!=''])
+    
+  # Time spent sitting with conspecifics
+  temp_dat$total.with.others = sum(temp_dat$behav.length[temp_dat$Sitting.with.conspecific!=''])
   
   
   # Time(s) spent grooming with conspecific
   
   
+  
+  ## Emotion - column R onwards
+  temp_dat$total.emotion.events = sum(temp_dat$Full.Display..hoots.only..or.fight.!='')
   
 
 

@@ -1,21 +1,21 @@
 {
     "contents" : "",
-    "created" : 1430217549987.000,
+    "created" : 1430311167044.000,
     "dirty" : false,
     "encoding" : "",
     "folds" : "",
     "hash" : "0",
-    "id" : "9460CC05",
-    "lastKnownWriteTime" : 539763315,
+    "id" : "B4424000",
+    "lastKnownWriteTime" : 1713796193,
     "path" : null,
     "project_path" : null,
     "properties" : {
-        "caption" : "trial.dat",
-        "contentUrl" : "content?title=trial.dat&file=489a068886a0448899d203c3a4d99ff3.htm",
+        "caption" : "nlm.dat",
+        "contentUrl" : "content?title=nlm.dat&file=b0057155626a4bf1981a4c623f7bd8c8.htm",
         "displayedObservations" : "1000",
         "displayedVariables" : 62,
         "totalObservations" : "7240",
-        "variables" : "62"
+        "variables" : "63"
     },
     "source_on_save" : false,
     "type" : "r_dataframe"

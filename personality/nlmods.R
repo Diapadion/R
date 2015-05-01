@@ -49,10 +49,12 @@ nlm.0 <- nlme(Progress ~ SSlogis(Trial, Asym, xmid, scal),
 # Should it have a random effect but no personality impact?
 
 
-nlm.dat = groupedData(Error ~ Trial | Subject, data=trial.dat , order.groups=0
-                      )
+# setting up df for random effects (nested) via nlme
+nlm.dat = groupedData(Progress ~ Trial | Subject, data=trial.dat , order.groups=0)
 
-nlm.dat$ran = runif(length(nlm.dat$Subject))
+nlm.date = groupedData(Progress ~ Trial | Subject/Date, data=trial.dat , order.groups=c(0,0))
+
+#nlm.dat$ran = runif(length(nlm.dat$Subject))
 
 nlm.0 <- nlme(Progress ~ SSlogis(Trial, Asym, xmid, scal),
               data = nlm.dat,
@@ -62,15 +64,17 @@ nlm.0 <- nlme(Progress ~ SSlogis(Trial, Asym, xmid, scal),
               #start = initVals
 )
 
+# now trying to nest trials within subject
 nlm.0rs <- nlme(Progress ~ SSlogis(Trial, Asym, xmid, scal),
               data = nlm.dat,
               fixed = list(Asym ~ 1, xmid ~ 1, scal ~ 1),
-              random = Asym + xmid + scal ~ 1|Subject,
-              #groups = ~ Subject
+              random = Asym + xmid + scal ~ 1|Subject
+              #groups = ~ Subject/Date,
               #start = initVals
+              #verbose=TRUE
 )
 
-control = nlmeControl(pnlsTol = 0.001, msVerbose = TRUE)
+control = nlmeControl(pnlsTol = 0.001, msVerbose = FALSE, opt='nlminb')
 nlm.0.o <- update(nlm.0, fixed=list(Asym ~ Openness, xmid ~ Openness, scal ~ 1)
                 #, start = c(fixef(nlm.0),fixef(nlm.0),fixef(nlm.0)))
                 , start = c(Asym = fixef(nlm.0)[1],xmid = fixef(nlm.0)[2], scal = fixef(nlm.0)[3],
@@ -89,17 +93,29 @@ nlm.0.fo<- update(nlm.0, fixed=list(Asym ~ Friendliness + Openness, xmid ~ Frien
 nlm.0rs.o <- update(nlm.0rs, fixed=list(Asym ~ Openness, xmid ~ Openness, scal ~ 1)
                   #, start = c(fixef(nlm.0),fixef(nlm.0),fixef(nlm.0)))
                   , start = c(Asym = fixef(nlm.0)[1],xmid = fixef(nlm.0)[2], scal = fixef(nlm.0)[3],
-                              Openness=c(1,1)))
+                              Openness=c(0.5,0.5)))
 
 nlm.0rs.f <- update(nlm.0rs, fixed=list(Asym ~ Friendliness, xmid ~ Friendliness, scal ~ 1)
                   #, start = c(fixef(nlm.0),fixef(nlm.0),fixef(nlm.0)))
-                  , start = c(Asym = fixef(nlm.0)[1],xmid = fixef(nlm.0)[2], scal = fixef(nlm.0)[3],1,1))
+                  , start = c(Asym = fixef(nlm.0)[1],xmid = fixef(nlm.0)[2], scal = fixef(nlm.0)[3],0.5,0.5))
 
+nlm.0rs.c <- update(nlm.0rs, fixed=list(Asym ~ Confidence, xmid ~ Confidence, scal ~ 1)
+                    #, start = c(fixef(nlm.0),fixef(nlm.0),fixef(nlm.0)))
+                    , start = c(Asym = fixef(nlm.0)[1],xmid = fixef(nlm.0)[2], scal = fixef(nlm.0)[3],0.5,0.5))
+
+control = nlmeControl(pnlsTol = 0.02, msVerbose = TRUE)
 nlm.0rs.fo<- update(nlm.0rs, fixed=list(Asym ~ Friendliness + Openness, xmid ~ Friendliness + Openness, scal ~ 1)
                   #, start = c(fixef(nlm.0),fixef(nlm.0),fixef(nlm.0)))
                   , start = c(Asym = fixef(nlm.0)[1],xmid = fixef(nlm.0)[2], scal = fixef(nlm.0)[3],
-                              #fixef(nlm.0.f)[2],fixef(nlm.0.o)[2],fixef(nlm.0.f)[4],fixef(nlm.0.o)[4]))
-                              1,1,1,1))
+                            #  fixef(nlm.0.f)[2],fixef(nlm.0.o)[2],fixef(nlm.0.f)[4],fixef(nlm.0.o)[4]))
+                              0.5,0.5,0.5,0.5))
+
+nlm.0rs.foc<- update(nlm.0rs, fixed=list(Asym ~ Friendliness + Openness + Confidence, 
+                                        xmid ~ Friendliness + Openness + Confidence, scal ~ 1)
+                    #, start = c(fixef(nlm.0),fixef(nlm.0),fixef(nlm.0)))
+                    , start = c(Asym = fixef(nlm.0)[1],xmid = fixef(nlm.0)[2], scal = fixef(nlm.0)[3],
+                                #  fixef(nlm.0.f)[2],fixef(nlm.0.o)[2],fixef(nlm.0.f)[4],fixef(nlm.0.o)[4]))
+                                0.5,0.5,0.5,0.5,0.5,0.5))
 
 
 # fit plots
@@ -151,7 +167,7 @@ fixef(nlm.0)
 
 # Correlation tests with ranef's
 
-ran.prog = ranef(nlm.0,drop=TRUE)
+ran.prog = ranef(nlm.0rs,drop=TRUE)
 
 # with Asymptote
 cor.test(unlist(ran.prog[1]),mtrim$Friendliness)
@@ -164,6 +180,7 @@ cor.test(unlist(ran.prog[1]),mtrim$Confidence)
 # with xmid (slope rise)
 cor.test(unlist(ran.prog[2]),mtrim$Friendliness)
 cor.test(unlist(ran.prog[2]),mtrim$Openness)
+cor.test(unlist(ran.prog[2]),mtrim$Confidence)
 
 
 ##
@@ -293,6 +310,93 @@ cor.test(1/unlist(BLUP.err$Subject[2]),mtrim$Confidence)
 
 ### ERROR
 
+# using General Additive Models
+
+library(mgcv)
+library(gamm4)
+library(bbmle)
+
+gam.err.0 <- gamm4(Error ~ 1 + Trial,
+                  data = trial.dat,
+                  random= ~ (1+Trial | Subject/Date)
+)
+
+
+# testing for which is best
+# gam.err.0s.tp10 <- gamm4(Error ~ 1 + s(Trial,k=10),
+#                    data = trial.dat,
+#                    random= ~ (1+Trial | Subject/Date)
+# )
+# gam.err.0s.cr10 
+gam.err.0s <- gamm4(Error ~ 1 + s(Trial,bs='cr',k=5),
+                    data = trial.dat,
+                    random= ~ (1+Trial | Subject/Date)
+)
+# gam.err.0s.cr20 <- gamm4(Error ~ 1 + s(Trial,bs='cr',k=20),
+#                     data = trial.dat,
+#                     random= ~ (1+Trial | Subject/Date)
+# )
+
+
+
+
+gam.err.pers.f <- gamm4(Error ~ 1 + s(Trial,bs='cr',k=5) + 
+                           s(Friendliness,bs='cr',k=5) +
+                           t2(Trial,Friendliness,bs='cr',k=5),
+                         data = trial.dat,
+                         random= ~ (1+Trial | Subject/Date)
+)
+
+gam.err.pers.o <- gamm4(Error ~ 1 + s(Trial,bs='cr',k=5) + 
+                          s(Openness,bs='cr',k=5) +
+                          t2(Trial,Openness,bs='cr',k=5),
+                        data = trial.dat,
+                        random= ~ (1+Trial | Subject/Date)
+)
+
+
+
+gam.err.pers.fo <- gamm4(Error ~ 1 + s(Trial,bs='cr',k=5) + 
+                            t2(Trial,Friendliness,bs='cr',k=5) +
+                            t2(Trial,Openness,bs='cr',k=5),
+                          data = trial.dat,
+                          random= ~ (1+Trial | Subject/Date)
+)
+
+gam.err.pers.fo.int <- gamm4(Error ~ 1 + s(Trial,bs='cr',k=5) + 
+                               s(Openness,bs='cr',k=5) + s(Friendliness,bs='cr',k=5) +
+                           t2(Trial,Friendliness,bs='cr',k=5) +
+                           t2(Trial,Openness,bs='cr',k=5),
+                         data = trial.dat,
+                         random= ~ (1+Trial | Subject/Date)
+)
+
+
+gam.err.pers.foc <- gamm4(Error ~ 1 + s(Trial,bs='cr',k=5) + 
+                            t2(Trial,Friendliness,bs='cr',k=5) +
+                            t2(Trial,Openness,bs='cr',k=5) + 
+                            t2(Trial,Confidence,bs='cr',k=5),
+                            data = trial.dat,
+                            random= ~ (1+Trial | Subject/Date)
+)
+
+
+gam.err.pers.fxo.0 <- gamm4(Error ~ 1 + s(Trial,bs='cr',k=10) +
+                      #t2(Trial,Friendliness) +
+                      t2(Trial,Openness,Friendliness,bs='cr',k=5),
+                    data = trial.dat,
+                    random= ~ (1+Trial | Subject/Date)
+)
+
+gam.err.pers.fxo <- gamm4(Error ~ 1 + s(Trial,bs='cr',k=10) +
+                              t2(Trial,Friendliness) +
+                              t2(Trial,Openness,Friendliness,bs='cr',k=5),
+                            data = trial.dat,
+                            random= ~ (1+Trial | Subject/Date)
+)
+
+
+
 #trial.dat$Err.t = ((L / trial.dat$Error) - 1 )^-1
 # the above transform makes regular OLS not a great approach
 # one alternative is Weighted LS, but ML is still good, and REML probably best
@@ -306,16 +410,20 @@ lmm.q.err.0 <- lmer(Error ~ I(Trial^2) + Trial + 1 + (1 + Trial + I(Trial^2)| Su
 #lmm.q.err.01 <- lmer(Error ~ I(Trial^2) + 1 + (1 + I(Trial^2)| Subject), data = trial.dat)
 lmm.q.err.o <- lmer(Error ~ I(Trial^2) + Trial + 1 + 
                       I(Trial^2):Openness + 
-                      (1 + Trial + I(Trial^2)| Subject), data = trial.dat, REML=FALSE)
+                      (1 + Trial + I(Trial^2)| Subject/Date), data = trial.dat, REML=FALSE)
 
-lmm.q.err.o <- lmer(Error ~ I(Trial^2) + Trial + 1 + 
+lmm.q.err.o2 <- lmer(Error ~ I(Trial^2) + Trial + 1 + 
                       I(Trial^2):Openness + Openness +
-                      (1 + Trial + I(Trial^2)| Subject), data = trial.dat, REML=FALSE)
+                      (1 + Trial + I(Trial^2)| Subject/Date), data = trial.dat, REML=FALSE)
 
 lmm.q.err.f <- lmer(Error ~ I(Trial^2) + Trial + 1 + 
                       I(Trial^2):Friendliness + Friendliness +
                       (1 + Trial + I(Trial^2)| Subject), data = trial.dat, REML=FALSE)
 
+
+trial.dat$err.pred = predict(lmm.q.err.0, newdata=trial.dat$Trial)
+
+plotLMER.fnc(lmm.q.err.0)
 
 coefplot(lmm.err.0)
 
@@ -323,19 +431,38 @@ coefplot(lmm.err.0)
 #|
 
 # null model
-lmm.err.0 <- lmer(Err.t ~ Trial + 1 + (1 + Trial| Subject), data = trial.dat)
+lmm.err.0 <- lmer(Error ~ Trial + 1 + (1 + Trial| Subject/Date), data = trial.dat, REML=FALSE)
 
-lmm.err.o <- lmer(Err.t ~ Trial + 1 
+lmm.err.0.rtr <- lmer(Error ~ 1 + (1 | Subject:Date) + (1 | Subject:Trial) + (1 | Subject), data = trial.dat, REML=FALSE)
+# model .0 is better
+
+
+
+
+lmm.err.o <- lmer(Error ~ Trial + 1 + Openness
                   #  + (1 + Trial|Subject) 
-                    + (1 + Trial|Openness)
+                    + (1 + Trial|Subject/Date)
                     #+ Openness + Friendliness + Dominance + Confidence + Activity)
-                         , data = trial.dat)
+                         , data = trial.dat, REML=FALSE)
 
-lmm.err.f <- lmer(Err.t ~ Trial + 1 
-                  #+ (1 + Trial|Subject) 
-                  + (1 + Trial|Friendliness)
+lmm.err.oB <- lmer(Error ~ Trial + 1 + Openness + Openness:Trial
+                  #  + (1 + Trial|Subject) 
+                  + (1 + Trial|Subject/Date)
                   #+ Openness + Friendliness + Dominance + Confidence + Activity)
-                  , data = trial.dat)
+                  , data = trial.dat, REML=FALSE)
+
+
+lmm.err.f <- lmer(Error ~ Trial + 1 + Friendliness
+                  #  + (1 + Trial|Subject) 
+                  + (1 + Trial|Subject/Date)
+                  #+ Openness + Friendliness + Dominance + Confidence + Activity)
+                  , data = trial.dat, REML=FALSE)
+
+lmm.err.fB <- lmer(Error ~ Trial + 1 + Friendliness + Friendliness:Trial
+                  #  + (1 + Trial|Subject) 
+                  + (1 + Trial|Subject/Date)
+                  #+ Openness + Friendliness + Dominance + Confidence + Activity)
+                  , data = trial.dat, REML=FALSE)
 
 lmm.err.fo <- lmer(Err.t ~ Trial + 1 
                     #+ (1 + Trial|Subject)                   
@@ -420,3 +547,63 @@ cor.test(1/unlist(BLUP.err$Subject[2]),mtrim$Friendliness)
 cor.test(1/unlist(BLUP.err$Subject[2]),mtrim$Openness)
 cor.test(1/unlist(BLUP.err$Subject[2]),mtrim$Confidence)
 
+
+
+### REWARD RATE
+
+library(lme4)
+
+glm.rrtr <- glmer(Correct ~ 1 + Trial + Anxiety + Activity + Dominance + Confidence + Openness + Friendliness
+                + (1 + Trial|Subject:Date) + (0 + Trial | Subject),
+                data=trial.dat,
+                family=binomial(link='logit'))
+
+glm.rrntr <- glmer(Correct ~ 1 + Trial + Anxiety + Activity + Dominance + Confidence + Openness + Friendliness
+                  + (1 | Subject:Date),
+                  data=trial.dat,
+                  family=binomial(link='logit'))
+
+glm.rDinSntr <- glmer(Correct ~ 1 + Trial + Anxiety + Activity + Dominance + Confidence + Openness + Friendliness
+                   + (1 | Subject/Date),
+                   data=trial.dat,
+                   family=binomial(link='logit'))
+
+# model below is probably not meaningful
+glm.rr <- glmer(Correct ~ 1 + Anxiety + Activity + Dominance + Confidence + Openness + Friendliness
+                + (1 | Subject:Date) + (1 | Subject:Trial), #+ (1 | Subject),
+                data=trial.dat,
+                family=binomial(link='logit'))
+
+# indicate that Subject effect on Intercept is degenerate
+
+
+#library(MCMCglmm)
+
+
+##### Cleanup
+
+.ls.objects <- function (pos = 1, pattern, order.by,
+                         decreasing=FALSE, head=FALSE, n=5) {
+  napply <- function(names, fn) sapply(names, function(x)
+    fn(get(x, pos = pos)))
+  names <- ls(pos = pos, pattern = pattern)
+  obj.class <- napply(names, function(x) as.character(class(x))[1])
+  obj.mode <- napply(names, mode)
+  obj.type <- ifelse(is.na(obj.class), obj.mode, obj.class)
+  obj.size <- napply(names, object.size)
+  obj.dim <- t(napply(names, function(x)
+    as.numeric(dim(x))[1:2]))
+  vec <- is.na(obj.dim)[, 1] & (obj.type != "function")
+  obj.dim[vec, 1] <- napply(names, length)[vec]
+  out <- data.frame(obj.type, obj.size, obj.dim)
+  names(out) <- c("Type", "Size", "Rows", "Columns")
+  if (!missing(order.by))
+    out <- out[order(out[[order.by]], decreasing=decreasing), ]
+  if (head)
+    out <- head(out, n)
+  out
+}
+# shorthand
+lsos <- function(..., n=10) {
+  .ls.objects(..., order.by="Size", decreasing=TRUE, head=TRUE, n=n)
+}

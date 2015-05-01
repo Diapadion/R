@@ -1,7 +1,7 @@
 {
     "contents" : "### initial correlation tests\n\n# summarizing the vars\n\np.summar = cbind(mtrim[,c(49:55)], aggregate(trial.dat[,c(3:5)],by=list(trial.dat$Subject), FUN=mean))\n\ncor.r_e = cor(p.summar$Correct,p.summar$Error)\ncor.r_p = cor(p.summar$Correct,p.summar$Progress)\ncor.p_e = cor(p.summar$Progress,p.summar$Error)\n                        \n\ncor.t.r_f = cor.test(p.summar$Correct,p.summar$Friendliness)\ncor.t.r_o = cor.test(p.summar$Correct,p.summar$Openness)\ncor.t.r_c = cor.test(p.summar$Correct,p.summar$Confidence)\n\ncor.t.e_f = cor.test(p.summar$Error,p.summar$Friendliness)\ncor.t.e_o = cor.test(p.summar$Error,p.summar$Openness)\ncor.t.e_c = cor.test(p.summar$Error,p.summar$Confidence)\n\ncor.t.p_f = cor.test(p.summar$Progress,p.summar$Friendliness)\ncor.t.p_o = cor.test(p.summar$Progress,p.summar$Openness)\ncor.t.p_c = cor.test(p.summar$Progress,p.summar$Confidence)\n\n\nlibrary(corrgram)\ncorrgram(p.summar)\n",
     "created" : 1430149822283.000,
-    "dirty" : false,
+    "dirty" : true,
     "encoding" : "UTF-8",
     "folds" : "",
     "hash" : "3174010329",

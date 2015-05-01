@@ -94,7 +94,7 @@ for(i in 1:length(dataIn[,9])){
 
 ### error, progress, & reward rate
 
-trial.dat<-data.frame(Subject=character(),Trial=numeric(),Correct=numeric(),
+trial.dat<-data.frame(Subject=character(),Date=character(),Trial=numeric(),Correct=numeric(),
                       Error=numeric(),Progress=numeric(),RT=numeric())
 
 
@@ -103,6 +103,7 @@ for (i in 1:length(dataIn[,7])){
     #skip
   } else {
     Subject = dataIn$Sub[i]
+    Date = dataIn$Date[i]
     Trial = dataIn$Trial[i]
     RT = dataIn$RT[i]
     
@@ -157,7 +158,7 @@ for (i in 1:length(dataIn[,7])){
       Correct = 1
     }
     
-    trial.dat <- rbind(trial.dat, data.frame(Subject,Trial,Correct,Error,Progress,RT))
+    trial.dat <- rbind(trial.dat, data.frame(Subject,Date,Trial,Correct,Error,Progress,RT))
 }
 }
 

@@ -11,11 +11,11 @@
     "project_path" : null,
     "properties" : {
         "caption" : "trial.dat",
-        "contentUrl" : "content?title=trial.dat&file=489a068886a0448899d203c3a4d99ff3.htm",
+        "contentUrl" : "content?title=trial.dat&file=999fbb30eed64dd29dde5a0f09ca5f89.htm",
         "displayedObservations" : "1000",
         "displayedVariables" : 62,
         "totalObservations" : "7240",
-        "variables" : "62"
+        "variables" : "61"
     },
     "source_on_save" : false,
     "type" : "r_dataframe"

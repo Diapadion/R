@@ -5,6 +5,12 @@ library (dplyr)
 trial.dat<-left_join(trial.dat, mtrim, by='Subject')
 trial.dat$Subject = as.factor(trial.dat$Subject)
 
+# log modulus transformation
+trial.dat$Err.t <- log(abs(trial.dat$Error)+1) * sign(trial.dat$Error)
+# inverse modulus transform
+trial.dat$Err.t <- 1/(abs(trial.dat$Error)+1) * sign(trial.dat$Error)
+# this seem to be the best
+
 
 library(ggplot2)
 gg.e <- ggplot(trial.dat, aes(Trial,Error))+geom_point()+

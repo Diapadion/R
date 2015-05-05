@@ -61,6 +61,7 @@ for (i in 1:length(sheets)){
   
     
   # OoS totaling
+  ### TODO does not papear ot be working
   if ('x' %in% temp_dat$OS){
     temp_dat$any.OS = 'Y'
     temp_dat$total.OS = sum(temp_dat$behav.length[temp_dat$OS=='x'])

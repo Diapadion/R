@@ -11,6 +11,14 @@ trial.dat$Err.t <- log(abs(trial.dat$Error)+1) * sign(trial.dat$Error)
 trial.dat$Err.t <- 1/(abs(trial.dat$Error)+1) * sign(trial.dat$Error)
 # this seem to be the best
 
+library(car)
+# Yeo-Johnson transformations. Seem less good.
+trial.dat$Err.yj <- yjPower(trial.dat$Error, -0.001, jacobian.adjusted = TRUE)
+
+gg.e.yj <- ggplot(trial.dat, aes(Trial,Err.yj))+geom_point()+
+  facet_wrap(~Subject) + stat_summary(fun.data="mean_cl_boot",colour='purple')
+gg.e.yj
+
 
 library(ggplot2)
 gg.e <- ggplot(trial.dat, aes(Trial,Error))+geom_point()+
@@ -437,45 +445,76 @@ coefplot(lmm.err.0)
 #|
 
 # null model
-lmm.err.0 <- lmer(Error ~ Trial + 1 + (1 + Trial| Subject/Date), data = trial.dat, REML=FALSE)
+lmm.err.0 <- lmer(Err.t ~ Trial + 1 + (1 + Trial| Subject/Date), data = trial.dat, REML=FALSE)
 
-lmm.err.0.rtr <- lmer(Error ~ 1 + (1 | Subject:Date) + (1 | Subject:Trial) + (1 | Subject), data = trial.dat, REML=FALSE)
+lmm.err.0.rtr <- lmer(Err.t ~ 1 + (1 | Subject:Date) + (1 | Subject:Trial) + (1 | Subject), data = trial.dat, REML=FALSE)
 # model .0 is better
 
 
 
 
-lmm.err.o <- lmer(Error ~ Trial + 1 + Openness
+lmm.err.o <- lmer(Err.t ~ Trial + 1 + Openness
                   #  + (1 + Trial|Subject) 
                     + (1 + Trial|Subject/Date)
                     #+ Openness + Friendliness + Dominance + Confidence + Activity)
                          , data = trial.dat, REML=FALSE)
 
-lmm.err.oB <- lmer(Error ~ Trial + 1 + Openness + Openness:Trial
+lmm.err.oB <- lmer(Err.t ~ Trial + 1 + Openness + Openness:Trial
                   #  + (1 + Trial|Subject) 
                   + (1 + Trial|Subject/Date)
                   #+ Openness + Friendliness + Dominance + Confidence + Activity)
                   , data = trial.dat, REML=FALSE)
 
 
-lmm.err.f <- lmer(Error ~ Trial + 1 + Friendliness
+lmm.err.f <- lmer(Err.t ~ Trial + 1 + Friendliness
                   #  + (1 + Trial|Subject) 
                   + (1 + Trial|Subject/Date)
                   #+ Openness + Friendliness + Dominance + Confidence + Activity)
                   , data = trial.dat, REML=FALSE)
 
-lmm.err.fB <- lmer(Error ~ Trial + 1 + Friendliness + Friendliness:Trial
+lmm.err.fB <- lmer(Err.t ~ Trial + 1 + Friendliness + Friendliness:Trial
                   #  + (1 + Trial|Subject) 
                   + (1 + Trial|Subject/Date)
                   #+ Openness + Friendliness + Dominance + Confidence + Activity)
                   , data = trial.dat, REML=FALSE)
 
 lmm.err.fo <- lmer(Err.t ~ Trial + 1 
+                   + Friendliness + Friendliness:Trial
+                   + Openness + Openness:Trial
+                   + (1 + Trial|Subject/Date)
                     #+ (1 + Trial|Subject)                   
-                    + (1 + Trial|Friendliness) 
-                    + (1 + Trial|Openness)
+                    #+ (1 + Trial|Friendliness) 
+                    #+ (1 + Trial|Openness)
                     #+ Openness + Friendliness + Dominance + Confidence + Activity)
-                    , data = trial.dat)
+                    , data = trial.dat, REML=FALSE)
+
+anova(lmm.err.0,lmm.err.fo,lmm.err.f,lmm.err.fB,lmm.err.o,lmm.err.oB)
+# is f on B and o on c the meaningful interactions?
+
+lmm.err.Bf <- lmer(Err.t ~ Trial + 1 
+                   + Friendliness:Trial
+                   + (1 + Trial|Subject/Date)
+                   , data = trial.dat, REML=FALSE)
+
+lmm.err.Co <- lmer(Err.t ~ Trial + 1 
+                   + Openness
+                   + (1 + Trial|Subject/Date)
+                   , data = trial.dat, REML=FALSE)
+
+# this is the best model
+lmm.err.BfCo <- lmer(Err.t ~ Trial + 1 
+                   + Friendliness:Trial + Openness
+                   + (1 + Trial|Subject/Date)
+                   , data = trial.dat, REML=FALSE)
+
+lmm.err.Bf_o <- lmer(Err.t ~ Trial + 1 
+                     + Friendliness:Trial + Openness + Openness:Trial
+                     + (1 + Trial|Subject/Date)
+                     , data = trial.dat, REML=FALSE)
+
+anova(lmm.err.0,lmm.err.fo,lmm.err.f,lmm.err.fB,lmm.err.o,lmm.err.oB, lmm.err.Bf,lmm.err.Co,lmm.err.BfCo, lmm.err.Bf_o)
+anova(lmm.err.0,lmm.err.f,lmm.err.fB,lmm.err.o, lmm.err.Bf,lmm.err.BfCo, lmm.err.Bf_o)
+
 
 # lmm.err.fxo <- lmer(Err.t ~ Trial + 1 
 #                    #+ (1 + Trial|Subject)                   

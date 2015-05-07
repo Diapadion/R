@@ -9,15 +9,25 @@ trial.dat$Subject = as.factor(trial.dat$Subject)
 trial.dat$Err.t <- log(abs(trial.dat$Error)+1) * sign(trial.dat$Error)
 # inverse modulus transform
 trial.dat$Err.t <- 1/(abs(trial.dat$Error)+1) * sign(trial.dat$Error)
-# this seem to be the best
+# this seem to be the best, but needs refelction
+# ... and reflection fucks it all up
+trial.dat$Err.t.r <- 1/(abs(trial.dat$Error)*-1+3) * sign(trial.dat$Error)
 
 library(car)
+library(MASS)
 # Yeo-Johnson transformations. Seem less good.
-trial.dat$Err.yj <- yjPower(trial.dat$Error, -0.001, jacobian.adjusted = TRUE)
+# ... but I don't think there is a robust alternative
+yj.lambda = with(data=trial.dat,boxcox(Error[Error>0] ~ Trial[Error>0], plotit=TRUE,eps=0.01,
+                                       lambda=seq(-2,2,0.0001)))
+yj.lambda = with(data=trial.dat,boxcox(abs(Error)+1 ~ Trial, plotit=TRUE,eps=0.01,
+                                       lambda=seq(-2,2,0.001)))
+trial.dat$Err.yj <- yjPower(trial.dat$Error, #-1.887,
+                            -0.146,
+                            jacobian.adjusted = TRUE)
 
 gg.e.yj <- ggplot(trial.dat, aes(Trial,Err.yj))+geom_point()+
   facet_wrap(~Subject) + stat_summary(fun.data="mean_cl_boot",colour='purple')
-gg.e.yj
+gg.e.yj + coord_cartesian(ylim = c(-3, 3)) 
 
 
 library(ggplot2)
@@ -26,9 +36,9 @@ gg.e <- ggplot(trial.dat, aes(Trial,Error))+geom_point()+
 
 gg.e + stat_summary(fun.data="mean_cl_boot",colour='red') #+ stat_smooth(method='glm') # this isn't very good
 
-gg.e <- ggplot(trial.dat, aes(Trial,Err.t))+geom_point()+
+gg.e <- ggplot(trial.dat, aes(Trial,Err.t.r))+geom_point()+
   facet_wrap(~Subject) + stat_summary(fun.data="mean_cl_boot",colour='purple')
-
+gg.e
 
 
 gg.p <- ggplot(trial.dat, aes(Trial,Progress))+geom_point()+
@@ -445,139 +455,71 @@ coefplot(lmm.err.0)
 #|
 
 # null model
-lmm.err.0 <- lmer(Err.t ~ Trial + 1 + (1 + Trial| Subject/Date), data = trial.dat, REML=FALSE)
+lmm.err.0 <- lmer(Err.yj ~ Trial + 1 + (1 + Trial| Subject/Date), data = trial.dat, REML=FALSE)
 
-lmm.err.0.rtr <- lmer(Err.t ~ 1 + (1 | Subject:Date) + (1 | Subject:Trial) + (1 | Subject), data = trial.dat, REML=FALSE)
+lmm.err.0.rtr <- lmer(Err.yj ~ 1 + (1 | Subject:Date) + (1 | Subject:Trial) + (1 | Subject), data = trial.dat, REML=FALSE)
 # model .0 is better
 
 
 
 
-lmm.err.o <- lmer(Err.t ~ Trial + 1 + Openness
+lmm.err.o <- lmer(Err.yj ~ Trial + 1 + Openness
                   #  + (1 + Trial|Subject) 
                     + (1 + Trial|Subject/Date)
                     #+ Openness + Friendliness + Dominance + Confidence + Activity)
                          , data = trial.dat, REML=FALSE)
 
-lmm.err.oB <- lmer(Err.t ~ Trial + 1 + Openness + Openness:Trial
+lmm.err.oB <- lmer(Err.yj ~ Trial + 1 + Openness:Trial
                   #  + (1 + Trial|Subject) 
                   + (1 + Trial|Subject/Date)
                   #+ Openness + Friendliness + Dominance + Confidence + Activity)
                   , data = trial.dat, REML=FALSE)
 
 
-lmm.err.f <- lmer(Err.t ~ Trial + 1 + Friendliness
+lmm.err.f <- lmer(Err.yj ~ Trial + 1 + Friendliness
                   #  + (1 + Trial|Subject) 
                   + (1 + Trial|Subject/Date)
                   #+ Openness + Friendliness + Dominance + Confidence + Activity)
                   , data = trial.dat, REML=FALSE)
 
-lmm.err.fB <- lmer(Err.t ~ Trial + 1 + Friendliness + Friendliness:Trial
+lmm.err.fB <- lmer(Err.yj ~ Trial + 1 + Friendliness:Trial
                   #  + (1 + Trial|Subject) 
                   + (1 + Trial|Subject/Date)
                   #+ Openness + Friendliness + Dominance + Confidence + Activity)
                   , data = trial.dat, REML=FALSE)
 
-lmm.err.fo <- lmer(Err.t ~ Trial + 1 
-                   + Friendliness + Friendliness:Trial
-                   + Openness + Openness:Trial
+anova(lmm.err.f,lmm.err.o,lmm.err.fB,lmm.err.oB)
+
+lmm.err.fBc <- lmer(Err.yj ~ Trial + 1 + Friendliness:Trial + Friendliness
+                   #  + (1 + Trial|Subject) 
                    + (1 + Trial|Subject/Date)
-                    #+ (1 + Trial|Subject)                   
-                    #+ (1 + Trial|Friendliness) 
-                    #+ (1 + Trial|Openness)
-                    #+ Openness + Friendliness + Dominance + Confidence + Activity)
-                    , data = trial.dat, REML=FALSE)
-
-anova(lmm.err.0,lmm.err.fo,lmm.err.f,lmm.err.fB,lmm.err.o,lmm.err.oB)
-# is f on B and o on c the meaningful interactions?
-
-lmm.err.Bf <- lmer(Err.t ~ Trial + 1 
-                   + Friendliness:Trial
-                   + (1 + Trial|Subject/Date)
+                   #+ Openness + Friendliness + Dominance + Confidence + Activity)
                    , data = trial.dat, REML=FALSE)
 
-lmm.err.Co <- lmer(Err.t ~ Trial + 1 
-                   + Openness
-                   + (1 + Trial|Subject/Date)
-                   , data = trial.dat, REML=FALSE)
+anova(lmm.err.f,lmm.err.o,lmm.err.fB,lmm.err.fBc)
 
 # this is the best model
-lmm.err.BfCo <- lmer(Err.t ~ Trial + 1 
-                   + Friendliness:Trial + Openness
-                   + (1 + Trial|Subject/Date)
-                   , data = trial.dat, REML=FALSE)
+lmm.err.fB.oc <- lmer(Err.yj ~ Trial + 1 + Friendliness:Trial + Openness
+                      #  + (1 + Trial|Subject) 
+                      + (1 + Trial|Subject/Date)
+                      #+ Openness + Friendliness + Dominance + Confidence + Activity)
+                      , data = trial.dat, REML=FALSE)
 
-lmm.err.Bf_o <- lmer(Err.t ~ Trial + 1 
-                     + Friendliness:Trial + Openness + Openness:Trial
-                     + (1 + Trial|Subject/Date)
-                     , data = trial.dat, REML=FALSE)
+lmm.err.fBc.oc <- lmer(Err.yj ~ Trial + 1 + Friendliness:Trial + Friendliness + Openness
+                       #  + (1 + Trial|Subject) 
+                       + (1 + Trial|Subject/Date)
+                       #+ Openness + Friendliness + Dominance + Confidence + Activity)
+                       , data = trial.dat, REML=FALSE)
 
-anova(lmm.err.0,lmm.err.fo,lmm.err.f,lmm.err.fB,lmm.err.o,lmm.err.oB, lmm.err.Bf,lmm.err.Co,lmm.err.BfCo, lmm.err.Bf_o)
-anova(lmm.err.0,lmm.err.f,lmm.err.fB,lmm.err.o, lmm.err.Bf,lmm.err.BfCo, lmm.err.Bf_o)
-
-
-# lmm.err.fxo <- lmer(Err.t ~ Trial + 1 
-#                    #+ (1 + Trial|Subject)                   
-#                    + (1 + Trial|Friendliness:Openness)
-#                    #+ Openness + Friendliness + Dominance + Confidence + Activity)
-#                    , data = trial.dat)
-
-lmm.err.ac <- lmer(Err.t ~ Trial + 1 
-                  #+ (1 + Trial|Subject) 
-                  + (1 + Trial|Activity)
-                  #+ Openness + Friendliness + Dominance + Confidence + Activity)
-                  , data = trial.dat)
-
-lmm.err.an <- lmer(Err.t ~ Trial + 1 
-                  #+ (1 + Trial|Subject) 
-                  + (1 + Trial|Anxiety)
-                  #+ Openness + Friendliness + Dominance + Confidence + Activity)
-                  , data = trial.dat)
-
-lmm.err.c <- lmer(Err.t ~ Trial + 1 
-                  #+ (1 + Trial|Subject) 
-                  + (1 + Trial|Confidence)
-                  #+ Openness + Friendliness + Dominance + Confidence + Activity)
-                  , data = trial.dat)
-
-lmm.err.d <- lmer(Err.t ~ Trial + 1 
-                  #+ (1 + Trial|Subject) 
-                  + (1 + Trial|Dominance)
-                  #+ Openness + Friendliness + Dominance + Confidence + Activity)
-                  , data = trial.dat)
-
-lmm.err.all <- lmer(Err.t ~ Trial + 1 + 
-                      #(1 + Trial| Subject)
-                    + (1 + Trial|Friendliness) 
-                    + (1 + Trial|Openness)
-                    + (1 + Trial|Anxiety)
-                    + (1 + Trial|Activity)
-                    + (1 + Trial|Confidence)
-                    + (1 + Trial|Dominance)                    
-                    ,data = trial.dat)
-
-
-err.AIC <- AICctab(lmm.err.0,lmm.err.f,lmm.err.o,lmm.err.fo,lmm.err.all,
-                   lmm.err.c, lmm.err.ac,lmm.err.an,lmm.err.d,
-                   #type=c("BIC","AIC","AICc","qAIC","qAICc"),
-      logLik=TRUE, delta=TRUE, base=TRUE, dispersion=TRUE)
-                    
-BICtab(lmm.err.0,lmm.err.f,lmm.err.o,lmm.err.fo,lmm.err.all, #type=c("BIC","AIC","AICc","qAIC","qAICc"),
-       logLik=TRUE)
-
-library(lmtest)
-
-lrtest(lmm.err.f)
-
-Dfo_0 = -2*logLik(lmm.err.0, REML = TRUE) + 2*logLik(lmm.err.fo, REML = TRUE)
-ddf = 3
-chi.fo_0 <- pchisq(Dfo_0, ddf, ncp=0, lower.tail=FALSE, log.p=FALSE)
+anova(lmm.err.f,lmm.err.o,lmm.err.fB,lmm.err.fBc,lmm.err.fB.oc,lmm.err.fBc.oc)
 
 
 ### BLUP individual parameter tests
 BLUP.err = ranef(lmm.err.0,drop=TRUE)
 
-# intercept: P/R
+# the below appears to have become useless  
+
+# intercept
 cor.test(unlist(BLUP.err$Subject[1]),mtrim$Friendliness)
 cor.test(unlist(BLUP.err$Subject[1]),mtrim$Openness)
 cor.test(unlist(BLUP.err$Subject[1]),mtrim$Anxiety)
@@ -585,9 +527,7 @@ cor.test(unlist(BLUP.err$Subject[1]),mtrim$Activity)
 cor.test(unlist(BLUP.err$Subject[1]),mtrim$Dominance)
 cor.test(unlist(BLUP.err$Subject[1]),mtrim$Confidence)
 
-# just P
-
-# slope: 1/R -> transform via 1/beta
+# slope
 cor.test(1/unlist(BLUP.err$Subject[2]),mtrim$Friendliness)
 cor.test(1/unlist(BLUP.err$Subject[2]),mtrim$Openness)
 cor.test(1/unlist(BLUP.err$Subject[2]),mtrim$Confidence)
@@ -625,6 +565,33 @@ glm.rr <- glmer(Correct ~ 1 + Anxiety + Activity + Dominance + Confidence + Open
 #library(MCMCglmm)
 
 
+
+### REACTION TIME
+### only for all correct responses
+
+RT.dat = dataIn[((dataIn$PressAccuracy=='1')&(dataIn$CorrectItem=='A')),c(1:11)]
+
+RT.dat$Subject = as.factor(RT.dat$Sub)
+
+RT.dat<-left_join(RT.dat, mtrim, by='Subject')
+
+RT.dat <-RT.dat[!outliers(RT.dat$RT),]
+
+lmm.rt.0 <- lmer(RT ~ Trial + 1 + (1 + Trial| Subject/Date)# + (1 + Trial| Date)
+                 , data = RT.dat, REML=FALSE)
+# not worth the bother of modeling, the correlations are crap
+
+head(RT.dat$RT[RT.dat$Subject=='Prospero'],30)
+
+
+
+### acces. func.
+
+outliers <- function(obs, x = 3)
+  abs(obs - mean(obs, na.rm = T)) > (sd(obs, na.rm = T) * x)
+
+
+
 ##### Cleanup
 
 .ls.objects <- function (pos = 1, pattern, order.by,
@@ -652,3 +619,104 @@ glm.rr <- glmer(Correct ~ 1 + Anxiety + Activity + Dominance + Confidence + Open
 lsos <- function(..., n=10) {
   .ls.objects(..., order.by="Size", decreasing=TRUE, head=TRUE, n=n)
 }
+
+
+### Old stuff
+
+
+lmm.err.fo <- lmer(Err.t ~ Trial + 1 
+                   + Friendliness + Friendliness:Trial
+                   + Openness + Openness:Trial
+                   + (1 + Trial|Subject/Date)
+                   #+ (1 + Trial|Subject)                   
+                   #+ (1 + Trial|Friendliness) 
+                   #+ (1 + Trial|Openness)
+                   #+ Openness + Friendliness + Dominance + Confidence + Activity)
+                   , data = trial.dat, REML=FALSE)
+
+anova(lmm.err.0,lmm.err.fo,lmm.err.f,lmm.err.fB,lmm.err.o,lmm.err.oB)
+# is f on B and o on c the meaningful interactions?
+
+lmm.err.Bf <- lmer(Err.t ~ Trial + 1 
+                   + Friendliness:Trial
+                   + (1 + Trial|Subject/Date)
+                   , data = trial.dat, REML=FALSE)
+
+lmm.err.Co <- lmer(Err.t ~ Trial + 1 
+                   + Openness
+                   + (1 + Trial|Subject/Date)
+                   , data = trial.dat, REML=FALSE)
+
+
+lmm.err.BfCo <- lmer(Err.t ~ Trial + 1 
+                     + Friendliness:Trial + Openness
+                     + (1 + Trial|Subject/Date)
+                     , data = trial.dat, REML=FALSE)
+
+lmm.err.Bf_o <- lmer(Err.t ~ Trial + 1 
+                     + Friendliness:Trial + Openness + Openness:Trial
+                     + (1 + Trial|Subject/Date)
+                     , data = trial.dat, REML=FALSE)
+
+anova(lmm.err.0,lmm.err.fo,lmm.err.f,lmm.err.fB,lmm.err.o,lmm.err.oB, lmm.err.Bf,lmm.err.Co,lmm.err.BfCo, lmm.err.Bf_o)
+anova(lmm.err.0,lmm.err.f,lmm.err.fB,lmm.err.o, lmm.err.Bf,lmm.err.BfCo, lmm.err.Bf_o)
+
+
+# lmm.err.fxo <- lmer(Err.t ~ Trial + 1 
+#                    #+ (1 + Trial|Subject)                   
+#                    + (1 + Trial|Friendliness:Openness)
+#                    #+ Openness + Friendliness + Dominance + Confidence + Activity)
+#                    , data = trial.dat)
+
+lmm.err.ac <- lmer(Err.t ~ Trial + 1 
+                   #+ (1 + Trial|Subject) 
+                   + (1 + Trial|Activity)
+                   #+ Openness + Friendliness + Dominance + Confidence + Activity)
+                   , data = trial.dat)
+
+lmm.err.an <- lmer(Err.t ~ Trial + 1 
+                   #+ (1 + Trial|Subject) 
+                   + (1 + Trial|Anxiety)
+                   #+ Openness + Friendliness + Dominance + Confidence + Activity)
+                   , data = trial.dat)
+
+lmm.err.c <- lmer(Err.t ~ Trial + 1 
+                  #+ (1 + Trial|Subject) 
+                  + (1 + Trial|Confidence)
+                  #+ Openness + Friendliness + Dominance + Confidence + Activity)
+                  , data = trial.dat)
+
+lmm.err.d <- lmer(Err.t ~ Trial + 1 
+                  #+ (1 + Trial|Subject) 
+                  + (1 + Trial|Dominance)
+                  #+ Openness + Friendliness + Dominance + Confidence + Activity)
+                  , data = trial.dat)
+
+lmm.err.all <- lmer(Err.t ~ Trial + 1 + 
+                      #(1 + Trial| Subject)
+                      + (1 + Trial|Friendliness) 
+                    + (1 + Trial|Openness)
+                    + (1 + Trial|Anxiety)
+                    + (1 + Trial|Activity)
+                    + (1 + Trial|Confidence)
+                    + (1 + Trial|Dominance)                    
+                    ,data = trial.dat)
+
+
+err.AIC <- AICctab(lmm.err.0,lmm.err.f,lmm.err.o,lmm.err.fo,lmm.err.all,
+                   lmm.err.c, lmm.err.ac,lmm.err.an,lmm.err.d,
+                   #type=c("BIC","AIC","AICc","qAIC","qAICc"),
+                   logLik=TRUE, delta=TRUE, base=TRUE, dispersion=TRUE)
+
+BICtab(lmm.err.0,lmm.err.f,lmm.err.o,lmm.err.fo,lmm.err.all, #type=c("BIC","AIC","AICc","qAIC","qAICc"),
+       logLik=TRUE)
+
+library(lmtest)
+
+lrtest(lmm.err.f)
+
+Dfo_0 = -2*logLik(lmm.err.0, REML = TRUE) + 2*logLik(lmm.err.fo, REML = TRUE)
+ddf = 3
+chi.fo_0 <- pchisq(Dfo_0, ddf, ncp=0, lower.tail=FALSE, log.p=FALSE)
+
+

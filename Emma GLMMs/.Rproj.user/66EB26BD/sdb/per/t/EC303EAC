@@ -1,0 +1,17 @@
+{
+    "contents" : "\n\n\ndata1<- read.csv(file.choose(),header=T)\n#choose excel file (saved as .csv file)\n\n#data1\n\nlibrary(lme4)\n\n# To code any explanatory variables that are nominal as categorical factors:\n# (this e.g. ID and SESSION is the categorical var that needs recoding as a factor variable)\n\ndata1$ID<-factor(data1$ID)\n\ndata1$SESSION<-factor(data1$SESSION)\n\n# RUN THE MODEL\n# In this model trying to explain variation in MORS (0/1) with explanatory \n# variables SESSION (categorical) and PRECOND– random factor = ID (catetgorical)\n\nmodel.1<- glmer(MORS~scale(PRECOND)+SESSION+(1|ID), data=data1, family=binomial(link='logit'),\n                nAGQ=10\n                  )\n\nglm.1<- glm(MORS~scale(PRECOND)+SESSION+ID, data=data1, family=binomial(link='logit')   \n)\n\n#To see the basic output\n\nsummary(model.1)\n",
+    "created" : 1431436191666.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "4038526102",
+    "id" : "EC303EAC",
+    "lastKnownWriteTime" : 1431437259,
+    "path" : "C:/Users/s1229179/git-repos/R/Emma GLMMs/basic_anal.R",
+    "project_path" : "basic_anal.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}

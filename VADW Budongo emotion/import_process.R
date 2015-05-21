@@ -13,8 +13,8 @@ behav_dat = NULL
 
 
 #i = 1 # David
-i = 4 # Lucy
-i = 5 # Pearl
+i = 4 # Lucy (new)
+i = 6 # Pearl
 
 for (i in 1:length(sheets)){
   temp_dat = NULL
@@ -28,16 +28,25 @@ for (i in 1:length(sheets)){
   temp_dat$Start.time = temp_dat$Start.time[1]
   
   # append total length as new column and adjust final row, Time
-  temp_dat$total.length = as.numeric(substring(temp_dat$Time[dmtd[1]],7))
-  temp_dat$Time = as.numeric(levels(temp_dat$Time))[temp_dat$Time]
-  temp_dat$Time[dmtd[1]]=temp_dat$total.length[1]
+  # !!! this needs to be done with Date's, not numerics, otherwise the times will be wrong
+  # so the data needs to be properly standardized
+  # currently this works for Lucy 07-10 data  
+  
+  temp_dat$total.length = as.numeric(substring(temp_dat$Time[dmtd[1]]
+                                               ,7))
+  # same for the above guy, it needs to be a certain length string-phrase to exclude
+  # (but the numeric aspect works... for now)
+  
+  temp_dat$Time = strptime(levels(temp_dat$Time)[temp_dat$Time],format="%M.%S")
+  #temp_dat$Time = as.numeric(levels(temp_dat$Time))[temp_dat$Time] # obsolete
+  temp_dat$Time[dmtd[1]]=strptime(temp_dat$total.length[1],format="%M") # may need later adjusts
   
   # code time differences for all behaviors (col D)
   for(j in 1 : dim(temp_dat)[1]-1){
-    temp_dat$behav.length[j] = temp_dat$Time[j+1]-temp_dat$Time[j]
+    temp_dat$behav.length[j] = difftime(temp_dat$Time[j+1],temp_dat$Time[j],units="secs")
     # the last row has the wrong value
   }
-  
+    
   # accounting for all the state behaviors
   temp_dat$time.Forag = sum(temp_dat$behav.length[temp_dat$Fo == 'x'])
   temp_dat$time.RestGroom = sum(temp_dat$behav.length[temp_dat$Re.Gr == 'x'])

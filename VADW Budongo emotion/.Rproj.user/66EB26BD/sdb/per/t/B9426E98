@@ -11,10 +11,10 @@
     "project_path" : null,
     "properties" : {
         "caption" : "temp_dat",
-        "contentUrl" : "content?title=temp_dat&file=f6c619eee81346528fea7f0e238872d8.htm",
-        "displayedObservations" : "38",
+        "contentUrl" : "content?title=temp_dat&file=a63533c7262b4f7aa334271a484e8d22.htm",
+        "displayedObservations" : "33",
         "displayedVariables" : 75,
-        "totalObservations" : "38",
+        "totalObservations" : "33",
         "variables" : "99"
     },
     "source_on_save" : false,

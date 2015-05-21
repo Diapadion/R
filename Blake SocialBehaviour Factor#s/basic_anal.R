@@ -17,7 +17,7 @@ nfactors(bsbd[,2:11])
 bvss = VSS(bsbd[,2:11])
 plot(bvss$map)
 
-fa.parallel(bsbd[,2:11])
+fa.parallel(bsbd[,2:11],sim=F)
 
 
 
@@ -41,4 +41,18 @@ EFA.Comp.Data(Data=bsbd[complete.cases(bsbd),2:11],F.Max=6,
 # Hull method?
 
 
+
+
+##### Actual extractions
+
+
+sb.f2 = fa(bsbd[,2:11], nfactors = 2, rotate="varimax")
+sb.pc2 = principal(bsbd[,2:11], nfactors = 2, rotate="varimax")
+# replace current solution in text (???)
+
+sb.f3 = fa(bsbd[,2:11], nfactors = 3, rotate="varimax")
+sb.pc3 = principal(bsbd[,2:11], nfactors = 3, rotate="varimax")
+
+sb.f4 = fa(bsbd[,2:11], nfactors = 4, rotate="varimax")
+sb.pc4 = principal(bsbd[,2:11], nfactors = 4, rotate="varimax")
 

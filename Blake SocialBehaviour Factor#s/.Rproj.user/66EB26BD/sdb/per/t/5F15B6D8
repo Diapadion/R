@@ -1,12 +1,12 @@
 {
-    "contents" : "library(foreign)\nbsbd = read.spss(\"PCA_relationship_qualities.sav\", to.data.frame=TRUE)\n\nlibrary(memisc)\nbsbd <- as.data.frame(as.data.set(spss.system.file('PCA_relationship_qualities.sav')))\n\n\nwrite.csv(as.data.frame(bsdb),file='excel.csv')\n\n\nlibrary(psych)\n\nVSS.scree(bsbd[,2:11])\nnfactors(bsbd[,2:11])\n         #,nrotate=\"varimax\")\n\nbvss = VSS(bsbd[,2:11])\nplot(bvss$map)\n\nfa.parallel(bsbd[,2:11])\n\n\n\n\n\n\nlibrary(nFactors)\n\nnfn = nScree(x=bsbd[complete.cases(bsbd),2:11], model = 'factors')\n\nncn = nScree(x=bsbd[complete.cases(bsbd),2:11], model = 'components')\n\n\n\n# not appropriate for components...\nEFA.Comp.Data(Data=bsbd[complete.cases(bsbd),2:11],F.Max=6,\n              ,Graph=TRUE)\n\n\n\n# Hull method?\n\n\n\n",
+    "contents" : "library(foreign)\nbsbd = read.spss(\"PCA_relationship_qualities.sav\", to.data.frame=TRUE)\n\nlibrary(memisc)\nbsbd <- as.data.frame(as.data.set(spss.system.file('PCA_relationship_qualities.sav')))\n\n\nwrite.csv(as.data.frame(bsdb),file='excel.csv')\n\n\nlibrary(psych)\n\nVSS.scree(bsbd[,2:11])\nnfactors(bsbd[,2:11])\n         #,nrotate=\"varimax\")\n\nbvss = VSS(bsbd[,2:11])\nplot(bvss$map)\n\nfa.parallel(bsbd[,2:11],sim=F)\n\n\n\n\n\n\nlibrary(nFactors)\n\nnfn = nScree(x=bsbd[complete.cases(bsbd),2:11], model = 'factors')\n\nncn = nScree(x=bsbd[complete.cases(bsbd),2:11], model = 'components')\n\n\n\n# not appropriate for components...\nEFA.Comp.Data(Data=bsbd[complete.cases(bsbd),2:11],F.Max=6,\n              ,Graph=TRUE)\n\n\n\n# Hull method?\n\n\n\n\n##### Actual extractions\n\n\nsb.f2 = fa(bsbd[,2:11], nfactors = 2, rotate=\"varimax\")\nsb.pc2 = principal(bsbd[,2:11], nfactors = 2, rotate=\"varimax\")\n# replace current solution in text (???)\n\nsb.f3 = fa(bsbd[,2:11], nfactors = 3, rotate=\"varimax\")\nsb.pc3 = principal(bsbd[,2:11], nfactors = 3, rotate=\"varimax\")\n\nsb.f4 = fa(bsbd[,2:11], nfactors = 4, rotate=\"varimax\")\nsb.pc4 = principal(bsbd[,2:11], nfactors = 4, rotate=\"varimax\")\n\n",
     "created" : 1431437342379.000,
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "2008279649",
+    "hash" : "958027213",
     "id" : "5F15B6D8",
-    "lastKnownWriteTime" : 1431445647,
+    "lastKnownWriteTime" : 1432207393,
     "path" : "C:/Users/s1229179/git-repos/R/Blake SocialBehaviour Factor#s/basic_anal.R",
     "project_path" : "basic_anal.R",
     "properties" : {

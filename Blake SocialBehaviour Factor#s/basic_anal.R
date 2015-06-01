@@ -20,8 +20,10 @@ plot(bvss$map)
 fa.parallel(bsbd[,2:11],sim=F)
 
 
+### construct validity
 
-
+w.2 = omega(bsbd[,2:11],2,fm='pc')
+w.3 = omega(bsbd[,2:11],3,fm='pc')
 
 
 library(nFactors)

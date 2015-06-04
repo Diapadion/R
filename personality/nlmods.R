@@ -41,10 +41,11 @@ gg.e <- ggplot(trial.dat, aes(Trial,Err.t.r))+geom_point()+
 gg.e
 
 
+# this is used in ASP2015 presentation
 gg.p <- ggplot(trial.dat, aes(Trial,Progress))+geom_point()+
-  facet_wrap(~Subject)
+  facet_wrap(~Subject) + theme_bw()
 
-gg.p + stat_summary(fun.data="mean_cl_boot",colour='green')
+gg.p + stat_summary(fun.data="mean_cl_boot",colour='blue')
 
 
 gg.p.tr <-  ggplot(trial.dat, aes(Trial,Prog.t))+geom_point()+

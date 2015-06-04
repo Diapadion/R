@@ -72,9 +72,27 @@ mod.g <- glm(LBdata$Accuracy ~ LBlong, family = binomial(link = 'probit'))
 
 # GLMMs
 
+# this is the main one
+# used in ASP 2015 presentation
 mod.gm1 <- glmer(Accuracy ~ dom + neu + agr + ext + con + opn + (1 | Group.1),
                  family = binomial, data=cz_bin_pers 
 )
+library(texreg)
+ext.gm1=extract(mod.gm1, include.aic = FALSE, include.bic=FALSE, include.dic=FALSE,
+                include.deviance=FALSE, include.loglik=FALSE,include.nobs=FALSE,
+                include.groups=FALSE,include.variance=FALSE)
+gm1.tbl = htmlreg(ext.gm1,ci.force=TRUE, custom.model.names='Chimpanzee Accuracy',
+                  caption = "", groups=NULL, digits=3, ci.force.level = 0.95, ci.test=NULL,
+                  bold=TRUE, custom.note = '', 
+                  #reorder.coef = c(1:5,8,9,6,11,10,7),
+                  custom.coef.names=c(NA,'Dominance','Neuroticism','Agreeableness','Extraversion',
+                                      'Conscientiousness','Openness')
+                  )
+write(gm1.tbl,"sys.html")
+library(stargazer)
+stargazer(mod.gm1, type="html")
+
+
 
 mod.gm2 <- glmer(Accuracy ~ dom + neu + agr + ext + con + opn + Trial + (1 | Group.1),
   family = binomial, data=cz_bin_pers 

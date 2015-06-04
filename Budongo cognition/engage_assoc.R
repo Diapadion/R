@@ -32,10 +32,13 @@ ts <- aggregate(aggPers, by=list(aggPers$participat), FUN=sd)
 library(rpanel)
 rp.ancova(aggPers$dom, aggPers$participat)
 
-mp = barplot(height=as.matrix(tm[3:8]),beside=TRUE)
- errbar(ts)
 
-segments(mp, tm[3:8] - ts[3:8], mp,tm[3:8] + ts[3:8], lwd=2)
+
+mp = barplot(height=as.matrix(tm[3:8]),beside=TRUE)
+library(Hmisc)
+errbar(ts)
+
+segments(c(mp), c(t(t(tm[3:8] - ts[3:8]))), c(mp),c(t(t(tm[3:8] + ts[3:8]))), lwd=2)
 
 vioplot(aggPers[,2:7],aggPers[,8])
 

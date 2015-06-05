@@ -11,11 +11,11 @@
     "project_path" : null,
     "properties" : {
         "caption" : "aggPers",
-        "contentUrl" : "content?title=aggPers&file=9745c8b6aa364693ac5041cb256eb1f9.htm",
+        "contentUrl" : "content?title=aggPers&file=df880b0379d44f3c927f5d36282241cd.htm",
         "displayedObservations" : "18",
         "displayedVariables" : 9,
         "totalObservations" : "18",
-        "variables" : "10"
+        "variables" : "12"
     },
     "source_on_save" : false,
     "type" : "r_dataframe"

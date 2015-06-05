@@ -34,7 +34,7 @@ Session number ,Date,Individual,Start Pressing,End,Number of OFF,Number of Class
 5,26-Feb-15,Emma,09:41:26,09:41:35,0,0,0,Classical,n/a,n/a
 5,26-Feb-15,Pearl,09:41:50,09:41:59,0,0,0,Classical,n/a,n/a
 5,26-Feb-15,Eva,09:42:07,09:42:22,0,0,2,Classical,Pop,Pop
-5,26-Feb-15,edith,09:45:12,09:45:23,0,0,0,Pop,n/a,n/a
+5,26-Feb-15,Edith,09:45:12,09:45:23,0,0,0,Pop,n/a,n/a
 5,26-Feb-15,Kilimi,09:45:53,09:46:19,0,0,0,Pop,n/a,n/a
 5,26-Feb-15,Frek,09:53:39,09:53:45,0,0,0,Pop,n/a,n/a
 5,26-Feb-15,Frek,09:54:14,09:54:58,0,0,0,Pop,n/a,n/a
@@ -43,7 +43,7 @@ Session number ,Date,Individual,Start Pressing,End,Number of OFF,Number of Class
 6,27-Feb-15,Frek,09:23:48,09:23:51,0,0,0,Silence,n/a,n/a
 6,27-Feb-15,Kilimi,09:28:25,09:28:44,0,0,0,Silence,n/a,n/a
 6,27-Feb-15,Kilimi,09:29:49,09:30:17,0,1,1,Silence,Pop,Classical
-6,27-Feb-15,eva,09:40:51,09:41:42,0,0,0,Classical,n/a,n/a
+6,27-Feb-15,Eva,09:40:51,09:41:42,0,0,0,Classical,n/a,n/a
 7,03-Mar-15,Pearl,08:52:05,08:52:15,0,0,0,Classical,n/a,n/a
 7,03-Mar-15,Kilimi,08:53:11,08:53:31,1,1,0,Classical,Off,Classical
 7,03-Mar-15,Emma,08:54:09,08:54:26,0,0,0,Classical,n/a,n/a

@@ -88,9 +88,9 @@ gm1.tbl = htmlreg(ext.gm1,ci.force=TRUE, custom.model.names='Chimpanzee Accuracy
                   custom.coef.names=c(NA,'Dominance','Neuroticism','Agreeableness','Extraversion',
                                       'Conscientiousness','Openness')
                   )
-write(gm1.tbl,"sys.html")
-library(stargazer)
-stargazer(mod.gm1, type="html")
+write(gm1.tbl,"PerfGLM.html")
+# library(stargazer)
+# stargazer(mod.gm1, type="html")
 
 
 

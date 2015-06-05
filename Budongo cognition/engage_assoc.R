@@ -57,7 +57,9 @@ library(MASS)
 mod.polr.d <- polr(participat ~ dom, data=aggPers)
 mod.polr.2.d <- polr(participat ~ I(dom^2), data=aggPers)
 mod.polr.all <- polr(participat ~ dom + con + neu + ext + agr + opn, data=aggPers)
-mod.polr.2.all <- polr(participat ~ I(dom^2) + con + I(neu^2) + ext + agr + opn, data=aggPers)
+mod.polr.2.dn <- polr(participat ~ I(dom^2) + con + I(neu^2) + ext + agr + opn, data=aggPers) #**
+mod.polr.2.all <- polr(participat ~ I(dom^2) + I(con^2) + I(ext^2) + I(neu^2) + I(opn^2) + I(agr^2)
+                       + con + ext + agr + opn + dom + neu, data=aggPers)
 
 
 library(rms)
@@ -104,6 +106,13 @@ TukeyHSD(dom.aov)
 agr.aov = aov(agr ~ participat, data = aggPers)
 summary(agr.aov)
 TukeyHSD(agr.aov)
+
+neu.aov = aov(neu ~ participat, data = aggPers)
+TukeyHSD(neu.aov)
+
+opn.aov = aov(opn ~ participat, data = aggPers)
+TukeyHSD(opn.aov)
+
 
 summary(fm1 <- aov(breaks ~ wool + tension, data = warpbreaks))
 TukeyHSD(fm1, "tension", ordered = TRUE)

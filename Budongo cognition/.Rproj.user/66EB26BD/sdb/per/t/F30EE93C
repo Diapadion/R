@@ -1,0 +1,22 @@
+{
+    "contents" : "",
+    "created" : 1433602275535.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "F30EE93C",
+    "lastKnownWriteTime" : 1852138866,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "caption" : "tatScreen",
+        "contentUrl" : "content?title=tatScreen&file=c6285b30d46943e8806d891a542471de.htm",
+        "displayedObservations" : 72,
+        "displayedVariables" : 18,
+        "totalObservations" : 72,
+        "variables" : 18
+    },
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}

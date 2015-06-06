@@ -145,11 +145,18 @@ tatScreen$secs[outliers(tatScreen$secs,3)] <- NA
 
 # how many approaches to screen?
 table(tatScreen$Individual)
+#aggPers$
 EW3particip = c(1,0,15,5,9,15,0,8,0,0,2,4,0,1,9,0,1,2)
 aggPers = cbind(aggPers, EW3particip)
 
 mew.3.pm <- glm(EW3particip ~ dom + neu + agr + ext + con + opn, data=aggPers, family=poisson)
 # again, need to ZIF
+library(pscl)
+mew.3.zpm <- zeroinfl(EW3particip ~ #dom + neu + 
+                        agr + ext + con + opn, data=aggPers, dist="poisson")
+
+
+
                                                 
 ext.pm3=extract(mew.3.pm, include.aic = FALSE, include.bic=FALSE, include.dic=FALSE,
                  include.deviance=FALSE, include.loglik=FALSE,include.nobs=FALSE,

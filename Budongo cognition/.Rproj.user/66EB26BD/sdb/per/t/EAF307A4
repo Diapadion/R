@@ -1,19 +1,19 @@
 {
     "contents" : "",
-    "created" : 1433418073824.000,
+    "created" : 1433602698010.000,
     "dirty" : false,
     "encoding" : "",
     "folds" : "",
     "hash" : "0",
-    "id" : "1FBD3E5F",
+    "id" : "EAF307A4",
     "lastKnownWriteTime" : 1713795954,
     "path" : null,
     "project_path" : null,
     "properties" : {
         "caption" : "aggPers",
-        "contentUrl" : "content?title=aggPers&file=df880b0379d44f3c927f5d36282241cd.htm",
+        "contentUrl" : "content?title=aggPers&file=98ad7212347e43e399532bd451483c19.htm",
         "displayedObservations" : "18",
-        "displayedVariables" : 9,
+        "displayedVariables" : 13,
         "totalObservations" : "18",
         "variables" : "12"
     },

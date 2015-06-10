@@ -88,6 +88,9 @@ inPodL$Time = as.numeric(inPodL$Time)
   
 mew.pois.1 = glmer(Time ~ dom + neu + agr + ext + con + opn + (1 | Date) + (1 | Chimp),
                    data=inPodL, family = poisson)
+mew.pois.1s = glmer(Time ~ s(dom) + s(neu) + s(agr) + s(ext) + s(con) + s(opn) + (1 | Date) + (1 | Chimp),
+                   data=inPodL, family = poisson)
+
 
 ext.pgm1=extract(mew.pois.1, include.aic = FALSE, include.bic=FALSE, include.dic=FALSE,
                  include.deviance=FALSE, include.loglik=FALSE,include.nobs=FALSE,
@@ -178,6 +181,15 @@ mew.3.pgmm <- glmer(secs ~ Dominance + Neuroticism + Agreeableness + Extraversio
                     ,data = tatScreen, family = poisson
                     #,control=glmerControl(maxfun=10000)
                     )
+
+mew.3.pgmm.s <- glmer(secs ~ s(Dominance) + s(Neuroticism) + s(Agreeableness) + s(Extraversion) + s(Conscientiousness) + 
+                      s(Openness)
+                    + (1 | Session.number) 
+                    + (1 | Individual)
+                    ,data = tatScreen, family = poisson
+                    #,control=glmerControl(maxfun=10000)
+)
+
 
 
 # okay, so let's check the convergence/OPTIMIZER issues

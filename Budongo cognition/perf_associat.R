@@ -74,7 +74,7 @@ mod.g <- glm(LBdata$Accuracy ~ LBlong, family = binomial(link = 'probit'))
 
 # this is the main one
 # used in ASP 2015 presentation
-mod.gm1 <- glmer(Accuracy ~ dom + neu + agr + ext + con + opn + (1 | Group.1),
+mod.gm1 <- glmer(Accuracy ~ dom + con + opn + neu + agr + ext +  (1 | Group.1),
                  family = binomial, data=cz_bin_pers 
 )
 library(texreg)
@@ -85,8 +85,8 @@ gm1.tbl = htmlreg(ext.gm1,ci.force=TRUE, custom.model.names='Chimpanzee Accuracy
                   caption = "", groups=NULL, digits=3, ci.force.level = 0.95, ci.test=NULL,
                   bold=TRUE, custom.note = '', 
                   #reorder.coef = c(1:5,8,9,6,11,10,7),
-                  custom.coef.names=c(NA,'Dominance','Neuroticism','Agreeableness','Extraversion',
-                                      'Conscientiousness','Openness')
+                  custom.coef.names=c(NA,'Dominance','Conscientiousness','Openness',
+                                      'Neuroticism','Agreeableness','Extraversion')
                   )
 write(gm1.tbl,"PerfGLM.html")
 # library(stargazer)
@@ -245,3 +245,15 @@ medLogInspecT <- aggregate(cz_bin_pers$loginspecTime, by=list(cz_bin_pers$Group.
 
 pBLUP = cbind(pBLUP, medLogProcT)
 iBLUP = cbind(iBLUP, medLogInspecT)
+
+
+
+### GLMM check
+
+# So this doesn't work. So won't worry about it till later, if that is even necessary.
+mcmc.gm1 <- MCMCglmm(Accuracy ~ dom + ext + con + agr + neu + opn, 
+                           random = ~Group.1,
+                           data = cz_bin_pers, family = "multinomial"
+                           , rcov=~idh(trait):units
+                           # , burnin = 10000 , nitt = 90000 
+                           , verbose = FALSE)

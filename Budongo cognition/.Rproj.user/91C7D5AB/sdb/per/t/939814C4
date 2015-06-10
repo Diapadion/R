@@ -1,0 +1,25 @@
+{
+    "contents" : "",
+    "created" : 1433946817827.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "939814C4",
+    "lastKnownWriteTime" : 7011605692497750387,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "zyudak2i8j",
+        "caption" : "tatScreen",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=tatScreen&cache_key=zyudak2i8j",
+        "displayedObservations" : 72,
+        "environment" : "",
+        "object" : "tatScreen",
+        "totalObservations" : 72,
+        "variables" : 18
+    },
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}

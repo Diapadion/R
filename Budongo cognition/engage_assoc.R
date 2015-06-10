@@ -19,6 +19,8 @@
 participat = as.factor(c(2,0,2,1,1,2,0,2,0,0,2,1,0,1,1,1,0,0))
 aggPers = cbind(aggPers, participat)
 
+# changing column names
+
 
 # GLM(?)
 
@@ -34,9 +36,12 @@ rp.ancova(aggPers$dom, aggPers$participat)
 
 
 
-mp = barplot(height=as.matrix(tm[3:8]),beside=TRUE)
+mp = barplot(height=as.matrix(tm[3:8]),beside=TRUE,
+             legend.text=c('Never participated','Incomplete participation','Completed full sessions'),
+              ylim=c(0,7))
+
 library(Hmisc)
-errbar(ts)
+#errbar(ts)
 
 segments(c(mp), c(t(t(tm[3:8] - ts[3:8]))), c(mp),c(t(t(tm[3:8] + ts[3:8]))), lwd=2)
 
@@ -56,8 +61,10 @@ beanplot(data=t(aggPers[,2:7]),names=aggPers[,8])
 library(MASS)
 mod.polr.d <- polr(participat ~ dom, data=aggPers)
 mod.polr.2.d <- polr(participat ~ I(dom^2), data=aggPers)
-mod.polr.all <- polr(participat ~ dom + con + neu + ext + agr + opn, data=aggPers)
-mod.polr.2.dn <- polr(participat ~ I(dom^2) + con + I(neu^2) + ext + agr + opn, data=aggPers) #**
+mod.polr.all <- polr(participat ~ Dominance + Conscientiousness + Openness + 
+                       Neuroticism + Extraversion + Agreeableness, data=aggPers) #**
+mod.polr.2.dn <- polr(participat ~ I(Dominance^2) + Conscientiousness + Openness + 
+                        I(Neuroticism^2) + Extraversion + Agreeableness, data=aggPers) #**
 mod.polr.2.all <- polr(participat ~ I(dom^2) + I(con^2) + I(ext^2) + I(neu^2) + I(opn^2) + I(agr^2)
                        + con + ext + agr + opn + dom + neu, data=aggPers)
 
@@ -78,7 +85,8 @@ cm.agr <- clm(participat ~ agr, data=aggPers)
 cm.aint <- clm(participat ~ con + ext + I(dom^2) + I(neu^2) + opn, data=aggPers)
 # check with vif()
 # in order to that, need to use lm() since clm() doesn't have functionality
-vif(lm(as.numeric(participat) ~ dom + con + neu + ext + agr + opn, data=aggPers))
+vif(lm(as.numeric(participat) ~ Dominance + Conscientiousness + Openness + 
+         Neuroticism + Extraversion + Agreeableness, data=aggPers))
 # dom      con      neu      ext      agr      opn 
 # 6.401741 3.181492 7.307849 1.786007 1.737412 1.756628
 

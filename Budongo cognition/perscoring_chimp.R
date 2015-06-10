@@ -38,36 +38,36 @@ compare_data$dom <-
    + 7*8
    ) / 15
 
+compare_data$con <-
+  (pers$Pred - pers$Impl - pers$Defn - pers$Reckl - pers$Errc - pers$Irri - pers$Aggr - pers$Jeals
+   - pers$Dsor - pers$Thotl - pers$Dist - pers$Unper - pers$Quit - pers$Clmy
+   + 13*8
+  ) / 14
+#  (-dmdob$impl.z-dmdob$defn.z-dmdob$reckl.z-dmdob$errc.z-dmdob$irri.z+dmdob$pred.z-dmdob$aggr.z-dmdob$jeals.z-dmdob$dsor.z+64)/9
+
+compare_data$opn <-
+  (pers$Inqs + pers$Invt + pers$Curious + pers$Innov
+  ) / 4
+#(dmdob$inqs.z+dmdob$invt.z)/2
+
+compare_data$neu <-
+  (pers$Exct + pers$Aut - pers$Stbl - pers$Cool - pers$Unem
+   + 3*8
+  ) / 5
+#(-dmdob$stbl.z+dmdob$exct.z-dmdob$unem.z+16)/3
+
+compare_data$agr <-
+  (pers$Symp + pers$Help + pers$Sens + pers$Prot + pers$Gntl + pers$Conv
+  ) / 6
+#(dmdob$symp.z+dmdob$help.z+dmdob$sens.z+dmdob$prot.z+dmdob$gntl.z)/5
+
 compare_data$ext <-
   (pers$Actv + pers$Play + pers$Soc + pers$Frdy + pers$Affc + pers$Imit 
    - pers$Sol - pers$Lazy - pers$Indv - pers$Depr     
    + 4*8
      ) / 10
   
-compare_data$con <-
-  (pers$Pred - pers$Impl - pers$Defn - pers$Reckl - pers$Errc - pers$Irri - pers$Aggr - pers$Jeals
-   - pers$Dsor - pers$Thotl - pers$Dist - pers$Unper - pers$Quit - pers$Clmy
-   + 13*8
-   ) / 14
 
-#  (-dmdob$impl.z-dmdob$defn.z-dmdob$reckl.z-dmdob$errc.z-dmdob$irri.z+dmdob$pred.z-dmdob$aggr.z-dmdob$jeals.z-dmdob$dsor.z+64)/9
-
-compare_data$agr <-
-  (pers$Symp + pers$Help + pers$Sens + pers$Prot + pers$Gntl + pers$Conv
-  ) / 6
-  
-  #(dmdob$symp.z+dmdob$help.z+dmdob$sens.z+dmdob$prot.z+dmdob$gntl.z)/5
-
-compare_data$neu <-
-  (pers$Exct + pers$Aut - pers$Stbl - pers$Cool - pers$Unem
-   + 3*8
-   ) / 5
-  #(-dmdob$stbl.z+dmdob$exct.z-dmdob$unem.z+16)/3
-
-compare_data$opn <-
-  (pers$Inqs + pers$Invt + pers$Curious + pers$Innov
-   ) / 4
-  #(dmdob$inqs.z+dmdob$invt.z)/2
 
 # ddply(compare_data,~chimp,summarise,mean=
 #           na.action = na.omit)
@@ -82,6 +82,8 @@ rownames(aggPers) <- aggPers$Group.1
 aggPers<-aggPers[c(-1,-2,-4,-17,-22),]
 aggPers<-aggPers[,-2]
 
+colnames(aggPers) <- c("Chimp",'Dominance','Conscientiousness','Openness','Neuroticism',
+                       'Agreeableness','Extraversion')
 
 
 ### adding pers to trial by trial data

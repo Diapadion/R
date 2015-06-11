@@ -164,14 +164,20 @@ mew.mcmc.hp <- MCMCglmm(Time ~ dom + ext + con + agr + neu + opn, random= ~Date 
 )
 
 prior1.2 = list(
-  B = list(mu = c(0, 0, 0, 0, 0, 0), V = diag(6) * 1e10),
+ # B = list(mu = c(0, 0, 0, 0, 0, 0), V = diag(6) * 1e10),
   R = list(V = 1, fix = 1),
   G = list(G1 = list(V = diag(2), n = 0.002), G2 = list(V = diag(2), n = 0.002)))
+
+B.prior <- list(V=diag(6)*1e7, mu=c(0,0,0,0,0,0))
+prior2.2  <- list(B=B.prior,
+                R=list(V=diag(1), nu=0.02), G=list(G1=list(V=diag(1),
+                nu=0.02, alpha.mu=rep(0,1), alpha.V=1000*diag(1)), G2=list(V=diag(1),
+                nu=0.02, alpha.mu=rep(0,1), alpha.V=1000*diag(1))))
 
 mew.mcmc.pZIF.4 <- MCMCglmm(Time ~ dom + ext + con + agr + neu + opn, random= ~Date + Chimp,
                             data = inPodL, family = "zipoisson"
                             , rcov=~idh(trait):units
-                            , prior = prior1.2
+                            , prior = prior2.2
                             , burnin = 10000 , nitt = 90000
                             , verbose = FALSE
 )

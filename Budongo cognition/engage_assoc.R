@@ -37,8 +37,8 @@ rp.ancova(aggPers$dom, aggPers$participat)
 
 
 mp = barplot(height=as.matrix(tm[3:8]),beside=TRUE,
-             legend.text=c('Never participated','Incomplete participation','Completed full sessions'),
-              ylim=c(0,7))
+             #legend.text=c('Never participated','Incomplete participation','Completed full sessions')
+              ,ylim=c(0,7))
 
 library(Hmisc)
 #errbar(ts)
@@ -107,7 +107,7 @@ cm.naint.stp <- step(cm.naint, direction="forward")
 
 
 # Tukey attempts using aov() based on best model (above)
-dom.aov = aov(dom ~ participat, data = aggPers)
+dom.aov = aov(Dominance ~ participat, data = aggPers)
 pers.aov = aov(aggPers$participat ~ I(aggPers$dom^2) + I(aggPers$neu^2) + aggPers$agr + aggPers$opn)
 TukeyHSD(dom.aov)
 
@@ -115,10 +115,10 @@ agr.aov = aov(agr ~ participat, data = aggPers)
 summary(agr.aov)
 TukeyHSD(agr.aov)
 
-neu.aov = aov(neu ~ participat, data = aggPers)
+neu.aov = aov(Neuroticism ~ participat, data = aggPers)
 TukeyHSD(neu.aov)
 
-opn.aov = aov(opn ~ participat, data = aggPers)
+opn.aov = aov(Openness ~ participat, data = aggPers)
 TukeyHSD(opn.aov)
 
 

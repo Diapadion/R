@@ -22,7 +22,9 @@ aggPers = cbind(aggPers, EWpartic)
 EWtm <- aggregate(aggPers, by=list(aggPers$EWpartic), FUN=mean)
 EWts <- aggregate(aggPers, by=list(aggPers$EWpartic), FUN=sd)
 
-EWp = barplot(height=as.matrix(EWtm[3:8]),beside=TRUE)
+EWp = barplot(height=as.matrix(EWtm[3:8]),beside=TRUE,
+              legend.text=c('Non-participants','Participants'),
+              ylim=c(0,7))
 segments(c(EWp), c(t(t(EWtm[3:8] - EWts[3:8]))), c(EWp),c(t(t(EWtm[3:8] + EWts[3:8]))), lwd=2)
 
 # logit glm for seeing how pers affects this
@@ -33,9 +35,10 @@ mew.gm1 = glm(EWpartic ~ dom + con + neu + ext + agr + opn,
 
 # t-tests
 
-c.t = t.test(aggPers$con[aggPers$EWpartic==1],aggPers$con[aggPers$EWpartic==0]) # yep
-n.t = t.test(aggPers$neu[aggPers$EWpartic==1],aggPers$neu[aggPers$EWpartic==0]) # nope
-o.t = t.test(aggPers$opn[aggPers$EWpartic==1],aggPers$opn[aggPers$EWpartic==0]) # yep
+c.t = t.test(aggPers$Conscientiousness[aggPers$EWpartic==1],aggPers$Conscientiousness[aggPers$EWpartic==0])
+# the above is now borderline
+n.t = t.test(aggPers$Neuroticism[aggPers$EWpartic==1],aggPers$Neuroticism[aggPers$EWpartic==0]) # nope
+o.t = t.test(aggPers$Openness[aggPers$EWpartic==1],aggPers$Openness[aggPers$EWpartic==0]) # yep
 
 
 
@@ -57,7 +60,7 @@ for (i in 2:19){
   tAround[,i] <- strptime(levels(tAround[,i])[tAround[,i]],format="%H:%M:%S")
 }
 
-toSecs <- function(u,v = (Sys.date()-1/24)) {
+toSecs <- function(u,v = (Sys.Date()-1/24)) {
   difftime(strptime(levels(u)[u],format="%H:%M:%S"),
          v, # this shift works...
          units='secs')
@@ -122,7 +125,9 @@ mew.poisZIF.1 <- glmmadmb(Time ~ s(dom) + s(ext) + s(con) + s(agr) + s(neu) + s(
 # probably choose to go with MCMCglmm
 library(MCMCglmm)
 
-mew.mcmc.pZIF.1 <- MCMCglmm(Time ~ dom + con +  opn + neu + agr + ext, random= ~Date + Chimp,
+mew.mcmc.pZIF.1 <- MCMCglmm(Time ~ Dominance + Conscientiousness +
+                              Openness + Neuroticism + Agreeableness +
+                              Extraversion, random= ~Date + Chimp,
                             data = inPodL, family = "zipoisson"
                             , rcov=~idh(trait):units
                             , burnin = 10000 , nitt = 90000 , verbose = FALSE
@@ -208,7 +213,7 @@ tatScreen$Openness = numeric(1)
 
 
 for (i in 1:length(tatScreen$Date)){
-  tatScreen[i,13:18] = aggPers[which(as.character(tatScreen$Individual[i])==as.character(aggPers$Group.1)),2:7]
+  tatScreen[i,13:18] = aggPers[which(as.character(tatScreen$Individual[i])==as.character(aggPers$Chimp)),2:7]
 
 }
 
@@ -228,10 +233,14 @@ aggPers = cbind(aggPers, EW3particip)
 mew.3.pm <- glm(EW3particip ~ dom + neu + agr + ext + con + opn, data=aggPers, family=poisson)
 # again, need to ZIF
 library(pscl)
-mew.3.zpm <- zeroinfl(EW3particip ~ #dom + neu + 
-                        agr + ext + con + opn, data=aggPers, dist="poisson")
-mew.3.hm <- hurdle(EW3particip ~ dom + con + opn + neu + 
-                        agr + ext, data=aggPers, dist="poisson")
+mew.3.zpm <- zeroinfl(EW3particip ~ Dominance + Neuroticism + 
+                        Agreeableness + Extraversion + 
+                        Conscientiousness + Openness
+                      , data=aggPers, dist="poisson")
+mew.3.hm <- hurdle(EW3particip ~ Dominance + Neuroticism + 
+                     Agreeableness + Extraversion + 
+                     Conscientiousness + Openness
+                   , data=aggPers, dist="poisson")
 # Looks like Con doesn't figure into this one, just Agr
 
 # MCMCglmm again ... to test robustness, or if MCMC is operating correctly

@@ -21,19 +21,19 @@
 
 # Columns O-Q: proximity/social data
 ## Record total time spent with others during focal (column O)
-# Length of time for who they are with the most, dyadically (ie conspecific spent most time with) 
-	# refers to col O
-	# do not take into acocunt grooming
+## Length of time for who they are with the most, dyadically (ie conspecific spent most time with) 
+	## refers to col O
+	## does not take into acocunt grooming
 ## Record total time spent allogrooming others during focal (column P)
 ## divide this into give, recieve, mutual (column I 'AG')
-# ID of main neighbour, dyadically (ie conspecific spent near to for longest)
-	# individual spent msot time near - see col O
-	# each combo is a distinct option
+## ID of main neighbour, dyadically (ie conspecific spent near to for longest)
+	## individual spent most time near - see col O
+	## each combo is a distinct option
 ## Record total time spent near others during focal (column Q)
-# ID of main conspecific groomed with, dyadically (ie conspecific spent most time with)
-	# same thing again for grooming partner
+## ID of main conspecific groomed with, dyadically (ie conspecific spent most time with)
+	## same thing again for grooming partner
 
-# Event and response to event: column R onwards
+#  Event and response to event: column R onwards
 ## Record total number of events per focal: column R
 # Compile individual data per event: 
 # If column R is complete, record pod, time, name of conspecific per event (columns D, E and S), state behaviour that occurs before each event (columns F-N), amd if they are with, grooming with or near anyone prior to event (columns O-Q), and if yes, record ID if dyadic; retain info for column R
@@ -50,3 +50,7 @@
 
 # remove empty (not-emotive rows)
 # but keep rows with (above mentioned) reconciliation post-aggression
+
+#######
+# the time data needs to be standardized
+# see modified Lucy csv

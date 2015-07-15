@@ -31,57 +31,61 @@ wmat <- rbind(cbind("FEARFUL",-1,0,0,0,0,0),cbind("SUBMISSIVE",-1,0,0,0,0,0),
 compare_data <- NULL
 
 compare_data <- data.frame(chimp = pers$chimpname)
-# 
-# compare_data$dom <-
-#   (pers$Dom - pers$Fear - pers$Subm - pers$Tim - pers$Caut - pers$Depd + pers$Indp - pers$Vuln + 
-#      pers$Decs + pers$Intll + pers$Pers + pers$Buly + pers$Stngy + pers$Manp - pers$Anx 
-#    + 7*8
-#    ) / 15
-# 
-# compare_data$con <-
-#   (pers$Pred - pers$Impl - pers$Defn - pers$Reckl - pers$Errc - pers$Irri - pers$Aggr - pers$Jeals
-#    - pers$Dsor - pers$Thotl - pers$Dist - pers$Unper - pers$Quit - pers$Clmy
-#    + 13*8
-#   ) / 14
-# #  (-dmdob$impl.z-dmdob$defn.z-dmdob$reckl.z-dmdob$errc.z-dmdob$irri.z+dmdob$pred.z-dmdob$aggr.z-dmdob$jeals.z-dmdob$dsor.z+64)/9
-# 
-# compare_data$opn <-
-#   (pers$Inqs + pers$Invt + pers$Curious + pers$Innov
-#   ) / 4
-# #(dmdob$inqs.z+dmdob$invt.z)/2
-# 
-# compare_data$neu <-
-#   (pers$Exct + pers$Aut - pers$Stbl - pers$Cool - pers$Unem
-#    + 3*8
-#   ) / 5
-# #(-dmdob$stbl.z+dmdob$exct.z-dmdob$unem.z+16)/3
-# 
-# compare_data$agr <-
-#   (pers$Symp + pers$Help + pers$Sens + pers$Prot + pers$Gntl + pers$Conv
-#   ) / 6
-# #(dmdob$symp.z+dmdob$help.z+dmdob$sens.z+dmdob$prot.z+dmdob$gntl.z)/5
-# 
-# compare_data$ext <-
-#   (pers$Actv + pers$Play + pers$Soc + pers$Frdy + pers$Affc + pers$Imit 
-#    - pers$Sol - pers$Lazy - pers$Indv - pers$Depr     
-#    + 4*8
-#      ) / 10
-  
-compare_data$raw_dom <- (pers$Dom+pers$Decs+pers$Pers+pers$Buly+pers$Stngy+
-                           pers$Manp-pers$Subm-pers$Depd-pers$Fear-pers$Tim-
-                           pers$Caut-pers$Anx+6*8)/12
 
-compare_data$raw_ext <- (pers$Actv+pers$Play+pers$Soc+pers$Imit-pers$Sol-
-                           pers$Lazy-pers$Indv+3*8)/7
+compare_data$dom <-
+  (pers$Dom - pers$Fear - pers$Subm - pers$Tim - pers$Caut - pers$Depd + pers$Indp - pers$Vuln + 
+     pers$Decs + pers$Intll + pers$Pers + pers$Buly + pers$Stngy + pers$Manp - pers$Anx 
+   + 7*8
+   ) / 15
 
-compare_data$raw_con <- (9*8-pers$Impl-pers$Reckl-pers$Irri-pers$Aggr-
-                           pers$Jeals-pers$Thotl-pers$Unper-pers$Quit-pers$Clmy)/9
+compare_data$ext <-
+  (pers$Actv + pers$Play + pers$Soc + pers$Frdy + pers$Affc + pers$Imit 
+   - pers$Sol - pers$Lazy - pers$Indv - pers$Depr     
+   + 4*8
+  ) / 10
 
-compare_data$raw_agr <- (pers$Help+pers$Sens+pers$Prot+pers$Gntl+pers$Conv)/5
+compare_data$con <-
+  (#pers$Pred - pers$Impl 
+    - pers$Defn - pers$Reckl - pers$Errc - pers$Irri - pers$Aggr - pers$Jeals
+   - pers$Dsor - pers$Thotl - pers$Dist - pers$Unper - pers$Quit #- pers$Clmy
+   + 11*8
+  ) / 11
+#  (-dmdob$impl.z-dmdob$defn.z-dmdob$reckl.z-dmdob$errc.z-dmdob$irri.z+dmdob$pred.z-dmdob$aggr.z-dmdob$jeals.z-dmdob$dsor.z+64)/9
 
-compare_data$raw_neu <- (pers$Exct+pers$Aut-pers$Cool+1*8)/3
+compare_data$agr <-
+  (pers$Symp + pers$Help + pers$Sens + pers$Prot + pers$Gntl + pers$Conv
+  ) / 6
+#(dmdob$symp.z+dmdob$help.z+dmdob$sens.z+dmdob$prot.z+dmdob$gntl.z)/5
 
-compare_data$raw_opn <- (pers$Inqs+pers$Invt+pers$Curious)/3
+compare_data$neu <-
+  (pers$Exct + pers$Aut - pers$Stbl - pers$Cool - pers$Unem
+   + 3*8
+  ) / 5
+#(-dmdob$stbl.z+dmdob$exct.z-dmdob$unem.z+16)/3
+
+compare_data$opn <-
+  (pers$Inqs + pers$Invt + pers$Curious + pers$Innov
+  ) / 4
+#(dmdob$inqs.z+dmdob$invt.z)/2
+
+
+
+# # 2005-based mumbo
+# compare_data$raw_dom <- (pers$Dom+pers$Decs+pers$Pers+pers$Buly+pers$Stngy+
+#                            pers$Manp-pers$Subm-pers$Depd-pers$Fear-pers$Tim-
+#                            pers$Caut-pers$Anx+6*8)/12
+# 
+# compare_data$raw_ext <- (pers$Actv+pers$Play+pers$Soc+pers$Imit-pers$Sol-
+#                            pers$Lazy-pers$Indv+3*8)/7
+# 
+# compare_data$raw_con <- (9*8-pers$Impl-pers$Reckl-pers$Irri-pers$Aggr-
+#                            pers$Jeals-pers$Thotl-pers$Unper-pers$Quit-pers$Clmy)/9
+# 
+# compare_data$raw_agr <- (pers$Help+pers$Sens+pers$Prot+pers$Gntl+pers$Conv)/5
+# 
+# compare_data$raw_neu <- (pers$Exct+pers$Aut-pers$Cool+1*8)/3
+# 
+# compare_data$raw_opn <- (pers$Inqs+pers$Invt+pers$Curious)/3
 
 
 
@@ -90,7 +94,8 @@ compare_data$raw_opn <- (pers$Inqs+pers$Invt+pers$Curious)/3
 #           na.action = na.omit)
 
 # remove data from 2005 sampling
-compare_data = compare_data[25:99,]
+# and the incomplete points by 
+compare_data = compare_data[25:95,]
 
 aggPers <- aggregate(compare_data, by=list(compare_data$chimp), FUN=mean, na.rm=TRUE,na.action = na.omit)
 

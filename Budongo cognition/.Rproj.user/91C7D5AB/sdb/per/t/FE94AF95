@@ -1,0 +1,25 @@
+{
+    "contents" : "",
+    "created" : 1436974790090.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "FE94AF95",
+    "lastKnownWriteTime" : 27585050233536628,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "9m4ovj1y87",
+        "caption" : "tAround",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=tAround&cache_key=9m4ovj1y87",
+        "displayedObservations" : 12,
+        "environment" : "",
+        "object" : "tAround",
+        "totalObservations" : 12,
+        "variables" : 19
+    },
+    "relative_order" : 8,
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}

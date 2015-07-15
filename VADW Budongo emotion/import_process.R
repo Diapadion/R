@@ -9,15 +9,24 @@ sheets = list.files(pattern="*.csv")
 behav_dat = NULL
 
 ## Notes: variables need to be standardized for capitalization
-## (or can I do anything?)
+##        a particular time standardization has been determined as well
 
 
 #i = 1 # David
 i = 4 # Lucy (new)
-i = 6 # Pearl
-i = 7 # Pearl++ new and improved (and fake)
+#i = 6 # Pearl
+#i = 7 # Pearl++ new and improved (and fake)
+
+
 
 process_sheet <- function(indat){
+  # this function takes a single sheet (currently by index) and
+  # returns a df of the meaningful events, as specified by design doc
+  
+  # function can be used to append sheets to one another to create 
+  # a mass df for mixed modeling
+  
+  
   temp_dat = NULL
   temp_dat = read.csv(sheets[i], skip=1, header=TRUE)
   
@@ -153,6 +162,10 @@ process_sheet <- function(indat){
   ## Emotion - column R onwards
   temp_dat$total.emotion.events = sum(temp_dat$Full.Display..hoots.only..or.fight.!='')
   
+  
+  # filter_dat is a new df which is expanded and fit with room for current and previous events:
+  filter_dat <- NULL
+  
   # identifying rows with emotional events (R complete) *or* reconciliation behav.s
   # and recording previous states where relevant
   for (j in 2:dmtd[1]){
@@ -163,15 +176,16 @@ process_sheet <- function(indat){
         (temp_dat$Name.of.conspecific.s..fought.with[j] != '' &  
          !is.na(temp_dat$Name.of.conspecific.s..fought.with[j]))
        ){
-      filter_dat[j,]=cbind(temp_dat[j,],temp_dat[j-1,])
+      filter_dat = rbind(filter_dat,cbind(temp_dat[j,],temp_dat[j-1,]))
     }
-    
-    
   }
   
-  return(temp_dat)
+  return(filter_dat)
 }
 
+
+
+### below is incomplete and needs to be tailored to the preferred directory/spreadsheet setup
 
 for (i in 1:length(sheets)){
   process_sheet(i)  # fill in later

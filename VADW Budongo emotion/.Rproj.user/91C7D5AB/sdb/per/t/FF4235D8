@@ -1,0 +1,25 @@
+{
+    "contents" : "",
+    "created" : 1436354918972.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "FF4235D8",
+    "lastKnownWriteTime" : 7011605692497750387,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "5hpbu38urw",
+        "caption" : "temp_dat",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=temp_dat&cache_key=5hpbu38urw",
+        "displayedObservations" : 87,
+        "environment" : "",
+        "object" : "temp_dat",
+        "totalObservations" : 87,
+        "variables" : 103
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}

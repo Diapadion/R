@@ -44,8 +44,6 @@ o.t = t.test(aggPers$Openness[aggPers$EWpartic==1],aggPers$Openness[aggPers$EWpa
 
 #2) Time spent around the apparatus
 
-tAround <- read.csv('EW_timeSpentInPodsFinalStage.csv', header=TRUE)
-
 inPodL <- data.frame(Date=factor(),Chimp=factor(),Time=numeric(),
                      Dominance=numeric(),Extraversion=numeric(),
                      Conscientiousness=numeric(),
@@ -55,43 +53,55 @@ inPodL <- data.frame(Date=factor(),Chimp=factor(),Time=numeric(),
 
 #??? inPod$Date <- tAround$Date
 
+tAround <- read.csv('EW_timeSpentInPodsFinalStage.csv', header=TRUE)
+
 for (i in 2:19){
   #tAround[,i] <- as.Date(tAround[,i],format="%H:%M:%S",origin='00:00:00')
-  tAround[,i] <- strptime(levels(tAround[,i])[tAround[,i]],format="%H:%M:%S")
+  tAround[,i] <- difftime(
+    strptime(levels(tAround[,i])[tAround[,i]],format="%H:%M:%S")
+    ,Sys.Date()-1/24,
+    units='secs')
 }
 
+# not needed amymore
 toSecs <- function(u,v = (Sys.Date()-1/24)) {
-  difftime(strptime(levels(u)[u],format="%H:%M:%S"),
-         v, # this shift works...
+
+    difftime(
+      strptime(levels(u)[u],format="%H:%M:%S")
+         ,v, # this shift works...
          units='secs')
 }
 
+
 # toSecs should work since changed, but we will have to check this again eventually
 inPodL = rbind(
-  cbind(Date=tAround$Date,Chimp="Cindy",Time=toSecs(tAround$Cindy),aggPers[1,2:7]),
-  cbind(Date=tAround$Date,Chimp="David",Time=toSecs(tAround$David),aggPers[2,2:7]),
-  cbind(Date=tAround$Date,Chimp="Edith",Time=toSecs(tAround$Edith),aggPers[3,2:7]),
-  cbind(Date=tAround$Date,Chimp="Emma",Time=toSecs(tAround$Emma),aggPers[4,2:7]),
-  cbind(Date=tAround$Date,Chimp="Eva",Time=toSecs(tAround$Eva),aggPers[5,2:7]),
-  cbind(Date=tAround$Date,Chimp="Frek",Time=toSecs(tAround$Frek),aggPers[6,2:7]),
-  cbind(Date=tAround$Date,Chimp="Heleen",Time=toSecs(tAround$Heleen),aggPers[7,2:7]),
-  cbind(Date=tAround$Date,Chimp="Kilimi",Time=toSecs(tAround$Kilimi),aggPers[8,2:7]),
-  cbind(Date=tAround$Date,Chimp="Kindia",Time=toSecs(tAround$Kindia),aggPers[9,2:7]),
-  cbind(Date=tAround$Date,Chimp="Lianne",Time=toSecs(tAround$Lianne),aggPers[10,2:7]),
-  cbind(Date=tAround$Date,Chimp="Liberius",Time=toSecs(tAround$Liberius),aggPers[11,2:7]),
-  cbind(Date=tAround$Date,Chimp="Louis",Time=toSecs(tAround$Louis),aggPers[12,2:7]),
-  cbind(Date=tAround$Date,Chimp="Lucy",Time=toSecs(tAround$Lucy),aggPers[13,2:7]),
-  cbind(Date=tAround$Date,Chimp="Paul",Time=toSecs(tAround$Paul),aggPers[14,2:7]),
-  cbind(Date=tAround$Date,Chimp="Pearl",Time=toSecs(tAround$Pearl),aggPers[15,2:7]),
-  cbind(Date=tAround$Date,Chimp="Qafzeh",Time=toSecs(tAround$Qafzeh),aggPers[16,2:7]),
-  cbind(Date=tAround$Date,Chimp="Rene",Time=toSecs(tAround$Rene),aggPers[17,2:7]),
-  cbind(Date=tAround$Date,Chimp="Sophie",Time=toSecs(tAround$Sophie),aggPers[18,2:7])  
+  cbind(Date=tAround$Date,Chimp="Cindy",Time=tAround$Cindy,aggPers[1,2:7]),
+  cbind(Date=tAround$Date,Chimp="David",Time=tAround$David,aggPers[2,2:7]),
+  cbind(Date=tAround$Date,Chimp="Edith",Time=tAround$Edith,aggPers[3,2:7]),
+  cbind(Date=tAround$Date,Chimp="Emma",Time=tAround$Emma,aggPers[4,2:7]),
+  cbind(Date=tAround$Date,Chimp="Eva",Time=tAround$Eva,aggPers[5,2:7]),
+  cbind(Date=tAround$Date,Chimp="Frek",Time=tAround$Frek,aggPers[6,2:7]),
+  cbind(Date=tAround$Date,Chimp="Heleen",Time=tAround$Heleen,aggPers[7,2:7]),
+  cbind(Date=tAround$Date,Chimp="Kilimi",Time=tAround$Kilimi,aggPers[8,2:7]),
+  cbind(Date=tAround$Date,Chimp="Kindia",Time=tAround$Kindia,aggPers[9,2:7]),
+  cbind(Date=tAround$Date,Chimp="Lianne",Time=tAround$Lianne,aggPers[10,2:7]),
+  cbind(Date=tAround$Date,Chimp="Liberius",Time=tAround$Liberius,aggPers[11,2:7]),
+  cbind(Date=tAround$Date,Chimp="Louis",Time=tAround$Louis,aggPers[12,2:7]),
+  cbind(Date=tAround$Date,Chimp="Lucy",Time=tAround$Lucy,aggPers[13,2:7]),
+  cbind(Date=tAround$Date,Chimp="Paul",Time=tAround$Paul,aggPers[14,2:7]),
+  cbind(Date=tAround$Date,Chimp="Pearl",Time=tAround$Pearl,aggPers[15,2:7]),
+  cbind(Date=tAround$Date,Chimp="Qafzeh",Time=tAround$Qafzeh,aggPers[16,2:7]),
+  cbind(Date=tAround$Date,Chimp="Rene",Time=tAround$Rene,aggPers[17,2:7]),
+  cbind(Date=tAround$Date,Chimp="Sophie",Time=tAround$Sophie,aggPers[18,2:7])  
   )
+
+
 inPodL$Time = as.numeric(inPodL$Time)
   
 
 # what predicts the amount of total time spent in the pod, per day
-mew.pois.1 = glmer(Time ~ dom + neu + agr + ext + con + opn + (1 | Date) + (1 | Chimp),
+mew.pois.1 = glmer(Time ~ Dominance + Extraversion + Conscientiousness + Agreeableness
+                   + Neuroticism + Openness + (1 | Date) + (1 | Chimp),
                    data=inPodL, family = poisson)
 # scaling needs to be done properly, from the outset
 mew.pois.1s = glmer(Time ~ s(dom) + s(neu) + s(agr) + s(ext) + s(con) + s(opn) + (1 | Date) + (1 | Chimp),
@@ -265,6 +275,7 @@ pm3.tbl = htmlreg(ext.pm3,ci.force=TRUE, custom.model.names='Number of approache
                   #                    'Conscientiousness','Openness')
 )
 write(pm3.tbl,"GotoScreen3PGLM.html")
+
 
 # how much time spent at the screen?
 mew.3.pgmm <- glmer(secs ~ Dominance + Neuroticism + Agreeableness + Extraversion + Conscientiousness + 

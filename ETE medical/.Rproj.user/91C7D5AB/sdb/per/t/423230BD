@@ -1,0 +1,18 @@
+{
+    "contents" : "\n\nete1 = read.csv('CSVexport.csv',header=T)\n\n\nlibrary(beanplot)\n\nete1$\n\n\ngenderM = beanplot(ete1$How.many.hours.per.week.do.you.spend.on.research.activities. ~ ete1$Gender,\n                   bw='nrd0', cutmin=0, cutmax=60,\n                   overallline = \"median\",beanlines = 'median')\n  \n  \n  with(data=vpers[vpers$Dimension=='Dominance',], beanplot(Score ~ Sex * Sample, side = 'both', bw = 0.3, cutmax = 4, cutmin = 1,\n                                                           overallline = \"median\", beanlines = 'median', what = c(0,1,1,0), boxwex=0.9,\n                                                           col = list(\"cadetblue3\", \"cadetblue1\", \"royalblue3\", \"royalblue1\",\"slateblue\",\"slateblue1\"),\n                                                           main='Dominance' , show.names=FALSE)\n  )\n  \naggregate(x = ete1$How.many.supporting.SPAs.do.you.actually.work.each.week.,\n          by = list(ete1$Gender),\n          FUN=mean\n          , na.action=na.pass,\n          na.rm=T\n          )\n\n\ntable(ete1$How.many.hours.per.week.do.you.spend.on.research.activities.[ete1$Gender=='Male'])\ntable(ete1$How.many.hours.per.week.do.you.spend.on.research.activities.[ete1$Gender=='Female'])\n\n\n\nt.test(ete1$How.many.supporting.SPAs.do.you.actually.work.each.week.[ete1$Gender=='Female'],\n       ete1$How.many.supporting.SPAs.do.you.actually.work.each.week.[ete1$Gender=='Male'],\n       alternative = 'less')\n\n",
+    "created" : 1437393559525.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1532132628",
+    "id" : "423230BD",
+    "lastKnownWriteTime" : 1437397544,
+    "path" : "C:/Users/s1229179/GitHub/R/ETE medical/beans.R",
+    "project_path" : "beans.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "type" : "r_source"
+}

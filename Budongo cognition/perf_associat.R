@@ -176,7 +176,14 @@ mod.l <- lda()
 
 ####### Processing Time #######
 cz_bin_pers$inspecTime = cz_bin_pers$SampleSelect - cz_bin_pers$SampleOn
+
+# second timing period needs to be selected by accuracy
 cz_bin_pers$procTime = cz_bin_pers$ChoiceSelect - cz_bin_pers$ChoiceOn
+
+cz_bin_pers$procTime.1 = ifelse(cz_bin_pers$Accuracy=='1',
+       cz_bin_pers$procTime,
+       NA)
+       
 
 
 # remove upper outliers
@@ -187,7 +194,7 @@ cz_bin_pers$inspecTime[outliers(cz_bin_pers$inspecTime,2.5)] <- NA
 # log transfoooooooorrrmm
 cz_bin_pers$logprocTime <- log(cz_bin_pers$procTime)
 cz_bin_pers$loginspecTime <- log(cz_bin_pers$inspecTime)
-
+cz_bin_pers$procTime.1.log <- log(cz_bin_pers$procTime.1)
 
 shapiro.test(cz_bin_pers$logprocTime) # doesn't make sense untransformed, RT is never normal
 qqnorm(cz_bin_pers$logprocTime)
@@ -196,6 +203,8 @@ qqline(cz_bin_pers$logprocTime)
 shapiro.test(cz_bin_pers$loginspecTime)
 qqnorm(cz_bin_pers$loginspecTime)
 qqline(cz_bin_pers$loginspecTime)
+
+qqnorm(cz_bin_pers$procTime.1.log)
 
 #cz_bin_pers$logprocTime[outliers(cz_bin_pers$logprocTime,2.5)] <- NA
 #cz_bin_pers$loginspecTime[outliers(cz_bin_pers$loginspecTime,2.5)] <- NA
@@ -221,6 +230,13 @@ mod.it2 <- lmer(log(inspecTime) ~ dom + neu + opn + agr + con + ext + Trial + (1
 mod.it3 <- lmer(loginspecTime ~ Trial + (1 | Group.1)
                 , data=cz_bin_pers
 )
+
+# now with corrects (rewarded) only
+
+mod.ptrw.1 <- lmer(procTime.1.log ~ dom + neu + opn + agr + con + ext + (1 | Group.1)
+                           , data=cz_bin_pers
+)
+
 
 
 library(corrgram)

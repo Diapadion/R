@@ -25,6 +25,11 @@ cor.t.p_c = cor.test(p.summar$Progress,p.summar$Confidence)
 cor.t.rt_f = cor.test(p.summar$x,p.summar$Friendliness)
 cor.t.rt_o = cor.test(p.summar$x,p.summar$Openness)
 cor.t.rt_c = cor.test(p.summar$x,p.summar$Confidence)
+cor.t.rt_act = cor.test(p.summar$x,p.summar$Activity)
+cor.t.rt_anx = cor.test(p.summar$x,p.summar$Anxiety)
+
+
+
 
 
 library(corrgram)

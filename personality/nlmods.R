@@ -578,9 +578,18 @@ RT.dat<-left_join(RT.dat, mtrim, by='Subject')
 
 RT.dat <-RT.dat[!outliers(RT.dat$RT),]
 
-lmm.rt.0 <- lmer(RT ~ Trial + 1 + (1 + Trial| Subject/Date)# + (1 + Trial| Date)
+lmm.rt.0 <- lmer(log(RT) ~ Trial + 1 + (1 + Trial| Subject/Date)# + (1 + Trial| Date)
                  , data = RT.dat, REML=FALSE)
-# not worth the bother of modeling, the correlations are crap
+# not worth the bother of modeling, the correlations are crap (??)
+
+lmm.rt.1 <- lmer(log(RT) ~ Confidence + Openness + Friendliness + Dominance +
+                 Anxiety + Activity + 1 + (1 + Trial| Subject/Date)# + (1 + Trial| Date)
+                 , data = RT.dat, REML=FALSE)
+
+lmm.rt.1tr <- lmer(log(RT) ~ Trial + Confidence + Openness + Friendliness + Dominance +
+                   Anxiety + Activity + 1 + (1 + Trial| Subject/Date)# + (1 + Trial| Date)
+                 , data = RT.dat, REML=FALSE)
+
 
 head(RT.dat$RT[RT.dat$Subject=='Prospero'],30)
 

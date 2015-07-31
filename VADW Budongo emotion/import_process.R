@@ -1,5 +1,5 @@
 
-setwd('./csv')
+#setwd('./csv 17.02.14')
 
 sheets = list.files(pattern="*.csv")
 
@@ -10,16 +10,17 @@ behav_dat = NULL
 
 ## Notes: variables need to be standardized for capitalization
 ##        a particular time standardization has been determined as well
+### See Lucy file for correct formatting
+# Once formatted, then add code to compile data together
 
 
 #i = 1 # David
-i = 4 # Lucy (new)
+#i = 4 # Lucy (new)
 #i = 6 # Pearl
 #i = 7 # Pearl++ new and improved (and fake)
 
 
 
-process_sheet <- function(indat){
   # this function takes a single sheet (currently by index) and
   # returns a df of the meaningful events, as specified by design doc
   
@@ -169,7 +170,8 @@ process_sheet <- function(indat){
   # identifying rows with emotional events (R complete) *or* reconciliation behav.s
   # and recording previous states where relevant
   for (j in 2:dmtd[1]){
-    if ((temp_dat$Full.Display..hoots.only..or.fight.[j] != '') | 
+    if ((temp_dat$Full.Display..hoots.only..or.fight.[j] != '') |
+     	is.na(temp_dat$Full.Display..hoots.only..or.fight.[j]) |    
         (temp_dat$Does.focal.show.consolation.behaviour.after.a.fight.between.conspecifics.[j] != '' &
          !is.na(temp_dat$Does.focal.show.consolation.behaviour.after.a.fight.between.conspecifics.[j]) 
         ) | 
@@ -180,26 +182,23 @@ process_sheet <- function(indat){
     }
   }
   
-  return(filter_dat)
-}
-
 
 
 ### below is incomplete and needs to be tailored to the preferred directory/spreadsheet setup
 
-for (i in 1:length(sheets)){
-  process_sheet(i)  # fill in later
+#for (i in 1:length(sheets)){
+#  process_sheet(i)  # fill in later
   
   
-}
+#}
 
 
-temp_dat = read.csv(sheets[i], skip=1, header=TRUE)
+#temp_dat = read.csv(sheets[i], skip=1, header=TRUE)
 
 
 
 
-temp_dat$length = as.numeric(substring(temp_dat$Time[dim(temp_dat)[1]],7))
+#temp_dat$length = as.numeric(substring(temp_dat$Time[dim(temp_dat)[1]],7))
 
 
 

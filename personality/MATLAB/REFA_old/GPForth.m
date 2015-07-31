@@ -1,0 +1,36 @@
+function [Lh,Th,table]=GPForth(A,T)
+
+al=1;
+L=A*T;
+[f,Gq]=vgQ(L);
+G=A'*Gq;
+table=[];
+for iter=0:500
+    M=T'*G;
+    S=(M+M')/2;
+    Gp=G-T*S;
+    s=norm(Gp,'fro');
+    table=[table;iter f log10(s) al];
+    if s<10^(-5),break,end
+
+    al=2*al;
+    for i=0:10
+       X=T-al*Gp;
+       [U,D,V]=svd(X,0);
+       Tt=U*V';
+       L=A*Tt;
+       [ft,Gq]=vgQ(L);
+       if ft<f-.5*s^2*al,break,end
+       al=al/2;
+       end
+    T=Tt;
+    f=ft;
+    G=A'*Gq;
+end
+    Th=T;
+    [I,J]=max(abs(T),[],2);
+    T=T(:,J);
+    Lh=A*T;
+    factor_contribute=diag(Lh'*Lh);
+    [I,J]=sort(factor_contribute,'descend');
+    Lh=Lh(:,J);

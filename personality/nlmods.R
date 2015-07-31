@@ -568,27 +568,53 @@ glm.rr <- glmer(Correct ~ 1 + Anxiety + Activity + Dominance + Confidence + Open
 
 
 ### REACTION TIME
-### only for all correct responses
+### for both all and only correct responses
 
-RT.dat = dataIn[((dataIn$PressAccuracy=='1')&(dataIn$CorrectItem=='A')),c(1:11)]
+library(lme4)
+
+RT.dat = dataIn[(
+    (dataIn$CorrectItem=='A')),c(1:11)]
+
+RT.dat1 = dataIn[((dataIn$PressAccuracy=='1')&(dataIn$CorrectItem=='A')),c(1:11)]
+
 
 RT.dat$Subject = as.factor(RT.dat$Sub)
+RT.dat1$Subject = as.factor(RT.dat1$Sub)
 
-RT.dat<-left_join(RT.dat, mtrim, by='Subject')
+RT.dat <-left_join(RT.dat, mtrim, by='Subject')
 
-RT.dat <-RT.dat[!outliers(RT.dat$RT),]
+RT.dat <-RT.dat[!outliers(RT.dat$RT,3.5),]
+
+
+RT.dat1 <-left_join(RT.dat1, mtrim, by='Subject')
+
+RT.dat1 <-RT.dat1[!outliers(RT.dat1$RT,3.5),]
+
+
+# regrss
+#library(blme) # noooo...
+library(lmer)
 
 lmm.rt.0 <- lmer(log(RT) ~ Trial + 1 + (1 + Trial| Subject/Date)# + (1 + Trial| Date)
                  , data = RT.dat, REML=FALSE)
 # not worth the bother of modeling, the correlations are crap (??)
 
 lmm.rt.1 <- lmer(log(RT) ~ Confidence + Openness + Friendliness + Dominance +
-                 Anxiety + Activity + 1 + (1 + Trial| Subject/Date)# + (1 + Trial| Date)
+                 Anxiety + Activity + 1 + (1 + Trial| Subject) #+ (1 + Trial| Date)
                  , data = RT.dat, REML=FALSE)
 
 lmm.rt.1tr <- lmer(log(RT) ~ Trial + Confidence + Openness + Friendliness + Dominance +
-                   Anxiety + Activity + 1 + (1 + Trial| Subject/Date)# + (1 + Trial| Date)
+                   Anxiety + Activity + 1 + (1 + Trial| Subject)# + (1 + Trial| Date)
                  , data = RT.dat, REML=FALSE)
+
+lmm.rt1.1 <- lmer(log(RT) ~ Confidence + Openness + Friendliness + Dominance +
+                    Anxiety + Activity + 1 + (1 + Trial| Subject)# + (1 + Trial| Date)
+                  , data = RT.dat1, REML=FALSE)
+
+lmm.rt1.1tr <- lmer(log(RT) ~ Trial + Confidence + Openness + Friendliness + Dominance +
+                     Anxiety + Activity + 1 + (1 + Trial| Subject)# + (1 + Trial| Date)
+                   , data = RT.dat1, REML=FALSE)
+
 
 
 head(RT.dat$RT[RT.dat$Subject=='Prospero'],30)

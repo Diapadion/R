@@ -1,0 +1,21 @@
+
+
+rotfactA = rf4agg;
+rotfactN = rf4nind;
+sz = size(rotfactA);
+row = sz(1);
+col = sz(2);
+
+[c1,i1] = max(abs(rotfactA'))
+[c2,i2] = max(abs(rotfactN'))
+%A(sub2ind(size(A),(1:3).',I))
+
+
+
+for i = 1:len
+    for j = 1:col
+        
+    
+    
+    
+    

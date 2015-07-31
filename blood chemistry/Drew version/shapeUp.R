@@ -1,5 +1,12 @@
-#fulldata <- read.csv("final_data.csv")
+### takes 
+
+
+#dmdob.bak <- dmdob  # beware using this command and overwriting the backup
+
+setwd('./Drew version/')
+fulldata <- read.csv("final_data.csv")
 # just use import, then attach what it gives you...
+detach(fulldata)
 attach(fulldata)
 
 # temporary fixes:
@@ -8,7 +15,7 @@ attach(fulldata)
 
 
 
-as.numeric(fulldata$DOB.y,na.rm=TRUE)+as.numeric(fulldata$DOB.x,na.rm=TRUE)
+#as.numeric(fulldata$DOB.y,na.rm=TRUE)+as.numeric(fulldata$DOB.x,na.rm=TRUE)
 
      
 DOBrm <- (!is.na(fulldata$DOB.x))|(!is.na(fulldata$DOB.y))
@@ -81,11 +88,48 @@ for (i in 1:(dim(dmdob)[1])){
   
 }
 
+bBMIt1 <- structure(numeric(dim(dmdob)[1]), class="Date")
+bBMIt2 <- structure(numeric(dim(dmdob)[1]), class="Date")
+
+for (i in 1:(dim(dmdob)[1])){
+  bBMIt1[i] <- as.Date(as.character(dmdob$HeightDate[i]), format='%m/%d/%Y')
+  bBMIt2[i] <- as.Date(as.character(dmdob$HeightDate.1[i]), format='%m/%d/%Y')
+  }
+
+bBPt1 <- structure(numeric(dim(dmdob)[1]), class="Date")
+bBPt2 <- structure(numeric(dim(dmdob)[1]), class="Date")
+bBPt3 <- structure(numeric(dim(dmdob)[1]), class="Date")
+
+for (i in 1:(dim(dmdob)[1])){
+  
+  yeart <- as.character(dmdob$Survey.1[i])
+  if(nchar(yeart)==10){
+    bBPt1[i] <- as.Date(yeart,format = "%m/%d/%Y")
+    
+  }
+  else bBPt1[i] <- as.Date(yeart,format = "%m/%d/%y")
+  
+  yeart <- as.character(dmdob$Survey.2[i])
+  if(nchar(yeart)==10){
+    bBPt2[i] <- as.Date(yeart,format = "%m/%d/%Y")
+    
+  }
+  else bBPt2[i] <- as.Date(yeart,format = "%m/%d/%y")
+  
+  yeart <- as.character(dmdob$Survey.3[i])
+  if(nchar(yeart)==10){
+    bBPt3[i] <- as.Date(yeart,format = "%m/%d/%Y")
+  
+  }
+  else bBPt3[i] <- as.Date(yeart,format = "%m/%d/%y")
+ 
+}
+
 
 #age <- as.numeric(as.Date(dmdob$DOPR.x,format="%m/%d/%Y")-DoB)
 #age <- as.numeric(as.Date('01/01/2000')-DoB)
 
-library(pastecs)
+#library(pastecs) # what did I think I needed this for
 age <- as.numeric(bchemt1-DoB)
 
 
@@ -135,6 +179,8 @@ hct <- cbind(dmdob$hct,dmdob$hct2,dmdob$hct3)
 hgb <- cbind(dmdob$hgb,dmdob$hgb2,dmdob$hgb3)
 eos <- cbind(dmdob$eos,dmdob$eos2,dmdob$eos3)
 rbc <- cbind(dmdob$rbc,dmdob$rbc2,dmdob$rbc3)
+
+
 
 
 # outliers (added 24/03/15)
@@ -251,6 +297,73 @@ diastolic <- cbind(diastolic.1,diastolic.2,diastolic.3)
 diastolic[outliers(diastolic,3.5)]<-NA
 #
 diastolic[diastolic==8]<-NA
+
+
+
+
+### including all times, with precision
+### alternative to code above
+
+overlapBM <- data.frame(chimp=character(),sex=numeric(),DoB=date(),age=numeric(),
+                        BMI=numeric(),systolic=numeric(), diastolic=numeric(),
+                        cholesterol=numeric(),triglycerides=numeric,creatinine=numeric(),
+                        Dominance=numeric(),Openness=numeric(),Agreeableness=numeric(),
+                        Conscientiousness=numeric(),Neuroticism=numeric(),Extraversion=numeric())
+
+# testing some rounding
+
+# should age be done at the dmdob level?
+
+# basic attributes
+baseAttr <- data.frame(chimp=dmdob$chimp,Sex=sex,dmdob$DOB.x,Dominance=compare_data$chimp_Dom_CZ,
+                      Openness=compare_data$chimp_Opn_CZ,Agreeableness=compare_data$chimp_Agr_CZ,
+                      Conscientiousness=compare_data$chimp_Con_CZ,Neuroticism=compare_data$chimp_Neu_CZ,
+                      Extraversion=compare_data$chimp_Ext_CZ)
+
+# now build it all up
+# bChem has 4, bBMI has 2, others have 3
+overlapBM <- rbind(
+ # cbind(baseAttr,marker='BMI',value=dmdob$BMI,age=as.numeric(floor((bBMIt1-DoB)/365.25))),
+  #cbind(baseAttr,marker='BMI',value=dmdob$BMI.1,age=as.numeric(floor((bBMIt2-DoB)/365.25))),
+  #cbind(baseAttr,marker='Systolic',value=systolic.1,age=as.numeric(floor((bt1-DoB)/365.25))
+)
+ovChol <- rbind(                        # watch out for these reversals
+  cbind(baseAttr,marker='Cholesterol',value=chol[,4],age=as.numeric(floor((bchemt1-DoB)/365.25))),
+  cbind(baseAttr,marker='Cholesterol',value=chol[,3],age=as.numeric(floor((bchemt2-DoB)/365.25))),
+  cbind(baseAttr,marker='Cholesterol',value=chol[,2],age=as.numeric(floor((bchemt3-DoB)/365.25))),
+  cbind(baseAttr,marker='Cholesterol',value=chol[,1],age=as.numeric(floor((bchemt4-DoB)/365.25)))
+)
+ovTrig <- rbind(
+  cbind(baseAttr,marker='Triglycerides',value=trig[,4],age=as.numeric(floor((bchemt1-DoB)/365.25))),      
+  cbind(baseAttr,marker='Triglycerides',value=trig[,3],age=as.numeric(floor((bchemt2-DoB)/365.25))),  
+  cbind(baseAttr,marker='Triglycerides',value=trig[,2],age=as.numeric(floor((bchemt3-DoB)/365.25))),      
+  cbind(baseAttr,marker='Triglycerides',value=trig[,1],age=as.numeric(floor((bchemt4-DoB)/365.25)))
+)
+ovCreat <- rbind(
+  cbind(baseAttr,marker='Creatinine',value=creatinine[,3],age=as.numeric(floor((bchemt1-DoB)/365.25))),      
+  cbind(baseAttr,marker='Creatinine',value=creatinine[,2],age=as.numeric(floor((bchemt2-DoB)/365.25))),            
+  cbind(baseAttr,marker='Creatinine',value=creatinine[,1],age=as.numeric(floor((bchemt3-DoB)/365.25)))
+)
+        
+ovTest <- merge(ovChol, ovTrig, all= TRUE)
+
+ovTest <- merge(ovTest,ovCreat, all= T)
+
+
+library(reshape2)
+
+overlapBP = dcast(ovTest[!is.na(ovTest$age),],  chimp + age ~ marker,
+                  fun.aggregate=mean, value.var='value')
+
+
+
+as.numeric(floor((bBMIt2-DoB)/365.25))
+
+
+floor((bcellt2-DoB)/365.25)
+
+# bind them all in long format
+
 
 
 
@@ -392,6 +505,12 @@ colnames(scoutput)[6:11]<- c('Dominance','Extraversion','Conscientiousness',
 
 #slongput <- reshape(scoutput, idvar = "chimp"
 #                    )
+
+#############
+### STOP HERE
+#############
+
+
 
 attach(scoutput)
 # model1 <- lmer(sys ~ chimp + time + sex + BMI + age + dom + ext + con + agr + neu + opn +

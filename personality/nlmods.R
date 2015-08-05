@@ -90,11 +90,12 @@ nlm.0 <- nlme(Progress ~ SSlogis(Trial, Asym, xmid, scal),
 )
 
 # now trying to nest trials within subject
+## this is the null model for pub
 nlm.0rs <- nlme(Progress ~ SSlogis(Trial, Asym, xmid, scal),
               data = nlm.dat,
               fixed = list(Asym ~ 1, xmid ~ 1, scal ~ 1),
               random = Asym + xmid + scal ~ 1|Subject
-              #groups = ~ Subject/Date,
+              #, groups = ~ Subject/Date,
               #start = initVals
               #verbose=TRUE
 )
@@ -115,6 +116,7 @@ nlm.0.fo<- update(nlm.0, fixed=list(Asym ~ Friendliness + Openness, xmid ~ Frien
                               #fixef(nlm.0.f)[2],fixef(nlm.0.o)[2],fixef(nlm.0.f)[4],fixef(nlm.0.o)[4]))
                               1,1,1,1))
  
+## similarly, the rs models are for pub
 nlm.0rs.o <- update(nlm.0rs, fixed=list(Asym ~ Openness, xmid ~ Openness, scal ~ 1)
                   #, start = c(fixef(nlm.0),fixef(nlm.0),fixef(nlm.0)))
                   , start = c(Asym = fixef(nlm.0)[1],xmid = fixef(nlm.0)[2], scal = fixef(nlm.0)[3],
@@ -126,7 +128,14 @@ nlm.0rs.f <- update(nlm.0rs, fixed=list(Asym ~ Friendliness, xmid ~ Friendliness
 
 nlm.0rs.c <- update(nlm.0rs, fixed=list(Asym ~ Confidence, xmid ~ Confidence, scal ~ 1)
                     #, start = c(fixef(nlm.0),fixef(nlm.0),fixef(nlm.0)))
-                    , start = c(Asym = fixef(nlm.0)[1],xmid = fixef(nlm.0)[2], scal = fixef(nlm.0)[3],0.5,0.5))
+                    , start = c(Asym = fixef(nlm.0rs)[1],xmid = fixef(nlm.0rs)[2], scal = fixef(nlm.0rs)[3],0.5,0.5))
+
+# new - a is for activity
+nlm.0rs.a <- update(nlm.0rs, fixed=list(Asym ~ Activity, xmid ~ Activity, scal ~ 1)
+                    #, start = c(fixef(nlm.0),fixef(nlm.0),fixef(nlm.0)))
+                    , start = c(Asym = fixef(nlm.0)[1],xmid = fixef(nlm.0)[2], scal = fixef(nlm.0)[3],
+                                c(0.5,0.5)))
+# fuck it
 
 control = nlmeControl(pnlsTol = 0.02, msVerbose = TRUE)
 nlm.0rs.fo<- update(nlm.0rs, fixed=list(Asym ~ Friendliness + Openness, xmid ~ Friendliness + Openness, scal ~ 1)
@@ -141,6 +150,17 @@ nlm.0rs.foc<- update(nlm.0rs, fixed=list(Asym ~ Friendliness + Openness + Confid
                     , start = c(Asym = fixef(nlm.0)[1],xmid = fixef(nlm.0)[2], scal = fixef(nlm.0)[3],
                                 #  fixef(nlm.0.f)[2],fixef(nlm.0.o)[2],fixef(nlm.0.f)[4],fixef(nlm.0.o)[4]))
                                 0.5,0.5,0.5,0.5,0.5,0.5))
+
+library(bbmle)
+temp <- AICctab(nlm.0rs,nlm.0rs.o,nlm.0rs.f,nlm.0rs.c,nlm.0rs.fo,nlm.0rs.foc,
+        logLik=TRUE, delta=TRUE, base=TRUE, dispersion=TRUE)
+write.csv(cbind(rownames(temp),temp$df,temp$logLik,temp$AICc), "clipboard.csv", sep=,)
+temp <- BICtab(nlm.0rs,nlm.0rs.o,nlm.0rs.f,nlm.0rs.c,nlm.0rs.fo,nlm.0rs.foc,base=TRUE)
+write.csv(cbind(rownames(temp),temp$df,temp$BIC), "clipboard.csv")
+
+AICtab(nlm.0rs,nlm.0rs.o,nlm.0rs.f,nlm.0rs.c,nlm.0rs.fo,nlm.0rs.foc,base=TRUE)
+
+anova(nlm.0rs,nlm.0rs.o,nlm.0rs.f,nlm.0rs.c,nlm.0rs.fo,nlm.0rs.foc)
 
 
 # fit plots
@@ -215,7 +235,7 @@ thurstone <- function(x, L, P, R) (L*(x + P)/(x + P + R))
 thurstone <- deriv(~(4*(x + P)/(x + P + R)),
                     c('P','R'), function(x, P, R){})
 
-nlm.0 <- nlme(Progress ~ thurstone(Trial, P, R),
+thrs.nlm.0 <- nlme(Progress ~ thurstone(Trial, P, R),
               data=nlm.dat,
               fixed=list(P ~ 1, R ~ 1),
               random = R + R ~ 1|Subject
@@ -233,8 +253,15 @@ nlm.o <- nlme(Progress ~ thurstone(Trial, P, R),
 nlm.f <- nlme(Progress ~ thurstone(Trial, P, R),
               data=nlm.dat,
               fixed=list(P ~ 1 + Friendliness, R ~ 1 + Friendliness),
-              random = R + R ~ 1|Subject
+              random = P + R ~ 1|Subject
               , start = c(0.01,0.01,0.01,0.01)
+)
+
+nlm.fo <- nlme(Progress ~ thurstone(Trial, P, R),
+              data=nlm.dat,
+              fixed=list(P ~ 1 + Friendliness + Openness, R ~ 1 + Friendliness + Openness),
+              random = P + R ~ 1|Subject
+              , start = c(0.01,0.01,0.01,0.01,0.01,0.01)
 )
 
 
@@ -453,7 +480,7 @@ plotLMER.fnc(lmm.q.err.0)
 coefplot(lmm.err.0)
 
 
-#|
+## Error models for pub
 
 # null model
 lmm.err.0 <- lmer(Err.yj ~ Trial + 1 + (1 + Trial| Subject/Date), data = trial.dat, REML=FALSE)
@@ -502,7 +529,7 @@ anova(lmm.err.f,lmm.err.o,lmm.err.fB,lmm.err.fBc)
 # this is the best model
 lmm.err.fB.oc <- lmer(Err.yj ~ Trial + 1 + Friendliness:Trial + Openness
                       #  + (1 + Trial|Subject) 
-                      + (1 + Trial|Subject/Date)
+                       + (1 + Trial|Subject/Date)
                       #+ Openness + Friendliness + Dominance + Confidence + Activity)
                       , data = trial.dat, REML=FALSE)
 
@@ -512,8 +539,18 @@ lmm.err.fBc.oc <- lmer(Err.yj ~ Trial + 1 + Friendliness:Trial + Friendliness + 
                        #+ Openness + Friendliness + Dominance + Confidence + Activity)
                        , data = trial.dat, REML=FALSE)
 
-anova(lmm.err.f,lmm.err.o,lmm.err.fB,lmm.err.fBc,lmm.err.fB.oc,lmm.err.fBc.oc)
+anova(lmm.err.0,lmm.err.f,lmm.err.o,lmm.err.fB,lmm.err.fBc,lmm.err.fB.oc,lmm.err.fBc.oc)
 
+temp <- AICctab(lmm.err.0,lmm.err.f,lmm.err.o,lmm.err.oB,lmm.err.fB,
+                lmm.err.fBc,lmm.err.fB.oc,lmm.err.fBc.oc,
+                    logLik=TRUE, delta=TRUE, base=TRUE, dispersion=TRUE)
+write.csv(cbind(rownames(temp),temp$df,temp$AICc,temp$logLik), "clipboard.csv")
+temp<-BICtab(lmm.err.0,lmm.err.f,lmm.err.o,lmm.err.oB,lmm.err.fB,
+             lmm.err.fBc,lmm.err.fB.oc,lmm.err.fBc.oc, base=T)
+write.csv(cbind(rownames(temp),temp$df,temp$BIC), "clipboard.csv")
+
+Anova(lmm.err.fB.oc)
+Anova(lmm.err.fBc.oc)
 
 ### BLUP individual parameter tests
 BLUP.err = ranef(lmm.err.0,drop=TRUE)

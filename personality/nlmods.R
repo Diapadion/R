@@ -586,6 +586,7 @@ glm.rrntr <- glmer(Correct ~ 1 + Trial + Anxiety + Activity + Dominance + Confid
                   data=trial.dat,
                   family=binomial(link='logit'))
 
+## this one
 glm.rDinSntr <- glmer(Correct ~ 1 + Trial + Anxiety + Activity + Dominance + Confidence + Openness + Friendliness
                    + (1 | Subject/Date),
                    data=trial.dat,
@@ -599,6 +600,45 @@ glm.rr <- glmer(Correct ~ 1 + Anxiety + Activity + Dominance + Confidence + Open
 
 # indicate that Subject effect on Intercept is degenerate
 
+
+## do we need to use the same model building strategy?
+glm.rr.0 <- glmer(Correct ~ 1 + Trial
+                  + (1 | Subject/Date),
+                  data=trial.dat,
+                  family=binomial(link='logit'))
+
+glm.rr.o <- glmer(Correct ~ 1 + Trial + Openness + (1 | Subject/Date),
+      data=trial.dat,
+      family=binomial(link='logit'))
+
+glm.rr.f <- glmer(Correct ~ 1 + Trial + Friendliness + (1 | Subject/Date),
+                 data=trial.dat,
+                 family=binomial(link='logit'))
+
+glm.rr.c <- glmer(Correct ~ 1 + Trial + Confidence + (1 | Subject/Date),
+                 data=trial.dat,
+                 family=binomial(link='logit'))
+
+glm.rr.ac <- glmer(Correct ~ 1 + Trial + Activity + (1 | Subject/Date),
+                 data=trial.dat,
+                 family=binomial(link='logit'))
+
+## and this one
+glm.rr.fo <- glmer(Correct ~ 1 + Trial + Openness + Friendliness + (1 | Subject/Date),
+                           data=trial.dat,
+                           family=binomial(link='logit'))
+
+glm.rr.foAc <- glmer(Correct ~ 1 + Trial + Openness + Friendliness + Activity + (1 | Subject/Date),
+                   data=trial.dat,
+                   family=binomial(link='logit'))
+
+
+anova(glm.rr.0,glm.rr.o,glm.rr.f,glm.rr.c,glm.rr.ac,glm.rr.fo,glm.rr.foAc,glm.rDinSntr)
+
+temp <- AICctab(glm.rr.0,glm.rr.o,glm.rr.f,glm.rr.c,glm.rr.ac,glm.rr.fo,glm.rr.foAc,glm.rDinSntr,
+                logLik=TRUE, delta=TRUE, base=TRUE, dispersion=TRUE)
+temp<-BICtab(glm.rr.0,glm.rr.o,glm.rr.f,glm.rr.c,glm.rr.ac,glm.rr.fo,glm.rr.foAc,glm.rDinSntr,
+             base=T)
 
 #library(MCMCglmm)
 
@@ -632,25 +672,77 @@ RT.dat1 <-RT.dat1[!outliers(RT.dat1$RT,3.5),]
 #library(blme) # noooo...
 library(lmer)
 
+## reverse model building strategy
+# in light of RR results
+# and weak correlations
+
 lmm.rt.0 <- lmer(log(RT) ~ Trial + 1 + (1 + Trial| Subject/Date)# + (1 + Trial| Date)
                  , data = RT.dat, REML=FALSE)
-# not worth the bother of modeling, the correlations are crap (??)
 
-lmm.rt.1 <- lmer(log(RT) ~ Confidence + Openness + Friendliness + Dominance +
+# unused
+lmm.rt.1.NTr <- lmer(log(RT) ~ Confidence + Openness + Friendliness + Dominance +
                  Anxiety + Activity + 1 + (1 + Trial| Subject) #+ (1 + Trial| Date)
                  , data = RT.dat, REML=FALSE)
 
-lmm.rt.1tr <- lmer(log(RT) ~ Trial + Confidence + Openness + Friendliness + Dominance +
-                   Anxiety + Activity + 1 + (1 + Trial| Subject)# + (1 + Trial| Date)
-                 , data = RT.dat, REML=FALSE)
+## all first responses
 
-lmm.rt1.1 <- lmer(log(RT) ~ Confidence + Openness + Friendliness + Dominance +
-                    Anxiety + Activity + 1 + (1 + Trial| Subject)# + (1 + Trial| Date)
+lmm.rt.all <- lmer(log(RT) ~ Trial + Confidence + Openness + Friendliness + Dominance +
+                   Anxiety + Activity + 1 + (1 + Trial| Subject/Date)# + (1 + Trial| Date)
+                 , data = RT.dat)
+
+lmm.rt.NAc <- lmer(log(RT) ~ Trial + Confidence + Openness + Friendliness + Dominance +
+                     Anxiety + 1 + (1 + Trial| Subject/Date)# + (1 + Trial| Date)
+                   , data = RT.dat, REML=FALSE)
+
+lmm.rt.NAcAx <- lmer(log(RT) ~ Trial + Confidence + Openness + Friendliness + Dominance +
+                     1 + (1 + Trial| Subject/Date)# + (1 + Trial| Date)
+                   , data = RT.dat, REML=FALSE)
+
+lmm.rt.NAcAxD <- lmer(log(RT) ~ Trial + Confidence + Openness + Friendliness +
+                       1 + (1 + Trial| Subject/Date)# + (1 + Trial| Date)
+                     , data = RT.dat, REML=FALSE)
+
+temp <- AICctab(lmm.rt.all, logLik=TRUE, delta=TRUE, base=TRUE, dispersion=TRUE)
+
+Anova(lmm.rt.all)
+Anova(lmm.rt.NAc)
+
+
+
+# unused
+lmm.rt1.NTr <- lmer(log(RT) ~ Confidence + Openness + Friendliness + Dominance +
+                    Anxiety + Activity + 1 + (1 + Trial| Subject/Date)# + (1 + Trial| Date)
                   , data = RT.dat1, REML=FALSE)
 
-lmm.rt1.1tr <- lmer(log(RT) ~ Trial + Confidence + Openness + Friendliness + Dominance +
-                     Anxiety + Activity + 1 + (1 + Trial| Subject)# + (1 + Trial| Date)
+## all correct first reponses (only)
+
+lmm.rt1.0 <- lmer(log(RT) ~ Trial + 1 + (1 + Trial| Subject/Date)# + (1 + Trial| Date)
+                 , data = RT.dat1, REML=FALSE)
+
+lmm.rt1.all <- lmer(log(RT) ~ Trial + Confidence + Openness + Friendliness + Dominance +
+                     Anxiety + Activity + 1 + (1 + Trial| Subject/Date)# + (1 + Trial| Date)
                    , data = RT.dat1, REML=FALSE)
+# Activity is weakest
+
+lmm.rt1.nAc <- lmer(log(RT) ~ Trial + Confidence + Openness + Friendliness + Dominance +
+                                     Anxiety + 1 + (1 + Trial| Subject/Date)# + (1 + Trial| Date)
+                                   , data = RT.dat1, REML=FALSE)
+# Anxiety is weakest
+
+lmm.rt1.nAcAx <- lmer(log(RT) ~ Trial + Confidence + Openness + Friendliness + Dominance +
+                      1 + (1 + Trial| Subject/Date)# + (1 + Trial| Date)
+                    , data = RT.dat1, REML=FALSE)
+# Dominance is weakest
+
+lmm.rt1.nAcAxD <- lmer(log(RT) ~ Trial + Confidence + Openness + Friendliness +
+                         1 + (1 + Trial| Subject/Date)# + (1 + Trial| Date)
+                    , data = RT.dat1, REML=FALSE)
+
+anova(lmm.rt1.0,lmm.rt1.all,lmm.rt1.nAc,lmm.rt1.nAcAx,lmm.rt1.nAcAxD)
+# after removing Dominance, fit gets notable worse
+
+temp <- AICctab(lmm.rt1.0,lmm.rt1.all,lmm.rt1.nAc,lmm.rt1.nAcAx,lmm.rt1.nAcAxD
+                , logLik=TRUE, delta=TRUE, base=TRUE, dispersion=TRUE)
 
 
 

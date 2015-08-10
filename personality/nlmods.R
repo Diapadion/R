@@ -743,7 +743,12 @@ anova(lmm.rt1.0,lmm.rt1.all,lmm.rt1.nAc,lmm.rt1.nAcAx,lmm.rt1.nAcAxD)
 
 temp <- AICctab(lmm.rt1.0,lmm.rt1.all,lmm.rt1.nAc,lmm.rt1.nAcAx,lmm.rt1.nAcAxD
                 , logLik=TRUE, delta=TRUE, base=TRUE, dispersion=TRUE)
+BICtab(lmm.rt1.0,lmm.rt1.all,lmm.rt1.nAc,lmm.rt1.nAcAx,lmm.rt1.nAcAxD
+                ,base=TRUE, dispersion=TRUE)
 
+Anova(lmm.rt1.all)
+Anova(lmm.rt1.nAc)
+Anova(lmm.rt1.nAcAx)
 
 
 head(RT.dat$RT[RT.dat$Subject=='Prospero'],30)

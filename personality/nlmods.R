@@ -25,7 +25,7 @@ trial.dat$Err.yj <- yjPower(trial.dat$Error, #-1.887,
                             -0.146,
                             jacobian.adjusted = TRUE)
 
-gg.e.yj <- ggplot(trial.dat, aes(Trial,Err.yj))+geom_point()+
+gg.e.yj <- ggplot(trial.dat, aes(Trial,Err.yj))+
   facet_wrap(~Subject) + stat_summary(fun.data="mean_cl_boot",colour='purple')
 gg.e.yj + coord_cartesian(ylim = c(-3, 3)) 
 
@@ -51,6 +51,21 @@ gg.p + stat_summary(fun.data="mean_cl_boot",colour='blue')
 gg.p.tr <-  ggplot(trial.dat, aes(Trial,Prog.t))+geom_point()+
   facet_wrap(~Subject)
 gg.p.tr + stat_summary(fun.data="mean_cl_boot",colour='green') + stat_smooth(method='lm')
+
+
+### cumulative plots for pub
+
+library(lattice) # manually ???
+library(Hmisc)
+library(ggplot2)
+
+gg.p <- ggplot(trial.dat, aes(Trial,Progress)) + 
+  stat_summary(fun.data="mean_cl_boot",colour='darkblue') + 
+  facet_wrap(~Subject) + theme_bw()
+
+gg.e <- ggplot(trial.dat, aes(Trial,Error)) + 
+  stat_summary(fun.data="mean_cl_boot",colour='darkgreen') + 
+  facet_wrap(~Subject) + theme_bw()
 
  ### PROGRESS
 
@@ -116,7 +131,7 @@ nlm.0.fo<- update(nlm.0, fixed=list(Asym ~ Friendliness + Openness, xmid ~ Frien
                               #fixef(nlm.0.f)[2],fixef(nlm.0.o)[2],fixef(nlm.0.f)[4],fixef(nlm.0.o)[4]))
                               1,1,1,1))
  
-## similarly, the rs models are for pub
+## These models are not what they seem: xmid is not interesting, scal is
 nlm.0rs.o <- update(nlm.0rs, fixed=list(Asym ~ Openness, xmid ~ Openness, scal ~ 1)
                   #, start = c(fixef(nlm.0),fixef(nlm.0),fixef(nlm.0)))
                   , start = c(Asym = fixef(nlm.0)[1],xmid = fixef(nlm.0)[2], scal = fixef(nlm.0)[3],
@@ -165,6 +180,9 @@ anova(nlm.0rs,nlm.0rs.o,nlm.0rs.f,nlm.0rs.c,nlm.0rs.fo,nlm.0rs.foc)
 
 # fit plots
 
+library(visreg)
+visreg(nlm.0rs.fo)
+
 library(ggplot2)
 gg.p <- ggplot(trial.dat, aes(Trial,Progress))+stat_summary(fun.data="mean_cl_boot",colour='green')
   
@@ -177,13 +195,13 @@ par(mfrow=c(2,2))
 
 plot(nlm.dat$Trial, nlm.dat$Progress)
 
-yPred = coef(nlm.0)
-ypred 
+yPred = coef(nlm.0rs)
+
 plot(nlm.dat$Trial, 
-      yPred[1]/(1 + exp((yPred[2]-nlm.dat$Trial)/(yPred[3])))
+      yPred[2,1]/(1 + exp((yPred[2,2]-nlm.dat$Trial)/(yPred[2,3])))
 )
 plot(nlm.dat$Trial, 
-     yPred[1]/(1 + exp((yPred[2]-nlm.dat$Trial)/(2*yPred[3])))
+     yPred[1]/(1 + exp((yPred[2]-nlm.dat$Trial)/(yPred[3])))
 )
 plot(nlm.dat$Trial, 
      yPred[1]/(1 + exp((yPred[2]-nlm.dat$Trial)/(1/2*yPred[3])))
@@ -357,8 +375,58 @@ cor.test(1/unlist(BLUP.err$Subject[2]),mtrim$Openness)
 cor.test(1/unlist(BLUP.err$Subject[2]),mtrim$Confidence)
 
 
+### Try it all again. From the SSlogis models, building models which
+### look at the added impact of personality on asym(ptote) and scal(e)
+
+## this is the null model for pub
+nlm.0rs <- nlme(Progress ~ SSlogis(Trial, Asym, xmid, scal),
+                data = nlm.dat,
+                fixed = list(Asym ~ 1, xmid ~ 1, scal ~ 1),
+                random = Asym + xmid + scal ~ 1|Subject
+                #, groups = ~ Subject/Date,
+                #start = initVals
+                #verbose=TRUE
+)
+
+nlm.0rs.o <- update(nlm.0rs, fixed=list(Asym ~ Openness, xmid ~ 1, scal ~ Openness)
+                    #, start = c(0.1,0.1,0.1,0.1,0.1
+                    , start = c(Asym = fixef(nlm.0rs)[1],xmid = fixef(nlm.0rs)[2], scal = fixef(nlm.0rs)[3]
+                                ,Openness=c(0.5,0.5)
+                    ))
+
+nlm.0rs.f <- update(nlm.0rs, fixed=list(Asym ~ Friendliness, xmid ~ 1, scal ~ Friendliness)
+                    #, start = c(0.1,0.1,0.1,0.1,0.1
+                    , start = c(Asym = fixef(nlm.0rs)[1],xmid = fixef(nlm.0rs)[2], scal = fixef(nlm.0rs)[3]
+                                ,Friendliness=c(0.5,0.5)
+                    ))
+
+nlm.0rs.fo <- update(nlm.0rs, fixed=list(Asym ~ Friendliness + Openness, 
+                                         xmid ~ 1, scal ~ Friendliness + Openness)
+                    #, start = c(0.1,0.1,0.1,0.1,0.1
+                    , start = c(Asym = fixef(nlm.0rs)[1],xmid = fixef(nlm.0rs)[2], scal = fixef(nlm.0rs)[3]
+                                ,Friendliness=c(0.5,0.5), Openness=c(0.5,0.5)
+                    ))
+
+anova(nlm.0rs,nlm.0rs.o,nlm.0rs.f,nlm.0rs.fo)
+
+AICctab(nlm.0rs,nlm.0rs.o,nlm.0rs.f,nlm.0rs.fo,
+                logLik=TRUE, delta=TRUE, base=TRUE, dispersion=TRUE)
+BICtab(nlm.0rs,nlm.0rs.o,nlm.0rs.f,nlm.0rs.fo,base=TRUE)
 
 
+anova(nlm.0rs,nlm.0rs.o,nlm.0rs.f,nlm.0rs.fo)
+
+# plots
+
+par(mfrow=c(2,2))
+
+plot(nlm.dat$Trial, nlm.dat$Progress)
+
+yPred = coef(nlm.0rs)
+
+plot(nlm.dat$Trial, 
+     yPred[2,1]/(1 + exp((yPred[2,2]-nlm.dat$Trial)/(1/2 * yPred[2,3])))
+)
 
 ### ERROR
 

@@ -21,7 +21,8 @@ rbind.all.columns <- function(x, y) {
 # personality
 ###
 
-
+setwd('C:/Users/s1229179/git-repos/R/Budongo cognition/')
+pers <- read.csv('EDIpersonality.csv',header=TRUE)
 
 
 
@@ -29,8 +30,7 @@ rbind.all.columns <- function(x, y) {
 # cognition
 ###
 
-setwd('C:/Users/s1229179/git-repos/R/Budongo cognition/')
-pers <- read.csv('EDIpersonality.csv',header=TRUE)
+
 
 setwd('Z:/chimp cognitive data/raw/')
 

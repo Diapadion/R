@@ -105,7 +105,7 @@ nlm.0 <- nlme(Progress ~ SSlogis(Trial, Asym, xmid, scal),
 )
 
 # now trying to nest trials within subject
-## this is the null model for pub
+
 nlm.0rs <- nlme(Progress ~ SSlogis(Trial, Asym, xmid, scal),
               data = nlm.dat,
               fixed = list(Asym ~ 1, xmid ~ 1, scal ~ 1),
@@ -378,6 +378,8 @@ cor.test(1/unlist(BLUP.err$Subject[2]),mtrim$Confidence)
 ### Try it all again. From the SSlogis models, building models which
 ### look at the added impact of personality on asym(ptote) and scal(e)
 
+### PROGRESS
+
 ## this is the null model for pub
 nlm.0rs <- nlme(Progress ~ SSlogis(Trial, Asym, xmid, scal),
                 data = nlm.dat,
@@ -393,6 +395,12 @@ nlm.0rs.o <- update(nlm.0rs, fixed=list(Asym ~ Openness, xmid ~ 1, scal ~ Openne
                     , start = c(Asym = fixef(nlm.0rs)[1],xmid = fixef(nlm.0rs)[2], scal = fixef(nlm.0rs)[3]
                                 ,Openness=c(0.5,0.5)
                     ))
+
+# znlm.0rs.o <- update(nlm.0rs, fixed=list(Asym ~ Opn.z, xmid ~ 1, scal ~ Opn.z)
+#                     #, start = c(0.1,0.1,0.1,0.1,0.1
+#                     , start = c(Asym = fixef(nlm.0rs)[1],xmid = fixef(nlm.0rs)[2], scal = fixef(nlm.0rs)[3]
+#                                 ,Opn.z=c(0.5,0.5)
+#                     ))
 
 nlm.0rs.f <- update(nlm.0rs, fixed=list(Asym ~ Friendliness, xmid ~ 1, scal ~ Friendliness)
                     #, start = c(0.1,0.1,0.1,0.1,0.1
@@ -427,6 +435,8 @@ yPred = coef(nlm.0rs)
 plot(nlm.dat$Trial, 
      yPred[2,1]/(1 + exp((yPred[2,2]-nlm.dat$Trial)/(1/2 * yPred[2,3])))
 )
+
+
 
 ### ERROR
 
@@ -695,6 +705,10 @@ glm.rr.ac <- glmer(Correct ~ 1 + Trial + Activity + (1 | Subject/Date),
 glm.rr.fo <- glmer(Correct ~ 1 + Trial + Openness + Friendliness + (1 | Subject/Date),
                            data=trial.dat,
                            family=binomial(link='logit'))
+
+zglm.rr.fo <- glmer(Correct ~ 1 + Trial + Opn.z + Frd.z + (1 | Subject/Date),
+                   data=trial.dat,
+                   family=binomial(link='logit'))
 
 glm.rr.foAc <- glmer(Correct ~ 1 + Trial + Openness + Friendliness + Activity + (1 | Subject/Date),
                    data=trial.dat,

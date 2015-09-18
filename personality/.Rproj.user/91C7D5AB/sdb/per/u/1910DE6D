@@ -1,0 +1,18 @@
+{
+    "contents" : "citation(package=\"car\")\n\ncitation(package=\"psych\")\n\n\ncitation(package=\"nlme\")\ncitation(package=\"lme4\")\n",
+    "created" : 1442340099138.000,
+    "dirty" : true,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "2655382856",
+    "id" : "1910DE6D",
+    "lastKnownWriteTime" : 7011605692497750387,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 8,
+    "source_on_save" : false,
+    "type" : "r_source"
+}

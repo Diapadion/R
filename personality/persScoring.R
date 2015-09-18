@@ -57,3 +57,14 @@ mtrim = within(data = mtrim, {
 mtrim$Subject = rownames(mtrim)
 
 
+## z-scores
+
+mtrim$Frd.z = scale(mtrim$Friendliness)
+mtrim$Opn.z = scale(mtrim$Openness)
+mtrim$Anx.z = scale(mtrim$Anxiety)
+mtrim$Act.z = scale(mtrim$Activity)
+mtrim$Cnf.z = scale(mtrim$Confidence)
+mtrim$Dom.z = scale(mtrim$Dominance)
+                      
+
+

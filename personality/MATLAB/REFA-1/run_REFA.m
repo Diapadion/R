@@ -18,11 +18,11 @@
 %load pcano.txt;
 %dt=pcano(:,3:15);
 
-%load monkeyPersAvg.txt;
-%dt = monkeyPersAvg;
+load monkeyPersAvg.txt;
+dt = monkeyPersAvg;
 
-load flatmat.txt;
-dt = flatmat';
+%load flatmat.txt;
+%dt = flatmat';
 
 
 

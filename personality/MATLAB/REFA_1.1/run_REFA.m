@@ -19,8 +19,11 @@
 %load pcano.txt;
 %dt=pcano(:,3:15);
 
-load flatmat.txt;
-dt = flatmat';
+load monkeyPersAvg.txt;
+dt = monkeyPersAvg;
+
+%load flatmat.txt;
+%dt = flatmat';
 
 %-----------------------------------------------------------
 %Extraction Method: ML (maximum likelihood estimation) (By default)

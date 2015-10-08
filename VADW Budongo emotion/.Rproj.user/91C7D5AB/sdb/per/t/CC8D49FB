@@ -1,0 +1,25 @@
+{
+    "contents" : "",
+    "created" : 1443695240981.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "CC8D49FB",
+    "lastKnownWriteTime" : 27585050233536628,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "ptejz1fhl8",
+        "caption" : "behav_dat",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=behav_dat&cache_key=ptejz1fhl8",
+        "displayedObservations" : "55",
+        "environment" : "",
+        "object" : "behav_dat",
+        "totalObservations" : "55",
+        "variables" : "206"
+    },
+    "relative_order" : 5,
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}

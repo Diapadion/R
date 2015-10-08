@@ -10,13 +10,13 @@
     "path" : null,
     "project_path" : null,
     "properties" : {
-        "cacheKey" : "25cwugr8mn",
+        "cacheKey" : "o5m59lzh30",
         "caption" : "filter_dat",
-        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=filter_dat&cache_key=25cwugr8mn",
-        "displayedObservations" : "38",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=filter_dat&cache_key=o5m59lzh30",
+        "displayedObservations" : "2",
         "environment" : "",
         "object" : "filter_dat",
-        "totalObservations" : "38",
+        "totalObservations" : "2",
         "variables" : "206"
     },
     "relative_order" : 3,

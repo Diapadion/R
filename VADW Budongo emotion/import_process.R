@@ -1,6 +1,12 @@
+## NB. Leveda's files:All chimps have 12 files each except:
+# Paul = 11; timings wrong
+# Cindy = 11; week 8 file missed
+# Lucy = 13; filming error = extra focal for Lucy
 
-#setwd('./csv 17.02.14')
+# First check working directory
+#setwd('./Edited files')
 
+#lists all sheets in working directory
 sheets = list.files(pattern="*.csv")
 
 # sort by animal, from here
@@ -13,21 +19,26 @@ behav_dat = NULL
 ### See Lucy file for correct formatting
 # Once formatted, then add code to compile data together
 
-
-#i = 1 # David
-#i = 4 # Lucy (new)
+# sheet order in wd; sheets need to be loaded 1 at a time, usin i='number here'
+#i = 1 # Cindy
+#i = 2 # David
+#i = 3 # Kilimi
+#i = 4 # Lianne
+#i = 5 # Louis
 #i = 6 # Pearl
-#i = 7 # Pearl++ new and improved (and fake)
+# once loaded, merge all sheets vertically using rbind
 
 
+  # this loop takes a single sheet (currently by index) and
+  # add it to a df of the meaningful events, as specified by design doc
+  
+  ## Below no longer planned:
+  ## function can be used to append sheets to one another to create 
+  ## a mass df for mixed modeling
 
-  # this function takes a single sheet (currently by index) and
-  # returns a df of the meaningful events, as specified by design doc
+for (i in 1:length(sheets)){
   
-  # function can be used to append sheets to one another to create 
-  # a mass df for mixed modeling
-  
-  
+
   temp_dat = NULL
   temp_dat = read.csv(sheets[i], skip=1, header=TRUE)
   
@@ -82,7 +93,7 @@ behav_dat = NULL
   
   
   # OoS totaling
-  ### TODO does not papear ot be working
+  ### TODO does not appear to be working
   if ('x' %in% temp_dat$OS){
     temp_dat$any.OS = 'Y'
     temp_dat$total.OS = sum(temp_dat$behav.length[temp_dat$OS=='x'])
@@ -128,7 +139,7 @@ behav_dat = NULL
   }
   
   
-  # for the extended Lucy example, this reliead on col Q
+  # for the extended Lucy example, this relied on col Q
   # but O and P should function exactly the same
   
   # Time spent (at all) _near_ others (Q)
@@ -181,7 +192,11 @@ behav_dat = NULL
       filter_dat = rbind(filter_dat,cbind(temp_dat[j,],temp_dat[j-1,]))
     }
   }
+ 
   
+  behav_dat <- rbind(behav_dat, filter_dat)
+  
+} 
 
 
 ### below is incomplete and needs to be tailored to the preferred directory/spreadsheet setup
@@ -202,4 +217,21 @@ behav_dat = NULL
 
 
 
-setwd('..')
+#setwd('..')
+
+
+### EDITS TO ADD: VW, 13.08.15
+# Write loop to read in all files at once, to same dataframe (above code)
+# Where '/' is present in data (e.g. x /runs away) treat info after / as note, *EXCEPT* for columns R-S; can we put this extra info in separate column labelled 'Notes'?
+# Where '-' is present, e.g. in column Ag: 'receive-Rene' can we add name of conspecific to separate column?
+# If a cell = ?, or x? or Kindia? or display?, etc (i.e. any cell that contains '?'), is there a way to exclude this from the behavioural/time totals, as this indicates uncertainty that data is accurate.
+# Can we add a column that calculates proportion responses to emotional event, i.e. if 'Does.focal.respond = Y', calculated out of total number of events where focal is present (e.g. if there are 12 events during focal, and focal chimp is present for 10 and respond 'Y' to 8, this column would be 8/10)
+# For total time, add code to account for occasions when end time is not rounded to minute, e.g. total time = 19.22
+
+# Potential problems with running code: Note to self
+# When running files, make sure to delete all empty bottom rows or this fucks up time calculations for total time, OS and beh. length. Also make sure to run this line of code:
+#   dmtd = dim(temp_dat) # this is real useful
+# before running all the code below, or the time calulcations won't work either.
+
+### DMA - 01.10.15
+# - "aNother" spelled wrong most of the time. Fixed in Cindy 130114

@@ -1,0 +1,25 @@
+{
+    "contents" : "",
+    "created" : 1446034659911.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "7D6F7C2E",
+    "lastKnownWriteTime" : 7011605692497750387,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "pkl9fzow5c",
+        "caption" : "intLvlPers",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=intLvlPers&cache_key=pkl9fzow5c",
+        "displayedObservations" : "18",
+        "environment" : "",
+        "object" : "intLvlPers",
+        "totalObservations" : "18",
+        "variables" : "18"
+    },
+    "relative_order" : 5,
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}

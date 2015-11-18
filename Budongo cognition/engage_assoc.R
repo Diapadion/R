@@ -68,6 +68,11 @@ mod.polr.2.dn <- polr(participat ~ I(Dominance^2) + Conscientiousness + Openness
 mod.polr.2.all <- polr(participat ~ I(dom^2) + I(con^2) + I(ext^2) + I(neu^2) + I(opn^2) + I(agr^2)
                        + con + ext + agr + opn + dom + neu, data=aggPers)
 
+mod.polr.o <- polr(participat ~ Openness, data=aggPers)
+# I think just the above is what we want
+# in order to confirm O's linearity
+mod.polr.a <- polr(participat ~ Agreeableness, data=aggPers)
+
 
 library(rms)
 mod.orm <- orm(participat ~ dom + con + neu + ext + agr + opn, data=aggPers)

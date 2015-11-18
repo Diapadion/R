@@ -19,6 +19,8 @@ EWpartic = as.factor(c(1,0,1,0,1,1,0,1,0,0,0,1,0,0,1,0,0,0))
 
 aggPers = cbind(aggPers, EWpartic)
 
+write.csv(aggPers, file = "aggregatedPers.csv")
+
 EWtm <- aggregate(aggPers, by=list(aggPers$EWpartic), FUN=mean)
 EWts <- aggregate(aggPers, by=list(aggPers$EWpartic), FUN=sd)
 

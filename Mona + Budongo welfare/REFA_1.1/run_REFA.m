@@ -19,11 +19,11 @@
 %load pcano.txt;
 %dt=pcano(:,3:15);
 
-%load aggregatedWelSWB.txt;
-%dt = aggregatedWelSWB;
+load aggregatedWelSWB.txt;
+dt = aggregatedWelSWB;
 
-load aggregatedWel.txt;
-dt = aggregatedWel;
+%load aggregatedWel.txt;
+%dt = aggregatedWel;
 
 %load aggregatedSWB.txt;
 %dt = aggregatedSWB;

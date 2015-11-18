@@ -1,0 +1,25 @@
+{
+    "contents" : "",
+    "created" : 1447259682695.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "B1463AAC",
+    "lastKnownWriteTime" : 7011605692497750387,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "uc21m4jisl",
+        "caption" : "xpers",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=xpers&cache_key=uc21m4jisl",
+        "displayedObservations" : 196,
+        "environment" : "",
+        "object" : "xpers",
+        "totalObservations" : 196,
+        "variables" : 42
+    },
+    "relative_order" : 9,
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}

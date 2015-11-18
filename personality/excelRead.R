@@ -108,16 +108,16 @@ for(i in 1:9){
 ### remove certain raters
 
 trimp = pers[,c(1:4,6:11),]
-trimp = trimp[,,-c(5,53)] # take out autistic and unperceptive
+##trimp = trimp[,,-c(5,53)] # take out autistic and unperceptive
 
 # colname tracking
 srt <- srt$ADJECTIVE[2:55]
-srt <- srt[-c(5,53)]
+##srt <- srt[-c(5,53)]
 
 ### Intraclass correlation
 library(psych)
 icc3 <- NULL
-for (i in 1:52){
+for (i in 1:54){
   icc3[i] =  ICC(trimp[,,i])$results
 }
 
@@ -125,6 +125,8 @@ ICC(trimp[,,4])
 ticc = ICC(trimp[,,1])
 ticc$results$
   
+# just checking on Autistic and Unperceptive
+icc3[6]
   
   
 ## potential problems (some estimates and confint below 0):

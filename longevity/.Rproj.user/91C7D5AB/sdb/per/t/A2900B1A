@@ -1,12 +1,12 @@
 {
-    "contents" : "\ntrong <- read.csv(file = \"Taronga Chimpanzees.csv\")\n\n# fiddling the Taronga DoBs\ntrong$bdate <- as.Date(trong$bdate, format = \"%d/%m/%Y\")\n\ntrong$formDoB <- format(trong$bdate, \"%m/%d/%Y\")\nwrite.csv(trong$formDoB,\"TarongaDoB.csv\")\n\nAZA <- read.csv(\"czoo.csv\")\ncolnames(AZA)[c(11:53)]\n\nJapan <- read.csv(\"japan_chimps_22_dec_2012.csv\")\ncolnames(Japan)[c(5:58)]\n\n# finding the differences between CPQ and HPQ\nsetdiff(tolower(colnames(Japan)[c(5:58)]),colnames(AZA)[c(11:53)])\n\n\n",
+    "contents" : "\ntrong <- read.csv(file = \"Taronga Chimpanzees.csv\")\n\n# fiddling the Taronga DoBs\ntrong$bdate <- as.Date(trong$bdate, format = \"%d/%m/%Y\")\n\ntrong$formDoB <- format(trong$bdate, \"%m/%d/%Y\")\nwrite.csv(trong$formDoB,\"TarongaDoB.csv\")\n\nAZA <- read.csv(\"czoo.csv\")\ncolnames(AZA)[c(11:53)]\n\nJapan <- read.csv(\"japan_chimps_22_dec_2012.csv\")\ncolnames(Japan)[c(5:58)]\n\nyerk <- read.csv(\"Yerkes Mortality.csv\")\n\n\nall <- read.csv(\"long_all.csv\")\n\n# finding the differences between CPQ and HPQ\nsetdiff(tolower(colnames(Japan)[c(5:58)]),colnames(AZA)[c(11:53)])\n\n\n\n",
     "created" : 1447266291886.000,
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "342182778",
+    "hash" : "1009149236",
     "id" : "A2900B1A",
-    "lastKnownWriteTime" : 1447355473,
+    "lastKnownWriteTime" : 1448028867,
     "path" : "C:/Users/s1229179/GitHub/R/longevity/startingFixes.R",
     "project_path" : "startingFixes.R",
     "properties" : {

@@ -44,7 +44,7 @@ covTest=function(fitobj,x,y,sigma.est="full",status=NULL, maxp=min(nrow(x),ncol(
   yy=y-my
   
   if(family=="gaussian"){
-    glmobj=glmnet(x,y,family="gaussian",standardize=T, alpha = 0.7,lambda.min.ratio=0.00001,  nlambda=1000)
+    glmobj=glmnet(x,y,family="gaussian",standardize=T, alpha = 1,lambda.min.ratio=0.00001,  nlambda=1000)
     #     glmobj=glmnet(x,y,family="gaussian",standardize=fitobj$standardize,lambda.min.ratio=lambda.min.ratio)
   }
   if(family=="cox"){
@@ -92,7 +92,7 @@ covTest=function(fitobj,x,y,sigma.est="full",status=NULL, maxp=min(nrow(x),ncol(
             # this next line because glmnet now bombs if x has one col
             if(length(tt0)==1){tt0=c(tt0,tt0)}
             #glmobj0=glmnet(x[,tt0,drop=F],y,family="gaussian",standardize=fitobj$standardize,lambda.min.ratio=lambda.min.ratio)
-            glmobj0=glmnet(x[,tt0,drop=F],y,family="gaussian",standardize=T, alpha = 0.7,lambda.min.ratio=0.00001,  nlambda=1000)
+            glmobj0=glmnet(x[,tt0,drop=F],y,family="gaussian",standardize=T, alpha = 1,lambda.min.ratio=0.00001,  nlambda=1000)
             yhat0=as.vector(predict(glmobj0,x[,tt0,drop=F],type="link",s=lambda/n))
           }
           if(family=="cox"){  

@@ -1,0 +1,25 @@
+{
+    "contents" : "",
+    "created" : 1447928443228.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "2BE6CB00",
+    "lastKnownWriteTime" : 7011605692497750387,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "egeflrr3wl",
+        "caption" : "netform2s",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=netform2s&cache_key=egeflrr3wl",
+        "displayedObservations" : 2553,
+        "environment" : "",
+        "object" : "netform2s",
+        "totalObservations" : 2553,
+        "variables" : 15
+    },
+    "relative_order" : 10,
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}

@@ -109,13 +109,47 @@ focals1 = focals1[focals1$Focal.ID != '',]
 focals1$Regurgitated = revalue(focals1$Regurgitated, c("n"="N","N/A"="N"))
 levels(focals1$Regurgitated)[1] = 'N'
 
-table
+
 
 
 # t2 = January to June, 2015
 
 ## Scans
-scans2 = meltedScan[meltedScan$Month %in% c("Jan","Feb","Mar","Apr","May","Jun") & meltedScan$Year == 2015,]
+scans2 = recastScan[recastScan$Month %in% c("Jan","Feb","Mar","Apr","May","Jun") & recastScan$Year == 2015,]
+
+scans2 = merge(scans2, wf[wf$time==2,], by.x= "variable", "Chimp")
+
+netform2s = scans2[,c(13:27)]
+netform2s = model.matrix(~ . - 1, data=netform2s)
+#netform2s = netform2s[,-c(1,4,5,10)]
+
+library(glmnet)
+library(lars)
+
+fwf2s.net <- glmnet(netform2s, scans2$welfareswb,
+                    family = "gaussian",
+                    standardize=T, alpha = 1,lambda.min.ratio=0.00001,  nlambda=1000
+                    #nlambda=1000, lambda.min.ratio = 0.00001
+)
+#plot(fwf2s.net)
+
+fwf2s.cvnet <- cv.glmnet(netform2s, scans2$welfareswb,
+                         family = "gaussian", nfolds=20)
+plot(fwf2s.cvnet)
+coef(fwf2s.net, 
+     s=fwf2s.cvnet$lambda.min
+     #s=fwf2.cvnet$lambda.1se
+)
+plot(fwf2s.net)
+plot(fwf2s.net, xvar="lambda", label=T)  
+plot(fwf2s.net, xvar="dev", label=T)
+
+fwf2s.lars  <- lars(netform2s, scans2$welfareswb, type="lasso", intercept=T,max.steps = 100000)
+
+#cvl.fwf2 <- covTest(tst.lars, netform2, temp$totalwelfare)
+covTest(fwf2s.lars, netform2s, scans2$welfareswb)
+
+
 
 ## Focals
 focals2 = focals[focals$Month %in% c("Jan","Feb","Mar","Apr","May","Jun") & focals$Year == 2015,]
@@ -152,9 +186,24 @@ levels(focals2$Focal.plucked.fur.from.another)[1] <- 'N'
 focals2$Focal.displaced.by.another = revalue(focals2$Focal.displaced.by.another, c("Y? ED"="Y","Y? RE"="Y"))
 levels(focals2$Focal.displaced.by.another)[1] = 'N'
 
-temp = merge(focals2, wf[wf$time==2,], by.x= "Focal.ID", "Chimp")
+table(focals2$Distance.of.nearest.neighbour)
+focals2$Distance.of.nearest.neighbour = droplevels(focals2$Distance.of.nearest.neighbour)
+#gsub('[:alpha:]','',levels(focals2$Distance.of.nearest.neighbour))
+#focals2$Distance.of.nearest.neighbour = revalue(focals2$Distance.of.nearest.neighbour, c("0.5M"=0.5,""))
+levels(focals2$Distance.of.nearest.neighbour) = c("0.5",'0','1','2','3','4','5','9','NA')
+focals2$Distance.of.nearest.neighbour = as.numeric(focals2$Distance.of.nearest.neighbour)
+
+levels(focals2$Eating.at.any.point.in.the.focal)[3] <- 'Y'
+focals2$Eating.at.any.point.in.the.focal = droplevels(focals2$Eating.at.any.point.in.the.focal)
+
+focals2$Focal.groom.with.another = droplevels(focals2$Focal.groom.with.another)
+
+
+focals2 = merge(focals2, wf[wf$time==2,], by.x= "Focal.ID", "Chimp")
 
 #table(focals2$Did.focal.self.groom)
+
+
 
 
 
@@ -213,15 +262,15 @@ Did.focal.drink.or.touch.urine
 
 library(glmnet)
 
-netform2 <- droplevels(temp[,c(21,29,31,32,33,35,36,37)])
+netform2f <- droplevels(focals2[,c(21,29,31,32,33,35,36,37,18,19,34)])
 
-netform2 = model.matrix(~ . - 1, data=netform2)
+netform2f = model.matrix(~ . - 1, data=netform2f)
 #netform2 = Matrix(netform2, sparse=TRUE)
-inherits(netform2, "sparseMatrix")
+inherits(netform2f, "sparseMatrix")
 
-netform2 = netform2[,c(2,3,4,5,6,7,8,9)]
+netform2f = netform2f[,c(2,3,4,5,6,7,8,9,10,11,12)]
 
-netform2 <- netform2[, ncol(netform2):1]
+#netform2f <- netform2[, ncol(netform2f):1]
 
 ### full diagnostics
 
@@ -237,29 +286,28 @@ netform2 <- netform2[, ncol(netform2):1]
 # # https://web.stanford.edu/~hastie/glmnet/glmnet_alpha.html # sparse matrices at bottom
 
 
-fwf2.net <- glmnet(netform2, temp$totalwelfare,
+fwf2f.net <- glmnet(netform2f, focals2$welfareswb,
                    family = "gaussian",
-                   standardize=T, alpha = 0.7,lambda.min.ratio=0.00001,  nlambda=1000
+                   standardize=T, alpha = 1,lambda.min.ratio=0.00001,  nlambda=1000
                    #nlambda=1000, lambda.min.ratio = 0.00001
                    )
-#plot(fwf2.net)
 
-fwf2.cvnet <- cv.glmnet(netform2, temp$totalwelfare,
+fwf2f.cvnet <- cv.glmnet(netform2f, focals2$welfareswb,
                    family = "gaussian", nfolds=20)
-plot(fwf2.cvnet)
+plot(fwf2f.cvnet)
 # coef(fwf2.cvnet, 
 #      #s=min(fwf2.net$lambda)
 #      s=fwf2.net$lambda[40]
 #      ,exact=F
 # )
 
-coef(fwf2.net, 
-     s=fwf2.cvnet$lambda.min
+coef(fwf2f.net, 
+     s=fwf2f.cvnet$lambda.min
      #s=fwf2.cvnet$lambda.1se
 )
-plot(fwf2.net)
-plot(fwf2.net, xvar="lambda", label=T)  
-plot(fwf2.net, xvar="dev", label=T)  
+plot(fwf2f.net)
+plot(fwf2f.net, xvar="lambda", label=T)  
+plot(fwf2f.net, xvar="dev", label=T)  
 
 # glmnetCovTest(fwf2.net, netform2, temp$totalwelfare)
 
@@ -267,13 +315,13 @@ plot(fwf2.net, xvar="dev", label=T)
 # summary(fwf2.net)
 
 library(lars)
-tst.lars  <- lars(netform2, temp$totalwelfare, type="lasso", intercept=T,max.steps = 100000)
+tst.lars  <- lars(netform2f, focals2$welfareswb, type="lasso", intercept=T,max.steps = 100000)
 #lcv.fwf2.net <- cv.lars(netform2, temp$totalwelfare, type="lasso",plot.it=T,se=T)
 coef(tst.lars)
 
 # library(covTest)
 cvl.fwf2 <- covTest(tst.lars, netform2, temp$totalwelfare)
-covTest(tst.lars, netform2, temp$totalwelfare)
+covTest(tst.lars, netform2f, focals2$welfareswb)
 
 # taking it back to OLS
 
@@ -292,4 +340,7 @@ fwf2.ols <- lmer(totalwelfare ~ Regurgitated + Did.focal.eat.faeces + Did.focal.
 # http://stats.stackexchange.com/questions/77546/how-to-interpret-glmnet
 # http://stats.stackexchange.com/questions/34859/how-to-present-results-of-a-lasso-using-glmnet
 
+
+### Chimps 2016 abstract snippet
+# Welfare was found to be predicted by observed negative behaviours (e.g. regurgitation, cacophagy), using LASSO penalized linear modeling and covariance tests.
 

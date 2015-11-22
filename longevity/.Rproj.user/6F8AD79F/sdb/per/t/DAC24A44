@@ -1,0 +1,25 @@
+{
+    "contents" : "",
+    "created" : 1448224248112.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "DAC24A44",
+    "lastKnownWriteTime" : 7011605692497750387,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "vaqex4ct8g",
+        "caption" : "all",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=all&cache_key=vaqex4ct8g",
+        "displayedObservations" : 544,
+        "environment" : "",
+        "object" : "all",
+        "totalObservations" : 544,
+        "variables" : 77
+    },
+    "relative_order" : 5,
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}

@@ -23,3 +23,12 @@ setdiff(tolower(colnames(Japan)[c(5:58)]),colnames(AZA)[c(11:53)])
 
 
 
+# aggregating DOPR dates from Yerkes
+
+# some were rated after their death... what should the DOPR be then? The date of death?
+
+
+
+
+#setwd("../Yerkes/")
+#yp <- read.csv(file = "yerkes_dec2_traits.csv")

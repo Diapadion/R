@@ -1,0 +1,25 @@
+{
+    "contents" : "",
+    "created" : 1448232834037.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "BE609425",
+    "lastKnownWriteTime" : 7011605692497750387,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "gjpu49azzh",
+        "caption" : "y.Ltrunc",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=y.Ltrunc&cache_key=gjpu49azzh",
+        "displayedObservations" : 363,
+        "environment" : "",
+        "object" : "y.Ltrunc",
+        "totalObservations" : 363,
+        "variables" : 1
+    },
+    "relative_order" : 6,
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}

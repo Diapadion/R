@@ -1,0 +1,18 @@
+{
+    "contents" : "# Plots\n\nplot(Dataset$Ext_CZ ~ Dataset$status)\n\nplot(Dataset$Dom_CZ ~ Dataset$status)\n\n\nplot(Dataset$origin ~ Dataset$status)\nplot(Dataset$age ~ Dataset$origin)\n\n\n\nplot(Dataset$age_pr, Dataset$Agr_CZ)\ncor.test(Dataset$age_pr, Dataset$Agr_CZ)\n\nplot(Dataset$age_pr, Dataset$Dom_CZ)\ncor.test(Dataset$age_pr, Dataset$Dom_CZ) # *\n\nplot(Dataset$age_pr, Dataset$Opn_CZ)\ncor.test(Dataset$age_pr, Dataset$Opn_CZ) # *\n\nplot(Dataset$age_pr, Dataset$Con_CZ)\ncor.test(Dataset$age_pr, Dataset$Con_CZ)\n\nplot(Dataset$age_pr, Dataset$Neu_CZ)\ncor.test(Dataset$age_pr, Dataset$Neu_CZ) # *\n\n\nplot(Dataset$age_pr, Dataset$Ext_CZ)\ncor.test(Dataset$age_pr, Dataset$Ext_CZ) # *\n\nplot(Dataset$DoB, Dataset$Ext_CZ)\nplot(Dataset$age, Dataset$Ext_CZ)\nplot(Dataset$age_pr_adj, Dataset$Ext_CZ)\n\nfit.e <- lm(Ext_CZ ~ years(DoB)-age), data=Dataset)\nplot(fit.e)\n\nfit.e <- lm(Ext_CZ ~ age, data=Dataset)\nplot(fit.e)\n\n\n# survfits\n\nlibrary(survival)\nplot(survfit(y ~ age_pr, data=Dataset))\n\nplot(survfit(yLt ~ Ext_CZ, data=datX))\n\n",
+    "created" : 1448288738974.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3906576614",
+    "id" : "72F47D44",
+    "lastKnownWriteTime" : 1448306526,
+    "path" : "C:/Users/s1229179/GitHub/R/longevity/plotting.R",
+    "project_path" : "plotting.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 6,
+    "source_on_save" : false,
+    "type" : "r_source"
+}

@@ -25,8 +25,9 @@ all$lastDate <- as.Date(all$lastDate, format='%d/%m/%Y')
 
 
 ### Ageing
-# should be age at Personality rating
+# ... should also be age at Personality rating
 
+# age at last known date
 #head(all$lastDate - all$DoB)
 all$age = as.numeric(difftime(all$lastDate, all$DoB, units = "weeks"))/52.25 
 # The above is super useful. Remember that (it is here).
@@ -41,8 +42,6 @@ all$DOPRmin = pmin(all$DOPR, all$DOPR2, na.rm = TRUE)
 all$DOPRmin = pmin(all$DOPRmin, all$lastDate)
 
 
-
-
 all$age_pr[all$sample == 'Yerkes'] = as.numeric(difftime(
   all$DOPRmin[all$sample == 'Yerkes'], all$DoB[all$sample == 'Yerkes'], units = "weeks"))/52.25 
 
@@ -55,9 +54,12 @@ yr = year(all$DoB[(all$sample == 'AZA') | (all$sample == 'Taronga')]) +
 
 all$DOPRmin[(all$sample == 'AZA') | (all$sample == 'Taronga')] <- (as.Date(date_decimal(yr)))
 
+# Some animals died before being rated.
+# Test: moving their rating date to a month or year back from DoD
 
-month(all$DOPRmin)
-
+all$age_pr_adj = all$age_pr
+all$age_pr_adj[all$age <= all$age_pr & (all$sample %in% c('Taronga', 'Yerkes', 'AZA'))] <-
+  (all$age_pr_adj[all$age <= all$age_pr & (all$sample %in% c('Taronga', 'Yerkes', 'AZA'))] - 5)
 
 
 ### Origin

@@ -1,0 +1,17 @@
+{
+    "contents" : "\n\nm1 <- survreg(yLt ~ Ext_CZ\n                       , dist = \"t\", data=datX\n)\nsummary(m1)\n\n\nmA <- survreg(y ~ Ext_CZ \n               , dist = \"loglogistic\", data=Dataset)\n  \nmB <- survreg(y ~ Ext_CZ + age_pr\n              , dist = \"loglogistic\", data=Dataset)\nsummary(mB)\n  \nmC <- survreg(y ~ Ext_CZ * age_pr\n              , dist = \"loglogistic\", data=Dataset)\nsummary(mC)\n\n\nm2 <- survreg(yLt ~ Ext_CZ + Ext_CZ:as.numeric(DoB)\n              , dist = \"t\", data=datX\n)\nsummary(m2)\n\n\n  \n  \n  \nmZ <- survreg(y ~ as.factor(Dataset$sex) + Dataset$age_pr + #Dataset$age + \n                as.factor(Dataset$origin) + as.factor(Dataset$LvZ) + \n                Dataset$Dom_CZ + Dataset$Ext_CZ + Dataset$Con_CZ +\n                Dataset$Agr_CZ + Dataset$Neu_CZ + Dataset$Opn_CZ,\n          dist=\"loglogistic\")\n  \n  \n  \n  \n  \n  \n  \n\n\n\nm0e<- survreg(yLt ~ as.factor(sex) + \n                         as.factor(origin) + as.factor(LvZ) + \n                         Dom_CZ + Ext_CZ + Con_CZ +\n                         Agr_CZ + Neu_CZ + Opn_CZ\n                       + as.numeric(DoB):Ext_CZ\n                       , dist = \"t\", data=datX\n)\nconfint(m0e, type=\"boot\")\n\nm0eo <- survreg(yLt ~ as.factor(sex) + \n                as.factor(origin) + as.factor(LvZ) + \n                Dom_CZ + Ext_CZ + Con_CZ +\n                Agr_CZ + Neu_CZ + Opn_CZ\n              + as.numeric(DoB):Ext_CZ + as.numeric(DoB):Opn_CZ\n              , dist = \"t\", data=datX\n)\n\nm0ed <- survreg(yLt ~ as.factor(sex) + \n                  as.factor(origin) + as.factor(LvZ) + \n                  Dom_CZ + Ext_CZ + Con_CZ +\n                  Agr_CZ + Neu_CZ + Opn_CZ\n                + as.numeric(DoB):Ext_CZ + as.numeric(DoB):Dom_CZ\n                , dist = \"t\", data=datX\n)\n\nm0exwDoB <- survreg(yLt ~ as.factor(sex) + \n                  as.factor(origin) + as.factor(LvZ) + \n                  Dom_CZ + Ext_CZ + Con_CZ +\n                  Agr_CZ + Neu_CZ + Opn_CZ\n                + as.factor(origin):Ext_CZ + as.numeric(DoB):Ext_CZ\n                , dist = \"t\", data=datX\n)",
+    "created" : 1448308874459.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3765484676",
+    "id" : "E5CBFDDE",
+    "lastKnownWriteTime" : 1448308021,
+    "path" : "~/GitHub/R/longevity/building.R",
+    "project_path" : "building.R",
+    "properties" : {
+    },
+    "relative_order" : 7,
+    "source_on_save" : false,
+    "type" : "r_source"
+}

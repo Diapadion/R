@@ -1,0 +1,18 @@
+{
+    "contents" : "# Cox models instead\n\nlibrary(survival)\n\nattr(y, 'type') <- 'right'\ncox.m <- coxph(themodel)\n\n\n\nattr(yLt, 'type')\n\ncox.trunc <- coxph(yLt ~ as.factor(sex) + as.factor(origin) + as.factor(LvZ) + \n                                    Dom_CZ + Ext_CZ + Con_CZ +\n                                    Agr_CZ + Neu_CZ + Opn_CZ,  data=datX\n                                  #dist = \"t\"\n)\n\nanova(cox.trunc)\n\ncox.trunc.x <- coxph(yLt ~ as.factor(sex) + as.factor(origin) + as.factor(LvZ) + \n                     Dom_CZ + Ext_CZ + Con_CZ +\n                     Agr_CZ + Neu_CZ + Opn_CZ + Ext_CZ:DoB,  data=datX\n             \n)\n\nanova(cox.trunc.x,cox.trunc)\n\n# predictable time-dependent covariate: Extraversion\n\npfit1 <- coxph(Surv(time, status==2) ~ log(bili) + ascites + age, pbc)\npfit2 <- coxph(Surv(time, status==2) ~ log(bili) + ascites + tt(age),\n                 data=pbc,\n                 tt=function(x, t, ...) {\n                   age <- x + t/365.25\n                   cbind(age=age, age2= (age-50)^2, age3= (age-50)^3)\n                 })\n\n# what is the best model for tt'ing extraversion\n\nplot(Ext_CZ ~ age_pr, data=datX)\nfit.e <- lm(Ext_CZ ~ age_pr, data=Dataset)\nsummary(fit.e)\n\nfit.e2 <- lm(Ext_CZ ~ age_pr + I(age_pr^2), data=Dataset)\nsummary(fit.e2)\n\nanova(fit.e, fit.e2)\n\ncox.tt <- coxph(yLt ~ as.factor(sex) + as.factor(origin) + as.factor(LvZ) + \n                   Dom_CZ + tt(Ext_CZ) + Con_CZ +\n                   Agr_CZ + Neu_CZ + Opn_CZ\n                 , tt=function(x,t,...){\n                   Ext = x - 2*t\n                   \n                   #pspline(x + t)\n                 }\n                 \n                 , data=datX\n)\n\ncox.tt2 <- coxph(yLt ~ as.factor(sex) + as.factor(origin) + as.factor(LvZ) + \n                               Dom_CZ +  tt(Ext_CZ) + Con_CZ +\n                               Agr_CZ + Neu_CZ + Opn_CZ\n                 , tt=function(x,t,...){\n                   Ext = x - t\n                   cbind(Ext = Ext, Ext2 = (Ext-1)^2)\n                   \n                   #pspline(x + t)\n                 }\n                   \n                , data=datX, x=TRUE\n)\n\ntt.deets = coxph.detail(cox.tt2)\n\nsummary(cox.tt2)\nanova(cox.tt2)\n\nll = 2*(cox.tt$loglik - cox.trunc$loglik)[2]\nll = 2*(cox.tt2$loglik - cox.trunc$loglik)[2]\nll\ndchisq(ll, 2)\n\n\n",
+    "created" : 1448308877125.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1076457482",
+    "id" : "640B228E",
+    "lastKnownWriteTime" : 1448322823,
+    "path" : "~/GitHub/R/longevity/cox.R",
+    "project_path" : "cox.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 8,
+    "source_on_save" : false,
+    "type" : "r_source"
+}

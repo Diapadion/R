@@ -104,12 +104,16 @@ library(flexsurv)
 
 #y.Ltrunc <- Surv(as.numeric(Dataset$DOPRmin), as.numeric(Dataset$lastDate),Dataset$status ,
 #                 type='counting')
-y.Ltrunc <- Surv(Dataset$age_pr_adj, Dataset$age,Dataset$status ,
+y.Ltrunc <- Surv(Dataset$age_pr_adj, Dataset$age,Dataset$status,
                  type='counting')
+
+attr(y.Ltrunc, 'type') <- 'counting'
 
 rmNAs = !is.na(y.Ltrunc)
 
 yLt = y.Ltrunc[rmNAs]
+attr(y.Ltrunc, 'type')
+attr(yLt, 'type')
 datX = Dataset[rmNAs,]
 
 #“extreme”, “logistic”, “gaussian”, “weibull”, “exponential”, “rayleigh”, “loggaussian”, 

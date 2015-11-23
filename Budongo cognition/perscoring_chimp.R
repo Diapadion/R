@@ -50,23 +50,27 @@ compare_data$con <-
    - pers$Dsor - pers$Thotl - pers$Dist - pers$Unper - pers$Quit #- pers$Clmy
    + 11*8
   ) / 11
-#  (-dmdob$impl.z-dmdob$defn.z-dmdob$reckl.z-dmdob$errc.z-dmdob$irri.z+dmdob$pred.z-dmdob$aggr.z-dmdob$jeals.z-dmdob$dsor.z+64)/9
 
 compare_data$agr <-
   (pers$Symp + pers$Help + pers$Sens + pers$Prot + pers$Gntl + pers$Conv
   ) / 6
-#(dmdob$symp.z+dmdob$help.z+dmdob$sens.z+dmdob$prot.z+dmdob$gntl.z)/5
 
 compare_data$neu <-
   (pers$Exct + pers$Aut - pers$Stbl - pers$Cool - pers$Unem
    + 3*8
   ) / 5
-#(-dmdob$stbl.z+dmdob$exct.z-dmdob$unem.z+16)/3
+
 
 compare_data$opn <-
   (pers$Inqs + pers$Invt + pers$Curious + pers$Innov
   ) / 4
-#(dmdob$inqs.z+dmdob$invt.z)/2
+
+
+# Looks like old CPQ stuff
+#  (dmdob$symp.z+dmdob$help.z+dmdob$sens.z+dmdob$prot.z+dmdob$gntl.z)/5
+#  (-dmdob$stbl.z+dmdob$exct.z-dmdob$unem.z+16)/3
+#  (dmdob$inqs.z+dmdob$invt.z)/2
+#  (-dmdob$impl.z-dmdob$defn.z-dmdob$reckl.z-dmdob$errc.z-dmdob$irri.z+dmdob$pred.z-dmdob$aggr.z-dmdob$jeals.z-dmdob$dsor.z+64)/9
 
 
 
@@ -98,6 +102,11 @@ compare_data$opn <-
 compare_data = compare_data[25:95,]
 
 aggPers <- aggregate(compare_data, by=list(compare_data$chimp), FUN=mean, na.rm=TRUE,na.action = na.omit)
+
+### this is for Longevity
+longP <- aggregate(pers[25:95,], by=list(pers[25:95,]$chimp), FUN=mean, na.rm=TRUE,na.action = na.omit)
+write.csv(longP, "aggTraits.csv")
+### End
 
 # removing dead chimps :((((
 rownames(aggPers) <- aggPers$Group.1

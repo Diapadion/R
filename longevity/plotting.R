@@ -37,6 +37,41 @@ plot(Dataset$DoB, Dataset$Ext_CZ)
 plot(Dataset$age, Dataset$Ext_CZ)
 plot(Dataset$age_pr_adj, Dataset$Ext_CZ)
 
+
+plot(Dataset$age_pr, Dataset$DoB-Dataset$age)
+
+
+plot(Dataset$Ext_CZ, Dataset$Ext_CZ - scale(Dataset$age_pr))
+plot(Dataset$Ext_CZ, Dataset$age_pr - 5 * Dataset$Ext_CZ)
+
+# could one substract the max value to reverse the range?
+
+
+
+# substraction is not quite the right operation
+plot(1/Dataset$age_pr_adj, Dataset$Ext_CZ)
+plot(scale(1/scale(Dataset$age_pr_adj)), Dataset$Ext_CZ)
+plot(Dataset$Ext_CZ-scale(1/scale(Dataset$age_pr_adj)), Dataset$Ext_CZ)
+
+# which of these two?
+plot(Dataset$age_pr_adj, Dataset$Ext_CZ-scale(1/(1 + Dataset$age_pr_adj))) # former, this one
+plot(Dataset$age_pr_adj, scale(1/scale(Dataset$age_pr_adj))-Dataset$Ext_CZ)
+
+# also...
+plot(Dataset$age_pr_adj, Dataset$Ext_CZ-scale(1/as.numeric(year(Dataset$DoB)))) # nope, no good
+
+
+
+View(cbind(Dataset$age_pr_adj, Dataset$Ext_CZ,
+           Dataset$Ext_CZ-scale(1/Dataset$age_pr_adj),
+           scale(1/scale(Dataset$age_pr_adj))-Dataset$Ext_CZ     ))
+
+# division?
+plot(Dataset$Ext_CZ/scale(Dataset$age_pr_adj), Dataset$Ext_CZ)
+plot(Dataset$age_pr_adj, Dataset$Ext_CZ/scale(Dataset$age_pr_adj)) # too condensed
+
+Dataset$divE <- scale(Dataset$Ext_CZ/scale(Dataset$age_pr_adj))
+
 fit.e <- lm(Ext_CZ ~ years(DoB)-age, data=Dataset)
 plot(fit.e)
 

@@ -102,12 +102,25 @@ library(car)
 ### ... left TRUNCATION (!)
 library(flexsurv)
 
+# currently optional - my attempt to control for age effects within E
+Dataset$adjE <- scale(Dataset$Ext_CZ-scale(1/(1 + Dataset$age_pr_adj)))
+# and now O
+Dataset$adjO <- scale(Dataset$Opn_CZ-scale(1/(1 + Dataset$age_pr_adj)))
+# hell, what if we do it for all of them?
+Dataset$adjD <- scale(Dataset$Dom_CZ-scale(1/(1 + Dataset$age_pr_adj)))
+Dataset$adjC <- scale(Dataset$Con_CZ-scale(1/(1 + Dataset$age_pr_adj)))
+Dataset$adjA <- scale(Dataset$Agr_CZ-scale(1/(1 + Dataset$age_pr_adj)))
+Dataset$adjN <- scale(Dataset$Neu_CZ-scale(1/(1 + Dataset$age_pr_adj)))
+
+
+### LOOK ABOVE
+
 #y.Ltrunc <- Surv(as.numeric(Dataset$DOPRmin), as.numeric(Dataset$lastDate),Dataset$status ,
 #                 type='counting')
 y.Ltrunc <- Surv(Dataset$age_pr_adj, Dataset$age,Dataset$status,
                  type='counting')
 
-attr(y.Ltrunc, 'type') <- 'counting'
+# attr(y.Ltrunc, 'type') <- 'counting'
 
 rmNAs = !is.na(y.Ltrunc)
 
@@ -116,12 +129,14 @@ attr(y.Ltrunc, 'type')
 attr(yLt, 'type')
 datX = Dataset[rmNAs,]
 
+
+
 #“extreme”, “logistic”, “gaussian”, “weibull”, “exponential”, “rayleigh”, “loggaussian”, 
 # “lognormal”, “loglogistic”, “t
 
 mod.trunc <- survreg(yLt ~ as.factor(sex) + 
                        as.factor(origin) + as.factor(LvZ) + 
-                       Dom_CZ + Ext_CZ + Con_CZ +
+                       Dom_CZ + adjE + Con_CZ +
                        Agr_CZ + Neu_CZ + Opn_CZ,
                      dist = "t", data=datX
                      )
@@ -136,6 +151,15 @@ summary(mod.trunc)
 confint(mod.trunc)
 
 exp(as.numeric(mod.trunc$coefficients[7]))
+
+mod.t.adj <- survreg(yLt ~ as.factor(sex) + 
+                       as.factor(origin) + as.factor(LvZ) + 
+                       adjD + adjE + adjC +
+                       adjA + adjN + adjO,
+                     dist = "t", data=datX
+)
+
+
                  
 # Thought:                  
 # subtract year(s) from DoD of those who died before being rated...? 

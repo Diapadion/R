@@ -74,3 +74,20 @@ m0exwDoB <- survreg(yLt ~ as.factor(sex) +
                 + as.factor(origin):Ext_CZ + as.numeric(DoB):Ext_CZ
                 , dist = "t", data=datX
 )
+
+
+
+
+
+
+# testing
+
+lfit6 <- survreg(Surv(time, status)~pspline(age, df=2), cancer)
+plot(cancer$age, predict(lfit6), xlab='Age', ylab="Spline prediction")
+title("Cancer Data")
+fit0 <- coxph(Surv(time, status) ~ ph.ecog + age, cancer)
+fit1 <- coxph(Surv(time, status) ~ ph.ecog + pspline(age,3), cancer)
+fit3 <- coxph(Surv(time, status) ~ ph.ecog + pspline(age,8), cancer)
+fit0
+fit1
+fit3

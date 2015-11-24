@@ -6,8 +6,7 @@ attr(y, 'type') <- 'right'
 cox.m <- coxph(themodel)
 
 
-
-attr(yLt, 'type')
+attr(yLt, 'type') <- 'counting'
 
 cox.trunc <- coxph(yLt ~ as.factor(sex) + as.factor(origin) + as.factor(LvZ) + 
                                     Dom_CZ + Ext_CZ + Con_CZ +
@@ -37,48 +36,131 @@ pfit2 <- coxph(Surv(time, status==2) ~ log(bili) + ascites + tt(age),
 
 # what is the best model for tt'ing extraversion
 
-plot(Ext_CZ ~ age_pr, data=datX)
-fit.e <- lm(Ext_CZ ~ age_pr, data=Dataset)
+plot(Dataset$Ext_CZ ~ Dataset$age_pr_adj)
+
+fit.e <- lm(Ext_CZ ~ age_pr_adj, data=Dataset)
 summary(fit.e)
+abline(fit.e)
 
-fit.e2 <- lm(Ext_CZ ~ age_pr + I(age_pr^2), data=Dataset)
+fit.e2 <- lm(Ext_CZ ~ age_pr_adj + I(age_pr_adj^2), data=Dataset)
 summary(fit.e2)
+lines(predict(fit.e2, data.frame(age_pr_adj = 1:55)))
 
-anova(fit.e, fit.e2)
+# Quadratic is the better model
+
+# in general, E
+
+# want to predict what E would have been if all were the same age
+
+Dataset$adjE <- scale(Dataset$age_pr_adj) - Dataset$Ext_CZ 
+plot(adjE ~ Ext_CZ, data=Dataset)
+plot(adjE ~ age_pr_adj, data=Dataset)
+
+plot(Ext_CZ ~ age_pr_adj, data=Dataset)
+
+# try again 
+# Dataset$adjE <- scale(Dataset$Ext_CZ-scale(1/(1 + Dataset$age_pr_adj)))
+# which way?
+# Dataset$adjE <- scale(1/scale(Dataset$age_pr_adj) - Dataset$Ext_CZ)
+
+
+
+
+cox.trunc.adjE <- coxph(yLt ~ as.factor(sex) + as.factor(origin) + as.factor(LvZ) + 
+                       Dom_CZ + adjE + Con_CZ +
+                       Agr_CZ + Neu_CZ + Opn_CZ,  data=datX
+                     
+)
+
+fit.e <- lm(Ext_CZ ~ adjE, data=Dataset)
+summary(fit.e)
+abline(fit.e)
+
+fit.e2 <- lm(Ext_CZ ~ adjE + I(adjE^2), data=Dataset)
+summary(fit.e2)
+#plot(Ext_CZ, fitted(fit.e2), type="l", data=datX)
+#abline(fit.e2)
+lines(predict(fit.e2, data.frame(age_pr = scale(1:55), Ext_CZ = scale(1:55))))
+
+predict(fit.e2, data.frame(adjE = 0:4))
+
+
+fit.e3 <- lm(Ext_CZ ~ adjE + I(adjE^2) + I(adjE^3), data=Dataset)
+summary(fit.e3)
+lines(predict(fit.e3, data.frame(age_pr = 1:55)))
+
+anova(fit.e, fit.e2, fit.e3)
 
 cox.tt <- coxph(yLt ~ as.factor(sex) + as.factor(origin) + as.factor(LvZ) + 
                    Dom_CZ + tt(Ext_CZ) + Con_CZ +
                    Agr_CZ + Neu_CZ + Opn_CZ
                  , tt=function(x,t,...){
-                   Ext = x - 2*t
-                   
-                   #pspline(x + t)
+                   # Ext = x - scale(1/(t + 1))
+                   pspline(x + t, df= 2, nterm = 3)
                  }
-                 
                  , data=datX
 )
 
 cox.tt2 <- coxph(yLt ~ as.factor(sex) + as.factor(origin) + as.factor(LvZ) + 
+                   Dom_CZ +  tt(Ext_CZ) + Con_CZ +
+                   Agr_CZ + Neu_CZ + Opn_CZ
+                 , tt=function(x,t,...){
+                   Ext = x - t   # to scale or not to scale
+                   cbind(Ext = Ext, Ext2 = (Ext)^2)
+                   
+                   #pspline(x + t)
+                 }
+                 , data=datX, x=TRUE
+)
+cox.tt2$loglik
+
+cox.tt2.a <- coxph(yLt ~ as.factor(sex) + as.factor(origin) + as.factor(LvZ) + 
+                   Dom_CZ +  tt(Ext_CZ) + Con_CZ +
+                   Agr_CZ + Neu_CZ + Opn_CZ
+                 , tt=function(x,t,...){
+                   Ext = scale(t) - x   # to scale or not to scale
+                   #Ext = 1.74 + t * -0.15 + t^2 * 0.002 
+                   #Ext = -0.086 + Ext * -0.532 + Ext^2 * 0.037 
+                   cbind(Ext = -0.532 * Ext, Ext2 = 0.037 *(Ext)^2)
+                   #pspline(x - t, method='aic', )
+                 }
+                 , data=datX, x=TRUE
+)
+
+
+cox.tt3 <- coxph(yLt ~ as.factor(sex) + as.factor(origin) + as.factor(LvZ) + 
                                Dom_CZ +  tt(Ext_CZ) + Con_CZ +
                                Agr_CZ + Neu_CZ + Opn_CZ
                  , tt=function(x,t,...){
                    Ext = x - t
-                   cbind(Ext = Ext, Ext2 = (Ext-1)^2)
-                   
-                   #pspline(x + t)
-                 }
-                   
+                   cbind(Ext = Ext, Ext2 = (Ext-1)^2, Ext3 = (Ext-1)^3)
+                }
                 , data=datX, x=TRUE
 )
 
-tt.deets = coxph.detail(cox.tt2)
 
 summary(cox.tt2)
-anova(cox.tt2)
+anova(cox.tt2.a)
 
 ll = 2*(cox.tt$loglik - cox.trunc$loglik)[2]
 ll = 2*(cox.tt2$loglik - cox.trunc$loglik)[2]
+ll = 2*(cox.tt2$loglik - cox.tt2.a$loglik)[2]
+ll = 2*(cox.tt3$loglik - cox.tt2$loglik)[2]
 ll
 dchisq(ll, 2)
+
+### are the tt effects doing what I think they're doing?
+
+tt.deets = coxph.detail(cox.tt)
+
+colnames(tt.deets$means)
+
+plot(rownames(tt.deets$means) # these are the same as time
+     ,tt.deets$means[,5]) # Ext1
+
+plot(rownames(tt.deets$means), tt.deets$means[,6]) # Ext2
+
+plot(rownames(tt.deets$means), tt.deets$means[,9]) # Opn, for comparison
+
 
 

@@ -34,17 +34,20 @@ pfit2 <- coxph(Surv(time, status==2) ~ log(bili) + ascites + tt(age),
                    cbind(age=age, age2= (age-50)^2, age3= (age-50)^3)
                  })
 
-# what is the best model for tt'ing extraversion
+# what is the best model for tt'ing extraversion?
 
-plot(Dataset$Ext_CZ ~ Dataset$age_pr_adj)
+plot(Dataset$Ext_CZ ~ Dataset$DoB)
+
+fit.e2 <- lm(Ext_CZ ~ as.numeric(DoB) + I(as.numeric(DoB)^2), data=Dataset)
 
 fit.e <- lm(Ext_CZ ~ age_pr_adj, data=Dataset)
 summary(fit.e)
 abline(fit.e)
 
-fit.e2 <- lm(Ext_CZ ~ age_pr_adj + I(age_pr_adj^2), data=Dataset)
+fit.e2 <- lm(Ext_CZ ~ scale(age_pr_adj) + I(scale(age_pr_adj)^2), data=Dataset)
 summary(fit.e2)
 lines(predict(fit.e2, data.frame(age_pr_adj = 1:55)))
+
 
 # Quadratic is the better model
 
@@ -87,7 +90,8 @@ predict(fit.e2, data.frame(adjE = 0:4))
 
 fit.e3 <- lm(Ext_CZ ~ adjE + I(adjE^2) + I(adjE^3), data=Dataset)
 summary(fit.e3)
-lines(predict(fit.e3, data.frame(age_pr = 1:55)))
+lines(predict(fit.e3, data.frame(
+  age_pr = 1:55)))
 
 anova(fit.e, fit.e2, fit.e3)
 
@@ -95,8 +99,9 @@ cox.tt <- coxph(yLt ~ as.factor(sex) + as.factor(origin) + as.factor(LvZ) +
                    Dom_CZ + tt(Ext_CZ) + Con_CZ +
                    Agr_CZ + Neu_CZ + Opn_CZ
                  , tt=function(x,t,...){
-                   # Ext = x - scale(1/(t + 1))
-                   pspline(x + t, df= 2, nterm = 3)
+                   #Ext = x - scale(1/(t + 1))
+                   #pspline(x + t, df= 2, nterm = 3)
+                   cbind(x, x - t)
                  }
                  , data=datX
 )
@@ -105,7 +110,7 @@ cox.tt2 <- coxph(yLt ~ as.factor(sex) + as.factor(origin) + as.factor(LvZ) +
                    Dom_CZ +  tt(Ext_CZ) + Con_CZ +
                    Agr_CZ + Neu_CZ + Opn_CZ
                  , tt=function(x,t,...){
-                   Ext = x - t   # to scale or not to scale
+                   Ext = x - scale(1/(t + 1))   # to scale or not to scale
                    cbind(Ext = Ext, Ext2 = (Ext)^2)
                    
                    #pspline(x + t)
@@ -113,9 +118,16 @@ cox.tt2 <- coxph(yLt ~ as.factor(sex) + as.factor(origin) + as.factor(LvZ) +
                  , data=datX, x=TRUE
 )
 cox.tt2$loglik
+plot(cox.zph(cox.tt2))
+
+
+
+
+fit.e2 <- lm(Ext_CZ ~ scale(age_pr_adj) + I(scale(age_pr_adj)^2), data=datX)
+datX$E.resid <- fit.e2$residuals
 
 cox.tt2.a <- coxph(yLt ~ as.factor(sex) + as.factor(origin) + as.factor(LvZ) + 
-                   Dom_CZ +  tt(Ext_CZ) + Con_CZ +
+                   Dom_CZ +  E.resid + Con_CZ +
                    Agr_CZ + Neu_CZ + Opn_CZ
                  , tt=function(x,t,...){
                    Ext = scale(t) - x   # to scale or not to scale
@@ -151,16 +163,66 @@ dchisq(ll, 2)
 
 ### are the tt effects doing what I think they're doing?
 
-tt.deets = coxph.detail(cox.tt)
+tt.deets = coxph.detail(cox.tt2)
 
 colnames(tt.deets$means)
 
-plot(rownames(tt.deets$means) # these are the same as time
-     ,tt.deets$means[,5]) # Ext1
+plot(rownames(tt.deets$means), # these are the same as time
+     tt.deets$means[,5]) # Ext1
 
-plot(rownames(tt.deets$means), tt.deets$means[,6]) # Ext2
+plot(rownames(tt.deets$means), tt.deets$means[,6] + tt.deets$means[,5]) # Ext2
 
 plot(rownames(tt.deets$means), tt.deets$means[,9]) # Opn, for comparison
 
+View(cbind(tt.deets$means,scale(tt.deets$means[,5]),scale(tt.deets$means[,6])))
 
+View(cbind(tt.deets$time,tt.deets$nevent,tt.deets$nrisk,tt.deets$score))
+
+
+
+################
+
+# What happens if we clip the ends?
+
+table(Dataset$age_pr)
+
+clipper <- Dataset$age_pr_adj < 46 & Dataset$age_pr_adj > 2.2
+
+y.clip <- Surv(Dataset$age_pr_adj[clipper], Dataset$age[clipper],Dataset$status[clipper],
+                 type='counting')
+
+y.clip <- Surv(Dataset$age_pr_adj, Dataset$age, Dataset$status,
+               type='counting')
+
+# attr(y.Ltrunc, 'type') <- 'counting'
+
+rmNAs = !is.na(y.clip) & clipper
+
+y.clip = y.clip[rmNAs]
+attr(y.clip, 'type') <- 'counting'
+dx.clip = Dataset[rmNAs,]
+
+plot(dx.clip$age_pr, dx.clip$Ext_CZ)
+
+View(cbind(dx.clip$age_pr_adj[order(dx.clip$age_pr_adj)], dx.clip$Ext_CZ[order(dx.clip$age_pr_adj)],
+           1/(1 + dx.clip$age_pr_adj[order(dx.clip$age_pr_adj)])))
+
+plot(dx.clip$age_pr_adj, 1/(1 + dx.clip$age_pr_adj ))
+plot(dx.clip$age_pr_adj, dx.clip$Ext_CZ - 1/(1 + dx.clip$age_pr_adj ))
+
+plot(dx.clip$age_pr_adj, dx.clip$Ext_CZ - scale(1 - dx.clip$age_pr_adj))
+plot(dx.clip$age_pr_adj, dx.clip$Ext_CZ  ))
+
+cox.clip <- coxph(y.clip ~ as.factor(sex) + as.factor(origin) + as.factor(LvZ) + 
+                  Dom_CZ + Ext_CZ + Con_CZ +
+                  Agr_CZ + Neu_CZ + Opn_CZ
+                , tt=function(x,t,...){
+                  Ext = x - scale(1/(t + 1))
+                  #pspline(x + t, df= 2, nterm = 3)
+                  
+                  Ext = x - scale(1/(t + 1))   # to scale or not to scale
+                  #cbind(Ext = Ext, Ext2 = (Ext)^2)
+                }
+                , data=dx.clip
+)
 

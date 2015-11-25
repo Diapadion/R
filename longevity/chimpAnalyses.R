@@ -115,6 +115,7 @@ Dataset$adjN <- scale(Dataset$Neu_CZ-scale(1/(1 + Dataset$age_pr_adj)))
 
 ### LOOK ABOVE
 
+
 #y.Ltrunc <- Surv(as.numeric(Dataset$DOPRmin), as.numeric(Dataset$lastDate),Dataset$status ,
 #                 type='counting')
 y.Ltrunc <- Surv(Dataset$age_pr_adj, Dataset$age,Dataset$status,
@@ -129,6 +130,10 @@ attr(y.Ltrunc, 'type')
 attr(yLt, 'type')
 datX = Dataset[rmNAs,]
 
+# need to do something about Tara -> IMPUTE
+which(datX$chimp == 'Tara')
+datX <- datX[-353,]
+yLt <- yLt[-353]
 
 
 #“extreme”, “logistic”, “gaussian”, “weibull”, “exponential”, “rayleigh”, “loggaussian”, 

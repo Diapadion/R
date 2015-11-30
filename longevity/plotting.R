@@ -29,13 +29,18 @@ cor.test(Dataset$age_pr, Dataset$Con_CZ)
 plot(Dataset$age_pr, Dataset$Neu_CZ)
 cor.test(Dataset$age_pr, Dataset$Neu_CZ) # *
 
-
 plot(Dataset$age_pr, Dataset$Ext_CZ)
 cor.test(Dataset$age_pr, Dataset$Ext_CZ) # *
 
 plot(Dataset$DoB, Dataset$Ext_CZ)
 plot(Dataset$age, Dataset$Ext_CZ)
 plot(Dataset$age_pr_adj, Dataset$Ext_CZ)
+
+library(psych)
+
+corr.test(as.matrix(Dataset[,c(73:78)]),as.matrix(as.numeric(Dataset$DoB)), method = "spearman", adjust='BY')
+# Dom, Neu, Opn, Ext
+
 
 
 plot(Dataset$age_pr, Dataset$DoB-Dataset$age)
@@ -77,6 +82,11 @@ plot(fit.e)
 
 fit.e <- lm(Ext_CZ ~ age, data=Dataset)
 plot(fit.e)
+
+
+plot(datX$age_pr_adj, datX$Ext_CZ)
+plot(datX$age_pr_adj, datX$E.resid)
+#fit.e2 <- 
 
 
 # survfits

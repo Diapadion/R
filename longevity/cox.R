@@ -123,9 +123,6 @@ plot(cox.zph(cox.tt2))
 
 
 
-fit.e2 <- lm(Ext_CZ ~ scale(age_pr_adj) + I(scale(age_pr_adj)^2), data=datX)
-datX$E.resid <- fit.e2$residuals
-
 cox.tt2.a <- coxph(yLt ~ as.factor(sex) + as.factor(origin) + as.factor(LvZ) + 
                    Dom_CZ +  E.resid + Con_CZ +
                    Agr_CZ + Neu_CZ + Opn_CZ
@@ -150,9 +147,36 @@ cox.tt3 <- coxph(yLt ~ as.factor(sex) + as.factor(origin) + as.factor(LvZ) +
                 , data=datX, x=TRUE
 )
 
-
 summary(cox.tt2)
 anova(cox.tt2.a)
+
+
+cox.Er2 <- coxph(yLt ~ as.factor(sex) + 
+                       as.factor(origin) + as.factor(LvZ) + 
+                       Dom_CZ + E.r2.DoB + Con_CZ + #E.resid3 +
+                       Agr_CZ + Neu_CZ + Opn_CZ
+                     , data=datX)
+
+cox.Er3 <- coxph(yLt ~ as.factor(sex) + 
+                   as.factor(origin) + as.factor(LvZ) + 
+                   Dom_CZ + E.resid3 + Con_CZ + #E.resid3 +
+                   Agr_CZ + Neu_CZ + Opn_CZ
+                 , data=datX)
+
+cox.EODN.r <- coxph(yLt ~ as.factor(sex) + 
+                        as.factor(origin) + as.factor(LvZ) + 
+                        D.r3.DoB + E.r3.DoB + Con_CZ + #E.resid3 +
+                        Agr_CZ + N.r1.DoB + O.r2.DoB
+                      , data=datX)
+
+cox.EODN.r.betr <- coxph(yLt ~ as.factor(sex) + 
+                      as.factor(origin) + as.factor(LvZ) + 
+                      D.r3 + E.r3 + Con_CZ + #E.resid3 +
+                      Agr_CZ + N.r1 + O.r2
+                    , data=datX)
+
+
+
 
 ll = 2*(cox.tt$loglik - cox.trunc$loglik)[2]
 ll = 2*(cox.tt2$loglik - cox.trunc$loglik)[2]

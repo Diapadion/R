@@ -1,0 +1,18 @@
+{
+    "contents" : "# Frailty\n\n\n\n\n# O and E residulized\n\nfrail.AFT.EOr2 <- survreg(yLt ~ as.factor(sex) + \n                       as.factor(origin) +  \n                       Dom_CZ + E.r2.DoB + Con_CZ + #E.resid3 +\n                       Agr_CZ + Neu_CZ + O.r2.DoB\n                       + frailty(sample)\n                     , data=datX, dist='t') # this model is informed by LASSO\n\n\nfrail.cox.EOr2 <- coxph(yLt ~ as.factor(sex) + \n                            as.factor(origin) +  \n                            Dom_CZ + E.r2.DoB + Con_CZ + #E.resid3 +\n                            Agr_CZ + Neu_CZ + O.r2.DoB\n                          + frailty(sample)\n                          , data=datX) # this model is informed by LASSO\n\n",
+    "created" : 1448907422668.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "575508239",
+    "id" : "2D00E79A",
+    "lastKnownWriteTime" : 1448910044,
+    "path" : "C:/Users/s1229179/GitHub/R/longevity/frailty.R",
+    "project_path" : "frailty.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 9,
+    "source_on_save" : false,
+    "type" : "r_source"
+}

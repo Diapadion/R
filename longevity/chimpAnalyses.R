@@ -1,45 +1,30 @@
 # survival analyses
 
-#
 
-library(survival)
-
-Dataset <- all[(all$sample == 'AZA') 
-               | (all$sample == 'Yerkes') | (all$sample == 'Taronga'),]
-
-Dataset$origin <- droplevels(Dataset$origin)
-
-library(OutlierDC)
-
-foA <- odc(themodel, data=Dataset, method="score")
-foB <- odc(themodel, data=Dataset, method="residual")
-foC <- odc(themodel, data=Dataset, method="boxplot")
-
-fo1 <- odc(yLt ~ as.factor(sex) + 
-             as.factor(origin) + as.factor(LvZ) + 
-             Dom_CZ + Ext_CZ + Con_CZ +
-             Agr_CZ + Neu_CZ + Opn_CZ, data=datX, method="score")
-fo2 <- odc(yLt ~ as.factor(sex) + 
-             as.factor(origin) + as.factor(LvZ) + 
-             Dom_CZ + Ext_CZ + Con_CZ +
-             Agr_CZ + Neu_CZ + Opn_CZ, data=datX, method="residual")
-fo3 <- odc(yLt ~ as.factor(sex) + 
-             as.factor(origin) + as.factor(LvZ) + 
-             Dom_CZ + Ext_CZ + Con_CZ +
-             Agr_CZ + Neu_CZ + Opn_CZ, data=datX, method="boxplot")
-# seem pretty meaningless
+# library(OutlierDC)
+# 
+# foA <- odc(themodel, data=Dataset, method="score")
+# foB <- odc(themodel, data=Dataset, method="residual")
+# foC <- odc(themodel, data=Dataset, method="boxplot")
+# 
+# fo1 <- odc(yLt ~ as.factor(sex) + 
+#              as.factor(origin) + as.factor(LvZ) + 
+#              Dom_CZ + Ext_CZ + Con_CZ +
+#              Agr_CZ + Neu_CZ + Opn_CZ, data=datX, method="score")
+# fo2 <- odc(yLt ~ as.factor(sex) + 
+#              as.factor(origin) + as.factor(LvZ) + 
+#              Dom_CZ + Ext_CZ + Con_CZ +
+#              Agr_CZ + Neu_CZ + Opn_CZ, data=datX, method="residual")
+# fo3 <- odc(yLt ~ as.factor(sex) + 
+#              as.factor(origin) + as.factor(LvZ) + 
+#              Dom_CZ + Ext_CZ + Con_CZ +
+#              Agr_CZ + Neu_CZ + Opn_CZ, data=datX, method="boxplot")
+## seem pretty meaningless
 
 
 # Alex's code for finding the ideal distribution
 
 thedistributions<-c("weibull","exponential","lognormal","loglogistic")
-
-# RIGHT censoring - matching 'time' and 'event'
-
-levels(Dataset$status)[levels(Dataset$status)=="Death"] <- 1
-levels(Dataset$status)[levels(Dataset$status)=="Alive"] <- 0
-
-y <- Surv(as.numeric(Dataset$lastDate),Dataset$status)
 
 
 themodel <- (y ~ as.factor(Dataset$sex) + Dataset$age_pr + #Dataset$age + 
@@ -100,40 +85,7 @@ library(car)
 
 ### INTERVAL censoring?
 ### ... left TRUNCATION (!)
-library(flexsurv)
-
-# currently optional - my attempt to control for age effects within E
-Dataset$adjE <- scale(Dataset$Ext_CZ-scale(1/(1 + Dataset$age_pr_adj)))
-# and now O
-Dataset$adjO <- scale(Dataset$Opn_CZ-scale(1/(1 + Dataset$age_pr_adj)))
-# hell, what if we do it for all of them?
-Dataset$adjD <- scale(Dataset$Dom_CZ-scale(1/(1 + Dataset$age_pr_adj)))
-Dataset$adjC <- scale(Dataset$Con_CZ-scale(1/(1 + Dataset$age_pr_adj)))
-Dataset$adjA <- scale(Dataset$Agr_CZ-scale(1/(1 + Dataset$age_pr_adj)))
-Dataset$adjN <- scale(Dataset$Neu_CZ-scale(1/(1 + Dataset$age_pr_adj)))
-
-
-### LOOK ABOVE
-
-
-#y.Ltrunc <- Surv(as.numeric(Dataset$DOPRmin), as.numeric(Dataset$lastDate),Dataset$status ,
-#                 type='counting')
-y.Ltrunc <- Surv(Dataset$age_pr_adj, Dataset$age,Dataset$status,
-                 type='counting')
-
-# attr(y.Ltrunc, 'type') <- 'counting'
-
-rmNAs = !is.na(y.Ltrunc)
-
-yLt = y.Ltrunc[rmNAs]
-attr(y.Ltrunc, 'type')
-attr(yLt, 'type')
-datX = Dataset[rmNAs,]
-
-# need to do something about Tara -> IMPUTE
-which(datX$chimp == 'Tara')
-datX <- datX[-353,]
-yLt <- yLt[-353]
+#library(flexsurv)
 
 
 #“extreme”, “logistic”, “gaussian”, “weibull”, “exponential”, “rayleigh”, “loggaussian”, 
@@ -141,9 +93,9 @@ yLt <- yLt[-353]
 
 mod.trunc <- survreg(yLt ~ as.factor(sex) + 
                        as.factor(origin) + as.factor(LvZ) + 
-                       Dom_CZ + adjE + Con_CZ +
-                       Agr_CZ + Neu_CZ + Opn_CZ,
-                     dist = "t", data=datX
+                       Dom_CZ + Con_CZ + Ext_CZ +
+                       Agr_CZ + Neu_CZ + Opn_CZ #+ adjE
+                     ,dist = "t", data=datX
                      )
 # Log(scale)                2.061     0.0465  44.340 0.00e+00
 # maybe change from extreme to t?
@@ -208,6 +160,40 @@ fit.T1 <- survfit(yLt ~ as.factor(sex) +
                     Agr_CZ + Neu_CZ + Opn_CZ
                   , data=datX)
 
+
+# residualized E in AFT?
+
+mod.E.r2 <- survreg(yLt ~ as.factor(sex) + 
+                    as.factor(origin) + as.factor(LvZ) + 
+                    Dom_CZ + E.r2.DoB + Con_CZ + #E.resid3 +
+                    Agr_CZ + Neu_CZ + Opn_CZ
+                  , data=datX, dist='t')
+
+summary(mod.t.Er2)
+
+# O and E residulized
+
+mod.EO.r2 <- survreg(yLt ~ as.factor(sex) + 
+                       as.factor(origin) + as.factor(LvZ) + 
+                       Dom_CZ + E.r2.DoB + Con_CZ + #E.resid3 +
+                       Agr_CZ + Neu_CZ + O.r2.DoB
+                     , data=datX, dist='t') # this model is informed by LASSO
+
+
+
+# with all significantly confounded dimensions properly residualized
+mod.EODN.r <- survreg(yLt ~ as.factor(sex) + 
+                       as.factor(origin) + as.factor(LvZ) + 
+                        D.r3.DoB + E.r3.DoB + Con_CZ + #E.resid3 +
+                       Agr_CZ + N.r1.DoB + O.r2.DoB
+                     , data=datX, dist='t')
+
+
+mod.EODN.r.betr <- survreg(yLt ~ as.factor(sex) + 
+                           as.factor(origin) + as.factor(LvZ) + 
+                           D.r3 + E.r3 + Con_CZ + #E.resid3 +
+                           Agr_CZ + N.r1 + O.r2
+                         , data=datX, dist='t')
 
 
 
@@ -274,3 +260,6 @@ Result
 # 1            t        1793.482    1577.619 0.11779359 215.8636
 # 3     logistic        1797.079    1587.880 0.08042083 209.1991
 # 2      extreme        1915.704    1693.870 0.02409324 221.8341
+
+
+attr(yLt, 'type') <- 'mcounting'

@@ -1,0 +1,25 @@
+{
+    "contents" : "",
+    "created" : 1448906292324.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "ADD915DB",
+    "lastKnownWriteTime" : 7011605692497750387,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "eywlh1qnom",
+        "caption" : "netform",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=netform&cache_key=eywlh1qnom",
+        "displayedObservations" : 363,
+        "environment" : "",
+        "object" : "netform",
+        "totalObservations" : 363,
+        "variables" : 3
+    },
+    "relative_order" : 8,
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}

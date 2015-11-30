@@ -1,0 +1,25 @@
+{
+    "contents" : "",
+    "created" : 1448448293525.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "288879C9",
+    "lastKnownWriteTime" : 7011605692497750387,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "oeywlh1qno",
+        "caption" : "datX",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=datX&cache_key=oeywlh1qno",
+        "displayedObservations" : "361",
+        "environment" : "",
+        "object" : "datX",
+        "totalObservations" : "361",
+        "variables" : "85"
+    },
+    "relative_order" : 7,
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}

@@ -7,6 +7,7 @@ cox.m <- coxph(themodel)
 
 
 attr(yLt, 'type') <- 'counting'
+attr(yLt, 'type') <- 'mcounting'
 
 cox.trunc <- coxph(yLt ~ as.factor(sex) + as.factor(origin) + as.factor(LvZ) + 
                                     Dom_CZ + Ext_CZ + Con_CZ +

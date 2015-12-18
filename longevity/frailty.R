@@ -1,7 +1,12 @@
 # Frailty
 
 
-
+frail.AFT <- survreg(yLt ~ as.factor(sex) + 
+                          as.factor(origin) +  
+                          Dom_CZ + Ext_CZ + Con_CZ + #E.resid3 +
+                          Agr_CZ + Neu_CZ + Opn_CZ
+                        + frailty(sample)
+                        , data=datX, dist='t') # this model is informed by LASSO
 
 # O and E residulized
 

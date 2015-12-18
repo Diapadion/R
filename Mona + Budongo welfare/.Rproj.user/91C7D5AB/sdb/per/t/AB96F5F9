@@ -1,0 +1,25 @@
+{
+    "contents" : "",
+    "created" : 1449771757479.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "AB96F5F9",
+    "lastKnownWriteTime" : 7011605692497750387,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "5akx7dtnou",
+        "caption" : "scans1",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=scans1&cache_key=5akx7dtnou",
+        "displayedObservations" : 5741,
+        "environment" : "",
+        "object" : "scans1",
+        "totalObservations" : 5741,
+        "variables" : 47
+    },
+    "relative_order" : 10,
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}

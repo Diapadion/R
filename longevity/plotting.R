@@ -96,3 +96,10 @@ plot(survfit(y ~ age_pr, data=Dataset))
 
 plot(survfit(yLt ~ Ext_CZ, data=datX))
 
+
+
+# Wild vs. Captive 
+plot(datX$DoB, datX$origin)
+plot(datX$age_pr_adj, datX$origin)
+plot(datX$age, datX$origin)
+

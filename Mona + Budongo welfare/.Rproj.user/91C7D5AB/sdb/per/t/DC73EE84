@@ -1,0 +1,25 @@
+{
+    "contents" : "",
+    "created" : 1449753243205.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "DC73EE84",
+    "lastKnownWriteTime" : 7011605692497750387,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "tag50thdi7",
+        "caption" : "focals1",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=focals1&cache_key=tag50thdi7",
+        "displayedObservations" : 253,
+        "environment" : "",
+        "object" : "focals1",
+        "totalObservations" : 253,
+        "variables" : 71
+    },
+    "relative_order" : 8,
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}

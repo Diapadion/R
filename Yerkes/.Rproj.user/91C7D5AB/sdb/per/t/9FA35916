@@ -1,0 +1,25 @@
+{
+    "contents" : "",
+    "created" : 1449067442706.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "9FA35916",
+    "lastKnownWriteTime" : 7011605692497750387,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "xcbzhf2fas",
+        "caption" : "midja_c",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=midja_c&cache_key=xcbzhf2fas",
+        "displayedObservations" : 382,
+        "environment" : "",
+        "object" : "midja_c",
+        "totalObservations" : 382,
+        "variables" : 1609
+    },
+    "relative_order" : 7,
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}

@@ -92,7 +92,7 @@ library(car)
 # “lognormal”, “loglogistic”, “t
 
 mod.trunc <- survreg(yLt ~ as.factor(sex) + 
-                       as.factor(origin) + as.factor(LvZ) + 
+                       as.factor(origin) + # as.factor(LvZ) + 
                        Dom_CZ + Con_CZ + Ext_CZ +
                        Agr_CZ + Neu_CZ + Opn_CZ #+ adjE
                      ,dist = "t", data=datX

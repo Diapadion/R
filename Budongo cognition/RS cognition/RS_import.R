@@ -38,7 +38,7 @@ for (i in 1:length(temp)){
 trainAA2$stage = "AA2"
 
 #
-setwd("../2-choice ABpairs2_fine/")
+setwd('../2-choice ABpairs2_fine/')
 temp = list.files(pattern="*.csv")
 
 trainABp2 <- NULL
@@ -67,7 +67,7 @@ for (i in 1:length(temp)){
 }
 trainABp4$stage = "ABp4"
 
-#
+###
 setwd("../../testing/all/")
 temp = list.files(pattern="*.csv")
 
@@ -82,7 +82,7 @@ RSdat = rbind(trainAA1, trainAA2, trainABp2, trainABp3, trainABp4, testing)
 
 
 ## importing personality
-setwd("../../")
+setwd('Z:/chimp cognitive data/RS/')
 aggPers = read.csv("aggregatedPers.csv", header=TRUE)
 
 # two groups:

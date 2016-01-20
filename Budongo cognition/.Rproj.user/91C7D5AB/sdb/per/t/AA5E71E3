@@ -10,14 +10,14 @@
     "path" : null,
     "project_path" : null,
     "properties" : {
-        "cacheKey" : "6juj8z6et3",
+        "cacheKey" : "1u449xizol",
         "caption" : "aggPers",
-        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=aggPers&cache_key=6juj8z6et3",
-        "displayedObservations" : 18,
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=aggPers&cache_key=1u449xizol",
+        "displayedObservations" : "18",
         "environment" : "",
         "object" : "aggPers",
-        "totalObservations" : 18,
-        "variables" : 9
+        "totalObservations" : "18",
+        "variables" : "11"
     },
     "relative_order" : 5,
     "source_on_save" : false,

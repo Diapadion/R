@@ -1,0 +1,18 @@
+{
+    "contents" : "### new LASSO technique\n\n# run the other files first:\n# \n\nload(\"C:/Users/s1229179/GitHub/R/moneyline/.RData\")\n\n# one day, the above will not be necessary\n\n\nlibrary(glmnet)\n\n# 2014\n\nnetform14 <- droplevels(kpDiffs14)\n\nnetform14 = model.matrix(~ . - 1, data=netform14)\n\n\nnet.diff.14 <- glmnet(netform14[,c(64:83)], netform14[,84], family=\"binomial\",\n                      standardize=T, alpha = 1,lambda.min.ratio=0.00001,  nlambda=1000)\n  \n \nnet.diff.14.cv <- cv.glmnet(netform14[,c(64:83)], netform14[,84], family=\"binomial\") \nplot(net.diff.14.cv)\n\ncoef(net.diff.14, \n     s=net.diff.14.cv$lambda.min\n     #s=net.diff.14.cv$lambda.1se\n)\n\n\n\n\n# 2013\n\nnetform13 <- droplevels(kpDiffs13)\n\nnetform13 = model.matrix(~ . - 1, data=netform13)\n\n\nnet.diff.13 <- glmnet(netform13[,c(64:81)], netform13[,82], family=\"binomial\",\n                      standardize=T, alpha = 1,lambda.min.ratio=0.00001,  nlambda=1000)\n\n\nnet.diff.13.cv <- cv.glmnet(netform13[,c(64:81)], netform13[,82], family=\"binomial\") \nplot(net.diff.13.cv)\n\ncoef(net.diff.13, \n     s=net.diff.13.cv$lambda.min\n     #s=net.diff.14.cv$lambda.1se\n)\n\n\n\n# 2012\n\nnetform12 <- droplevels(kpDiffs12)\n\nnetform12 = model.matrix(~ . - 1, data=netform12)\n\n\nnet.diff.12 <- glmnet(netform12[,c(64:81)], netform12[,82], family=\"binomial\",\n                      standardize=T, alpha = 1,lambda.min.ratio=0.00001,  nlambda=1000)\n\n\nnet.diff.12.cv <- cv.glmnet(netform12[,c(64:81)], netform12[,82], family=\"binomial\") \nplot(net.diff.12.cv)\n\ncoef(net.diff.12, \n     s=net.diff.12.cv$lambda.min\n     #s=net.diff.14.cv$lambda.1se\n)\n\n\n",
+    "created" : 1452609739595.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2471918052",
+    "id" : "F36C7CF1",
+    "lastKnownWriteTime" : 1452611970,
+    "path" : "C:/Users/s1229179/GitHub/R/moneyline/lasso.R",
+    "project_path" : "lasso.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "type" : "r_source"
+}

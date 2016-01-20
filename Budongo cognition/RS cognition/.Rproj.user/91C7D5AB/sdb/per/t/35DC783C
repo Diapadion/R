@@ -1,0 +1,25 @@
+{
+    "contents" : "",
+    "created" : 1453215385905.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "35DC783C",
+    "lastKnownWriteTime" : 7011605692497750387,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "o9ahgr2lhb",
+        "caption" : "TraTri",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=TraTri&cache_key=o9ahgr2lhb",
+        "displayedObservations" : "23",
+        "environment" : "",
+        "object" : "TraTri",
+        "totalObservations" : "23",
+        "variables" : "3"
+    },
+    "relative_order" : 6,
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}

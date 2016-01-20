@@ -1,0 +1,25 @@
+{
+    "contents" : "",
+    "created" : 1452609855637.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "1BB7BB9D",
+    "lastKnownWriteTime" : 7011605692497750387,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "x6xo91g9fd",
+        "caption" : "bracket12",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=bracket12&cache_key=x6xo91g9fd",
+        "displayedObservations" : 64,
+        "environment" : "",
+        "object" : "bracket12",
+        "totalObservations" : 64,
+        "variables" : 31
+    },
+    "relative_order" : 5,
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}

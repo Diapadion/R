@@ -1,0 +1,25 @@
+{
+    "contents" : "",
+    "created" : 1453218529457.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "54816F84",
+    "lastKnownWriteTime" : 7011605692497750387,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "evbx345z6c",
+        "caption" : "RSdat",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=RSdat&cache_key=evbx345z6c",
+        "displayedObservations" : 7292,
+        "environment" : "",
+        "object" : "RSdat",
+        "totalObservations" : 7292,
+        "variables" : 15
+    },
+    "relative_order" : 8,
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}

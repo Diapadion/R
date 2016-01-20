@@ -75,6 +75,8 @@ mod14 <- lm(log(bracket14$wins + 1) ~ kp14$Rank + kp14$Pyth + kp14$AdjO #+ kp14$
 
 mod14.st <- step(mod14)
 
+
+
 #mod2.st <- step(mod2)
 
 

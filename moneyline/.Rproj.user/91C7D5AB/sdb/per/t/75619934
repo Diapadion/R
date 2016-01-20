@@ -1,0 +1,25 @@
+{
+    "contents" : "",
+    "created" : 1452610371447.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "75619934",
+    "lastKnownWriteTime" : 7011605692497750387,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "rt06g3smgk",
+        "caption" : "victDiffs14",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=victDiffs14&cache_key=rt06g3smgk",
+        "displayedObservations" : "32",
+        "environment" : "",
+        "object" : "victDiffs14",
+        "totalObservations" : "32",
+        "variables" : "22"
+    },
+    "relative_order" : 9,
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}

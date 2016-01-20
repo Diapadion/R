@@ -1,0 +1,25 @@
+{
+    "contents" : "",
+    "created" : 1452611731628.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "C86397F8",
+    "lastKnownWriteTime" : 7011605692497750387,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "bx758sapp3",
+        "caption" : "netform13",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=netform13&cache_key=bx758sapp3",
+        "displayedObservations" : 32,
+        "environment" : "",
+        "object" : "netform13",
+        "totalObservations" : 32,
+        "variables" : 82
+    },
+    "relative_order" : 13,
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}

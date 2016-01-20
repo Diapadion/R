@@ -4,6 +4,29 @@
 # currently this file cannot be Source'd
 
 
+DMAeng <- read.csv("DMA_engage.csv")
+
+DMAeng = merge(DMAeng,aggPers, by.x= "Chimp", "Chimp")
+DMAeng$Engagement <- as.ordered(DMAeng$Engagement)
+
+library(ordinal)
+# because clmm is the only mixed-mod funct I know of
+
+
+cmm.1 <- clmm(Engagement ~ Dominance + Conscientiousness + Neuroticism + Extraversion + 
+              Agreeableness + Openness + Pod
+            + (1 | Date) + (1|Chimp), data=DMAeng)
+
+cmm.1.nA <- clmm(Engagement ~ Dominance + Conscientiousness + Neuroticism + Extraversion + 
+                Openness + Pod
+              + (1 | Date) + (1|Chimp), data=DMAeng)
+
+
+
+####### Everything below is outdated, based on general categorization
+####### not the individuals days' data
+
+
 ### engagement ideas
 
 # never involved {0}
@@ -40,10 +63,8 @@ mp = barplot(height=as.matrix(tm[3:8]),beside=TRUE,
              #legend.text=c('Never participated','Incomplete participation','Completed full sessions')
               ,ylim=c(0,7))
 
-library(Hmisc)
-#errbar(ts)
-
 segments(c(mp), c(t(t(tm[3:8] - ts[3:8]))), c(mp),c(t(t(tm[3:8] + ts[3:8]))), lwd=2)
+
 
 vioplot(aggPers[,2:7],aggPers[,8])
 

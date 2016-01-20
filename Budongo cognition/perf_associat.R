@@ -77,6 +77,8 @@ mod.g <- glm(LBdata$Accuracy ~ LBlong, family = binomial(link = 'probit'))
 mod.gm1 <- glmer(Accuracy ~ dom + con + opn + neu + agr + ext +  (1 | Group.1),
                  family = binomial, data=cz_bin_pers 
 )
+ci.accu1 <- confint(mod.gm1, method='Wald')
+
 library(texreg)
 ext.gm1=extract(mod.gm1, include.aic = FALSE, include.bic=FALSE, include.dic=FALSE,
                 include.deviance=FALSE, include.loglik=FALSE,include.nobs=FALSE,
@@ -89,14 +91,13 @@ gm1.tbl = htmlreg(ext.gm1,ci.force=TRUE, custom.model.names='Chimpanzee Accuracy
                                       'Neuroticism','Agreeableness','Extraversion')
                   )
 write(gm1.tbl,"PerfGLM.html")
-# library(stargazer)
-# stargazer(mod.gm1, type="html")
 
 
 
 mod.gm2 <- glmer(Accuracy ~ dom + neu + agr + ext + con + opn + Trial + (1 | Group.1),
   family = binomial, data=cz_bin_pers 
   )
+ci.accu2 <- confint(mod.gm2, method='Wald')
 
 
 mod.gm3 <- glmer(Accuracy ~ Trial + (1 | Group.1),
@@ -116,9 +117,12 @@ mod.gm2a <- glmer(Accuracy ~ dom + neu + agr + ext + con + opn + Trial + s(Sessi
 
 
 anova(mod.gm1,mod.gm2,mod.gm3,mod.gm4
-      #,mod.gm2a
+      ,mod.gm2a
       ) # so gm2 is the best model
 # can't step is with lme4
+library(bbmle)
+BICtab(mod.gm1,mod.gm2,weights=TRUE, delta=TRUE, base=TRUE, logLik=TRUE, sort=TRUE)
+
 library(lmerTest)
 library(car)
 #mod.gm2s <- step(mod.gm2a) # errrrgggh this would be awful nice
@@ -216,7 +220,7 @@ mod.pt1 <- lmer(log(procTime) ~ dom + neu + opn + agr + con + ext + (1 | Group.1
 mod.pt2 <- lmer(log(procTime) ~ Trial + dom + neu + opn + agr + con + ext + (1 | Group.1)
                , data=cz_bin_pers
                )
-mod.pt3 <- lmer(logprocTime ~ Trial + (1 | Group.1)
+mod.pt3 <- lmer(log(procTime) ~ Trial + (1 | Group.1)
                 , data=cz_bin_pers
 )
 
@@ -227,16 +231,21 @@ mod.it1 <- lmer(log(inspecTime) ~ dom + neu + opn + agr + con + ext + (1 | Group
 mod.it2 <- lmer(log(inspecTime) ~ dom + neu + opn + agr + con + ext + Trial + (1 | Group.1)
                 , data=cz_bin_pers
 )
-mod.it3 <- lmer(loginspecTime ~ Trial + (1 | Group.1)
+mod.it3 <- lmer(log(inspecTime) ~ Trial + (1 | Group.1)
                 , data=cz_bin_pers
 )
 
 # now with corrects (rewarded) only
 
-mod.ptrw.1 <- lmer(procTime.1.log ~ dom + neu + opn + agr + con + ext + (1 | Group.1)
-                           , data=cz_bin_pers
+mod.ptrw.1 <- lmer(log(procTime) ~ dom + neu + opn + agr + con + ext + (1 | Group.1)
+                           , data=cz_bin_pers[cz_bin_pers$Accuracy==1,]
 )
 
+mod.itrw.1 <- lmer(log(inspecTime) ~ dom + neu + opn + agr + con + ext + (1 | Group.1)
+                   , data=cz_bin_pers[cz_bin_pers$Accuracy==1,]
+)
+
+# nada
 
 
 library(corrgram)

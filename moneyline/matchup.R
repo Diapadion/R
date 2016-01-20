@@ -19,7 +19,8 @@ full14 <- full14[match(order14,full14$Team),]
 
 victDiffs14 <- NULL
 
-dataOverV <- c(1,5:21,23:24)
+dataOverV <- c(1,5:21,23:24) # this selects out the columns of data we want...
+# probably needs to be changed depending on the year (?)
 
 for (i in seq(1,dim(full14)[1],2)){
   if (full14$result[i] == 'W'){
@@ -182,6 +183,8 @@ kp12 <- kp12[match(order12,kp12$Team),]
 ### now to compute differences...
 
 kpDiffs12 <- NULL
+
+dataOverV <- c(1,5:21,23:24)
 
 for (i in seq(1,dim(kp12)[1],2)){
   kpdat = kp12[i+1,dataOverV]-kp12[i,dataOverV]

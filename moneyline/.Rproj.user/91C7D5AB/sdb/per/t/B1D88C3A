@@ -1,0 +1,25 @@
+{
+    "contents" : "",
+    "created" : 1452610903495.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "B1D88C3A",
+    "lastKnownWriteTime" : 7011605692497750387,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "fdeqo97bbx",
+        "caption" : "kpDiffs13",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=kpDiffs13&cache_key=fdeqo97bbx",
+        "displayedObservations" : 32,
+        "environment" : "",
+        "object" : "kpDiffs13",
+        "totalObservations" : 32,
+        "variables" : 21
+    },
+    "relative_order" : 11,
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}

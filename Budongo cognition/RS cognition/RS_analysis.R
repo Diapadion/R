@@ -14,6 +14,15 @@
 
 #######
 
+### [0] Correlations among personality domains
+
+# dependent on [1] code
+
+library(Hmisc)
+rcorr(as.matrix(intLvlPers2[,c(4:9)]), type="spearman")
+
+
+
 ### [1] Interaction levels
 
 # this section may be doomed to failure, and ought to be only used for visualization
@@ -24,19 +33,20 @@
 # c. CI, EV, PA
 # d. FK, KL, PE 
 
-RSpartic = as.ordered(c(2,1,1,1,2,3,0,3,0,0,1,1,0,2,3,0,0,0))
-intLvlPers = cbind(aggPers,RSpartic)
+# RSpartic = as.ordered(c(2,1,1,1,2,3,0,3,0,0,1,1,0,2,3,0,0,0))
+# intLvlPers = cbind(aggPers,RSpartic)
+# 
+# RStm <- aggregate(intLvlPers, by=list(intLvlPers$RSpartic), FUN=mean)
+# RSts <- aggregate(intLvlPers, by=list(intLvlPers$RSpartic), FUN=sd)
+# 
+# mp = barplot(height=as.matrix(RStm[4:9]),beside=TRUE,
+#              #legend.text=c('Never participated','Incomplete participation','Completed full sessions')
+#              ,ylim=c(0,7))
+# 
+# segments(c(mp), c(t(t(RStm[4:9] - RSts[4:9]))), c(mp),c(t(t(RStm[4:9] + RSts[4:9]))), lwd=2)
 
-RStm <- aggregate(intLvlPers, by=list(intLvlPers$RSpartic), FUN=mean)
-RSts <- aggregate(intLvlPers, by=list(intLvlPers$RSpartic), FUN=sd)
 
-mp = barplot(height=as.matrix(RStm[4:9]),beside=TRUE,
-             #legend.text=c('Never participated','Incomplete participation','Completed full sessions')
-             ,ylim=c(0,7))
-
-segments(c(mp), c(t(t(RStm[4:9] - RSts[4:9]))), c(mp),c(t(t(RStm[4:9] + RSts[4:9]))), lwd=2)
-
-### a possible addition:
+### addition:
 ### compare individuals who never participated, to those who did (to some degree)
 
 ## also... Lyndsey was alive
@@ -50,7 +60,9 @@ RSts <- aggregate(intLvlPers2, by=list(intLvlPers2$RSpartic), FUN=sd)
 
 mp = barplot(height=as.matrix(RStm[5:10]),beside=TRUE,
              #legend.text=c('Never participated','Incomplete participation','Completed full sessions')
-             ,ylim=c(0,7))
+             ,ylim=c(0,7),
+             names.arg=c('Dominance','Extraversion','Conscientiousness',
+                         'Agreeableness','Neuroticism','Openness'))
 
 segments(c(mp), c(t(t(RStm[5:10] - RSts[5:10]))), c(mp),c(t(t(RStm[5:10] + RSts[5:10]))), lwd=2)
 
@@ -64,8 +76,8 @@ o.t = t.test(intLvlPers2$Openness[intLvlPers2$RSpartic==1],intLvlPers2$Openness[
 d.t = t.test(intLvlPers2$Dominance[intLvlPers2$RSpartic==1],intLvlPers2$Dominance[intLvlPers2$RSpartic==0])
 # yes
 
-
-
+p.adjust(c(0.002396, 0.02227, 0.03598, 0.04071), 'BH', 4)
+# okay, all pass, post correction
 
 
 # starting from 'scratch'
@@ -162,22 +174,26 @@ mod.polr.all <- polr(RSpartic ~ Extraversion + Openness + Dominance + Neuroticis
 # ending in either completion of the training or dropout
 
 
-#TraTri = temp[temp$stage!='test',]
-#TraTri.1 = TraTri[TraTri$Correctness==' Correct',]
+TraTri = temp[temp$stage!='test',]
+TraTri.1 = TraTri[TraTri$Correctness==' Correct',]
 
 library(plyr)
 #TraTri = aggregate(TraTri, by=list('chimp','stage'), FUN=count)
 
+##### I don't think anything other the line below is needed
 TraTri = count(temp, c("chimp","stage"))
+
 TraTri.1 = count(TraTri.1, c("chimp","stage"))
 TraTri$correct = TraTri.1$freq
 
 TraTri$prop = TraTri$correct / TraTri$freq
-
-TraTri = merge(TraTri,aggPers, by.x= "chimp", "Chimp")
+#####
 
 # adding a column for whether the chimp dropped out or not (0: in, 1: dropped)
-TraTri = cbind(TraTri, dropped = c(0,0,0,1,1,0,0,0,0,1,0,0,0,1,0,0,0,1,0,0,1,0,0,0,0,1,0,0,1))
+# the below seems to be more wrong than it should be ... this may be an aggregation effect
+#TraTri = cbind(TraTri, dropped = c(0,0,0,1,1,0,0,0,0,1,0,0,0,1,0,0,0,1,0,0,1,0,0,0,0,1,0,0,1))
+
+TraTri = cbind(TraTri, dropped = c(0,0,0,1,1,0,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,1,0,0,0,0,1))
 
 TraTri = merge(TraTri,aggPers, by.x= "chimp", "Chimp")
 
@@ -215,10 +231,22 @@ RS.drop.aft.frail <- survreg(dOut ~ Dominance + Conscientiousness + Openness + N
                      Agreeableness + Extraversion +
                        frailty(stage)
                        , data = TraTri, dist='lognormal')
+
+summary(RS.drop.aft.frail)
 # Significant effect for Conscientiousness
 # high Conscientious chimps stay in the task for more trials
 
+library(texreg)
 
+ext.RSdaf=extract(RS.drop.aft.frail, include.aic = FALSE, include.bic=FALSE, include.dic=FALSE,
+                include.deviance=FALSE, include.loglik=FALSE,include.nobs=FALSE,
+                include.groups=FALSE,include.variance=FALSE)
+
+RS2surv.tbl = htmlreg(list(ext.RSdaf), custom.model.names=c('Std. Estimate'), ci.force=TRUE,
+                  caption = "", groups=NULL, digits=3, ci.force.level = 0.95, ci.test=NULL,
+                  bold=TRUE, custom.note = '')#, reorder.coef = c(1:5,8,9,6,11,10,7),
+                  #custom.coef.names=c(NA,"Age","Age<sup>2</sup>","Sex",NA,NA,NA,NA,NA,NA,NA))
+write(RS2surv.tbl,"../presentation images/RS2surv.html")
 
 # Cox to double check
 RS.drop.cox <- coxph(dOut ~ Dominance + Conscientiousness + Openness + Neuroticism +
@@ -265,9 +293,19 @@ rs.glm1.0 <- glmer(Correctness ~ Dominance + Conscientiousness + Openness + Neur
                    , data = temp, family = binomial
 )
 
-confint(rs.glm1.0, method="boot")
+# confint(rs.glm1.0, method="boot")
 # annoying, Wald is the only one which works
 rs.accu.ci = confint(rs.glm1.0, method="Wald")
+
+ext.RSaccu=extract(rs.glm1.0, include.aic = FALSE, include.bic=FALSE, include.dic=FALSE,
+                  include.deviance=FALSE, include.loglik=FALSE,include.nobs=FALSE,
+                  include.groups=FALSE,include.variance=FALSE)
+
+RS2accu.tbl = htmlreg(list(ext.RSaccu), custom.model.names=c('Std. Estimate'), ci.force=TRUE,
+                      caption = "", groups=NULL, digits=3, ci.force.level = 0.95, ci.test=NULL,
+                      bold=TRUE, custom.note = '')
+
+write(RS2accu.tbl,"../presentation images/RS2accu.html")
 
 # improve grouping with regards to AB,AA and training stages
 # turns out not to be helpful
@@ -322,7 +360,7 @@ for (i in 1:dim(temp)[1]){
 # okay that function makes it work
 #countCharOccurrences('/', as.character(temp$Coordinates[728]))
 
-
+# below is the most consistently defined model, I think.
 rs.touch.lmm <- glmer(touches ~ Dominance + Conscientiousness + Openness + Neuroticism +
                       Agreeableness + Extraversion +
                       (1 | chimp) + (1 | stage) + (1 | TrialType) #+ (1 | Section) + (1 | depend)
@@ -334,7 +372,7 @@ confint(rs.touch.lmm, method='Wald')
 
 rs.touch.lmm.1 <- glmer(touches ~ Dominance + Conscientiousness + Openness + Neuroticism +
                         Agreeableness + Extraversion +
-                        (1 | chimp) + (1 | stage) #+ (1 | TrialType) #+ (1 | Section) + (1 | depend)
+                        (1 | chimp) + (1 | stage) + (1 | TrialType) #+ (1 | Section) + (1 | depend)
                       #, data = temp
                       , data = temp[temp$Correctness==' Correct',]
                       , family = poisson(link = "log")
@@ -343,7 +381,7 @@ ci.touches.1 <- confint(rs.touch.lmm.1, method='Wald')
 
 rs.touch.lmm.0 <- glmer(touches ~ Dominance + Conscientiousness + Openness + Neuroticism +
                         Agreeableness + Extraversion +
-                        (1 | chimp) + (1 | stage) #+ (1 | TrialType) + (1 | Section) + (1 | depend)
+                        (1 | chimp) + (1 | stage) + (1 | TrialType) #+ (1 | Section) + (1 | depend)
                       #, data = temp
                       , data = temp[temp$Correctness==' Incorrect',]
                       , family = poisson(link = "log")

@@ -3,6 +3,8 @@
 
 # currently this file cannot be Source'd
 
+# [1] The bar plots of the chimps' interactions
+
 
 DMAeng <- read.csv("DMA_engage.csv")
 
@@ -12,14 +14,54 @@ DMAeng$Engagement <- as.ordered(DMAeng$Engagement)
 library(ordinal)
 # because clmm is the only mixed-mod funct I know of
 
+# with the individual dimensions
+cmm.D <- clmm(Engagement ~ Dominance
+              + (1 | Date) + (1|Chimp) + (1|Pod), data=DMAeng)
 
-cmm.1 <- clmm(Engagement ~ Dominance + Conscientiousness + Neuroticism + Extraversion + 
+
+# with all of them included
+
+cmm.1 <- clmm(Engagement ~ 1 + Dominance + Conscientiousness + Neuroticism + Extraversion + 
               Agreeableness + Openness + Pod
             + (1 | Date) + (1|Chimp), data=DMAeng)
 
 cmm.1.nA <- clmm(Engagement ~ Dominance + Conscientiousness + Neuroticism + Extraversion + 
                 Openness + Pod
               + (1 | Date) + (1|Chimp), data=DMAeng)
+
+cmm.2 <- clmm(Engagement ~ Dominance + I(Dominance^2) + Conscientiousness + Neuroticism + I(Neuroticism^2) + Extraversion + 
+                         Agreeableness + Openness + Pod
+              + (1 | Date) + (1|Chimp), data=DMAeng)
+
+library(bbmle)  
+AICctab(cmm.1, cmm.1.nA, cmm.2, weights=T, delta=T, base=T, logLik=T, sort=T)  
+# model 1 is the best
+summary(cmm.1)
+
+ci.DMApartic <- confint(cmm.1)
+
+
+library(texreg)
+ext.cmm1=extract(cmm.1, include.aic = FALSE, include.bic=FALSE, include.dic=FALSE,
+                 include.deviance=FALSE, include.loglik=FALSE,include.nobs=FALSE,
+                 include.groups=FALSE,include.variance=FALSE)
+pgm1.tbl = htmlreg(ext.pgm1,ci.force=TRUE, custom.model.names='Time spent in pod',
+                   caption = "", groups=NULL, digits=3, ci.force.level = 0.95, ci.test=NULL,
+                   bold=TRUE, custom.note = '', 
+                   #reorder.coef = c(1:5,8,9,6,11,10,7),
+                   custom.coef.names=c(NA,'Dominance','Neuroticism','Agreeableness','Extraversion',
+                                       'Conscientiousness','Openness')
+)
+write(pgm1.tbl,"InPodPGLM.html")
+
+
+
+library(rms)
+library(DAAG)
+vif(cmm.1)
+
+
+#vif.mer(cmm.1)
 
 
 
@@ -42,28 +84,23 @@ cmm.1.nA <- clmm(Engagement ~ Dominance + Conscientiousness + Neuroticism + Extr
 participat = as.factor(c(2,0,2,1,1,2,0,2,0,0,2,1,0,1,1,1,0,0))
 aggPers = cbind(aggPers, participat)
 
-# changing column names
-
-
-# GLM(?)
-
-mod.ord.e1 <- polr(participat ~ dom + neu, data = aggPers)
-
+## still useful for visualization
 
 tm <- aggregate(aggPers, by=list(aggPers$participat), FUN=mean)
 ts <- aggregate(aggPers, by=list(aggPers$participat), FUN=sd)
 
 
-library(rpanel)
-rp.ancova(aggPers$dom, aggPers$participat)
-
-
-
 mp = barplot(height=as.matrix(tm[3:8]),beside=TRUE,
-             #legend.text=c('Never participated','Incomplete participation','Completed full sessions')
+             #legend.text=c('Never participated','Incomplete participation','Completed full sessions'),
+             names.arg=c('Dominance','Extraversion','Conscientiousness',
+                         'Agreeableness','Neuroticism','Openness')
               ,ylim=c(0,7))
 
 segments(c(mp), c(t(t(tm[3:8] - ts[3:8]))), c(mp),c(t(t(tm[3:8] + ts[3:8]))), lwd=2)
+legend(legend = c('Never participated','Incomplete participation','Completed full sessions'),
+       x = 2.5, y = 2,
+       fill=c('grey28','grey58','grey88'))
+       
 
 
 vioplot(aggPers[,2:7],aggPers[,8])

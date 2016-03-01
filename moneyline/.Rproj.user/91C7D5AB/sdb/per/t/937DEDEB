@@ -1,0 +1,25 @@
+{
+    "contents" : "",
+    "created" : 1453915651545.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "937DEDEB",
+    "lastKnownWriteTime" : 7011605692497750387,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "eyaxdsym2c",
+        "caption" : "stack14",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=stack14&cache_key=eyaxdsym2c",
+        "displayedObservations" : "124",
+        "environment" : "",
+        "object" : "stack14",
+        "totalObservations" : "124",
+        "variables" : "24"
+    },
+    "relative_order" : 8,
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}

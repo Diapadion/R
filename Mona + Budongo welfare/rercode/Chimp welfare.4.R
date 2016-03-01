@@ -10,6 +10,7 @@ library(MASS)
 
 swbwel=read.csv("Chimp welfare ratings.scrubbed.4.csv")
 
+
 num_observations <- as.data.frame(table(swbwel$Chimp))
 num_observations
 names(num_observations)[1] <- "Chimp"

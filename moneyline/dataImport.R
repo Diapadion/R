@@ -60,6 +60,9 @@ for (j in 1 : dim(bracket14)[1]) {
   
 }
 
+
+
+
 #inc(bracket14$wins[bracket14$Team.1[2]==bracket14$Team])
 
 # sort both df's

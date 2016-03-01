@@ -1,4 +1,5 @@
 {
+    "collab_server" : "",
     "contents" : "",
     "created" : 1453314881713.000,
     "dirty" : false,
@@ -7,19 +8,21 @@
     "hash" : "0",
     "id" : "A56FB7E0",
     "lastKnownWriteTime" : 7011605692497750387,
+    "last_content_update" : 0,
     "path" : null,
     "project_path" : null,
     "properties" : {
-        "cacheKey" : "4w3jx9va4r",
+        "cacheKey" : "ohyb4fluc4",
         "caption" : "intLvlPers2",
-        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=intLvlPers2&cache_key=4w3jx9va4r",
-        "displayedObservations" : 19,
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=intLvlPers2&cache_key=ohyb4fluc4",
+        "displayedObservations" : "19",
         "environment" : "",
         "object" : "intLvlPers2",
-        "totalObservations" : 19,
-        "variables" : 11
+        "totalObservations" : "19",
+        "variables" : "11"
     },
     "relative_order" : 10,
     "source_on_save" : false,
+    "source_window" : "",
     "type" : "r_dataframe"
 }

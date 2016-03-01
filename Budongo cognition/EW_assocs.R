@@ -40,8 +40,13 @@ mew.gm1 = glm(EWpartic ~ dom + con + neu + ext + agr + opn,
 c.t = t.test(aggPers$Conscientiousness[aggPers$EWpartic==1],aggPers$Conscientiousness[aggPers$EWpartic==0])
 # the above is now borderline
 n.t = t.test(aggPers$Neuroticism[aggPers$EWpartic==1],aggPers$Neuroticism[aggPers$EWpartic==0]) # nope
+# this one doesn't actually meet the 'non-overlapping bars' criteria
+# ... exclude it?
 o.t = t.test(aggPers$Openness[aggPers$EWpartic==1],aggPers$Openness[aggPers$EWpartic==0]) # yep
 
+p.adjust(c(c.t$p.value, n.t$p.value, o.t$p.value), 'BH', 3)
+# none of these pass correction
+# n.t$p.value, # hmmmmm
 
 
 #2) Time spent around the apparatus
@@ -74,6 +79,10 @@ toSecs <- function(u,v = (Sys.Date()-1/24)) {
          units='secs')
 }
 
+## in lieu of fixing the time conversion functions, we have a backup
+
+tAround <- tAround.bak
+
 
 # toSecs should work since changed, but we will have to check this again eventually
 inPodL = rbind(
@@ -100,14 +109,24 @@ inPodL = rbind(
 
 inPodL$Time = as.numeric(inPodL$Time)
   
+# may consider removing outliers, to be consisten
+
+inPodL$secs[outliers(tatScreen$secs,3)]
+# happy days, no outliers above 3 SDs
+
 
 # what predicts the amount of total time spent in the pod, per day
 mew.pois.1 = glmer(Time ~ Dominance + Extraversion + Conscientiousness + Agreeableness
                    + Neuroticism + Openness + (1 | Date) + (1 | Chimp),
                    data=inPodL, family = poisson)
+# the above model is almost certainly meaningless
+
 # scaling needs to be done properly, from the outset
-mew.pois.1s = glmer(Time ~ s(dom) + s(neu) + s(agr) + s(ext) + s(con) + s(opn) + (1 | Date) + (1 | Chimp),
-                   data=inPodL, family = poisson)
+## Update - need to see how goes GLMM respond when we just take out the zeros
+mew.pois.1s = glmer(Time ~ s(Dominance) + s(Neuroticism) + s(Agreeableness) 
+                    + s(Extraversion) + s(Conscientiousness) + s(Openness)
+                    + (1 | Date) + (1 | Chimp),
+                  data=inPodL, subset = inPodL$Time!=0, family = poisson)
 
 # Ext ... but this isn't properly accounting for zeros; doesn't agree with MCMC
 
@@ -166,7 +185,7 @@ prior1.1 <- list(G=list(G1=list(V=diag(2), nu=2, alpha.mu=c(0,0),
 mew.mcmc.pZIF.3 <- MCMCglmm(Time ~ dom + ext + con + agr + neu + opn, random= ~Date,
                             data = inPodL, family = "zipoisson"
                             , rcov=~idh(trait):units
-                            #, prior = prior1.1
+                            , prior = prior1.1
                             , burnin = 10000 , nitt = 90000
                             , verbose = FALSE
 )
@@ -201,6 +220,9 @@ mew.mcmc.pZIF.4 <- MCMCglmm(Time ~ dom + ext + con + agr + neu + opn, random= ~D
 
 # ugh - so the first model is what I'll use
 ### we will return here later for Prior investigation
+
+
+
 
 
 #3) Who continues to interact?
@@ -295,6 +317,8 @@ mew.3.pgmm.s <- glmer(secs ~ s(Dominance) + s(Neuroticism) + s(Agreeableness) + 
                     ,data = tatScreen, family = poisson
                     #,control=glmerControl(maxfun=10000)
 )
+vif.mer(mew.3.pgmm.s)
+
 
 # MCMC test check again
 mew.3.mcmc.pgmm <- MCMCglmm(secs ~ Dominance + Neuroticism + Agreeableness + Extraversion + Conscientiousness + 

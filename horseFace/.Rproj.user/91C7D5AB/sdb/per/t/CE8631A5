@@ -1,0 +1,25 @@
+{
+    "contents" : "",
+    "created" : 1455631967145.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "CE8631A5",
+    "lastKnownWriteTime" : 7011605692497750387,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "n9d98xjdk8",
+        "caption" : "horseD",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=horseD&cache_key=n9d98xjdk8",
+        "displayedObservations" : 57,
+        "environment" : "",
+        "object" : "horseD",
+        "totalObservations" : 57,
+        "variables" : 22
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}

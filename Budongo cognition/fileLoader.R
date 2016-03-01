@@ -21,9 +21,19 @@ rbind.all.columns <- function(x, y) {
 # personality
 ###
 
-setwd('C:/Users/s1229179/git-repos/R/Budongo cognition/')
-pers <- read.csv('EDIpersonality.csv',header=TRUE)
+setwd('C:/Users/s1229179/GitHub/R/Budongo cognition/')
+# pers <- read.csv('EDIpersonality.csv',header=TRUE)
 
+
+## in the interest of maintaining consistency between experiment analyses
+## the preferred way to get the personality composites is to load them
+## from the scaled copies created for the RS analyses
+
+pers <- read.csv('RS cognition/scaledPers.csv',header=TRUE)
+
+# this removes the need to run perscoring_chimp.R
+#
+# Go directly to perf_associat.R (which has made a few modifications made)
 
 
 ###
@@ -35,6 +45,11 @@ pers <- read.csv('EDIpersonality.csv',header=TRUE)
 setwd('Z:/chimp cognitive data/raw/')
 
 
+# Problems with
+
+# - Kindia
+# - David
+# - Lucy
 
 
 temp = list.files(pattern="*.csv")

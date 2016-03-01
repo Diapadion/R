@@ -1,0 +1,18 @@
+{
+    "contents" : "\nhorseD <- read.csv(\"Smith et al. Raw Data.csv\")\n\n\nm0 <- glm(Direction.First.look ~ Emotion,\n            family = binomial,\n            data = horseD)\n\nlibrary(lme4)\n\nm1 <- glmer(Direction.First.look ~ Emotion + (1 | Subject),\n            family = binomial,\n            data = horseD)",
+    "created" : 1455631812270.000,
+    "dirty" : true,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "4198774500",
+    "id" : "5E8BF8F6",
+    "lastKnownWriteTime" : 7011605692497750387,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "type" : "r_source"
+}

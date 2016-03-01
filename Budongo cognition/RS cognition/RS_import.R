@@ -6,16 +6,16 @@ setwd('Z:/chimp cognitive data/RS/training/')
 
 ## sample sheet to work with (for now)
 
-
-hder = c(
-  "Section","Trial","RT","CorrectResponse","Response","TrialType","Stimulus Location 1",
-  "Stimulus Location 2","Coordinates","Correctness","FileNames1","FileNames2")
-
-train <- read.csv(file="2-choice AA1 black/2013_10_17_14_53_17_744465.csv", header= FALSE, skip = 7)
-colnames(train) = hder
-train$chimp = read.csv(file="2-choice AA1 black/2013_10_17_14_53_17_744465.csv", header=FALSE)[4,1]
-train$date = read.csv(file="2-choice AA1 black/2013_10_17_14_53_17_744465.csv", header=FALSE)[1,2]
-
+# can I Comment this out?
+# hder = c(
+#   "Section","Trial","RT","CorrectResponse","Response","TrialType","Stimulus Location 1",
+#   "Stimulus Location 2","Coordinates","Correctness","FileNames1","FileNames2")
+# 
+# train <- read.csv(file="2-choice AA1 black/2013_10_17_14_53_17_744465.csv", header= FALSE, skip = 7)
+# colnames(train) = hder
+# train$chimp = read.csv(file="2-choice AA1 black/2013_10_17_14_53_17_744465.csv", header=FALSE)[4,1]
+# train$date = read.csv(file="2-choice AA1 black/2013_10_17_14_53_17_744465.csv", header=FALSE)[1,2]
+# 
 
 
 
@@ -92,7 +92,7 @@ aggPers = read.csv("aggregatedPers.csv", header=TRUE)
 # these need to be centered and scaled first
 aggPers <- cbind(aggPers,scale(aggPers[,3:8]))
 aggPers$depend = c('AB','AB','AA','AA','AB','AA','X','AA','X','X','AA','AB','X','AB','AB',
-                   'X','X','X')
+                   'X','X','X','X')
 colnames(aggPers)[3:8] <- list("unz.Dom","unz.Ext","unz.Con","unz.Agr","unz.Neu","unz.Opn")
 ## merge dataframes
 
@@ -100,7 +100,7 @@ RSdat$chimp = droplevels(RSdat$chimp)
 library(plyr)
 RSdat$chimp <- revalue(RSdat$chimp, c("killimi"="Kilimi", "emma"="Emma", "lib"="Liberius","frek"="Freek",
                        "edith"="Edith", "paul"="Paul", "eva" = "Eva", "louis"="Louis",
-                       "pearl"="Pearl", "david" = "David", "cindy"="Cindy"))
+                       "pearl"="Pearl", "david" = "David", "cindy"="Cindy",))
 
 #head(levels(RSdat$chimp),12)
 #levels(droplevels(RSdat$chimp))
@@ -120,7 +120,7 @@ temp=temp[!is.na(temp$RT),]
 
 
 
-
+write.csv(aggPers[c(1:18),c(2:8,11:16)], 'scaledPers.csv')
 
 
 

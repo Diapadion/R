@@ -1,0 +1,25 @@
+{
+    "contents" : "",
+    "created" : 1453914253763.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "6A2D8CE2",
+    "lastKnownWriteTime" : 7011605692497750387,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "xu8zmmxs1z",
+        "caption" : "kp14",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=kp14&cache_key=xu8zmmxs1z",
+        "displayedObservations" : "64",
+        "environment" : "",
+        "object" : "kp14",
+        "totalObservations" : "64",
+        "variables" : "21"
+    },
+    "relative_order" : 6,
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}

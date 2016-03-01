@@ -1,12 +1,42 @@
 # this file requires the running of:
 # fileLoader.R
-# perscoring_chimp.R
+# # perscoring_chimp.R # <- I need strikethru for this
 
 
 s <- function(x) {scale(x)}
 
 outliers <- function(obs, x = 2.5)
   abs(obs - mean(obs, na.rm = T)) > (sd(obs, na.rm = T) * x)
+
+
+
+### Some fresh aggreagation
+### adding pers to trial by trial data
+aggPers <- pers
+
+CIdata <- cbind.data.frame(CIdata,aggPers[1,])
+EMdata <- cbind.data.frame(EMdata,aggPers[4,])
+EDdata <- cbind.data.frame(EDdata,aggPers[3,])
+EVdata <- cbind.data.frame(EVdata,aggPers[5,])
+FKdata <- cbind.data.frame(FKdata,aggPers[6,])
+KLdata <- cbind.data.frame(KLdata,aggPers[8,])
+LOdata <- cbind.data.frame(LOdata,aggPers[12,])
+LBdata <- cbind.data.frame(LBdata,aggPers[11,])
+PAdata <- cbind.data.frame(PAdata,aggPers[14,])
+Qdata <- cbind.data.frame(Qdata,aggPers[16,])
+PEdata <- cbind.data.frame(PEdata,aggPers[15,])
+#
+DAdata <- cbind.data.frame(DAdata, aggPers[2,])
+KDdata <- cbind.data.frame(KDdata, aggPers[9,])
+LUdata <- cbind.data.frame(LUdata, aggPers[13,])
+
+
+cz_bin_pers <- rbind.data.frame(CIdata,EMdata,EDdata,EVdata,FKdata,KLdata,LOdata,LBdata,
+                                PAdata,Qdata,PEdata, DAdata, KDdata, LUdata)
+
+cz_bin_pers$Accuracy <- as.factor(cz_bin_pers$Accuracy)
+cz_bin_pers$Trial <- as.integer(cz_bin_pers$Trial)
+
 
 
 
@@ -44,8 +74,8 @@ accu_pers <- cbind(accuracy,aggPers[c(-7,-10,-13,-17,-18),2:7])
 #accu_pers[2:3] <- cbind(as.numeric(accu_pers[2]))
   
 #some stupid model(s)
-urr <- lm(acc_mean ~ s(dom) + s(ext) + s(con) + s(neu) + s(opn) + s(agr), data=accu_pers )
-uurrrr <- lm(acc_sd ~ s(dom) + s(ext) + s(con) + s(neu) + s(opn) + s(agr), data=accu_pers )
+#urr <- lm(acc_mean ~ s(dom) + s(ext) + s(con) + s(neu) + s(opn) + s(agr), data=accu_pers )
+#uurrrr <- lm(acc_sd ~ s(dom) + s(ext) + s(con) + s(neu) + s(opn) + s(agr), data=accu_pers )
 
 
 
@@ -74,10 +104,15 @@ mod.g <- glm(LBdata$Accuracy ~ LBlong, family = binomial(link = 'probit'))
 
 # this is the main one
 # used in ASP 2015 presentation
-mod.gm1 <- glmer(Accuracy ~ dom + con + opn + neu + agr + ext +  (1 | Group.1),
+mod.gm1 <- glmer(Accuracy ~ Dominance + Conscientiousness + Openness + Neuroticism
+                 + Agreeableness + Extraversion +  (1 | Chimp),
                  family = binomial, data=cz_bin_pers 
 )
 ci.accu1 <- confint(mod.gm1, method='Wald')
+
+source('https://github.com/aufrank/R-hacks/raw/master/mer-utils.R')
+vif.mer(mod.gm1)
+
 
 library(texreg)
 ext.gm1=extract(mod.gm1, include.aic = FALSE, include.bic=FALSE, include.dic=FALSE,
@@ -98,7 +133,7 @@ mod.gm2 <- glmer(Accuracy ~ dom + neu + agr + ext + con + opn + Trial + (1 | Gro
   family = binomial, data=cz_bin_pers 
   )
 ci.accu2 <- confint(mod.gm2, method='Wald')
-
+vif.mer(mod.gm2)
 
 mod.gm3 <- glmer(Accuracy ~ Trial + (1 | Group.1),
                  family = binomial, data=cz_bin_pers 
@@ -121,7 +156,7 @@ anova(mod.gm1,mod.gm2,mod.gm3,mod.gm4
       ) # so gm2 is the best model
 # can't step is with lme4
 library(bbmle)
-BICtab(mod.gm1,mod.gm2,weights=TRUE, delta=TRUE, base=TRUE, logLik=TRUE, sort=TRUE)
+AICctab(mod.gm1,mod.gm2,weights=TRUE, delta=TRUE, base=TRUE, logLik=TRUE, sort=TRUE)
 
 library(lmerTest)
 library(car)
@@ -273,12 +308,23 @@ iBLUP = cbind(iBLUP, medLogInspecT)
 
 
 
+### LASSO selection
+
+library(MMS)
+
+lassD <- as.matrix(cz_bin_pers[,c(21:26)])
+ranD <- as.matrix(cz_bin_pers$Chimp)
+
+# oops, this only works for linear MM
+
+
+
 ### GLMM check
 
 # So this doesn't work. So won't worry about it till later, if that is even necessary.
 mcmc.gm1 <- MCMCglmm(Accuracy ~ dom + ext + con + agr + neu + opn, 
                            random = ~Group.1,
                            data = cz_bin_pers, family = "multinomial"
-                           , rcov=~idh(trait):units
+                           #, rcov=~idh(trait):units
                            # , burnin = 10000 , nitt = 90000 
                            , verbose = FALSE)

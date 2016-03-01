@@ -1,0 +1,25 @@
+{
+    "contents" : "",
+    "created" : 1453918010565.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "3407C4A6",
+    "lastKnownWriteTime" : 7011605692497750387,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "jy3z1cn8fi",
+        "caption" : "matchstack",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=matchstack&cache_key=jy3z1cn8fi",
+        "displayedObservations" : "243",
+        "environment" : "",
+        "object" : "matchstack",
+        "totalObservations" : "243",
+        "variables" : "24"
+    },
+    "relative_order" : 10,
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}

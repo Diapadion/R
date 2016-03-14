@@ -280,7 +280,7 @@ coef(net1, s=0.01)
 truncdistributions = c("t","extreme","logistic")
 
 truncmod <- (yLt ~ as.factor(datX$sex) + 
-                       as.factor(datX$origin) + as.factor(datX$LvZ) + 
+                       as.factor(datX$origin) + #as.factor(datX$LvZ) + 
                datX$Dom_CZ + datX$Ext_CZ + datX$Con_CZ +
                datX$Agr_CZ + datX$Neu_CZ + datX$Opn_CZ)
 

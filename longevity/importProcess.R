@@ -201,6 +201,12 @@ rmovals <- which((all$age - all$age_pr) < 0.0)   # 29, 505, ++...
 # is 0 enough, or do we need a buffer?
 all <- (all[-c(rmovals),])
 
+all$status <- droplevels(all$status)
+levels(all$status)[levels(all$status)=="Death"] <- TRUE
+levels(all$status)[levels(all$status)=="Alive"] <- FALSE
+
+all$status = as.logical(all$status)
+
 
 
 ### Regression prepping
@@ -217,13 +223,12 @@ library(survival)
 #Dataset = all[sample(nrow(all), 200), ]
 Dataset <- all
 
-
 Dataset$origin <- droplevels(Dataset$origin)
 
 # RIGHT censoring - matching 'time' and 'event'
 
-levels(Dataset$status)[levels(Dataset$status)=="Death"] <- 1
-levels(Dataset$status)[levels(Dataset$status)=="Alive"] <- 0
+# levels(Dataset$status)[levels(Dataset$status)=="Death"] <- 1
+# levels(Dataset$status)[levels(Dataset$status)=="Alive"] <- 0
 
 
 
@@ -263,165 +268,165 @@ yLt = y.Ltrunc[rmNAs]
 datX = Dataset[rmNAs,]
 
 
-### P dimensions confounded with age
-
-library(bbmle)
-
-## Extraversion
-
-fit.e0 <- lm(Ext_CZ ~ 1, data=datX)
-# residual entry for quadratic, cubic regs:
-fit.e1 <- lm(Ext_CZ ~ scale(age_pr_adj), data=datX)
-fit.e2 <- lm(Ext_CZ ~ scale(age_pr_adj) + I(scale(age_pr_adj)^2), data=datX)
-datX$E.resid2 <- fit.e2$residuals
-fit.e3 <- lm(Ext_CZ ~ scale(age_pr_adj) + I(scale(age_pr_adj)^2) + I(scale(age_pr_adj)^3), data=datX)
-datX$E.resid3 <- fit.e3$residuals
-
-anova(fit.e1,fit.e2,fit.e3)
-
-# DoB based?
-fit.e1.DoB <- lm(Ext_CZ ~ scale(DoB), data=datX)
-fit.e2.DoB <- lm(Ext_CZ ~ scale(DoB) + I(scale(DoB)^2), data=datX) # this seems to be the best (see anova)
-fit.e3.DoB <- lm(Ext_CZ ~ scale(DoB) + I(scale(DoB)^2) + I(scale(DoB)^3), data=datX) # No, this is best (see AIC)
-
-anova(fit.e0,fit.e1.DoB,fit.e2.DoB,fit.e3.DoB)
-#anova(fit.e1,fit.e2,fit.e3,fit.e1.DoB,fit.e2.DoB,fit.e3.DoB)
-
-AICctab(fit.e0,fit.e1.DoB,fit.e2.DoB,fit.e3.DoB #,fit.e1,fit.e2,fit.e3,
-       ,logLik=T,weights=T,base=T,delta=T)
-
-datX$E.r3.DoB <- fit.e3.DoB$residuals
-datX$E.r3 <- fit.e3$residuals
-# added for sake of LASSO
+# ### P dimensions confounded with age
+# 
+# library(bbmle)
+# 
+# ## Extraversion
+# 
+# fit.e0 <- lm(Ext_CZ ~ 1, data=datX)
+# # residual entry for quadratic, cubic regs:
+# fit.e1 <- lm(Ext_CZ ~ scale(age_pr_adj), data=datX)
+# fit.e2 <- lm(Ext_CZ ~ scale(age_pr_adj) + I(scale(age_pr_adj)^2), data=datX)
+# datX$E.resid2 <- fit.e2$residuals
+# fit.e3 <- lm(Ext_CZ ~ scale(age_pr_adj) + I(scale(age_pr_adj)^2) + I(scale(age_pr_adj)^3), data=datX)
+# datX$E.resid3 <- fit.e3$residuals
+# 
+# anova(fit.e1,fit.e2,fit.e3)
+# 
+# # DoB based?
+# fit.e1.DoB <- lm(Ext_CZ ~ scale(DoB), data=datX)
+# fit.e2.DoB <- lm(Ext_CZ ~ scale(DoB) + I(scale(DoB)^2), data=datX) # this seems to be the best (see anova)
+# fit.e3.DoB <- lm(Ext_CZ ~ scale(DoB) + I(scale(DoB)^2) + I(scale(DoB)^3), data=datX) # No, this is best (see AIC)
+# 
+# anova(fit.e0,fit.e1.DoB,fit.e2.DoB,fit.e3.DoB)
+# #anova(fit.e1,fit.e2,fit.e3,fit.e1.DoB,fit.e2.DoB,fit.e3.DoB)
+# 
+# AICctab(fit.e0,fit.e1.DoB,fit.e2.DoB,fit.e3.DoB #,fit.e1,fit.e2,fit.e3,
+#        ,logLik=T,weights=T,base=T,delta=T)
+# 
+# datX$E.r3.DoB <- fit.e3.DoB$residuals
+# datX$E.r3 <- fit.e3$residuals
+# # added for sake of LASSO
 datX$E.r2.DoB <- fit.e2.DoB$residuals
-
-
-# what do these residuals look like?
-
-plot(datX$Ext_CZ, datX$E.r3.DoB)
-plot(datX$age_pr_adj, datX$E.r3.DoB)
-
-plot(datX$Ext_CZ, datX$E.resid3)
-plot(datX$age_pr_adj, datX$E.resid3)
-
-
-## Openness
-fit.o0 <- lm(Opn_CZ ~ 1, data=datX)
-fit.o1 <- lm(Opn_CZ ~ scale(age_pr_adj), data=datX)
-fit.o2 <- lm(Opn_CZ ~ scale(age_pr_adj) + I(scale(age_pr_adj)^2), data=datX)
-fit.o3 <- lm(Opn_CZ ~ scale(age_pr_adj) + I(scale(age_pr_adj)^2) + I(scale(age_pr_adj)^3), data=datX)
-fit.o1.DoB <- lm(Opn_CZ ~ scale(DoB), data=datX)
-fit.o2.DoB <- lm(Opn_CZ ~ scale(DoB) + I(scale(DoB)^2), data=datX) # this one
-fit.o3.DoB <- lm(Opn_CZ ~ scale(DoB) + I(scale(DoB)^2) + I(scale(DoB)^3), data=datX) 
-
-AICctab(fit.o0,fit.o1.DoB,fit.o2.DoB,fit.o3.DoB #, fit.o1,fit.o2,fit.o3
-       , logLik=T,weights=T,base=T,delta=T)
-
-anova(fit.o1,fit.o2,fit.o3,fit.o1.DoB,fit.o2.DoB,fit.o3.DoB)
-
-
+# 
+# 
+# # what do these residuals look like?
+# 
+# plot(datX$Ext_CZ, datX$E.r3.DoB)
+# plot(datX$age_pr_adj, datX$E.r3.DoB)
+# 
+# plot(datX$Ext_CZ, datX$E.resid3)
+# plot(datX$age_pr_adj, datX$E.resid3)
+# 
+# 
+# ## Openness
+# fit.o0 <- lm(Opn_CZ ~ 1, data=datX)
+# fit.o1 <- lm(Opn_CZ ~ scale(age_pr_adj), data=datX)
+# fit.o2 <- lm(Opn_CZ ~ scale(age_pr_adj) + I(scale(age_pr_adj)^2), data=datX)
+# fit.o3 <- lm(Opn_CZ ~ scale(age_pr_adj) + I(scale(age_pr_adj)^2) + I(scale(age_pr_adj)^3), data=datX)
+# fit.o1.DoB <- lm(Opn_CZ ~ scale(DoB), data=datX)
+# fit.o2.DoB <- lm(Opn_CZ ~ scale(DoB) + I(scale(DoB)^2), data=datX) # this one
+# fit.o3.DoB <- lm(Opn_CZ ~ scale(DoB) + I(scale(DoB)^2) + I(scale(DoB)^3), data=datX) 
+# 
+# AICctab(fit.o0,fit.o1.DoB,fit.o2.DoB,fit.o3.DoB #, fit.o1,fit.o2,fit.o3
+#        , logLik=T,weights=T,base=T,delta=T)
+# 
+# anova(fit.o1,fit.o2,fit.o3,fit.o1.DoB,fit.o2.DoB,fit.o3.DoB)
+# 
+# 
 datX$O.r2.DoB <- fit.o2.DoB$residuals
-  datX$O.r2 <- fit.o2$residuals
-
-
-## Dominance
-
-fit.d0 <- lm(Dom_CZ ~ 1, data=datX)
-fit.d1 <- lm(Dom_CZ ~ scale(age_pr_adj), data=datX)
-fit.d2 <- lm(Dom_CZ ~ scale(age_pr_adj) + I(scale(age_pr_adj)^2), data=datX)
-fit.d3 <- lm(Dom_CZ ~ scale(age_pr_adj) + I(scale(age_pr_adj)^2) + I(scale(age_pr_adj)^3), data=datX)
-fit.d1.DoB <- lm(Dom_CZ ~ scale(DoB), data=datX)
-fit.d2.DoB <- lm(Dom_CZ ~ scale(DoB) + I(scale(DoB)^2), data=datX) 
-fit.d3.DoB <- lm(Dom_CZ ~ scale(DoB) + I(scale(DoB)^2) + I(scale(DoB)^3), data=datX) # looks like here again
-
-AICctab(fit.d0, fit.d1.DoB,fit.d2.DoB,fit.d3.DoB #,fit.d1,fit.d2,fit.d3
-       ,logLik=T,weights=T,base=T,delta=T)
-
-anova(fit.d0, fit.d1,fit.d2,fit.d3,fit.d1.DoB,fit.d2.DoB,fit.d3.DoB)
-
-
-#datX$D.r2.DoB <- fit.d2.DoB$residuals
-datX$D.r3.DoB <- fit.d3.DoB$residuals
-datX$D.r3 <- fit.d3$residuals
-
-
-## Neuroticism
-
-fit.n0 <- lm(Neu_CZ ~ 1, data=datX)
-fit.n1 <- lm(Neu_CZ ~ scale(age_pr_adj), data=datX)
-fit.n2 <- lm(Neu_CZ ~ scale(age_pr_adj) + I(scale(age_pr_adj)^2), data=datX)
-fit.n3 <- lm(Neu_CZ ~ scale(age_pr_adj) + I(scale(age_pr_adj)^2) + I(scale(age_pr_adj)^3), data=datX)
-fit.n1.DoB <- lm(Neu_CZ ~ scale(DoB), data=datX) # This one
-fit.n2.DoB <- lm(Neu_CZ ~ scale(DoB) + I(scale(DoB)^2), data=datX)
-fit.n3.DoB <- lm(Neu_CZ ~ scale(DoB) + I(scale(DoB)^2) + I(scale(DoB)^3), data=datX)
-
-AICctab(fit.n0, fit.n1.DoB,fit.n2.DoB,fit.n3.DoB #,fit.n1,fit.n2,fit.n3,
-       ,logLik=T,weights=T,base=T,delta=T)
-
-anova(fit.n0, fit.n1,fit.n2,fit.n3,fit.n1.DoB,fit.n2.DoB,fit.n3.DoB)
-
-
-datX$N.r1.DoB <- fit.n1.DoB$residuals
-datX$N.r1 <- fit.n1$residuals
-
-# stop indendation
-
-
-  
-
-  
-  
-
-
-# let's try a LASSO...
-
-library(glmnet)
-# see also chimpAnalyses.R
-
-netform = data.frame(cbind(scale(datX$DoB),
-                scale(datX$DoB)^2,
-                scale(datX$DoB)^3))
-colnames(netform) = c("DoB1","DoB2","DoB3") 
-  
-rmatx = model.matrix( ~ DoB1 + DoB2 + DoB3 - 1, netform)
-
-lasso.rE = glmnet(rmatx, datX$Ext_CZ, #grouped=FALSE
-                 )
-lasso.rE.cv = cv.glmnet(rmatx, datX$Ext_CZ)
-
-plot(lasso.rE.cv)
-
-plot(lasso.rE, label=T)
-plot(lasso.rE, xvar="lambda", label=T)  
-plot(lasso.rE, xvar="dev", label=T) 
-
-coef(lasso.rE, s=lasso.rE.cv$lambda.1se
-)
-# well, this says to leave out the cubic
-
-
-lasso.rD = glmnet(rmatx, datX$Dom_CZ)
-lasso.rD.cv = cv.glmnet(rmatx, datX$Dom_CZ)
-plot(lasso.rD, label=T)
-coef(lasso.rD, s=lasso.rD.cv$lambda.1se)
-
-
-lasso.rO = glmnet(rmatx, datX$Opn_CZ)
-lasso.rO.cv = cv.glmnet(rmatx, datX$Opn_CZ)
-plot(lasso.rO, label=T)
-coef(lasso.rO, s=lasso.rO.cv$lambda.1se)
-
-
-lasso.rN = glmnet(rmatx, datX$Neu_CZ)
-lasso.rN.cv = cv.glmnet(rmatx, datX$Neu_CZ)
-plot(lasso.rN, label=T)
-plot(lasso.rN.cv)
-coef(lasso.rN, s=lasso.rN.cv$lambda.1se)
-
-lasso.rD = glmnet(rmatx, datX$Dom_CZ)
-lasso.rD.cv = cv.glmnet(rmatx, datX$Dom_CZ)
-plot(lasso.rD, label=T)
-plot(lasso.rD.cv)
-coef(lasso.rD, s=lasso.rD.cv$lambda.1se)
-
-## these suggest just the quadratics for O and E
+#   datX$O.r2 <- fit.o2$residuals
+# 
+# 
+# ## Dominance
+# 
+# fit.d0 <- lm(Dom_CZ ~ 1, data=datX)
+# fit.d1 <- lm(Dom_CZ ~ scale(age_pr_adj), data=datX)
+# fit.d2 <- lm(Dom_CZ ~ scale(age_pr_adj) + I(scale(age_pr_adj)^2), data=datX)
+# fit.d3 <- lm(Dom_CZ ~ scale(age_pr_adj) + I(scale(age_pr_adj)^2) + I(scale(age_pr_adj)^3), data=datX)
+# fit.d1.DoB <- lm(Dom_CZ ~ scale(DoB), data=datX)
+# fit.d2.DoB <- lm(Dom_CZ ~ scale(DoB) + I(scale(DoB)^2), data=datX) 
+# fit.d3.DoB <- lm(Dom_CZ ~ scale(DoB) + I(scale(DoB)^2) + I(scale(DoB)^3), data=datX) # looks like here again
+# 
+# AICctab(fit.d0, fit.d1.DoB,fit.d2.DoB,fit.d3.DoB #,fit.d1,fit.d2,fit.d3
+#        ,logLik=T,weights=T,base=T,delta=T)
+# 
+# anova(fit.d0, fit.d1,fit.d2,fit.d3,fit.d1.DoB,fit.d2.DoB,fit.d3.DoB)
+# 
+# 
+# #datX$D.r2.DoB <- fit.d2.DoB$residuals
+# datX$D.r3.DoB <- fit.d3.DoB$residuals
+# datX$D.r3 <- fit.d3$residuals
+# 
+# 
+# ## Neuroticism
+# 
+# fit.n0 <- lm(Neu_CZ ~ 1, data=datX)
+# fit.n1 <- lm(Neu_CZ ~ scale(age_pr_adj), data=datX)
+# fit.n2 <- lm(Neu_CZ ~ scale(age_pr_adj) + I(scale(age_pr_adj)^2), data=datX)
+# fit.n3 <- lm(Neu_CZ ~ scale(age_pr_adj) + I(scale(age_pr_adj)^2) + I(scale(age_pr_adj)^3), data=datX)
+# fit.n1.DoB <- lm(Neu_CZ ~ scale(DoB), data=datX) # This one
+# fit.n2.DoB <- lm(Neu_CZ ~ scale(DoB) + I(scale(DoB)^2), data=datX)
+# fit.n3.DoB <- lm(Neu_CZ ~ scale(DoB) + I(scale(DoB)^2) + I(scale(DoB)^3), data=datX)
+# 
+# AICctab(fit.n0, fit.n1.DoB,fit.n2.DoB,fit.n3.DoB #,fit.n1,fit.n2,fit.n3,
+#        ,logLik=T,weights=T,base=T,delta=T)
+# 
+# anova(fit.n0, fit.n1,fit.n2,fit.n3,fit.n1.DoB,fit.n2.DoB,fit.n3.DoB)
+# 
+# 
+# datX$N.r1.DoB <- fit.n1.DoB$residuals
+# datX$N.r1 <- fit.n1$residuals
+# 
+# # stop indendation
+# 
+# 
+#   
+# 
+#   
+#   
+# 
+# 
+# # let's try a LASSO...
+# 
+# library(glmnet)
+# # see also chimpAnalyses.R
+# 
+# netform = data.frame(cbind(scale(datX$DoB),
+#                 scale(datX$DoB)^2,
+#                 scale(datX$DoB)^3))
+# colnames(netform) = c("DoB1","DoB2","DoB3") 
+#   
+# rmatx = model.matrix( ~ DoB1 + DoB2 + DoB3 - 1, netform)
+# 
+# lasso.rE = glmnet(rmatx, datX$Ext_CZ, #grouped=FALSE
+#                  )
+# lasso.rE.cv = cv.glmnet(rmatx, datX$Ext_CZ)
+# 
+# plot(lasso.rE.cv)
+# 
+# plot(lasso.rE, label=T)
+# plot(lasso.rE, xvar="lambda", label=T)  
+# plot(lasso.rE, xvar="dev", label=T) 
+# 
+# coef(lasso.rE, s=lasso.rE.cv$lambda.1se
+# )
+# # well, this says to leave out the cubic
+# 
+# 
+# lasso.rD = glmnet(rmatx, datX$Dom_CZ)
+# lasso.rD.cv = cv.glmnet(rmatx, datX$Dom_CZ)
+# plot(lasso.rD, label=T)
+# coef(lasso.rD, s=lasso.rD.cv$lambda.1se)
+# 
+# 
+# lasso.rO = glmnet(rmatx, datX$Opn_CZ)
+# lasso.rO.cv = cv.glmnet(rmatx, datX$Opn_CZ)
+# plot(lasso.rO, label=T)
+# coef(lasso.rO, s=lasso.rO.cv$lambda.1se)
+# 
+# 
+# lasso.rN = glmnet(rmatx, datX$Neu_CZ)
+# lasso.rN.cv = cv.glmnet(rmatx, datX$Neu_CZ)
+# plot(lasso.rN, label=T)
+# plot(lasso.rN.cv)
+# coef(lasso.rN, s=lasso.rN.cv$lambda.1se)
+# 
+# lasso.rD = glmnet(rmatx, datX$Dom_CZ)
+# lasso.rD.cv = cv.glmnet(rmatx, datX$Dom_CZ)
+# plot(lasso.rD, label=T)
+# plot(lasso.rD.cv)
+# coef(lasso.rD, s=lasso.rD.cv$lambda.1se)
+# 
+# ## these suggest just the quadratics for O and E

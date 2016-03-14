@@ -5,6 +5,10 @@
 
 
 
+
+attr(yLt, 'type') <- 'mcounting'
+
+
 frail.AFT <- survreg(yLt ~ as.factor(sex) + 
                           as.factor(origin) +  
                           Dom_CZ + Ext_CZ + Con_CZ + #E.resid3 +
@@ -14,20 +18,21 @@ frail.AFT <- survreg(yLt ~ as.factor(sex) +
 
 # O and E residulized
 
-frail.AFT.EOr2 <- survreg(yLt ~ as.factor(sex) + 
+frail.AFT.EOr2 <- survreg(yLt ~ as.factor(sex) + # this model is informed by LASSO
                        as.factor(origin) +  
-                       Dom_CZ + E.r2.DoB + Con_CZ + #E.resid3 +
+                       Dom_CZ + E.r2.DoB + Con_CZ + 
                        Agr_CZ + Neu_CZ + O.r2.DoB
                        + frailty(sample)
-                     , data=datX, dist='t') # this model is informed by LASSO
+                     , data=datX, dist='t')  # 'logistic' , 'extreme' , 't'
 
-
-frail.cox.EOr2 <- coxph(yLt ~ as.factor(sex) + 
+frail.AFT.EAD <- survreg(yLt ~ as.factor(sex) + # this model is informed by LASSO(s)
                             as.factor(origin) +  
-                            Dom_CZ + E.r2.DoB + Con_CZ + #E.resid3 +
-                            Agr_CZ + Neu_CZ + O.r2.DoB
+                            Dom_CZ + E.r2.DoB + Agr_CZ
                           + frailty(sample)
-                          , data=datX) # this model is informed by LASSO
+                          , data=datX, dist='logistic') 
+
+
+
 
 
 ### No left truncation, but intervalized stuff instead
@@ -57,7 +62,16 @@ f.10.age <-  survreg(y ~ as.factor(sex) +
 
 
 
-### with the Japanese and Edi data included, we're having trouble with the basic frailty functions
+
+
+# Cox is basically useless for all this
+frail.cox.EOr2 <- coxph(yLt ~ as.factor(sex) + 
+                          as.factor(origin) +  
+                          Dom_CZ + E.r2.DoB + Con_CZ + #E.resid3 +
+                          Agr_CZ + Neu_CZ + O.r2.DoB
+                        + frailty(sample)
+                        , data=datX) # this model is informed by LASSO
+
 require(coxme)
 
 attr(yLt, 'type') <- 'counting'
@@ -65,7 +79,20 @@ attr(yLt, 'type') <- 'counting'
 
 coxme.1 <- coxme(yLt ~ as.factor(sex) + 
                        as.factor(origin) +  
-                       Dom_CZ + Ext_CZ + Con_CZ + #E.resid3 +
+                       Dom_CZ + Ext_CZ + Con_CZ +
                        Agr_CZ + Neu_CZ + Opn_CZ
                      + (1 | sample)
                      , data=datX)
+
+coxme.2 <- coxme(yLt ~ as.factor(sex) + 
+                   as.factor(origin) +  
+                   Dom_CZ + E.r2.DoB + Con_CZ + 
+                   Agr_CZ + Neu_CZ + O.r2.DoB
+                 + (1 | sample)
+                 , data=datX)
+
+coxme.3 <- coxme(yLt ~ as.factor(sex) + 
+                   as.factor(origin) +  
+                   Dom_CZ + E.r2.DoB + Agr_CZ + 
+                 + (1 | sample)
+                 , data=datX)

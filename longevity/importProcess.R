@@ -1,6 +1,11 @@
 ### Importation and Processing
 
 all <- read.csv("long_all.csv")
+# cutting off the bottom
+all <- all[-c(558:dim(all)[1]),]
+
+# removing row at 378, where the questionnaire changes
+all <- all[-378,]
 
 all[,c(7:60)] <- lapply((all[,c(7:60)]), as.character)
 all[,c(7:60)] <- lapply((all[,c(7:60)]), as.numeric)
@@ -12,9 +17,19 @@ all$status[(all$status == 'LTF') & (all$sample == 'Taronga')] <- 'Alive'
 
 all$status[(all$status == 'LTF') & (all$sample == 'Yerkes')] <- 'Alive'
 
+all$status[(all$status == 'dead') & (all$sample == 'Japan')] <- 'Death'
+all$status[(all$status == 'alive') & (all$sample == 'Japan')] <- 'Alive'
+
+# just for Bram - what out for the number
+all$status[535] <- 'Alive'
+
+# for frailty purposes, we want to make Taronga part of AZA
+all$sample[all$sample=='Taronga'] = 'AZA'
+
 #levels(all$sample)
 
 # remove the 'rm's until a better situation is realized
+### TODO: come up with a better alternative
 all <- all[!all$status == 'rm',]
 
 
@@ -32,18 +47,23 @@ all$lastDate <- as.Date(all$lastDate, format='%d/%m/%Y')
 all$age = as.numeric(difftime(all$lastDate, all$DoB, units = "weeks"))/52.25 
 # The above is super useful. Remember that (it is here).
 
-# making age at DOPR for Yerkes
+# making age at DOPR for Yerkes & Edinburgh
 # see other files - there may be an issue with death dates overlapping
 all$DOPR = as.Date(all$DOPR,format='%m/%d/%Y')
 all$DOPR2 = as.Date(all$DOPR2,format='%m/%d/%Y')
 all$DOPRmin = pmin(all$DOPR, all$DOPR2, na.rm = TRUE)
 
 # some death dates cut off
-all$DOPRmin = pmin(all$DOPRmin, all$lastDate)
+# all$DOPRmin = pmin(all$DOPRmin, all$lastDate) # this was a PROBLEM
+
+### TODO: set a cut-off for the rating/death date
 
 
-all$age_pr[all$sample == 'Yerkes'] = as.numeric(difftime(
-  all$DOPRmin[all$sample == 'Yerkes'], all$DoB[all$sample == 'Yerkes'], units = "weeks"))/52.25 
+
+ind = all$sample == 'Yerkes' | all$sample == 'Edinburgh'
+
+all$age_pr[ind] = as.numeric(difftime(
+  all$DOPRmin[ind], all$DoB[ind], units = "weeks"))/52.25 
 
 library(lubridate)
 all$DOPRmin[(all$sample == 'AZA') | (all$sample == 'Taronga')] <- 
@@ -63,10 +83,13 @@ all$age_pr_adj[all$age <= all$age_pr & (all$sample %in% c('Taronga', 'Yerkes', '
 
 
 ### Origin
-all$origin[all$sample == 'AZA' & all$origin == 'UNKNOWN'] <- 'CAPTIVE' # is this appropriate?
-
-all$origin[(all$sample == 'Yerkes' | all$sample == 'Taronga') & all$origin == ''] <- 'CAPTIVE'
-all$origin[(all$sample == 'Yerkes' | all$sample == 'Taronga') & all$origin == 'W'] <- 'WILD'
+# are these appropriate?
+# all$origin[all$sample == 'AZA' & all$origin == 'UNKNOWN'] <- #'CAPTIVE' 
+# 
+# all$origin[(all$sample == 'Yerkes' | all$sample == 'Taronga') & all$origin == ''] <- 'CAPTIVE'
+# all$origin[(all$sample == 'Yerkes' | all$sample == 'Taronga') & all$origin == 'W'] <- 'WILD'
+all$origin[all$origin == ''] <- 'CAPTIVE'
+all$origin[all$origin == 'W'] <- 'WILD'
 
 table(all$origin)
 # library(dplyr) # needed?
@@ -91,24 +114,93 @@ all$LvZ[all$sample == 'Taronga'] <- 'zoo'
 # will need to create HPQ composites later
 # and compare the possibilities
 
-all$Dom_CZ <-
-  scale((all$dom-all$subm-all$depd+all$indp-all$fear+all$decs-all$tim-all$caut+
-     all$intll+all$pers+all$buly+all$stngy+40)/12)
 
-all$Ext_CZ <-
-  scale((-all$sol-all$lazy+all$actv+all$play+all$soc-all$depr+all$frdy+all$affc+all$imit+24)/9)
+all$Dom = NA
+all$Ext = NA
+all$Con = NA
+all$Agr = NA
+all$Neu = NA
+all$Opn = NA
 
-all$Con_CZ <-
-  scale((-all$impl-all$defn-all$reckl-all$errc-all$irri+all$pred-all$aggr-all$jeals-all$dsor+64)/9)
 
-all$Agr_CZ <-
-  scale((all$symp+all$help+all$sens+all$prot+all$gntl)/5)
+ind = (all$sample == 'AZA' | all$sample == 'Yerkes' | all$sample == 'Taronga')
 
-all$Neu_CZ <-
-  scale((-all$stbl+all$exct-all$unem+16)/3)
+all[ind,]$Dom <-
+  (all[ind,]$dom-all[ind,]$subm-all[ind,]$depd+all[ind,]$indp-all[ind,]$fear+all[ind,]$decs
+   -all[ind,]$tim-all[ind,]$caut+all[ind,]$intll+all[ind,]$pers+all[ind,]$buly+all[ind,]$stngy+40)/12
 
-all$Opn_CZ <-
-  scale((all$inqs+all$invt)/2)
+all[ind,]$Ext <-
+  (-all[ind,]$sol-all[ind,]$lazy-all[ind,]$depr
+   +all[ind,]$actv+all[ind,]$play+all[ind,]$soc+all[ind,]$frdy+all[ind,]$affc+all[ind,]$imit+24)/9
+
+all[ind,]$Con <-
+  (-all[ind,]$impl-all[ind,]$defn-all[ind,]$reckl-all[ind,]$errc-all[ind,]$irri
+   +all[ind,]$pred-all[ind,]$aggr-all[ind,]$jeals-all[ind,]$dsor+64)/9
+
+all[ind,]$Agr <-
+  (all[ind,]$symp+all[ind,]$help+all[ind,]$sens+all[ind,]$prot+all[ind,]$gntl)/5
+
+all[ind,]$Neu <-
+  (-all[ind,]$stbl+all[ind,]$exct-all[ind,]$unem+16)/3
+
+all[ind,]$Opn <-
+  (all[ind,]$inqs+all[ind,]$invt) /2
+  
+
+
+ind = (all$sample == 'Japan' | all$sample == 'Edinburgh') 
+
+all[ind,]$Dom <-
+  (all[ind,]$dom
+   -all[ind,]$subm
+   -all[ind,]$depd
+   +all[ind,]$indp
+   -all[ind,]$fear
+   +all[ind,]$decs
+   -all[ind,]$tim
+   -all[ind,]$caut
+   +all[ind,]$intll
+   +all[ind,]$pers
+   +all[ind,]$buly
+   +all[ind,]$stngy
+   -all[ind,]$Vuln - all[ind,]$Anx + all[ind,]$manp + 56)/15
+
+all[ind,]$Ext <-
+  (-all[ind,]$sol-all[ind,]$lazy-all[ind,]$depr
+   +all[ind,]$actv+all[ind,]$play+all[ind,]$soc+all[ind,]$frdy+all[ind,]$affc+all[ind,]$imit
+   -all[ind,]$Indv + 32)/10
+
+all[ind,]$Con <-
+  (-all[ind,]$impl-all[ind,]$defn-all[ind,]$reckl-all[ind,]$errc-all[ind,]$irri
+   +all[ind,]$pred-all[ind,]$aggr-all[ind,]$jeals-all[ind,]$dsor
+   - all[ind,]$Thot - all[ind,]$Dist - all[ind,]$Unper - all[ind,]$Quit - all[ind,]$clmy + 104)/14
+
+all[ind,]$Agr <-
+  (all[ind,]$symp+all[ind,]$help+all[ind,]$sens+all[ind,]$prot+all[ind,]$gntl
+   + all[ind,]$Conv)/6
+
+all[ind,]$Neu <-
+  (-all[ind,]$stbl+all[ind,]$exct-all[ind,]$unem
+   - all[ind,]$Cool + all[ind,]$aut + 24)/5
+
+all[ind,]$Opn <-
+  (all[ind,]$inqs+all[ind,]$invt
+   + all[ind,]$Cur + all[ind,]$Innov) / 4
+
+
+# Scale each dimension across all chimps
+all$Dom_CZ <- scale(all$Dom)
+all$Ext_CZ <- scale(all$Ext)
+all$Con_CZ <- scale(all$Con)
+all$Agr_CZ <- scale(all$Agr)
+all$Neu_CZ <- scale(all$Neu)
+all$Opn_CZ <- scale(all$Opn)
+
+# removing individuals who died before rating
+rmovals <- which((all$age - all$age_pr) < 0.0)   # 29, 505, ++...
+# is 0 enough, or do we need a buffer?
+all <- (all[-c(rmovals),])
+
 
 
 ### Regression prepping
@@ -117,8 +209,14 @@ all$Opn_CZ <-
 
 library(survival)
 
-Dataset <- all[(all$sample == 'AZA') 
-               | (all$sample == 'Yerkes') | (all$sample == 'Taronga'),]
+# Dataset <- all[(all$sample == 'AZA') 
+#                | (all$sample == 'Yerkes') | (all$sample == 'Taronga'),]
+### !!!
+### something is going wrong with the regressions since adding all the new data
+#Dataset <- all[all$sample == 'Yerkes',]
+#Dataset = all[sample(nrow(all), 200), ]
+Dataset <- all
+
 
 Dataset$origin <- droplevels(Dataset$origin)
 
@@ -127,7 +225,10 @@ Dataset$origin <- droplevels(Dataset$origin)
 levels(Dataset$status)[levels(Dataset$status)=="Death"] <- 1
 levels(Dataset$status)[levels(Dataset$status)=="Alive"] <- 0
 
-y <- Surv(as.numeric(Dataset$lastDate),Dataset$status)
+
+
+
+y <- Surv(as.numeric(Dataset$age),Dataset$status)
 
 
 # adding LEFT truncation
@@ -149,7 +250,7 @@ Dataset$adjN <- scale(Dataset$Neu_CZ-scale(1/(1 + Dataset$age_pr_adj)))
 
 #y.Ltrunc <- Surv(as.numeric(Dataset$DOPRmin), as.numeric(Dataset$lastDate),Dataset$status ,
 #                 type='counting')
-y.Ltrunc <- Surv(Dataset$age_pr_adj, Dataset$age,Dataset$status,
+y.Ltrunc <- Surv(Dataset$age_pr, Dataset$age,Dataset$status,  # previously age_pr_adj
                  type='counting')
 
 # attr(y.Ltrunc, 'type') <- 'counting' # this is needed to be able to handle Cox
@@ -161,11 +262,6 @@ yLt = y.Ltrunc[rmNAs]
 #attr(yLt, 'type')
 datX = Dataset[rmNAs,]
 
-# need to do something about Tara -> IMPUTE?
-  # Alex says replace with 4's
-#which(datX$chimp == 'Tara')
-datX <- datX[-353,]
-yLt <- yLt[-353]
 
 ### P dimensions confounded with age
 
@@ -195,7 +291,9 @@ AICctab(fit.e0,fit.e1.DoB,fit.e2.DoB,fit.e3.DoB #,fit.e1,fit.e2,fit.e3,
        ,logLik=T,weights=T,base=T,delta=T)
 
 datX$E.r3.DoB <- fit.e3.DoB$residuals
-  datX$E.r3 <- fit.e3$residuals
+datX$E.r3 <- fit.e3$residuals
+# added for sake of LASSO
+datX$E.r2.DoB <- fit.e2.DoB$residuals
 
 
 # what do these residuals look like?
@@ -244,7 +342,7 @@ anova(fit.d0, fit.d1,fit.d2,fit.d3,fit.d1.DoB,fit.d2.DoB,fit.d3.DoB)
 
 #datX$D.r2.DoB <- fit.d2.DoB$residuals
 datX$D.r3.DoB <- fit.d3.DoB$residuals
-  datX$D.r3 <- fit.d3$residuals
+datX$D.r3 <- fit.d3$residuals
 
 
 ## Neuroticism
@@ -319,3 +417,11 @@ lasso.rN.cv = cv.glmnet(rmatx, datX$Neu_CZ)
 plot(lasso.rN, label=T)
 plot(lasso.rN.cv)
 coef(lasso.rN, s=lasso.rN.cv$lambda.1se)
+
+lasso.rD = glmnet(rmatx, datX$Dom_CZ)
+lasso.rD.cv = cv.glmnet(rmatx, datX$Dom_CZ)
+plot(lasso.rD, label=T)
+plot(lasso.rD.cv)
+coef(lasso.rD, s=lasso.rD.cv$lambda.1se)
+
+## these suggest just the quadratics for O and E

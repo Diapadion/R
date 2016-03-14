@@ -60,8 +60,9 @@ library(rms)
 library(DAAG)
 vif(cmm.1)
 
-
-#vif.mer(cmm.1)
+source("clmm_mer-utils.R")
+# this doesn't appear to do anything for clmm, or, you know, work
+vif.mer(cmm.1)
 
 
 

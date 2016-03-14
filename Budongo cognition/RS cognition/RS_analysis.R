@@ -14,11 +14,18 @@
 
 #######
 
+library(optimx)
+library(nloptr)
+library(bbmle)
+library(lme4)
+
+library(Hmisc)
+
 ### [0] Correlations among personality domains
 
 # dependent on [1] code
 
-library(Hmisc)
+
 rcorr(as.matrix(intLvlPers2[,c(4:9)]), type="spearman")
 
 
@@ -83,85 +90,85 @@ p.adjust(c(0.002396, 0.02227, 0.03598, 0.04071), 'BH', 4)
 # starting from 'scratch'
 
 
-booterLvl <- NULL
-for (i in 1:500){
-  booterLvl = rbind(booterLvl,intLvlPers)
-}
-
-  
-  
-library(nnet)
-RS.mult.lvl.0 <- multinom(RSpartic ~ Dominance + Conscientiousness + Openness + Neuroticism +
-                            Agreeableness + Extraversion,  data = intLvlPers)
-# this doesn't _really_ seem lke it has worked
-
-
-#polr doesn't work for all predictors
-library(MASS)
-RS.om.lvl.0 <- polr(RSpartic ~ Dominance + Conscientiousness + Openness + Neuroticism +
-                      #Agreeableness + 
-                      Extraversion,
-                    data = intLvlPers, model = "probit"
-                    )
-
-# nor does clm...
-library(ordinal)
-RS.om.lvl.b0 <- clm(RSpartic ~ Dominance + Conscientiousness + Openness + Neuroticism +
-       Agreeableness + Extraversion,
-     data = booterLvl #, link = "probit"
-)
-
-saveB = Boot(RS.om.lvl.0, R = 1000, method = 'case') # doens't work
-
-
-# ... nope
-library(rms)
-RS.om.lvl.0 <- #orm # is original
-  lrm(RSpartic ~ Dominance + Conscientiousness + Openness + Neuroticism +
-                     Agreeableness + Extraversion,
-                   data = intLvlPers #, model = "probit"
-)
-
-
+# booterLvl <- NULL
+# for (i in 1:500){
+#   booterLvl = rbind(booterLvl,intLvlPers)
+# }
 # 
-library(glmnet)
-
-fit3=glmnet(as.matrix(intLvlPers[,3:8]),
-            as.double(intLvlPers$RSpartic)-1,
-            #lapply(intLvlPers$RSpartic,as.numeric),
-            family="multinomial")
-
-
-# I have no idea
-library(VGAM)
-RS.v.0 <- vglm(RSpartic ~ Dominance + Conscientiousness + Openness + Neuroticism +
-                 Agreeableness + Extraversion,
-               data = intLvlPers,
-               family=cumulative(link="multilogit", parallel=TRUE)
-)
-
-
-# let's do this first with the Tukey tests
-#library(multcomp)
-library(DTK)
-RlvlS.dtk.d = DTK.test(intLvlPers$Dominance, intLvlPers$RSpartic)
-RlvlS.dtk.c = DTK.test(intLvlPers$Conscientiousness, intLvlPers$RSpartic)
-RlvlS.dtk.n = DTK.test(intLvlPers$Neuroticism, intLvlPers$RSpartic)
-RlvlS.dtk.o = DTK.test(intLvlPers$Openness, intLvlPers$RSpartic)
-
-library(MASS)
-mod.polr.o <- polr(RSpartic ~ Openness + I(Openness^2), data=intLvlPers)
-mod.polr.c <- polr(RSpartic ~ Conscientiousness + I(Conscientiousness^2), data=intLvlPers)
-mod.polr.d <- polr(RSpartic ~ Dominance + I(Dominance^2), data=intLvlPers) # + I(Dominance^2)
-mod.polr.n <- polr(RSpartic ~ Neuroticism + I(Neuroticism^2), data=intLvlPers)
-
-# below is consistent with above
-mod.polr.ce <- polr(RSpartic ~ Extraversion + Conscientiousness, data=intLvlPers)
-mod.polr.oa <- polr(RSpartic ~ Openness + Agreeableness, data=intLvlPers)
-
-
-mod.polr.odnc <- polr(RSpartic ~ Openness + Dominance + Neuroticism + Conscientiousness, data=intLvlPers)
-mod.polr.all <- polr(RSpartic ~ Extraversion + Openness + Dominance + Neuroticism + Conscientiousness, data=intLvlPers)
+#   
+#   
+# library(nnet)
+# RS.mult.lvl.0 <- multinom(RSpartic ~ Dominance + Conscientiousness + Openness + Neuroticism +
+#                             Agreeableness + Extraversion,  data = intLvlPers)
+# # this doesn't _really_ seem lke it has worked
+# 
+# 
+# #polr doesn't work for all predictors
+# library(MASS)
+# RS.om.lvl.0 <- polr(RSpartic ~ Dominance + Conscientiousness + Openness + Neuroticism +
+#                       #Agreeableness + 
+#                       Extraversion,
+#                     data = intLvlPers, model = "probit"
+#                     )
+# 
+# # nor does clm...
+# library(ordinal)
+# RS.om.lvl.b0 <- clm(RSpartic ~ Dominance + Conscientiousness + Openness + Neuroticism +
+#        Agreeableness + Extraversion,
+#      data = booterLvl #, link = "probit"
+# )
+# 
+# saveB = Boot(RS.om.lvl.0, R = 1000, method = 'case') # doens't work
+# 
+# 
+# # ... nope
+# library(rms)
+# RS.om.lvl.0 <- #orm # is original
+#   lrm(RSpartic ~ Dominance + Conscientiousness + Openness + Neuroticism +
+#                      Agreeableness + Extraversion,
+#                    data = intLvlPers #, model = "probit"
+# )
+# 
+# 
+# # 
+# library(glmnet)
+# 
+# fit3=glmnet(as.matrix(intLvlPers[,3:8]),
+#             as.double(intLvlPers$RSpartic)-1,
+#             #lapply(intLvlPers$RSpartic,as.numeric),
+#             family="multinomial")
+# 
+# 
+# # I have no idea
+# library(VGAM)
+# RS.v.0 <- vglm(RSpartic ~ Dominance + Conscientiousness + Openness + Neuroticism +
+#                  Agreeableness + Extraversion,
+#                data = intLvlPers,
+#                family=cumulative(link="multilogit", parallel=TRUE)
+# )
+# 
+# 
+# # let's do this first with the Tukey tests
+# #library(multcomp)
+# library(DTK)
+# RlvlS.dtk.d = DTK.test(intLvlPers$Dominance, intLvlPers$RSpartic)
+# RlvlS.dtk.c = DTK.test(intLvlPers$Conscientiousness, intLvlPers$RSpartic)
+# RlvlS.dtk.n = DTK.test(intLvlPers$Neuroticism, intLvlPers$RSpartic)
+# RlvlS.dtk.o = DTK.test(intLvlPers$Openness, intLvlPers$RSpartic)
+# 
+# library(MASS)
+# mod.polr.o <- polr(RSpartic ~ Openness + I(Openness^2), data=intLvlPers)
+# mod.polr.c <- polr(RSpartic ~ Conscientiousness + I(Conscientiousness^2), data=intLvlPers)
+# mod.polr.d <- polr(RSpartic ~ Dominance + I(Dominance^2), data=intLvlPers) # + I(Dominance^2)
+# mod.polr.n <- polr(RSpartic ~ Neuroticism + I(Neuroticism^2), data=intLvlPers)
+# 
+# # below is consistent with above
+# mod.polr.ce <- polr(RSpartic ~ Extraversion + Conscientiousness, data=intLvlPers)
+# mod.polr.oa <- polr(RSpartic ~ Openness + Agreeableness, data=intLvlPers)
+# 
+# 
+# mod.polr.odnc <- polr(RSpartic ~ Openness + Dominance + Neuroticism + Conscientiousness, data=intLvlPers)
+# mod.polr.all <- polr(RSpartic ~ Extraversion + Openness + Dominance + Neuroticism + Conscientiousness, data=intLvlPers)
 
 
 
@@ -174,14 +181,14 @@ mod.polr.all <- polr(RSpartic ~ Extraversion + Openness + Dominance + Neuroticis
 # ending in either completion of the training or dropout
 
 
-TraTri = temp[temp$stage!='test',]
+TraTri = RStemp[RStemp$stage!='test',]
 TraTri.1 = TraTri[TraTri$Correctness==' Correct',]
 
 library(plyr)
 #TraTri = aggregate(TraTri, by=list('chimp','stage'), FUN=count)
 
 ##### I don't think anything other the line below is needed
-TraTri = count(temp, c("chimp","stage"))
+TraTri = count(RStemp, c("chimp","stage"))
 
 TraTri.1 = count(TraTri.1, c("chimp","stage"))
 TraTri$correct = TraTri.1$freq
@@ -193,7 +200,13 @@ TraTri$prop = TraTri$correct / TraTri$freq
 # the below seems to be more wrong than it should be ... this may be an aggregation effect
 #TraTri = cbind(TraTri, dropped = c(0,0,0,1,1,0,0,0,0,1,0,0,0,1,0,0,0,1,0,0,1,0,0,0,0,1,0,0,1))
 
-TraTri = cbind(TraTri, dropped = c(0,0,0,1,1,0,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,1,0,0,0,0,1))
+#TraTri = cbind(TraTri, dropped = c(0,0,0,1,1,0,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,1,0,0,0,0,1))
+TraTri = cbind(TraTri, dropped = 
+                 c(0,0,0,0,1,0,0,0,1,0,
+                   0,0,0,0,0,0,1,0,0,0,
+                   1,0,0,0,0,1,0,0,0,0,
+                   1,0,0,0,0,0,0,0,1,0,
+                   0,0,0,0,1,1,1,1))
 
 TraTri = merge(TraTri,aggPers, by.x= "chimp", "Chimp")
 
@@ -233,6 +246,7 @@ RS.drop.aft.frail <- survreg(dOut ~ Dominance + Conscientiousness + Openness + N
                        , data = TraTri, dist='lognormal')
 
 summary(RS.drop.aft.frail)
+ci.drop = confint(RS.drop.aft.frail, method='profile')
 # Significant effect for Conscientiousness
 # high Conscientious chimps stay in the task for more trials
 
@@ -253,6 +267,17 @@ RS.drop.cox <- coxph(dOut ~ Dominance + Conscientiousness + Openness + Neurotici
                        Agreeableness + Extraversion
                      + frailty(chimp)
                      , data = TraTri)
+
+
+# how about just the test trials?
+TestTri = TraTri[TraTri$stage=='test',]
+dOuTst = Surv(TestTri$freq, TestTri$dropped, type='right')
+
+RS.drop.aft.f.tst <- survreg(dOut ~ Dominance + Conscientiousness + Openness + Neuroticism +
+                               Agreeableness + Extraversion +
+                               frailty(stage)
+                             , data = TestTri, dist='lognormal')
+# not enough df... oh well
 
 
 # sketch model
@@ -276,11 +301,11 @@ RS.trial.lmm.prop <- lmer(prop ~ Dominance + Conscientiousness + Openness + Neur
 ### [3] Accuracy
 
 # "simple" GLMM of accuracy predicted by personality
-library(lme4)
+
 rs.glm1 <- glmer(Correctness ~ Dominance + Conscientiousness + Openness + Neuroticism +
                    Agreeableness + Extraversion +
                    (1 | chimp) + (1 | stage/TrialType)  #(1 | Section) + (1 | TrialType) + ,
-                 , data = temp, family = binomial
+                 , data = RStemp, family = binomial
 )
 # library(arm)
 # standardize() # converts everything to 2SE coefficients
@@ -290,7 +315,7 @@ rs.glm1.0 <- glmer(Correctness ~ Dominance + Conscientiousness + Openness + Neur
                      #Trial +  # adding this does... well, nothing.
                      (1 | chimp) + (1 | stage) + (1 | TrialType) #+ (1 | Section) + (1 | depend)
                    # last two look degenerate
-                   , data = temp, family = binomial
+                   , data = RStemp, family = binomial
 )
 
 # confint(rs.glm1.0, method="boot")
@@ -319,6 +344,34 @@ write(RS2accu.tbl,"../presentation images/RS2accu.html")
 ## there are multicolinearity / rank deficiency issues with the above, so just leave it
 
 
+rs.glm2.0 <- glmer(Correctness ~ Dominance + Conscientiousness + Openness + Neuroticism +
+                     Agreeableness + Extraversion +
+                     Trial +  # adding this does... well, very little.
+                     (1 | chimp) + (1 | stage) + (1 | TrialType) #+ (1 | Section) + (1 | depend)
+                   # last two look degenerate
+                   , data = RStemp, family = binomial
+)
+# shall we make trial more cumulative?
+
+rs.glm3.0 <- glmer(Correctness ~ Dominance + Conscientiousness + Openness + Neuroticism +
+                     Agreeableness + Extraversion +
+                     day +  
+                     (1 | chimp) + (1 | stage) + (1 | TrialType) #+ (1 | Section) + (1 | depend)
+                   # last two look degenerate
+                   , data = RStemp, family = binomial
+)
+
+rs.glm3.td <- glmer(Correctness ~ Dominance + Conscientiousness + Openness + Neuroticism +
+                     Agreeableness + Extraversion +
+                     day +  Trial +
+                     (1 | chimp) + (1 | stage) + (1 | TrialType) #+ (1 | Section) + (1 | depend)
+                   # last two look degenerate
+                   , data = RStemp, family = binomial
+)
+# 
+
+AICtab(rs.glm2.0, rs.glm1.0,rs.glm3.0, rs.glm3.td, weights=T, delta=T, base=T, logLik=T, sort=T) 
+
 
 ### Learning
 # after 33/48 trials, chimps progressed to next stage
@@ -327,23 +380,8 @@ write(RS2accu.tbl,"../presentation images/RS2accu.html")
 setwd("training/2-choice AA1 black/")
 
 
-# [4] RT
+### [4] Touches & RT
 
-library(car)
-
-rs.rt.lmm.all <- lmer(log(RT) ~ Dominance + Conscientiousness + Openness + Neuroticism +
-                   Agreeableness + Extraversion +
-                     (1 | chimp) + (1 | stage) + (1 | TrialType) #+ (1 | Section) + (1 | depend)
-                 , data = temp
-)
-
-rs.rt.lmm.1 <- lmer(log(RT) ~ Dominance + Conscientiousness + Openness + Neuroticism +
-                        Agreeableness + Extraversion +
-                        (1 | chimp) + (1 | stage) + (1 | TrialType) #+ (1 | Section) + (1 | depend)
-                      , data = temp[temp$Correctness==' Correct',]
-)
-
-# No effects.
 
 ## Number of touches:
 
@@ -353,8 +391,8 @@ rs.rt.lmm.1 <- lmer(log(RT) ~ Dominance + Conscientiousness + Openness + Neuroti
 
 grep("/",as.character(temp$Coordinates[728]))
 
-for (i in 1:dim(temp)[1]){
-  temp$touches[i] = countCharOccurrences('/', as.character(temp$Coordinates[i]))
+for (i in 1:dim(RStemp)[1]){
+  RStemp$touches[i] = countCharOccurrences('/', as.character(RStemp$Coordinates[i]))
   
 }
 # okay that function makes it work
@@ -364,29 +402,131 @@ for (i in 1:dim(temp)[1]){
 rs.touch.lmm <- glmer(touches ~ Dominance + Conscientiousness + Openness + Neuroticism +
                       Agreeableness + Extraversion +
                       (1 | chimp) + (1 | stage) + (1 | TrialType) #+ (1 | Section) + (1 | depend)
-                    , data = temp
+                    , data = RStemp[RStemp$touches > 0,]
                     #, data = temp[temp$Correctness==' Correct',]
-                    , family = poisson(link = "log")
+                    , family = poisson(link = "log"), control = glmerControl(optimizer='nloptwrap')
 )
-confint(rs.touch.lmm, method='Wald')
+rs.touch.lmm.d <- glmer(touches ~ Dominance + Conscientiousness + Openness + Neuroticism +
+                        Agreeableness + Extraversion + day +
+                        (1 | chimp) + (1 | stage) + (1 | TrialType) #+ (1 | Section) + (1 | depend)
+                      , data = RStemp[RStemp$touches > 0,]
+                      #, data = temp[temp$Correctness==' Correct',]
+                      , family = poisson(link = "log"), control = glmerControl(optimizer='Nelder_Mead')
+)
+
 
 rs.touch.lmm.1 <- glmer(touches ~ Dominance + Conscientiousness + Openness + Neuroticism +
                         Agreeableness + Extraversion +
                         (1 | chimp) + (1 | stage) + (1 | TrialType) #+ (1 | Section) + (1 | depend)
                       #, data = temp
-                      , data = temp[temp$Correctness==' Correct',]
-                      , family = poisson(link = "log")
+                      , data = RStemp[(RStemp$Correctness==' Correct' & RStemp$touches > 0),]
+                      , family = poisson(link = "log"), control = glmerControl(optimizer='Nelder_Mead')
 )
-ci.touches.1 <- confint(rs.touch.lmm.1, method='Wald')
+rs.touch.lmm.1.d <- glmer(touches ~ Dominance + Conscientiousness + Openness + Neuroticism +
+                          Agreeableness + Extraversion + day +
+                          (1 | chimp) + (1 | stage) + (1 | TrialType) #+ (1 | Section) + (1 | depend)
+                        #, data = temp
+                        , data = RStemp[(RStemp$Correctness==' Correct' & RStemp$touches > 0),]
+                        , family = poisson(link = "log"), control = glmerControl(optimizer='Nelder_Mead')
+)
+
 
 rs.touch.lmm.0 <- glmer(touches ~ Dominance + Conscientiousness + Openness + Neuroticism +
                         Agreeableness + Extraversion +
                         (1 | chimp) + (1 | stage) + (1 | TrialType) #+ (1 | Section) + (1 | depend)
                       #, data = temp
-                      , data = temp[temp$Correctness==' Incorrect',]
-                      , family = poisson(link = "log")
+                      ,  data = RStemp[(RStemp$Correctness==' Incorrect' & RStemp$touches > 0),]
+                      , family = poisson(link = "log"), control = glmerControl(optimizer='Nelder_Mead')
 )
-ci.touches.0 <- confint(rs.touch.lmm.0, method='Wald')
+rs.touch.lmm.0.d <- glmer(touches ~ Dominance + Conscientiousness + Openness + Neuroticism +
+                          Agreeableness + Extraversion + day +
+                          (1 | chimp) + (1 | stage) + (1 | TrialType) #+ (1 | Section) + (1 | depend)
+                        #, data = temp
+                        ,  data = RStemp[(RStemp$Correctness==' Incorrect' & RStemp$touches > 0),]
+                        , family = poisson(link = "log"), control = glmerControl(optimizer='Nelder_Mead')
+)
+
+
+AICtab(rs.touch.lmm, rs.touch.lmm.d, rs.touch.lmm.1,
+       rs.touch.lmm.1.d, rs.touch.lmm.0, rs.touch.lmm.0.d, 
+       weights=T, delta=T, base=T, logLik=T, sort=T) 
+
+
+# won't complete with N_M
+# probably just have to deal with Wald
+ci.touches <- confint(rs.touch.lmm, method='Wald')
+ci.touches.0 <- confint(rs.touch.lmm.0, method='profile')
+ci.touches.1 <- confint(rs.touch.lmm.1, method='profile')
+ci.touches.d <- confint(rs.touch.lmm.d, method='Wald')
+ci.touches.0.d <- confint(rs.touch.lmm.0.d, method='profile')
+ci.touches.1.d <- confint(rs.touch.lmm.1.d, method='profile')
+
+
+
+
+### RT now
+
+# convergence problems with CIs can be fixed
+# the best solution at this point seems to be thru Nelder_Mead
+
+rs.rt.lmm.pers <- lmer(log(RT) ~ Dominance + Conscientiousness + Openness + Neuroticism +
+                         Agreeableness + Extraversion +
+                         (1 | chimp) + (1 | stage) + (1 | TrialType) #+ (1 | Section) + (1 | depend)
+                       , data = RStemp
+)
+rs.rt.lmm.pers.day <- lmer(log(RT) ~ Dominance + Conscientiousness + Openness + Neuroticism +
+                             Agreeableness + Extraversion + day + 
+                             (1 | chimp) + (1 | stage) + (1 | TrialType) #+ (1 | Section) + (1 | depend)
+                           , data = RStemp, control = lmerControl(optimizer='Nelder_Mead')
+)
+
+
+
+rs.rt.lmm.1 <- lmer(log(RT) ~ Dominance + Conscientiousness + Openness + Neuroticism +
+                      Agreeableness + Extraversion +
+                      (1 | chimp) + (1 | stage) + (1 | TrialType) #+ (1 | Section) + (1 | depend)
+                    , data = RStemp[RStemp$Correctness==' Correct',]
+)
+
+
+rs.rt.lmm.1.day <- lmer(log(RT) ~ Dominance + Conscientiousness + Openness + Neuroticism +
+                          Agreeableness + Extraversion + scale(day) +
+                          (1 | chimp) + (1 | stage) + (1 | TrialType) #+ (1 | Section) + (1 | depend)
+                        , data = RStemp[RStemp$Correctness==' Correct',],
+                        control = lmerControl(optimizer='Nelder_Mead' #"nloptwrap"
+                          # lmerControl(optimizer = "optimx", 
+                          #                     optCtrl=list(#maxfun=1000, 
+                          #                                  #method='nlminb'
+                          #                                  method='L-BFGS-G' )
+                                              ))
+
+ci.RT.1 = confint(rs.rt.lmm.1)
+ci.RT.1.d = confint(rs.rt.lmm.1.day, method='profile')
+
+
+ci.RT = confint(rs.rt.lmm.pers)
+ci.RT.d = confint(rs.rt.lmm.pers.day, method='profile')
+
+AICtab(rs.rt.lmm.pers, rs.rt.lmm.pers.day, rs.rt.lmm.1, rs.rt.lmm.1.day, weights=T, delta=T, base=T, logLik=T, sort=T) 
+
+
+
+
+
+# let's try with just the single touches
+
+rs.rt.lmm.1.1tch <- lmer(log(RT) ~ Dominance + Conscientiousness + Openness + Neuroticism +
+                      Agreeableness + Extraversion +
+                      (1 | chimp) + (1 | stage) + (1 | TrialType) #+ (1 | Section) + (1 | depend)
+                    , data = RStemp[(RStemp$Correctness==' Correct' & RStemp$touches == 1),]
+)
+rs.rt.lmm.1.day.1tch <- lmer(log(RT) ~ Dominance + Conscientiousness + Openness + Neuroticism +
+                          Agreeableness + Extraversion + day +
+                          (1 | chimp) + (1 | stage) + (1 | TrialType) #+ (1 | Section) + (1 | depend)
+                        , data = RStemp[(RStemp$Correctness==' Correct' & RStemp$touches == 1),]
+)
+# They don't seem to help. Probably due to the reduced sample size.
+
 
 
 countCharOccurrences <- function(char, s) {

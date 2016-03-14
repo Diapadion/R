@@ -3,15 +3,17 @@
 library(survival)
 
 attr(y, 'type') <- 'right'
+attr(y, 'type') <- 'mright'
 cox.m <- coxph(themodel)
 
 
 attr(yLt, 'type') <- 'counting'
 attr(yLt, 'type') <- 'mcounting'
 
-cox.trunc <- coxph(yLt ~ as.factor(sex) + as.factor(origin) + as.factor(LvZ) + 
+cox.trunc <- coxph(yLt ~ as.factor(sex) + as.factor(origin) + #as.factor(LvZ) + 
                                     Dom_CZ + Ext_CZ + Con_CZ +
-                                    Agr_CZ + Neu_CZ + Opn_CZ,  data=datX
+                                    Agr_CZ + Neu_CZ + Opn_CZ,  data=datX,
+                   control=list(maxiter = 1000)
                                   #dist = "t"
 )
 

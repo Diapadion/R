@@ -1,18 +1,21 @@
 {
-    "contents" : "\ntrong <- read.csv(file = \"Taronga Chimpanzees.csv\")\n\n# fiddling the Taronga DoBs\ntrong$bdate <- as.Date(trong$bdate, format = \"%d/%m/%Y\")\n\ntrong$formDoB <- format(trong$bdate, \"%m/%d/%Y\")\nwrite.csv(trong$formDoB,\"TarongaDoB.csv\")\n\nAZA <- read.csv(\"czoo.csv\")\ncolnames(AZA)[c(11:53)]\n\nJapan <- read.csv(\"japan_chimps_22_dec_2012.csv\")\ncolnames(Japan)[c(5:58)]\n\nyerk <- read.csv(\"Yerkes Mortality.csv\")\n\n\nall <- read.csv(\"long_all.csv\")\n\n# finding the differences between CPQ and HPQ\nsetdiff(tolower(colnames(Japan)[c(5:58)]),colnames(AZA)[c(11:53)])\n\n\n\n# aggregating DOPR dates from Yerkes\n\n# some were rated after their death... what should the DOPR be then? The date of death?\n\n\n\n\n#setwd(\"../Yerkes/\")\n#yp <- read.csv(file = \"yerkes_dec2_traits.csv\")",
+    "collab_server" : "",
+    "contents" : "# This file should not need to be run\n# it was used for getting the different sample in line for concatenation\n\n\ntrong <- read.csv(file = \"Taronga Chimpanzees.csv\")\n\n# fiddling the Taronga DoBs\ntrong$bdate <- as.Date(trong$bdate, format = \"%d/%m/%Y\")\n\ntrong$formDoB <- format(trong$bdate, \"%m/%d/%Y\")\nwrite.csv(trong$formDoB,\"TarongaDoB.csv\")\n\nAZA <- read.csv(\"czoo.csv\")\ncolnames(AZA)[c(11:53)]\n\nJapan <- read.csv(\"japan_chimps_22_dec_2012.csv\")\ncolnames(Japan)[c(5:58)]\n\nyerk <- read.csv(\"Yerkes Mortality.csv\")\n\n\nall <- read.csv(\"long_all.csv\")\n\n# finding the differences between CPQ and HPQ\nsetdiff(tolower(colnames(Japan)[c(5:58)]),colnames(AZA)[c(11:53)])\n\n\n\n# aggregating DOPR dates from Yerkes\n\n# some were rated after their death... what should the DOPR be then? The date of death?\n\n\n\n\n#setwd(\"../Yerkes/\")\n#yp <- read.csv(file = \"yerkes_dec2_traits.csv\")",
     "created" : 1447266291886.000,
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "723805633",
+    "hash" : "1263312270",
     "id" : "A2900B1A",
-    "lastKnownWriteTime" : 1448268055,
+    "lastKnownWriteTime" : 1457953285,
+    "last_content_update" : 1457953285958,
     "path" : "C:/Users/s1229179/GitHub/R/longevity/startingFixes.R",
     "project_path" : "startingFixes.R",
     "properties" : {
         "tempName" : "Untitled1"
     },
-    "relative_order" : 2,
+    "relative_order" : 1,
     "source_on_save" : false,
+    "source_window" : "",
     "type" : "r_source"
 }

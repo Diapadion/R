@@ -1,6 +1,7 @@
 # Survival Analyses
 #   (only)
 
+library(survival)
 
 # library(OutlierDC)
 # 
@@ -21,14 +22,14 @@
 #              Dom_CZ + Ext_CZ + Con_CZ +
 #              Agr_CZ + Neu_CZ + Opn_CZ, data=datX, method="boxplot")
 ## seem pretty meaningless
+detach("package:OutlierDC")
 
 
 # Alex's code for finding the ideal distribution
 
 thedistributions<-c("weibull","exponential","lognormal","loglogistic")
 
-
-themodel <- (y ~ as.factor(Dataset$sex) + Dataset$age_pr + #Dataset$age + 
+themodel <- (y ~ as.factor(Dataset$sex) + #Dataset$DoB + #Dataset$age_pr + Dataset$age + 
                as.factor(Dataset$origin) + as.factor(Dataset$LvZ) + 
                Dataset$Dom_CZ + Dataset$Ext_CZ + Dataset$Con_CZ +
                Dataset$Agr_CZ + Dataset$Neu_CZ + Dataset$Opn_CZ
@@ -51,7 +52,7 @@ LLlist2 = 0
 estimates = 0
 for (i in 1:length(thedistributions)) {
   thisdist = thedistributions[i]
-  fit = survreg(themodel, dist = thisdist)
+  fit = survreg(model.p, dist = thisdist)
   distlist[i] = thisdist
   LLlist1[i] = -2*(fit$loglik[1])
   LLlist2[i] = -2*(fit$loglik[2])
@@ -66,7 +67,9 @@ Result
 
 ### The model(s)
 
-mod1.w <- survreg(themodel, dist = 'weibull')
+mod0.w <- survreg(y ~ 1, dist='weibull', control=list(maxiter = 10000))
+
+mod1.w <- survreg(themodel, dist = 'weibull', control=list(maxiter = 10000))
 mod1.ll <- survreg(themodel, dist = 'loglogistic')
 mod1.e <- survreg(themodel, dist = 'exponential')
 
@@ -74,12 +77,58 @@ mod.p.ll <- survreg(model.p, dist = 'loglogistic')
   
 summary(mod1.ll)
 
-fit1 <- survfit(themodel)
+fit1 <- survfit(yLt ~ 1 + as.factor(Dataset$sex)
+                )
+plot(fit1)
+summary(fit1)
 
 mod2.ll <- survreg(model.agexE, dist = 'loglogistic')
 
 mod.3 <- coxph(themodel)
 # Cox model doesn't support "mright" survival data
+
+# what happens if we build in the adjusted E and O
+
+mod.10.DoB <-  survreg(y ~ as.factor(Dataset$sex) + Dataset$DoB + #Dataset$age_pr + Dataset$age + 
+              as.factor(Dataset$origin) + as.factor(Dataset$LvZ) + 
+              Dataset$Dom_CZ + Dataset$Ext_CZ + Dataset$Con_CZ +
+              Dataset$Agr_CZ + Dataset$Neu_CZ + Dataset$Opn_CZ,
+              dist = 'weibull'
+)
+
+mod.10.age_pr <- survreg(y ~ as.factor(Dataset$sex) + Dataset$age_pr +
+                        as.factor(Dataset$origin) + as.factor(Dataset$LvZ) + 
+                        Dataset$Dom_CZ + Dataset$Ext_CZ + Dataset$Con_CZ +
+                        Dataset$Agr_CZ + Dataset$Neu_CZ + Dataset$Opn_CZ,
+                        dist = 'weibull'
+)
+
+mod.10.age <- survreg(y ~ as.factor(Dataset$sex) + Dataset$age +
+                           as.factor(Dataset$origin) + as.factor(Dataset$LvZ) + 
+                           Dataset$Dom_CZ + Dataset$Ext_CZ + Dataset$Con_CZ +
+                           Dataset$Agr_CZ + Dataset$Neu_CZ + Dataset$Opn_CZ,
+                      dist = 'weibull'
+)
+# so with just age, the Personality stuff comes through
+  
+
+
+# testing
+attr(y, 'type') <- 'right'
+#Surv(age,status)
+mod.99 <-  survreg(y ~ 1 + as.factor(sex) #+ #Dataset$DoB + #Dataset$age_pr + Dataset$age + 
+                         #as.factor(Dataset$origin) + #as.factor(Dataset$LvZ) + 
+                        # Dataset$Dom_CZ + Dataset$Ext_CZ + Dataset$Con_CZ
+                        #+ Dataset$Agr_CZ #+ Dataset$Neu_CZ# + Dataset$Opn_CZ
+                   , data = Dataset    
+                   , dist = 'weibull'
+)  
+
+mod.199 <- survreg(yLt ~ 1, , dist = 't')
+# fuck
+
+
+
 
 library(car)
 

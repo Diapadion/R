@@ -45,17 +45,31 @@ mcmc1 <- MCMCglmm(Time ~ Dominance, random = ~Chimp + Date,
                   prior = priorB
                   )
 
+
+### THIS ONE ###
 mcmc2 <- MCMCglmm(Time ~ Dominance + Conscientiousness +
                     Openness + Neuroticism + Agreeableness +
                     Extraversion, 
                   random =~ idh(trait):Chimp + idh(trait):Date,
-                  data = inPodL, family='zipoisson',
+                  data = inPodL.mcmc, family='zipoisson',
                   , rcov=~idh(trait):units
                   , verbose = FALSE,
                   burnin = 10000 , nitt = 90000,
                   prior = priorB
 )
 
+mcmc2.0.0 <- MCMCglmm(Time ~ Dominance + Conscientiousness +
+                    Openness + Neuroticism + Agreeableness +
+                    Extraversion, 
+                  random =~ idh(trait):Chimp + idh(trait):Date,
+                  data = inPodL.mcmc, family='hupoisson',
+                  , rcov=~idh(trait):units
+                  , verbose = FALSE,
+                  burnin = 10000 , nitt = 90000,
+                  prior = priorB
+)
+
+# maybe this one...
 mcmc2.1 <- MCMCglmm(Time ~ Dominance + Conscientiousness +
                     Openness + Neuroticism + Agreeableness +
                     Extraversion, 
@@ -65,6 +79,17 @@ mcmc2.1 <- MCMCglmm(Time ~ Dominance + Conscientiousness +
                   , verbose = FALSE,
                   burnin = 10000 , nitt = 90000,
                   prior = priorB
+)
+
+mcmc2.1.0 <- MCMCglmm(Time ~ Dominance + Conscientiousness +
+                      Openness + Neuroticism + Agreeableness +
+                      Extraversion, 
+                    random =~ us(trait):Chimp + us(trait):Date,
+                    data = inPodL, family='hupoisson',
+                    , rcov=~us(trait):units
+                    , verbose = FALSE,
+                    burnin = 10000 , nitt = 90000,
+                    prior = priorB
 )
 
 
@@ -107,10 +132,16 @@ priorB.2 <- list(R=list(V=diag(2),n=2,fix=2),
 
 nterms = 7
 
+# # this appears to be the best prior
+# priorC <- list(B=list(mu=matrix(0, nterms, 1), V=diag(nterms)*1e+6),  
+#                R=list(V=diag(2), nu=0.001, fix=2),
+#                G=list(G1=list(V=diag(c(1, 1e-6)), nu=0.001, fix=2),
+#                       G2=list(V=diag(c(1, 1e-6)), nu=0.001, fix=2)))
+
 priorC <- list(B=list(mu=matrix(0, nterms, 1), V=diag(nterms)*1e+6),  
-               R=list(V=diag(2), nu=1.002, fix=2),
-               G=list(G1=list(V=diag(c(1, 1e-6)), nu=1.002, fix=2),
-                      G2=list(V=diag(c(1, 1e-6)), nu=1.002, fix=2)))
+               R=list(V=diag(2), nu=2.001, fix=2),
+               G=list(G1=list(V=diag(c(1, 1e-6)), nu=2.001, fix=2),
+                      G2=list(V=diag(c(1, 1e-6)), nu=2.001, fix=2)))
 
 # this sets up a diffuse prior around zero on the fixed effects,   
 # where nterms is the number of fixed effects your fitting
@@ -121,27 +152,115 @@ diag(priorC$B$V)[seq(4, nterms, 2)] <- 1e-6
 # intercept) to be very small, essentially fixing them to zero.
 
 
-mcmc3 <- MCMCglmm(Time ~ s(Dominance) + s(Conscientiousness) +
-                    s(Openness) + s(Neuroticism) + s(Agreeableness) +
-                    s(Extraversion), 
-                  random =~ idh(trait):Chimp + idh(trait):Date,
-                  data = inPodL, family='zipoisson',
-                  , rcov=~idh(trait):units
-                  , verbose = FALSE,
-                  burnin = 10000 , nitt = 90000,
-                  prior = priorC
-)
+# mcmc3 <- MCMCglmm(Time ~ Dominance + Conscientiousness +
+#                     Openness + Neuroticism + Agreeableness +
+#                     Extraversion, 
+#                   random =~ idh(trait):Chimp + idh(trait):Date,
+#                   data = inPodL.mcmc, family='zipoisson',
+#                   , rcov=~idh(trait):units
+#                   , verbose = FALSE,
+#                   burnin = 10000 , nitt = 90000,
+#                   prior = priorC
+# )
 
 
+# THIS ONE
 mcmc3.us <- MCMCglmm(Time ~ Dominance + Conscientiousness +
                     Openness + Neuroticism + Agreeableness +
                     Extraversion, 
                   random =~ us(trait):Chimp + us(trait):Date,
-                  data = inPodL, family='zipoisson',
+                  data = inPodL.mcmc, family='zipoisson',
                   , rcov=~us(trait):units
                   , verbose = FALSE,
-                  burnin = 10000 , nitt = 90000,
+                  #burnin = 30000 , nitt = 300000,
+                  burnin = 10000 , nitt = 50000,
                   prior = priorC
 )
+summary(mcmc3.us)
 
 
+### hurdle?
+### ... probably not
+
+### should compare the ZIFp to the regular Poisson
+
+priorD <-list(R = list(V = diag(1), nu = 0.002), G =
+              list(G1 = list(V = diag(1), nu = 0.002)))
+
+mcmc3.p.us <- MCMCglmm(Time ~ Dominance + Conscientiousness +
+                          Openness + Neuroticism + Agreeableness +
+                          Extraversion, 
+                        random =~ us(trait):Chimp + us(trait):Date,
+                        data = inPodL.mcmc, family='poisson',
+                        , rcov=~us(trait):units
+                        , verbose = FALSE,
+                        burnin = 30000 , nitt = 100000,
+                        prior = priorC
+)
+
+mcmc3.za.us <- MCMCglmm(Time ~ Dominance + Conscientiousness +
+                       Openness + Neuroticism + Agreeableness +
+                       Extraversion, 
+                     random =~ us(trait):Chimp + us(trait):Date,
+                     data = inPodL.mcmc, family='zapoisson',
+                     , rcov=~us(trait):units
+                     , verbose = FALSE,
+                     burnin = 30000 , nitt = 100000,
+                     prior = priorC
+)
+
+mcmc3.hu.us <- MCMCglmm(Time ~ Dominance + Conscientiousness +
+                          Openness + Neuroticism + Agreeableness +
+                          Extraversion, 
+                        random =~ us(trait):Chimp + us(trait):Date,
+                        data = inPodL.mcmc, family='hupoisson',
+                        , rcov=~us(trait):units
+                        , verbose = FALSE,
+                        burnin = 30000 , nitt = 100000,
+                        prior = priorC
+)
+#summary(mcmc3.us)
+
+## can it just be done with glmm and compared via DIC?
+library(lme4)
+glm3.p.us <- glmer(Time ~ Dominance + Conscientiousness +
+                     Openness + Neuroticism + Agreeableness +
+                     Extraversion +
+                     (1 | Date) + (1 | Chimp)
+                     , data = inPodL.mcmc,
+                   family = poisson()
+                   )
+# this is shit, what about a regular ZIP?
+
+library(pscl)
+zifp3 <- zeroinfl(Time ~ Dominance + Conscientiousness +
+                    Openness + Neuroticism + Agreeableness +
+                    Extraversion
+                  , data = inPodL.mcmc, dist="poisson")
+zifp3.hu <- hurdle(Time ~ Dominance + Conscientiousness +
+                    Openness + Neuroticism + Agreeableness +
+                    Extraversion
+                  , data = inPodL.mcmc, dist="poisson")
+
+
+
+require(R2admb)
+install.packages("glmmADMB", repos="http://R-Forge.R-project.org")
+
+install.packages('C:/Users/s1229179/Downloads/glmmADMB_0.8.3.3.zip', repos=NULL)
+
+install.packages("glmmADMB", 
+                 repos=c("http://glmmadmb.r-forge.r-project.org/repos",
+                         getOption("repos")),
+                 type="source")
+
+library(glmmADMB)
+# ...shit
+
+mew.poisZIF.1 <- glmmADMB(Time ~ Dominance + Conscientiousness +
+                            Openness + Neuroticism + Agreeableness +
+                            Extraversion + (1 | Date) + (1 | Chimp),
+                          data=inPodL.mcmc, family = "poisson"
+                          , zeroInflation=TRUE
+)
+# probably choose to go with MCMCglmm

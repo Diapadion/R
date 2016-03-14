@@ -13,7 +13,7 @@
 
 
 
-#1) CI, ED, FK, KL, EV, PE, LO
+# [1] CI, ED, FK, KL, EV, PE, LO
 
 EWpartic = as.factor(c(1,0,1,0,1,1,0,1,0,0,0,1,0,0,1,0,0,0))
 
@@ -49,7 +49,8 @@ p.adjust(c(c.t$p.value, n.t$p.value, o.t$p.value), 'BH', 3)
 # n.t$p.value, # hmmmmm
 
 
-#2) Time spent around the apparatus
+
+### [2] Time spent around the apparatus
 
 inPodL <- data.frame(Date=factor(),Chimp=factor(),Time=numeric(),
                      Dominance=numeric(),Extraversion=numeric(),
@@ -115,6 +116,11 @@ inPodL$secs[outliers(tatScreen$secs,3)]
 # happy days, no outliers above 3 SDs
 
 
+## need to fix (add) the score standardizations, here:
+levels(inPodL$Chimp)[6] <- 'Freek'
+inPodL.mcmc = merge(inPodL[,c(1:3)],aggPers[,c(1,8:13)], by.x= "Chimp", "Chimp")
+
+
 # what predicts the amount of total time spent in the pod, per day
 mew.pois.1 = glmer(Time ~ Dominance + Extraversion + Conscientiousness + Agreeableness
                    + Neuroticism + Openness + (1 | Date) + (1 | Chimp),
@@ -144,16 +150,7 @@ pgm1.tbl = htmlreg(ext.pgm1,ci.force=TRUE, custom.model.names='Time spent in pod
 write(pgm1.tbl,"InPodPGLM.html")
 
 
-install.packages("glmmADMB", repos=c("http://www.hafro.is/~arnima/repos", getOption("repos")))
-install.packages("glmmADMB", repos=c("http://glmmadmb.r-forge.r-project.org/repos", getOption("repos")),type="source")
-library(glmmADMB)
 
-mew.poisZIF.1 <- glmmadmb(Time ~ s(dom) + s(ext) + s(con) + s(agr) + s(neu) + s(opn) +
-                            (1 | Date) + (1 | Chimp),
-         data=inPodL, family = "poisson"
-         , zeroInflation=TRUE
-         )
-# probably choose to go with MCMCglmm
 library(MCMCglmm)
 
 mew.mcmc.pZIF.1 <- MCMCglmm(Time ~ Dominance + Conscientiousness +
@@ -163,7 +160,7 @@ mew.mcmc.pZIF.1 <- MCMCglmm(Time ~ Dominance + Conscientiousness +
                             , rcov=~idh(trait):units
                             , burnin = 10000 , nitt = 90000 , verbose = FALSE
                             )
-# Dom, Neu, Con
+# Dom, Neu, Con ### NO - SEE NEW FILE
 
 # I think idh is better, if this is being done correctly
 mew.mcmc.pZIF.2 <- MCMCglmm(Time ~ dom + ext + con + agr + neu + opn, random= ~Date + Chimp,
@@ -225,7 +222,7 @@ mew.mcmc.pZIF.4 <- MCMCglmm(Time ~ dom + ext + con + agr + neu + opn, random= ~D
 
 
 
-#3) Who continues to interact?
+# [3] Who continues to interact?
 
 
 tatScreen <- read.csv('EW_timeSpentAtScreenFinalStage.csv', header=TRUE)
@@ -247,7 +244,7 @@ tatScreen$Openness = numeric(1)
 
 
 for (i in 1:length(tatScreen$Date)){
-  tatScreen[i,13:18] = aggPers[which(as.character(tatScreen$Individual[i])==as.character(aggPers$Chimp)),2:7]
+  tatScreen[i,13:18] = aggPers[which(as.character(tatScreen$Individual[i])==as.character(aggPers$Chimp)),8:13]
 
 }
 
@@ -264,8 +261,11 @@ table(tatScreen$Individual)
 EW3particip = c(1,0,15,5,9,15,0,8,0,0,2,4,0,1,9,0,1,2)
 aggPers = cbind(aggPers, EW3particip)
 
-mew.3.pm <- glm(EW3particip ~ dom + neu + agr + ext + con + opn, data=aggPers, family=poisson)
+mew.3.pm <- glm(EW3particip ~ Dominance + Neuroticism + Agreeableness +
+                  Extraversion + Conscientiousness + Openness, data=aggPers, family=poisson)
 # again, need to ZIF
+# but ZIFing doesn't really work, so probably means it is unnecessary and we should stick to gm
+
 library(pscl)
 mew.3.zpm <- zeroinfl(EW3particip ~ Dominance + Neuroticism + 
                         Agreeableness + Extraversion + 
@@ -276,6 +276,22 @@ mew.3.hm <- hurdle(EW3particip ~ Dominance + Neuroticism +
                      Conscientiousness + Openness
                    , data=aggPers, dist="poisson")
 # Looks like Con doesn't figure into this one, just Agr
+
+# library(bbmle)  
+# AICtab(mew.3.pm, mew.3.hm, weights=T, delta=T, base=T, logLik=T, sort=T)
+
+confint(mew.3.pm)
+
+
+### can this model can be done better?
+# No, well, disagreeable chimps like Frek and Edith 
+# will approach the screen and lose interest, and they're
+# the ones approaching the screen lots because they don't
+# care about others around them
+#
+# but C?
+
+
 
 # MCMCglmm again ... to test robustness, or if MCMC is operating correctly
 mew.3.mcmc.zpm <- MCMCglmm(EW3particip ~ dom + ext + con + agr + neu + opn, 
@@ -317,7 +333,7 @@ mew.3.pgmm.s <- glmer(secs ~ s(Dominance) + s(Neuroticism) + s(Agreeableness) + 
                     ,data = tatScreen, family = poisson
                     #,control=glmerControl(maxfun=10000)
 )
-vif.mer(mew.3.pgmm.s)
+vif.mer(mew.3.pgmm)
 
 
 # MCMC test check again

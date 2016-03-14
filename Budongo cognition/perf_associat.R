@@ -34,15 +34,29 @@ LUdata <- cbind.data.frame(LUdata, aggPers[13,])
 cz_bin_pers <- rbind.data.frame(CIdata,EMdata,EDdata,EVdata,FKdata,KLdata,LOdata,LBdata,
                                 PAdata,Qdata,PEdata, DAdata, KDdata, LUdata)
 
+cz_bin_pers$Chimp = droplevels(cz_bin_pers$Chimp)
+
 cz_bin_pers$Accuracy <- as.factor(cz_bin_pers$Accuracy)
 cz_bin_pers$Trial <- as.integer(cz_bin_pers$Trial)
 
+cz_bin_pers$date = as.POSIXct(cz_bin_pers$SessionStart, origin="1970-01-01")   
+
+cz_bin_pers$date = format(cz_bin_pers$date, "%Y-%m-%d")
+
+library(dplyr)
+
+cz_bin_pers$day = NA
+indivs = levels(cz_bin_pers$Chimp)
+for (i in 1:length(indivs)){
+  
+  cz_bin_pers[cz_bin_pers$Chimp==indivs[i],] = cz_bin_pers[cz_bin_pers$Chimp==indivs[i],] %>% mutate(day = dense_rank(date))
+}
 
 
 
 # first we need an average performance matrix
 
-# need to deal with Frek later
+# need to deal with 'Frek' later
 
 accuracy <- data.frame(chimp = character(0), acc_mean = numeric(0), acc_sd = numeric(0))
 accuracy <- data.frame(
@@ -129,7 +143,8 @@ write(gm1.tbl,"PerfGLM.html")
 
 
 
-mod.gm2 <- glmer(Accuracy ~ dom + neu + agr + ext + con + opn + Trial + (1 | Group.1),
+mod.gm2 <- glmer(Accuracy ~ Dominance + Conscientiousness + Openness + Neuroticism
+                 + Agreeableness + Extraversion + Trial + (1 | Chimp),
   family = binomial, data=cz_bin_pers 
   )
 ci.accu2 <- confint(mod.gm2, method='Wald')
@@ -138,9 +153,7 @@ vif.mer(mod.gm2)
 mod.gm3 <- glmer(Accuracy ~ Trial + (1 | Group.1),
                  family = binomial, data=cz_bin_pers 
 )
-mod.gm4 <- glmer(Accuracy ~ Trial + (1 + Trial | Group.1),
-                 family = binomial, data=cz_bin_pers 
-)
+
 
 mod.gm3a <- glmer(Accuracy ~ Trial + s(SessionStart) + (1 | Group.1),
                              family = binomial, data=cz_bin_pers 
@@ -150,13 +163,24 @@ mod.gm2a <- glmer(Accuracy ~ dom + neu + agr + ext + con + opn + Trial + s(Sessi
                   family = binomial, data=cz_bin_pers 
 )
 
+mod.gm4 <- glmer(Accuracy ~ Dominance + Conscientiousness + Openness + Neuroticism
+                 + Agreeableness + Extraversion + day + (1 | Chimp),
+                 family = binomial, data=cz_bin_pers 
+)
+
+mod.gm5 <- glmer(Accuracy ~ + Dominance + Conscientiousness + Openness + Neuroticism
+                 + Agreeableness + Extraversion + Trial + day + (1 | Chimp),
+                 family = binomial, data=cz_bin_pers 
+)
+
 
 anova(mod.gm1,mod.gm2,mod.gm3,mod.gm4
       ,mod.gm2a
       ) # so gm2 is the best model
 # can't step is with lme4
 library(bbmle)
-AICctab(mod.gm1,mod.gm2,weights=TRUE, delta=TRUE, base=TRUE, logLik=TRUE, sort=TRUE)
+AICtab(mod.gm1,mod.gm2,mod.gm4,mod.gm5,weights=TRUE, delta=TRUE, base=TRUE, logLik=TRUE, sort=TRUE)
+pchisq(2*-1284.9-2*-1287.9,1,lower.tail=F)
 
 library(lmerTest)
 library(car)

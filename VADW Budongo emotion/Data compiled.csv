@@ -1,0 +1,322 @@
+Chimp,Outcome,Scenario,LT Scenario,LT Outcome,Horses,No scenario,New,Length of outcome,Length of outcome minus fades,Proportion LT Outcome
+LB,Emotional.outcome,Eric Expected,0,3,N,N,Y,13,NA,0.230769231
+PA2,Emotional.novel,Emotional.novel.horses,1,0,Y,N,Y,15,NA,0
+PA,Emotional.novel,Emotional.novel.horses,1,1,Y,N,Y,15,NA,0.066666667
+DA,Emotional.novel,Emotional.novel.horses,1,2,Y,N,Y,15,NA,0.133333333
+PA,Emotional.outcome,Emotional.outcome.horses,2,0,Y,N,Y,13,NA,0
+DA,Emotional.victim,Emotional.victim.horses,2,0,Y,N,Y,15,NA,0
+EV,Unemotional.novel,Unemotional.novel.horses,2,2,Y,N,Y,15,NA,0.133333333
+KL,Emotional.novel,Emotional.novel.horses,3,1,Y,N,Y,15,NA,0.066666667
+Q,Unemotional.novel,Unemotional.novel.horses,3,8,Y,N,Y,15,NA,0.533333333
+Q,Bystander.masked,Bystander.masked.horses,4,0,Y,N,Y,13,NA,0
+RE,Emotional.victim,Carlos Expected,4,7,N,N,Y,22,NA,0.318181818
+EV,Emotional.outcome,Emotional.outcome.horses,4,10,Y,N,Y,13,NA,0.769230769
+PA,Unemotional.novel,Unemotional.novel.horses,5,0,Y,N,Y,15,NA,0
+Q,Emotional.novel,Emotional.novel.horses,5,1,Y,N,Y,15,NA,0.066666667
+KL,Unemotional.novel,Unemotional.novel.horses,5,3,Y,N,Y,15,NA,0.2
+PA,Unemotional.victim,Unemotional.victim.horses,5,5,Y,N,Y,15,NA,0.333333333
+PA,Unemotional.victim,Carlos Unexpected,5,6,N,N,Y,13,NA,0.461538462
+FK,Emotional.victim,Emotional.victim.horses,5,13,Y,N,Y,15,NA,0.866666667
+FK,Unemotional.outcome,Eric Unexpected,7,2,N,N,Y,11,NA,0.181818182
+CI,Unemotional.outcome,Unemotional.outcome.horses,7,4,Y,N,Y,11,NA,0.363636364
+KL,Emotional.victim,Emotional.victim.horses,7,8,Y,N,Y,15,NA,0.533333333
+CI,Emotional.outcome,Emotional.outcome.horses,7,11,Y,N,Y,13,NA,0.846153846
+EV,Emotional.victim,Emotional.victim.horses,7,12,Y,N,Y,15,NA,0.8
+EV,Bystander.masked,Bystander.masked.horses,8,1,Y,N,Y,13,NA,0.076923077
+PE,Unemotional.novel,Unemotional.novel.horses,8,1,Y,N,Y,15,NA,0.066666667
+KL,Unemotional.victim,Carlos Unexpected,8,3,N,N,Y,13,NA,0.230769231
+PE,Unemotional.victim,Unemotional.victim.horses,8,3,Y,N,Y,15,NA,0.2
+Q,Unemotional.victim,Unemotional.victim.horses,8,6,Y,N,Y,15,NA,0.4
+CI,Emotional.novel,Emotional.novel.horses,8,9,Y,N,Y,15,NA,0.6
+FK,Unemotional.victim,Carlos Unexpected,8,12,N,N,Y,13,NA,0.923076923
+KL,Emotional.outcome,Eric Expected,9,1,N,N,Y,13,NA,0.076923077
+PA,Emotional.victim,Emotional.victim.horses,9,2,Y,N,Y,15,NA,0.133333333
+PE,Unemotional.outcome,Unemotional.outcome.horses,9,2,Y,N,Y,11,NA,0.181818182
+PE,Emotional.victim,Emotional.victim.horses,9,7,Y,N,Y,15,NA,0.466666667
+LB,Emotional.victim,Carlos Expected,9,13,N,N,Y,22,NA,0.590909091
+ED,Unemotional.novel,Unemotional.novel.horses,9,13,Y,N,Y,15,NA,0.866666667
+DA,Unemotional.victim,Unemotional.victim.horses,10,0,Y,N,Y,15,NA,0
+LB,Unemotional.victim,Unemotional.victim.horses,10,2,Y,N,Y,15,NA,0.133333333
+CI,Unemotional.victim,Unemotional.victim.horses,10,5,Y,N,Y,15,NA,0.333333333
+PA2,Unemotional.novel,Unemotional.novel.horses,10,7,Y,N,Y,15,NA,0.466666667
+CI,Victim.masked,Victim.masked.horses,10,7,Y,N,Y,13,NA,0.538461538
+LB,Emotional.novel,Emotional.novel.horses,10,12,Y,N,Y,15,NA,0.8
+FK,Emotional.outcome,Eric Expected,10,13,N,N,Y,13,NA,1
+KL,Victim.masked,Victim.masked.horses,11,1,Y,N,Y,13,NA,0.076923077
+PA2,Unemotional.victim,Unemotional.victim.horses,11,2,Y,N,Y,15,NA,0.133333333
+PE,Emotional.victim,Carlos Expected,11,3,N,N,Y,22,NA,0.136363636
+ED,Unemotional.victim,Carlos Unexpected,11,3,N,N,Y,13,NA,0.230769231
+RE,Unemotional.victim,Unemotional.victim.horses,11,11,Y,N,Y,15,NA,0.733333333
+PE,Emotional.outcome,Eric Expected,12,1,N,N,Y,13,NA,0.076923077
+PE,Bystander.masked,Bystander.masked.horses,12,2,Y,N,Y,13,NA,0.153846154
+ED,Emotional.victim,Carlos Expected,12,3,N,N,Y,22,NA,0.136363636
+KL,Unemotional.victim,Unemotional.victim.horses,12,3,Y,N,Y,15,NA,0.2
+PE,Unemotional.victim,Carlos Unexpected,12,5,N,N,Y,13,NA,0.384615385
+PA,Unemotional.outcome,Unemotional.outcome.horses,12,6,Y,N,Y,11,NA,0.545454545
+PE,Victim.masked,Victim.masked.horses,12,6,Y,N,Y,13,NA,0.461538462
+FK,Emotional.victim,Carlos Expected,12,7,N,N,Y,22,NA,0.318181818
+CI,Unemotional.novel,Unemotional.novel.horses,12,8,Y,N,Y,15,NA,0.533333333
+LB,Emotional.victim,Emotional.victim.horses,12,9,Y,N,Y,15,NA,0.6
+ED,Emotional.novel,Emotional.novel.horses,12,13,Y,N,Y,15,NA,0.866666667
+LB,Bystander.masked,Bystander.masked.horses,13,1,Y,N,Y,13,NA,0.076923077
+PE,Unemotional.outcome,Eric Unexpected,13,1,N,N,Y,11,NA,0.090909091
+EV,Unemotional.victim,Unemotional.victim.horses,13,2,Y,N,Y,15,NA,0.133333333
+PE,Emotional.outcome,Emotional.outcome.horses,13,4,Y,N,Y,13,NA,0.307692308
+FK,Unemotional.novel,Unemotional.novel.horses,13,6,Y,N,Y,15,NA,0.4
+KL,Emotional.outcome,Emotional.outcome.horses,13,8,Y,N,Y,13,NA,0.615384615
+PE,Emotional.novel,Emotional.novel.horses,13,13,Y,N,Y,15,NA,0.866666667
+PA,Emotional.victim,Carlos Expected,13,22,N,N,Y,22,NA,1
+KL,Unemotional.outcome,Eric Unexpected,14,4,N,N,Y,11,NA,0.363636364
+RE,Unemotional.outcome,Unemotional.outcome.horses,14,5,Y,N,Y,11,NA,0.454545455
+ED2,Emotional.victim,Emotional.victim.horses,14,14,Y,N,Y,15,NA,0.933333333
+LU,Emotional.victim,Emotional.victim.horses,14,15,Y,N,Y,15,NA,1
+SO,Unemotional.novel,Unemotional.novel.horses,15,4,Y,N,Y,15,NA,0.266666667
+FK,Emotional.novel,Emotional.novel.horses,15,10,Y,N,Y,15,NA,0.666666667
+ED,Unemotional.victim,Unemotional.victim.horses,15,15,Y,N,Y,15,NA,1
+ED,Emotional.victim,Emotional.victim.horses,16,6,Y,N,Y,15,NA,0.4
+KD,Unemotional.novel,Unemotional.novel.horses,16,6,Y,N,Y,15,NA,0.4
+KL,Emotional.victim,Carlos Expected,16,7,N,N,Y,22,NA,0.318181818
+EV,Emotional.victim,Carlos Expected,16,18,N,N,Y,22,NA,0.818181818
+PA,Bystander.masked,Bystander.masked.horses,17,1,Y,N,Y,13,NA,0.076923077
+RE,Unemotional.novel,Unemotional.novel.horses,17,6,Y,N,Y,15,NA,0.4
+RE,Emotional.outcome,Eric Expected,17,7,N,N,Y,13,NA,0.538461538
+EV,Emotional.novel,Emotional.novel.horses,17,14,Y,N,Y,15,NA,0.933333333
+Q,Victim.masked,Victim.masked.horses,18,3,Y,N,Y,13,NA,0.230769231
+ED,Unemotional.outcome,Eric Unexpected,18,5,N,N,Y,11,NA,0.454545455
+Q,Unemotional.outcome,Unemotional.outcome.horses,18,5,Y,N,Y,11,NA,0.454545455
+KL,Bystander.masked,Bystander.masked.horses,18,7,Y,N,Y,13,NA,0.538461538
+RE,Emotional.novel,Emotional.novel.horses,18,12,Y,N,Y,15,NA,0.8
+SO,Unemotional.outcome,Unemotional.outcome.horses,19,3,Y,N,Y,11,NA,0.272727273
+EV2,Unemotional.victim,Unemotional.victim.horses,19,15,Y,N,Y,15,NA,1
+CI,Emotional.victim,Emotional.victim.horses,20,10,Y,N,Y,15,NA,0.666666667
+RE,Unemotional.victim,Carlos Unexpected,21,7,N,N,Y,13,NA,0.538461538
+KL,Unemotional.outcome,Unemotional.outcome.horses,21,7,Y,N,Y,11,NA,0.636363636
+LB,Unemotional.outcome,Unemotional.outcome.horses,21,8,Y,N,Y,11,NA,0.727272727
+RE,Emotional.victim,Emotional.victim.horses,21,14,Y,N,Y,15,NA,0.933333333
+ED,Emotional.outcome,Eric Expected,22,0,N,N,Y,13,NA,0
+PA,Unemotional.outcome,Eric Unexpected,22,10,N,N,Y,11,NA,0.909090909
+RE2,Emotional.outcome,Emotional.outcome.horses,22,13,Y,N,Y,13,NA,1
+FK,Victim.masked,Victim.masked.horses,22,13,Y,N,Y,13,NA,1
+LU,Emotional.novel,Emotional.novel.horses,22,15,Y,N,Y,15,NA,1
+LB,Unemotional.victim,Carlos Unexpected,23,10,N,N,Y,13,NA,0.769230769
+LB,Unemotional.outcome,Eric Unexpected,24,0,N,N,Y,11,NA,0
+HL,Emotional.outcome,Eric Expected,24,7,N,N,Y,13,NA,0.538461538
+RE,Emotional.outcome,Emotional.outcome.horses,24,NA,Y,N,Y,13,NA,NA
+EV2,Unemotional.victim,Carlos Unexpected,25,8,N,N,Y,13,NA,0.615384615
+FK,Unemotional.victim,Unemotional.victim.horses,25,9,Y,N,Y,15,NA,0.6
+LB,Unemotional.novel,Unemotional.novel.horses,25,12,Y,N,Y,15,NA,0.8
+PA,Emotional.outcome,Eric Expected,27,1,N,N,Y,13,NA,0.076923077
+EV,Unemotional.outcome,Unemotional.outcome.horses,27,6,Y,N,Y,11,NA,0.545454545
+EV,Unemotional.victim,Carlos Unexpected,28,8,N,N,Y,13,NA,0.615384615
+LB,Victim.masked,Victim.masked.horses,28,12,Y,N,Y,13,NA,0.923076923
+FK,Unemotional.outcome,Unemotional.outcome.horses,29,7,Y,N,Y,11,NA,0.636363636
+ED,Emotional.outcome,Emotional.outcome.horses,30,13,Y,N,Y,13,NA,1
+LB,Emotional.outcome,Emotional.outcome.horses,31,6,Y,N,Y,13,NA,0.461538462
+FK,Bystander.masked,Bystander.masked.horses,31,13,Y,N,Y,13,NA,1
+ED,Bystander.masked,Bystander.masked.horses,32,10,Y,N,Y,13,NA,0.769230769
+EV,Victim.masked,Victim.masked.horses,32,11,Y,N,Y,13,NA,0.846153846
+RE,Bystander.masked,Bystander.masked.horses,33,13,Y,N,Y,13,NA,1
+CI,Bystander.masked,Bystander.masked.horses,36,6,Y,N,Y,13,NA,0.461538462
+ED,Unemotional.outcome,Unemotional.outcome.horses,36,9,Y,N,Y,11,NA,0.818181818
+LB2,Emotional.outcome,Eric Expected,39,5,N,N,Y,13,NA,0.384615385
+HL,Unemotional.outcome,Unemotional.outcome.horses,40,10,Y,N,Y,11,NA,0.909090909
+FK,Emotional.outcome,Emotional.outcome.horses,41,11,Y,N,Y,13,NA,0.846153846
+EV,Emotional.outcome,Eric Expected,42,12,N,N,Y,13,NA,0.923076923
+PA,Victim.masked,Victim.masked.horses,45,13,Y,N,Y,13,NA,1
+EV,Unemotional.outcome,Eric Unexpected,48,8,N,N,Y,11,NA,0.727272727
+RE,Victim.masked,Victim.masked.horses,50,13,Y,N,Y,13,NA,1
+ED,Victim.masked,Victim.masked.horses,51,13,Y,N,Y,13,NA,1
+RE,Unemotional.outcome,Eric Unexpected,52,7,N,N,Y,11,NA,0.636363636
+DA,Unemotional.outcome,Unemotional.outcome.horses,55,11,Y,N,Y,11,NA,1
+KD,Emotional.victim,Carlos Expected,NA,0,N,N,N,22,20,0
+PA,Unemotional.victim,Carlos Unexpected,NA,0,N,N,N,13,11,0
+PE,Unemotional.victim,Carlos Unexpected,NA,0,N,N,N,13,11,0
+SO,Unemotional.victim,Carlos Unexpected,NA,0,N,N,N,13,11,0
+LO,Emotional.outcome,Eric Expected,NA,0,N,N,N,13,11,0
+LB,Unemotional.outcome,Eric Unexpected,NA,0,N,N,N,11,9,0
+LO,Unemotional.outcome,Eric Unexpected,NA,0,N,N,N,11,9,0
+PE,Unemotional.outcome,Eric Unexpected,NA,0,N,N,N,11,9,0
+Q,Unemotional.victim,N,NA,0,N,Y,Y,15,NA,0
+SO,Victim.masked,N,NA,0,N,Y,Y,13,NA,0
+DA,Emotional.victim,Carlos Expected,NA,1,N,N,N,22,20,0.045454545
+KL,Emotional.victim,Carlos Expected,NA,1,N,N,N,22,20,0.045454545
+EM,Unemotional.victim,Carlos Unexpected,NA,1,N,N,N,13,11,0.076923077
+Q,Unemotional.victim,Carlos Unexpected,NA,1,N,N,N,13,11,0.076923077
+CI,Emotional.outcome,Eric Expected,NA,1,N,N,N,13,11,0.076923077
+KL,Emotional.outcome,Eric Expected,NA,1,N,N,N,13,11,0.076923077
+PE,Emotional.outcome,Eric Expected,NA,1,N,N,N,13,11,0.076923077
+CI,Unemotional.outcome,Eric Unexpected,NA,1,N,N,N,11,9,0.090909091
+ED,Unemotional.outcome,Eric Unexpected,NA,1,N,N,N,11,9,0.090909091
+CI,Unemotional.outcome,N,NA,1,N,Y,Y,11,NA,0.090909091
+EV,Unemotional.outcome,N,NA,1,N,Y,Y,11,NA,0.090909091
+PE,Unemotional.outcome,N,NA,1,N,Y,Y,11,NA,0.090909091
+PE,Unemotional.victim,N,NA,1,N,Y,Y,15,NA,0.066666667
+SO,Unemotional.victim,N,NA,1,N,Y,Y,15,NA,0.066666667
+LB,Victim.masked,N,NA,1,N,Y,Y,13,NA,0.076923077
+KL,Unemotional.victim,Carlos Unexpected,NA,2,N,N,N,13,11,0.153846154
+LB,Unemotional.victim,Carlos Unexpected,NA,2,N,N,N,13,11,0.153846154
+Q,Emotional.outcome,Eric Expected,NA,2,N,N,N,13,11,0.153846154
+PE,Emotional.novel,N,NA,2,N,Y,Y,15,NA,0.133333333
+Q,Emotional.novel,N,NA,2,N,Y,Y,15,NA,0.133333333
+CI,Emotional.outcome,N,NA,2,N,Y,Y,13,NA,0.153846154
+PE,Emotional.outcome,N,NA,2,N,Y,Y,13,NA,0.153846154
+SO,Emotional.outcome,N,NA,2,N,Y,Y,13,NA,0.153846154
+EM,Unemotional.novel,N,NA,2,N,Y,Y,15,NA,0.133333333
+PE,Unemotional.novel,N,NA,2,N,Y,Y,15,NA,0.133333333
+Q,Unemotional.outcome,N,NA,2,N,Y,Y,11,NA,0.181818182
+CI,Unemotional.victim,N,NA,2,N,Y,Y,15,NA,0.133333333
+KL,Unemotional.victim,N,NA,2,N,Y,Y,15,NA,0.133333333
+Q,Victim.masked,N,NA,2,N,Y,Y,13,NA,0.153846154
+LO,Emotional.victim,Carlos Expected,NA,3,N,N,N,22,20,0.136363636
+CI,Unemotional.victim,Carlos Unexpected,NA,3,N,N,N,13,11,0.230769231
+LO,Unemotional.victim,Carlos Unexpected,NA,3,N,N,N,13,11,0.230769231
+LB,Emotional.outcome,Eric Expected,NA,3,N,N,N,13,11,0.230769231
+KL,Unemotional.outcome,Eric Unexpected,NA,3,N,N,N,11,9,0.272727273
+CI,Bystander.masked,N,NA,3,N,Y,Y,13,NA,0.230769231
+KL,Emotional.outcome,N,NA,3,N,Y,Y,13,NA,0.230769231
+KL,Unemotional.outcome,N,NA,3,N,Y,Y,11,NA,0.272727273
+KL,Victim.masked,N,NA,3,N,Y,Y,13,NA,0.230769231
+RE,Unemotional.victim,Carlos Unexpected,NA,4,N,N,N,13,11,0.307692308
+KL,Bystander.masked,N,NA,4,N,Y,Y,13,NA,0.307692308
+CI,Emotional.victim,N,NA,4,N,Y,Y,15,NA,0.266666667
+Q,Emotional.victim,N,NA,4,N,Y,Y,15,NA,0.266666667
+CI,Unemotional.novel,N,NA,4,N,Y,Y,15,NA,0.266666667
+EM,Unemotional.outcome,N,NA,4,N,Y,Y,11,NA,0.363636364
+FK,Unemotional.outcome,N,NA,4,N,Y,Y,11,NA,0.363636364
+PE,Victim.masked,N,NA,4,N,Y,Y,13,NA,0.307692308
+PA,Emotional.victim,Carlos Expected,NA,5,N,N,N,22,20,0.227272727
+PE,Emotional.victim,Carlos Expected,NA,5,N,N,N,22,20,0.227272727
+DA,Unemotional.victim,Carlos Unexpected,NA,5,N,N,N,13,11,0.384615385
+FK,Unemotional.victim,Carlos Unexpected,NA,5,N,N,N,13,11,0.384615385
+RE,Unemotional.outcome,Eric Unexpected,NA,5,N,N,N,11,9,0.454545455
+CI,Emotional.novel,N,NA,5,N,Y,Y,15,NA,0.333333333
+EV,Emotional.victim,N,NA,5,N,Y,Y,15,NA,0.333333333
+LB,Emotional.victim,N,NA,5,N,Y,Y,15,NA,0.333333333
+LB,Unemotional.outcome,N,NA,5,N,Y,Y,11,NA,0.454545455
+LU,Unemotional.outcome,N,NA,5,N,Y,Y,11,NA,0.454545455
+FK,Emotional.outcome,Eric Expected,NA,6,N,N,N,13,11,0.461538462
+FK,Unemotional.outcome,Eric Unexpected,NA,6,N,N,N,11,9,0.545454545
+FK,Bystander.masked,N,NA,6,N,Y,Y,13,NA,0.461538462
+LB,Bystander.masked,N,NA,6,N,Y,Y,13,NA,0.461538462
+Q,Bystander.masked,N,NA,6,N,Y,Y,13,NA,0.461538462
+ED,Unemotional.novel,N,NA,6,N,Y,Y,15,NA,0.4
+PA,Unemotional.outcome,N,NA,6,N,Y,Y,11,NA,0.545454545
+RE,Unemotional.outcome,N,NA,6,N,Y,Y,11,NA,0.545454545
+PA,Victim.masked,N,NA,6,N,Y,Y,13,NA,0.461538462
+EV,Unemotional.outcome,Eric Unexpected,NA,7,N,N,N,11,9,0.636363636
+KL,Emotional.novel,N,NA,7,N,Y,Y,15,NA,0.466666667
+FK,Emotional.outcome,N,NA,7,N,Y,Y,13,NA,0.538461538
+Q,Emotional.outcome,N,NA,7,N,Y,Y,13,NA,0.538461538
+SO,Unemotional.outcome,N,NA,7,N,Y,Y,11,NA,0.636363636
+Q,Emotional.victim,Carlos Expected,NA,8,N,N,N,22,20,0.363636364
+ED,Unemotional.victim,Carlos Unexpected,NA,8,N,N,N,13,11,0.615384615
+EM,Emotional.outcome,Eric Expected,NA,8,N,N,N,13,11,0.615384615
+ED2,Bystander.masked,N,NA,8,N,Y,Y,13,NA,0.615384615
+KL,Unemotional.novel,N,NA,8,N,Y,Y,15,NA,0.533333333
+EM,Emotional.victim,Carlos Expected,NA,9,N,N,N,22,20,0.409090909
+EM,Unemotional.outcome,Eric Unexpected,NA,9,N,N,N,11,9,0.818181818
+RE,Bystander.masked,N,NA,9,N,Y,Y,13,NA,0.692307692
+LU,Emotional.outcome,N,NA,9,N,Y,Y,13,NA,0.692307692
+RE,Emotional.outcome,N,NA,9,N,Y,Y,13,NA,0.692307692
+PE,Emotional.victim,N,NA,9,N,Y,Y,15,NA,0.6
+LB,Unemotional.victim,N,NA,9,N,Y,Y,15,NA,0.6
+ED,Victim.masked,N,NA,9,N,Y,Y,13,NA,0.692307692
+FK,Victim.masked,N,NA,9,N,Y,Y,13,NA,0.692307692
+EV,Unemotional.victim,Carlos Unexpected,NA,10,N,N,N,13,11,0.769230769
+EV,Emotional.outcome,Eric Expected,NA,10,N,N,N,13,11,0.769230769
+LU,Bystander.masked,N,NA,10,N,Y,Y,13,NA,0.769230769
+PE,Bystander.masked,N,NA,10,N,Y,Y,13,NA,0.769230769
+ED,Emotional.novel,N,NA,10,N,Y,Y,15,NA,0.666666667
+LB,Emotional.novel,N,NA,10,N,Y,Y,15,NA,0.666666667
+ED,Emotional.outcome,N,NA,10,N,Y,Y,13,NA,0.769230769
+LB,Emotional.outcome,N,NA,10,N,Y,Y,13,NA,0.769230769
+PA,Emotional.outcome,N,NA,10,N,Y,Y,13,NA,0.769230769
+KL,Emotional.victim,N,NA,10,N,Y,Y,15,NA,0.666666667
+RE,Emotional.victim,N,NA,10,N,Y,Y,15,NA,0.666666667
+ED,Unemotional.outcome,N,NA,10,N,Y,Y,11,NA,0.909090909
+ED,Unemotional.victim,N,NA,10,N,Y,Y,15,NA,0.666666667
+FK,Unemotional.victim,N,NA,10,N,Y,Y,15,NA,0.666666667
+RE,Unemotional.victim,N,NA,10,N,Y,Y,15,NA,0.666666667
+HL,Victim.masked,N,NA,10,N,Y,Y,13,NA,0.769230769
+LU,Victim.masked,N,NA,10,N,Y,Y,13,NA,0.769230769
+HL,Unemotional.victim,Carlos Unexpected,NA,11,N,N,N,13,11,0.846153846
+ED,Emotional.outcome,Eric Expected,NA,11,N,N,N,13,11,0.846153846
+RE,Emotional.outcome,Eric Expected,NA,11,N,N,N,13,11,0.846153846
+EV,Bystander.masked,N,NA,11,N,Y,Y,13,NA,0.846153846
+RE,Emotional.novel,N,NA,11,N,Y,Y,15,NA,0.733333333
+PA,Emotional.victim,N,NA,11,N,Y,Y,15,NA,0.733333333
+FK,Unemotional.novel,N,NA,11,N,Y,Y,15,NA,0.733333333
+RE,Unemotional.novel,N,NA,11,N,Y,Y,15,NA,0.733333333
+HL,Unemotional.outcome,N,NA,11,N,Y,Y,11,NA,1
+SO2,Unemotional.victim,N,NA,11,N,Y,Y,15,NA,0.733333333
+EV,Victim.masked,N,NA,11,N,Y,Y,13,NA,0.846153846
+RE,Victim.masked,N,NA,11,N,Y,Y,13,NA,0.846153846
+SO2,Victim.masked,N,NA,11,N,Y,Y,13,NA,0.846153846
+ED,Bystander.masked,N,NA,12,N,Y,Y,13,NA,0.923076923
+PA,Bystander.masked,N,NA,12,N,Y,Y,13,NA,0.923076923
+LU,Emotional.novel,N,NA,12,N,Y,Y,15,NA,0.8
+PA,Emotional.novel,N,NA,12,N,Y,Y,15,NA,0.8
+EV,Emotional.outcome,N,NA,12,N,Y,Y,13,NA,0.923076923
+SO,Emotional.victim,N,NA,12,N,Y,Y,15,NA,0.8
+LB,Unemotional.novel,N,NA,12,N,Y,Y,15,NA,0.8
+SO,Unemotional.novel,N,NA,12,N,Y,Y,15,NA,0.8
+LU,Unemotional.victim,N,NA,12,N,Y,Y,15,NA,0.8
+PA,Unemotional.victim,N,NA,12,N,Y,Y,15,NA,0.8
+CI,Emotional.victim,Carlos Expected,NA,13,N,N,N,22,20,0.590909091
+SO,Bystander.masked,N,NA,13,N,Y,Y,13,NA,1
+EV,Unemotional.novel,N,NA,13,N,Y,Y,15,NA,0.866666667
+LU,Unemotional.novel,N,NA,13,N,Y,Y,15,NA,0.866666667
+Q,Unemotional.novel,N,NA,13,N,Y,Y,15,NA,0.866666667
+EM,Victim.masked,N,NA,13,N,Y,Y,13,NA,1
+FK,Emotional.novel,N,NA,14,N,Y,Y,15,NA,0.933333333
+SO,Emotional.novel,N,NA,14,N,Y,Y,15,NA,0.933333333
+PA,Unemotional.novel,N,NA,14,N,Y,Y,15,NA,0.933333333
+EV,Unemotional.victim,N,NA,14,N,Y,Y,15,NA,0.933333333
+EV,Emotional.novel,N,NA,15,N,Y,Y,15,NA,1
+ED,Emotional.victim,N,NA,15,N,Y,Y,15,NA,1
+FK,Emotional.victim,N,NA,15,N,Y,Y,15,NA,1
+LU,Emotional.victim,N,NA,15,N,Y,Y,15,NA,1
+SO,Emotional.victim,Carlos Expected,NA,16,N,N,N,22,20,0.727272727
+ED,Emotional.victim,Carlos Expected,NA,18,N,N,N,22,20,0.818181818
+RE,Emotional.victim,Carlos Expected,NA,18,N,N,N,22,20,0.818181818
+FK,Emotional.victim,Carlos Expected,NA,19,N,N,N,22,20,0.863636364
+EV,Emotional.victim,Carlos Expected,NA,20,N,N,N,22,20,0.909090909
+HL,Emotional.victim,Carlos Expected,NA,20,N,N,N,22,20,0.909090909
+LB,Emotional.victim,Carlos Expected,NA,20,N,N,N,22,20,0.909090909
+DA,Bystander.masked,Bystander.masked.horses,NA,NA,Y,N,Y,13,NA,0
+HL,Bystander.masked,Bystander.masked.horses,NA,NA,Y,N,Y,13,NA,0
+LU,Bystander.masked,Bystander.masked.horses,NA,NA,Y,N,Y,13,NA,0
+SO,Bystander.masked,Bystander.masked.horses,NA,NA,Y,N,Y,13,NA,0
+HL,Emotional.novel,Emotional.novel.horses,NA,NA,Y,N,Y,15,NA,0
+SO,Emotional.novel,Emotional.novel.horses,NA,NA,Y,N,Y,15,NA,0
+DA,Emotional.outcome,Emotional.outcome.horses,NA,NA,Y,N,Y,13,NA,0
+HL,Emotional.outcome,Emotional.outcome.horses,NA,NA,Y,N,Y,13,NA,0
+LU,Emotional.outcome,Emotional.outcome.horses,NA,NA,Y,N,Y,13,NA,0
+Q,Emotional.outcome,Emotional.outcome.horses,NA,NA,Y,N,Y,13,NA,0
+SO,Emotional.outcome,Emotional.outcome.horses,NA,NA,Y,N,Y,13,NA,0
+HL,Emotional.victim,Emotional.victim.horses,NA,NA,Y,N,Y,15,NA,0
+Q,Emotional.victim,Emotional.victim.horses,NA,NA,Y,N,Y,15,NA,0
+SO,Emotional.victim,Emotional.victim.horses,NA,NA,Y,N,Y,15,NA,0
+EM,Bystander.masked,N,NA,NA,N,Y,Y,13,NA,0
+HL,Bystander.masked,N,NA,NA,N,Y,Y,13,NA,0
+EM,Emotional.novel,N,NA,NA,N,Y,Y,15,NA,0
+HL,Emotional.novel,N,NA,NA,N,Y,Y,15,NA,0
+EM,Emotional.outcome,N,NA,NA,N,Y,Y,13,NA,0
+HL,Emotional.outcome,N,NA,NA,N,Y,Y,13,NA,0
+EM,Emotional.victim,N,NA,NA,N,Y,Y,15,NA,0
+HL,Emotional.victim,N,NA,NA,N,Y,Y,15,NA,0
+HL,Unemotional.novel,N,NA,NA,N,Y,Y,15,NA,0
+EM,Unemotional.victim,N,NA,NA,N,Y,Y,15,NA,0
+HL,Unemotional.victim,N,NA,NA,N,Y,Y,15,NA,0
+CI,Victim.masked,N,NA,NA,N,Y,Y,13,NA,0
+DA,Unemotional.novel,Unemotional.novel.horses,NA,NA,Y,N,Y,15,NA,0
+HL,Unemotional.novel,Unemotional.novel.horses,NA,NA,Y,N,Y,15,NA,0
+LU,Unemotional.novel,Unemotional.novel.horses,NA,NA,Y,N,Y,15,NA,0
+LU,Unemotional.outcome,Unemotional.outcome.horses,NA,NA,Y,N,Y,11,NA,0
+HL,Unemotional.victim,Unemotional.victim.horses,NA,NA,Y,N,Y,15,NA,0
+LU,Unemotional.victim,Unemotional.victim.horses,NA,NA,Y,N,Y,15,NA,0
+SO,Unemotional.victim,Unemotional.victim.horses,NA,NA,Y,N,Y,15,NA,0
+DA,Victim.masked,Victim.masked.horses,NA,NA,Y,N,Y,13,NA,0
+HL,Victim.masked,Victim.masked.horses,NA,NA,Y,N,Y,13,NA,0
+LU,Victim.masked,Victim.masked.horses,NA,NA,Y,N,Y,13,NA,0
+SO,Victim.masked,Victim.masked.horses,NA,NA,Y,N,Y,13,NA,0

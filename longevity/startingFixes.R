@@ -1,3 +1,6 @@
+# This file should not need to be run
+# it was used for getting the different sample in line for concatenation
+
 
 trong <- read.csv(file = "Taronga Chimpanzees.csv")
 

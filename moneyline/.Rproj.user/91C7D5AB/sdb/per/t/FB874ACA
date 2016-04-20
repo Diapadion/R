@@ -1,0 +1,28 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1459878034453.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "FB874ACA",
+    "lastKnownWriteTime" : 7308604914264011873,
+    "last_content_update" : 1459878034453,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "xy74dhj2b3",
+        "caption" : "netf_stk",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=netf_stk&cache_key=xy74dhj2b3",
+        "displayedObservations" : 243,
+        "environment" : "",
+        "object" : "netf_stk",
+        "totalObservations" : 243,
+        "variables" : 18
+    },
+    "relative_order" : 9,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}

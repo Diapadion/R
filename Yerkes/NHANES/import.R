@@ -1,0 +1,157 @@
+### NHANES III data
+
+nhanes.bm <- read.SAScii('Z:/NHANES III/DS0010/02231-0010-Data.txt',
+                         'Z:/NHANES III/DS0010/02231-0010-Setup.sas')
+
+
+
+sort( sapply(ls(),function(x){object.size(get(x))}))
+
+
+### Chimps
+
+c.bm <- read.csv(file = 'cNHANES.csv')
+c.bm$wbc = c.bm$wbc/1000
+
+
+# Vars of interest
+
+hist(nhanes.bm$HSSEX) # sex
+hist(nhanes.bm$HSAGEIR) # age at 'interview'
+
+
+Weight?
+
+HEMATOLOGY
+WCP - WBC count - I think this needs to be /1000 in the chimps
+RCP - RBC count
+HTP - Hematocrit (%)
+HGP - Hemaglobin
+MVPSI - Mean corpuscular / cell volume (SI)
+MCPSI - mean corpuscular / cell hemaglobin (SI)
+MHP - mean cell hemaglobin concentration
+LMPDIF - lymphocytes (% of 100 cells)
+MOPDIF - monocytes (% of 100 cells)
+EOP - eosinophils (% of 100 cells)
+#BOP - basophils (% of 100 cells) # not in chimps
+
+SERUM BIOCHEMISTRY
+SGP - Glucose
+BUP - Blood Urea Nitrogen
+CEP - Creatinine
+TPP - (total) Protein
+AMP - Albumin
+TBP - (total) Bilirubin
+APPSI - Alkaline Phosphatase
+ATPSI - Alanine Aminotransferase (SGPT)
+ASPSI - Aspartate aminotransferase (SGOT)
+TCP - (total) Cholesterol
+SCP - (total) Calcium
+PSP - Phosphorus
+NAPSI - Sodium
+SKPSI - Potassium
+CLPSI - Chloride
+- AG ratio?
+- BC ratio?
+GBP - Globulin
+! - Lipase
+! - Amylase 
+TBP - Triglycerides
+! - Creatine Phosphokinase
+GGPSI - Gamma-glutamyl transpeptidase (GGTP)
+! - Magnesium
+OSPSI - Osmolality
+
+
+BMI, Height, Weight, BP and shit
+
+
+
+# selecting out which variable we want to work with
+
+# temp: for now, using the vars in common with the chimp set
+
+
+bmlabels = c("HSSEX","HSAGEIR", 
+             'WCP','RCP','HTP','HGP','MVPSI','MCPSI','MHP',
+             'LMPDIF','MOPDIF','EOP',#'BOP', not in chimps
+             'SGP','BUP','CEP','TPP','AMP','TBP','APPSI','ATPSI','ASPSI',
+             'TCP','SCP','PSP','NAPSI','SKPSI','CLPSI','GBP','TGP','GGPSI',
+             'OSPSI')
+# bmlabels %in% colnames(nhanes.bm)
+
+
+sel.nbm = nhanes.bm[,bmlabels]
+
+# fixing the NA coding
+#table(sel.nbm[,'SGP'])
+
+sel.nbm$WCP[sel.nbm$WCP == 88888] = NA
+
+sel.nbm$RCP[sel.nbm$RCP == 8888] = NA
+
+sel.nbm$HTP[sel.nbm$HTP == 88888] = NA
+
+sel.nbm$HGP[sel.nbm$HGP == 88888] = NA
+
+sel.nbm$MVPSI[sel.nbm$MVPSI == 88888] = NA
+
+sel.nbm$MCPSI[sel.nbm$MCPSI == 88888] = NA
+
+sel.nbm$MHP[sel.nbm$MHP == 88888] = NA
+
+sel.nbm$LMPDIF[sel.nbm$LMPDIF == 888] = NA
+
+sel.nbm$MOPDIF[sel.nbm$MOPDIF == 88] = NA
+
+sel.nbm$EOP[sel.nbm$EOP == 88] = NA
+
+sel.nbm$BOP[sel.nbm$BOP == 88] = NA
+
+sel.nbm$SGP[sel.nbm$SGP == 888] = NA
+
+sel.nbm$BUP[sel.nbm$BUP == 888] = NA
+
+sel.nbm$CEP[sel.nbm$CEP == 8888] = NA
+
+sel.nbm$TPP[sel.nbm$TPP == 8888] = NA
+
+sel.nbm$AMP[sel.nbm$AMP == 888] = NA
+
+sel.nbm$TBP[sel.nbm$TBP == 8888] = NA
+
+sel.nbm$APPSI[sel.nbm$APPSI == 8888] = NA
+
+sel.nbm$ATPSI[sel.nbm$ATPSI == 888] = NA
+
+sel.nbm$ASPSI[sel.nbm$ASPSI == 888] = NA
+
+sel.nbm$TCP[sel.nbm$TCP == 888] = NA
+
+sel.nbm$SCP[sel.nbm$SCP == 8888] = NA
+
+sel.nbm$PSP[sel.nbm$PSP == 8888] = NA
+
+sel.nbm$NAPSI[sel.nbm$NAPSI == 88888] = NA
+
+sel.nbm$SKPSI[sel.nbm$SKPSI == 8888] = NA
+
+sel.nbm$CLPSI[sel.nbm$CLPSI == 88888] = NA
+
+sel.nbm$GBP[sel.nbm$GBP == 888] = NA
+
+sel.nbm$TGP[sel.nbm$TGP == 8888] = NA
+
+sel.nbm$GGPSI[sel.nbm$GGPSI == 8888] = NA
+
+sel.nbm$OSPSI[sel.nbm$OSPSI == 888] = NA
+
+
+
+colnames(sel.nbm)[3:31] <- colnames(c.bm)[5:33]
+
+c.bm$species = 'chimp'
+sel.nbm$species = 'human'
+
+
+

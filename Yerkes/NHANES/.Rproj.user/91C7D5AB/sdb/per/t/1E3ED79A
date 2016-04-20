@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "# depends import.R\n\nlibrary(psych)\n\n### Humans\n\ndim(sel.nbm[complete.cases(sel.nbm),])\n\n\nfa.parallel(sel.nbm[complete.cases(sel.nbm),c(3:31)], fm = 'gls') #  pa?\n# seem like 10\n\nnfactors(sel.nbm[complete.cases(sel.nbm),c(3:31)], fm = 'ml')\n\n\nEFA.Comp.Data(sel.nbm[complete.cases(sel.nbm),c(3:31)], F.Max = 15, Graph = T)\n# okay fine, 10\n\n\nfa.1 <- fa(sel.nbm[,c(3:31)], nfactors = 10, fm = 'minres'\n   )\n\nfa.1a <- fa(sel.nbm[complete.cases(sel.nbm),c(3:31)], nfactors = 10, fm = 'minres'\n)\n\nfa.1x <- fa(sel.nbm[complete.cases(sel.nbm),c(3:31)], nfactors = 10, fm = 'ml'\n)\n\npa.1 <- principal(sel.nbm[,c(3:31)], nfactors = 10\n)\n\n\n### Chimps\n\nnfactors(c.bm[,c(5:33)], fm = 'gls') #  pa?\n\nfa.parallel(c.bm[,c(5:33)], fm = 'minres') #  pa?\n\n# chokes on missing data:\n# EFA.Comp.Data(\n#   aggregate(c.bm[,c(3:32)], by = list(c.bm$chimp), mean)\n#   ,F.Max = 15, Graph = T)\n\nfa.c.1 <- fa(c.bm[,c(5:33)], nfactors = 10, fm = 'minres'\n)\n\n\npa.c.1 <- principal(c.bm[,c(5:33)], nfactors = 10)\n\n\nprocrustes(fa.c.1$loadings, fa.1$loadings)\n\nprocrustes(fa.c.1$loadings, fa.1$loadings[,c(1:5,10,9,7,8,6)])\n\n\n0.793876724  8.809095e-01  0.71974158  0.747031357  0.59239310  0.82627457\n0.600784478  0.627731145  0.56643907  0.684564831  \n0.7193371\n\n\npcrust = procrustes(fa.1$loadings, fa.c.1$loadings)\n\npcrust = protest(fa.1$loadings, fa.c.1$loadings)\npspc = permustats(pcrust)\n\n\n\npcrusta = procrustes(pa.1$loadings, pa.c.1$loadings)\n0.841861752  0.892964096  0.864579231  0.756832481  0.803025736  0.891505227  0.7185726578\n0.311983995  0.629106243  0.816920692  0.7742925\n\n",
+    "created" : 1459791720120.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3851672872",
+    "id" : "1E3ED79A",
+    "lastKnownWriteTime" : 1460130886,
+    "last_content_update" : 1460130886346,
+    "path" : "C:/Users/s1229179/GitHub/R/Yerkes/NHANES/factors.R",
+    "project_path" : "factors.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

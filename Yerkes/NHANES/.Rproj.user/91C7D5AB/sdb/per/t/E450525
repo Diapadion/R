@@ -1,0 +1,28 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1459791965271.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "E450525",
+    "lastKnownWriteTime" : 7308604914264011873,
+    "last_content_update" : 1459791965271,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "gy5z575kkz",
+        "caption" : "sel.nbm",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=sel.nbm&cache_key=gy5z575kkz",
+        "displayedObservations" : "29314",
+        "environment" : "",
+        "object" : "sel.nbm",
+        "totalObservations" : "29314",
+        "variables" : "32"
+    },
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}

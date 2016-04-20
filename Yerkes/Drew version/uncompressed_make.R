@@ -149,11 +149,19 @@ const$chimp_Opn_CZ <-
 
 
 ## other outside vars we want to keep constant
-# mortality
+
+# Mortality
 #sData <- final_data[final_data$chimp %in% const$chimp]
 # we can still use 'final_data' and thus sData from this
 
 const$alive <- sData$status
+
+
+# Height
+const$height <- sData$Height..m.
+
+
+# BMI = W / (H [in m])^2
 
 
 # VERY IMPORTANT
@@ -277,6 +285,8 @@ longMetab$date <- yeart
 
 # based on our other height data, going to want to calculate more BMI datapoints
 
+# if, is that possible?
+
 
 
 #fixed  #???
@@ -295,6 +305,12 @@ longMetab$date <- yeart
 
 
 
+
+# only form the time points by BM measurements
+
+# for now
+# assume height is constant 
+# and that personality is constant
 
 
 fullcast <- 
@@ -372,3 +388,31 @@ class(yeart) <- "Date"
 const$age <- as.numeric(yeart) - as.numeric(const$DoB)
 
 
+
+
+# for NHANES temporary use
+
+# remove the NA filled non BM rows
+
+table(is.na(fullcast$Glucose))
+
+#nh.cast <- fullcast[(is.na(fullcast$Glucose) && is.na(fullcast$wbc)),]
+
+# right... because there is basically no overlap
+
+
+c.bm = fullcast[,c('chimp','sex','ageDays','wbc','rbc','hct','hgb',
+                   'mcv','mch','mchc','lymph','monos','eos',
+                   'Glucose','BUN','Creatine','Protein','Albumn','Bilirubn','alkphos',
+                   'sgpt','sgot','cholesterol','calcium','phosphate','sodium','potassium',
+                   'chloride','globulin','triglycerides','ggtp','osmolal'
+                  
+)]
+c.bm$ageDays = c.bm$ageDays / 365
+c.bm$lymph = c.bm$lymph/1000
+
+#DO THIS
+nh.cast <- fullcast[!(is.na(fullcast$Glucose) & is.na(fullcast$wbc)),]
+
+write.csv(c.bm, 'cNHANES.csv')
+                  

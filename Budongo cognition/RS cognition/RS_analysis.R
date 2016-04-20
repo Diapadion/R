@@ -175,7 +175,6 @@ p.adjust(c(0.002396, 0.02227, 0.03598, 0.04071), 'BH', 4)
 # [2] Trials before drop-out
 #     
   
-
 # should be able to model each training stage / individual with Surv
 # with frailty for each stage, and individual
 # ending in either completion of the training or dropout
@@ -188,12 +187,14 @@ library(plyr)
 #TraTri = aggregate(TraTri, by=list('chimp','stage'), FUN=count)
 
 ##### I don't think anything other the line below is needed
-TraTri = count(RStemp, c("chimp","stage"))
+aggTraTri = count(RStemp, c("chimp","stage"))
 
-TraTri.1 = count(TraTri.1, c("chimp","stage"))
-TraTri$correct = TraTri.1$freq
+aggTraTri.1 = count(TraTri.1, c("chimp","stage"))
+aggTraTri$correct = NA
+aggTraTri[aggTraTri$stage!='test',]$correct = aggTraTri.1$freq
 
-TraTri$prop = TraTri$correct / TraTri$freq
+# TODO fix below
+aggTraTri$prop = aggTraTri$correct / aggTraTri$freq
 #####
 
 # adding a column for whether the chimp dropped out or not (0: in, 1: dropped)
@@ -201,21 +202,21 @@ TraTri$prop = TraTri$correct / TraTri$freq
 #TraTri = cbind(TraTri, dropped = c(0,0,0,1,1,0,0,0,0,1,0,0,0,1,0,0,0,1,0,0,1,0,0,0,0,1,0,0,1))
 
 #TraTri = cbind(TraTri, dropped = c(0,0,0,1,1,0,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,1,0,0,0,0,1))
-TraTri = cbind(TraTri, dropped = 
+aggTraTri = cbind(aggTraTri, dropped = 
                  c(0,0,0,0,1,0,0,0,1,0,
                    0,0,0,0,0,0,1,0,0,0,
                    1,0,0,0,0,1,0,0,0,0,
                    1,0,0,0,0,0,0,0,1,0,
                    0,0,0,0,1,1,1,1))
 
-TraTri = merge(TraTri,aggPers, by.x= "chimp", "Chimp")
+aggTraTri = merge(aggTraTri,aggPers, by.x= "chimp", "Chimp")
 
 library(survival)
-dOut = Surv(TraTri$freq, TraTri$dropped, type='right')
+dOut = Surv(aggTraTri$freq, aggTraTri$dropped, type='right')
 
 # which distribution should we use?
-themodel <- (dOut ~ TraTri$Dominance + TraTri$Conscientiousness + TraTri$Openness + 
-               TraTri$Neuroticism + TraTri$Agreeableness + TraTri$Extraversion)
+themodel <- (dOut ~ aggTraTri$Dominance + aggTraTri$Conscientiousness + aggTraTri$Openness + 
+               aggTraTri$Neuroticism + aggTraTri$Agreeableness + aggTraTri$Extraversion)
 thedistributions<-c("weibull","exponential","lognormal","loglogistic")
 
 distlist = 0
@@ -238,17 +239,30 @@ Result
 # basic continuous right censored survival model
 
 RS.drop.aft <- survreg(dOut ~ Dominance + Conscientiousness + Openness + Neuroticism +
-                      Agreeableness + Extraversion, data = TraTri, dist='lognormal')
+                      Agreeableness + Extraversion, data = aggTraTri, dist='lognormal')
 
 RS.drop.aft.frail <- survreg(dOut ~ Dominance + Conscientiousness + Openness + Neuroticism +
                      Agreeableness + Extraversion +
                        frailty(stage)
-                       , data = TraTri, dist='lognormal')
+                       , data = aggTraTri, dist='lognormal')
 
 summary(RS.drop.aft.frail)
 ci.drop = confint(RS.drop.aft.frail, method='profile')
 # Significant effect for Conscientiousness
 # high Conscientious chimps stay in the task for more trials
+
+# perhaps, for consistency
+library(coxme)
+RS.drop.cox.f <- coxme(dOut ~ Dominance + Conscientiousness + Openness + Neuroticism +
+                               Agreeableness + Extraversion +
+                               (1 | stage) + (1 | chimp)
+                             , data = aggTraTri)
+confint(RS.drop.aft.frail) # how to make this work?
+summary(RS.drop.cox.f)
+# yes, the Cox ME {TODO}
+# probably just need to do the CIs by hand
+
+
 
 library(texreg)
 
@@ -262,15 +276,9 @@ RS2surv.tbl = htmlreg(list(ext.RSdaf), custom.model.names=c('Std. Estimate'), ci
                   #custom.coef.names=c(NA,"Age","Age<sup>2</sup>","Sex",NA,NA,NA,NA,NA,NA,NA))
 write(RS2surv.tbl,"../presentation images/RS2surv.html")
 
-# Cox to double check
-RS.drop.cox <- coxph(dOut ~ Dominance + Conscientiousness + Openness + Neuroticism +
-                       Agreeableness + Extraversion
-                     + frailty(chimp)
-                     , data = TraTri)
-
 
 # how about just the test trials?
-TestTri = TraTri[TraTri$stage=='test',]
+TestTri = aggTraTri[aggTraTri$stage=='test',]
 dOuTst = Surv(TestTri$freq, TestTri$dropped, type='right')
 
 RS.drop.aft.f.tst <- survreg(dOut ~ Dominance + Conscientiousness + Openness + Neuroticism +
@@ -280,22 +288,122 @@ RS.drop.aft.f.tst <- survreg(dOut ~ Dominance + Conscientiousness + Openness + N
 # not enough df... oh well
 
 
-# sketch model
+
+### [2'-prime] - WIP
+
+# Rate of learning from stage to stage, revisited
+
+# say we remove the testing sessions
+
+TrainOnlyTri <- aggTraTri[aggTraTri$stage!='test',]
+hist(log(TrainOnlyTri$freq), breaks = 20)
+
 
 RS.trial.lmm.tot <- lmer(log(freq) ~ Dominance + Conscientiousness + Openness + Neuroticism +
-                       Agreeableness + Extraversion +
-                       (1 | chimp) + (1 | stage)
-                     , data = TraTri)
-                       
+                           Agreeableness + Extraversion +
+                           (1 | chimp) + (1 | stage)
+                         , data = TrainOnlyTri)
+
+RS.trial.glmm.tot <- glmer(freq ~ Dominance + Conscientiousness + Openness + Neuroticism +
+                           Agreeableness + Extraversion +
+                           (1 | chimp) + (1 | stage), family = 'poisson'
+                         , data = TrainOnlyTri)
+summary(RS.trial.glmm.tot)
+confint(RS.trial.lmm.tot)
+
+# the below model shouldn't be formulated quite like this,
+# and won't produce meaningful results
 RS.trial.lmm.prop <- lmer(prop ~ Dominance + Conscientiousness + Openness + Neuroticism +
-                       Agreeableness + Extraversion +
-                       (1 | chimp) + (1 | stage)
-                     , data = TraTri)
+                            Agreeableness + Extraversion +
+                            (1 | chimp) + (1 | stage)
+                          , data = TrainOnlyTri)
 
-# I don't think there is anything here for this kind of model
+# again, for rerunning:
+TrainOnlyTri <- aggTraTri[aggTraTri$stage!='test',]
+# # and how about removing the training sessions where individuals dropped out
+# TrainOnlyTri <- TrainOnlyTri[TrainOnlyTri$dropped == 0,]
+# # and some custom removals
+# # # dropping just the 0 adds
+TrainOnlyTri <- TrainOnlyTri[-c(1,2,4,8,11,12,13,14,19,22,24,26,27,29,32,36,38,40,42),]
+# # these blocks were not trained to criterion
 
-## Can we model the cumulative functions? Is that what the GLMs do?
 
+RS.trial.lmm.tot <- lmer(log(freq) ~ Dominance + Conscientiousness + Openness + Neuroticism +
+                           Agreeableness + Extraversion +
+                           (1 | chimp) + (1 | stage)
+                         , data = TrainOnlyTri)
+
+RS.trial.glmm.tot <- glmer(freq ~ Dominance + Conscientiousness + Openness + Neuroticism +
+                             Agreeableness + Extraversion
+                             + (1 | chimp)
+                             + (1 | stage)
+                           , family = poisson(link = 'log')
+                           , data = TrainOnlyTri, 
+                           #control = glmerControl(optimizer='nloptwrap')
+                           control = glmerControl(optimizer='Nelder_Mead')
+                           ) 
+summary(RS.trial.glmm.tot)
+#confint(RS.trial.lmm.tot)
+confint(RS.trial.glmm.tot)
+
+
+
+## an entirely different *kind* of survival analysis
+# whoever reached criterion by the end of the block, is given status
+# everyone else is censorsed out
+
+TrainOnlyTri$crit = c(1,1,1,0,1,
+                      0,
+                      1,0,0,
+                      0,0,0,0, # maybe flip :3: (back to/from 0) 
+                      0,1,1,1,  # Eva switches conditions too...
+                      1,0,1,
+                      1,0,1,
+                      0,
+                      0,0,
+                      1,1,0,1,0,
+                      0,
+                      1,1,1,
+                      1,1,1,1,0,1,
+                      0)
+# this will also be useful for filtering
+
+dCrit = Surv(TrainOnlyTri$freq, TrainOnlyTri$crit, type='right')
+
+# tested, lognormal is good
+
+RS.crit.aft.frail <- survreg(dCrit ~ Dominance + Conscientiousness + Openness + Neuroticism +
+                               Agreeableness + Extraversion +
+                               frailty(stage)
+                             , data = TrainOnlyTri, dist='lognormal')
+confint(RS.crit.aft.frail)
+# nothing there... Cox to check:
+
+RS.crit.cox <- coxme(dCrit ~ Dominance + Conscientiousness + Openness + Neuroticism +
+                       Agreeableness + Extraversion
+                     + (1 | stage) + (1 | chimp)
+                     , data = TrainOnlyTri)
+summary(RS.crit.cox)
+# Nope.
+
+
+RS.crit.lmm <- lmer(log(freq) ~ Dominance + Conscientiousness + Openness + Neuroticism +
+                           Agreeableness + Extraversion +
+                           (1 | chimp) + (1 | stage)
+                         , data = TrainOnlyTri[TrainOnlyTri$crit == 1,])
+summary(RS.crit.lmm)
+
+RS.crit.glmm <- glmer(freq ~ Dominance + Conscientiousness + Openness + Neuroticism +
+                             Agreeableness + Extraversion +
+                             (1 | chimp) + (1 | stage), family = 'poisson'
+                           , data = TrainOnlyTri[TrainOnlyTri$crit == 1,])
+summary(RS.crit.glmm)
+# uuuuuhhhhh what??
+# this can't be right
+confint(RS.crit.glmm, method = 'Wald')
+
+# looks like there's nothing here
+# probably too few data points
 
 
 ### [3] Accuracy
@@ -307,6 +415,7 @@ rs.glm1 <- glmer(Correctness ~ Dominance + Conscientiousness + Openness + Neurot
                    (1 | chimp) + (1 | stage/TrialType)  #(1 | Section) + (1 | TrialType) + ,
                  , data = RStemp, family = binomial
 )
+
 # library(arm)
 # standardize() # converts everything to 2SE coefficients
 
@@ -368,10 +477,29 @@ rs.glm3.td <- glmer(Correctness ~ Dominance + Conscientiousness + Openness + Neu
                    # last two look degenerate
                    , data = RStemp, family = binomial
 )
-# 
+summary(rs.glm3.0)
+
+rs.glm3.ints <- glmer(Correctness ~ Dominance*day + Conscientiousness*day + Openness*day + Neuroticism*day +
+                     Agreeableness*day + Extraversion*day +
+                      
+                     (1 | chimp) + (1 | stage) + (1 | TrialType) #+ (1 | Section) + (1 | depend)
+                   # last two look degenerate
+                   , data = RStemp, family = binomial
+)
+rs.glm3.iA <- glmer(Correctness ~ Dominance + Conscientiousness + Openness + Neuroticism +
+                        Agreeableness*day + Extraversion +
+                        (1 | chimp) + (1 | stage) + (1 | TrialType) #+ (1 | Section) + (1 | depend)
+                      # last two look degenerate
+                      , data = RStemp, family = binomial
+)
+
+# individual other interactions didn't work out
 
 AICtab(rs.glm2.0, rs.glm1.0,rs.glm3.0, rs.glm3.td, weights=T, delta=T, base=T, logLik=T, sort=T) 
 
+AICtab(rs.glm3.iA, rs.glm3.ints,rs.glm3.0, rs.glm3.td, weights=T, delta=T, base=T, logLik=T, sort=T) 
+
+summary(rs.glm3.iA)
 
 ### Learning
 # after 33/48 trials, chimps progressed to next stage
@@ -474,6 +602,7 @@ rs.rt.lmm.pers <- lmer(log(RT) ~ Dominance + Conscientiousness + Openness + Neur
                          (1 | chimp) + (1 | stage) + (1 | TrialType) #+ (1 | Section) + (1 | depend)
                        , data = RStemp
 )
+
 rs.rt.lmm.pers.day <- lmer(log(RT) ~ Dominance + Conscientiousness + Openness + Neuroticism +
                              Agreeableness + Extraversion + day + 
                              (1 | chimp) + (1 | stage) + (1 | TrialType) #+ (1 | Section) + (1 | depend)

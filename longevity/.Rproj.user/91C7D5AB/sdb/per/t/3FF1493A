@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "# This file should not need to be run\n# it was used for getting the different sample in line for concatenation\n\n\ntrong <- read.csv(file = \"Taronga Chimpanzees.csv\")\n\n# fiddling the Taronga DoBs\ntrong$bdate <- as.Date(trong$bdate, format = \"%d/%m/%Y\")\n\ntrong$formDoB <- format(trong$bdate, \"%m/%d/%Y\")\nwrite.csv(trong$formDoB,\"TarongaDoB.csv\")\n\nAZA <- read.csv(\"czoo.csv\")\ncolnames(AZA)[c(11:53)]\n\nJapan <- read.csv(\"japan_chimps_22_dec_2012.csv\")\ncolnames(Japan)[c(5:58)]\n\nyerk <- read.csv(\"Yerkes Mortality.csv\")\n\n\nall <- read.csv(\"long_all.csv\")\n\n# finding the differences between CPQ and HPQ\nsetdiff(tolower(colnames(Japan)[c(5:58)]),colnames(AZA)[c(11:53)])\n\n\n\n# aggregating DOPR dates from Yerkes\n\n# some were rated after their death... what should the DOPR be then? The date of death?\n\n# No, they should be removed (and now have been).\n\n\n\n\n#setwd(\"../Yerkes/\")\n#yp <- read.csv(file = \"yerkes_dec2_traits.csv\")\n\n\n\n### lining up the newly dead Yerkes chimps\nyerk16 <- read.csv(\"./Yerkes aggregation/sub+status.csv\")\n\nyerk16 <- merge(yerk16, yerk[c(1,11)])\n\ny16changes = c(8,16,23,25,29,34,41,42,44,65,69,72,79,81,82,83,86,88,89,102,109,119)\ny16changes = yerk16[y16changes,]$Subject # just find these individuals and replace their status's and DoD's\n\n\n### determining the last date of info for the AZoos with LTF chimps\n\n# find the LTFs first\nALTFs = ((all$status == 'LTF') & (all$sample =='AZA'))\nwhich(ALTFs)\nAZA$zoo[ALTFs]\n# they're all at 20, 5, and 3\nall$lastDate[AZA$zoo == 20]\n\n\n### missing DoB's and other hints:\nhttp://last1000chimps.com/\n",
+    "created" : 1460380323136.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1111682575",
+    "id" : "3FF1493A",
+    "lastKnownWriteTime" : 1458732571,
+    "last_content_update" : 1458732571,
+    "path" : "C:/Users/s1229179/GitHub/R/longevity/startingFixes.R",
+    "project_path" : "startingFixes.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 8,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

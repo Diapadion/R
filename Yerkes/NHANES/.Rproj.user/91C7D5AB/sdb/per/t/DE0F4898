@@ -1,0 +1,28 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1459865995487.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "DE0F4898",
+    "lastKnownWriteTime" : 32651513914720368,
+    "last_content_update" : 1459865995487,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "excf6ws7v4",
+        "caption" : "vpers",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=vpers&cache_key=excf6ws7v4",
+        "displayedObservations" : "890155",
+        "environment" : "",
+        "object" : "vpers",
+        "totalObservations" : "890155",
+        "variables" : "3"
+    },
+    "relative_order" : 7,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}

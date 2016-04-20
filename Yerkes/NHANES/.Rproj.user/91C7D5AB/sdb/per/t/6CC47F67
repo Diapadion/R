@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "# commit 3739dde45a6aa3bd65c134fc2b05830c43e08b3a\n# Author: Mark James Adams <m.j.adams-2@sms.ed.ac.uk>\n# Date:   Mon Apr 11 19:23:01 2011 +0100\n\n\nunit.weight <- function(Loadings) {\n  rows <- length(Loadings[,1])\n\n  # unweigted loadings of +1, 0, -1\n  for (i in 1:rows) {\n    # replace the max of each row with 1\n    len <- length(Loadings[1,])\n    row <- Loadings[i,][1:len]\n    \n    where.maximum <- abs(row) >= max(abs(row));\n    salient.loading <- row[where.maximum][1];\n    \n    if(salient.loading > 0) {\n      fill <- 1;\n    } else if(salient.loading < 0) {\n      fill <- -1;\n    } else {\n      fill <- 0;\n    }\n    Loadings[i,][1:len][ where.maximum] <- fill;\n    Loadings[i,][1:len][!where.maximum] <- 0\n  }\n  Loadings\n}\n\nssq <- function(V) {\n  sum(V^2);\n}\n\n# Based on SAS code from\n# MCCRAE et al. Evaluating replicability of factors in the revised NEO \n# Personality Inventory: Confirmatory factor …. J Pers Soc Psychol (1996)\n# loadings: factor loadings for a varimax matrix\n# norm: loadings for the target matrix\n# weight \"unit\" or \"none\". Unit weight the loadings before applying the rotation\n#\n# Last column and last row of the result gives variable and factor congruences.\nprocrustes <- function(loadings, norm, weight=\"none\") {\n  \n  if(weight == \"unit\") {\n    loadings <- unit.weight(loadings);\n    norm <- unit.weight(norm);\n  }\n\n  S <- t(loadings) %*% norm;\n  W <- eigen(S %*% t(S))$vectors;\n\n  V <- eigen(t(S) %*% S)$vectors;\n\n  O <- t(W) %*% S %*% V;\n  K <- diag(diag(sign(O)));\n\n  WW <- W %*% K;\n  T <- WW %*% t(V);\n\n  procrust <- loadings %*% T;\n\n  #congruence coeffcients\n  \n  # A\n  norm.diag.root <- sqrt(diag(t(norm) %*% norm));\n  A <- matrix(norm.diag.root, ncol=1);\n  \n  #B \n  procrust.diag.root <- sqrt(diag(t(procrust) %*% procrust));\n  B <- matrix(procrust.diag.root, ncol=1)\n  \n  # C\n  norm.procrust.diag <- diag((t(norm) %*% procrust) / (A %*% t(B)));\n  C <- matrix(norm.procrust.diag, ncol=1)\n  \n  # D\n  D <- matrix(sqrt(diag(norm %*% t(norm))), ncol=1)\n  \n  E <- matrix(sqrt(diag(procrust %*% t(procrust))), ncol=1)\n  \n  congruence = diag((norm %*% t(procrust))/(D %*% t(E)));\n  \n  factor.congruence = sum(norm * procrust)/sqrt((ssq(norm)) * (ssq(procrust)));\n  \n  procrustes.congruence <- rbind(cbind(procrust, congruence), cbind(t(C), factor.congruence));\n\n  return(procrustes.congruence);\n\n} \n\n\n",
+    "created" : 1459864672440.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "4252843605",
+    "id" : "6CC47F67",
+    "lastKnownWriteTime" : 1459864604,
+    "last_content_update" : 1459864604,
+    "path" : "C:/Users/s1229179/GitHub/R/Yerkes/NHANES/procrustes-2.R",
+    "project_path" : "procrustes-2.R",
+    "properties" : {
+    },
+    "relative_order" : 7,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

@@ -5,7 +5,7 @@
 fullcast$chimp <- as.factor(fullcast$chimp)
 
 
-attach(fullcast)
+#attach(fullcast)
 
 model_t <- lmer(diastolic ~ ageDays + sex + BMI
                   +chimp_Agr_CZ+chimp_Con_CZ+chimp_Dom_CZ+chimp_Ext_CZ+chimp_Neu_CZ+chimp_Opn_CZ
@@ -49,7 +49,7 @@ model_t5 <- lmer(
   #diastolic
   ~ sex + BMI + DoB
                +chimp_Agr_CZ+chimp_Con_CZ+chimp_Dom_CZ+chimp_Ext_CZ+chimp_Neu_CZ+chimp_Opn_CZ                 
-               + (1 | chimp)
+               + (1 | chimp), data = fullcast
 )
 Anova(model_t5)
 
@@ -82,6 +82,6 @@ summary(model_t7)
 
 
 
-detach(fullcast)
+#detach(fullcast)
 
 

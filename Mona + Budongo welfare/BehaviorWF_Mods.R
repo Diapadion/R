@@ -98,6 +98,24 @@ groom <- read.csv("Grooming.csv")
 
 wf = read.csv(file = "Edinburgh chimp welfare ratings.csv")
 
+# some exploratory plots
+interaction.plot(wf$time, wf$Chimp, wf$welfareswb, type='b', col = c(1:18))
+
+library(ggplot2)
+ggplot(wf, aes(time, welfareswb,colour=Chimp)) + 
+  geom_line() + 
+  geom_point()
+
+ggplot(wf, aes(time, totalwelfare)) + 
+  geom_line() + 
+  geom_point()
+
+# are they actually different?
+t.test(wf$welfareswb[wf$time==1],wf$welfareswb[wf$time==2])
+
+
+
+
 # t1 = July to December, 2014
 
 ## Scans
@@ -294,11 +312,14 @@ library(glmnet)
 #colnames(focals1)
 netform1f <- droplevels(focals1[,c(21,29,31,32,33,34,35,36,37,18,19)])
 
+# netform1f.x = as.matrix(as.data.frame(lapply(netform1f, as.numeric))) # as preferred by Emil OWK
+
+
 netform1f = model.matrix(~ . - 1, data=netform1f)
 
 netform1f = netform1f[,c(2,3,4,5,6,7,8,9,10,11,12)]
 
-fwf1f.net <- glmnet(netform1f, focals1$welfareswb,
+fwf1f.net <- glmnet(netform1f.x, focals1$welfareswb,
                     family = "gaussian",
                     standardize=T, alpha = 1,lambda.min.ratio=0.00001,  nlambda=1000
                     #nlambda=1000, lambda.min.ratio = 0.00001
@@ -312,6 +333,8 @@ coef(fwf1f.net,
      s=fwf1f.cvnet$lambda.min
      #s=fwf1f.cvnet$lambda.1se
 )
+
+plot(fwf1f.net)
 
 #
 library(lme4)

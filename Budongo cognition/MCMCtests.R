@@ -164,7 +164,7 @@ diag(priorC$B$V)[seq(4, nterms, 2)] <- 1e-6
 # )
 
 
-# THIS ONE
+# THIS ONE?
 mcmc3.us <- MCMCglmm(Time ~ Dominance + Conscientiousness +
                     Openness + Neuroticism + Agreeableness +
                     Extraversion, 
@@ -247,7 +247,7 @@ zifp3.hu <- hurdle(Time ~ Dominance + Conscientiousness +
 require(R2admb)
 install.packages("glmmADMB", repos="http://R-Forge.R-project.org")
 
-install.packages('C:/Users/s1229179/Downloads/glmmADMB_0.8.3.3.zip', repos=NULL)
+install.packages('./glmmADMB_0.8.1.zip', repos=NULL)
 
 install.packages("glmmADMB", 
                  repos=c("http://glmmadmb.r-forge.r-project.org/repos",
@@ -255,12 +255,28 @@ install.packages("glmmADMB",
                  type="source")
 
 library(glmmADMB)
-# ...shit
+# ... shit
+# ... yeah?
 
-mew.poisZIF.1 <- glmmADMB(Time ~ Dominance + Conscientiousness +
+mew.poisZIF.1 <- glmmadmb(Time ~ Dominance + Conscientiousness +
                             Openness + Neuroticism + Agreeableness +
-                            Extraversion + (1 | Date) + (1 | Chimp),
-                          data=inPodL.mcmc, family = "poisson"
-                          , zeroInflation=TRUE
+                            Extraversion + (1 | Date)# + (1 | Chimp)
+                          ,data=inPodL.mcmc, family = "poisson"
+                          #, zeroInflation=TRUE
+                          , save.dir='./ADMB/',
+                          admb.opts = admbControl(noinit=FALSE, shess=FALSE)
 )
+
+## new fun toy thing
+library(gamlss)
+
+gam.zip.1 <- gamlss(Time ~ Dominance + Conscientiousness +
+                      Openness + Neuroticism + Agreeableness +
+                      Extraversion + random(Date) + random(Chimp), 
+                    data=inPodL.mcmc, family=ZIP)
+summary(gam.zip.1)
+
+
 # probably choose to go with MCMCglmm
+
+

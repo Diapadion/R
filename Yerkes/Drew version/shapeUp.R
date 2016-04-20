@@ -506,6 +506,26 @@ colnames(scoutput)[6:11]<- c('Dominance','Extraversion','Conscientiousness',
 #slongput <- reshape(scoutput, idvar = "chimp"
 #                    )
 
+
+# building up table for NHANES project
+
+c.bm <- NULL
+
+c.bm$sex = c(mmdat$sex,mmdat$sex,mmdat$sex)
+c.bm$age = c(mmdat$age,mmdat$age,mmdat$age)
+
+c.bm$WBC = c(mmdat$wbc.1,mmdat$wbc.2,mmdat$wbc.3)
+c.bm$RBC = c(mmdat$rbc.1,mmdat$rbc.2,mmdat$rbc.3)
+c.bm$hematocrit = c(mmdat$hct.1,mmdat$hct.2,mmdat$hct.3)
+c.bm$
+
+c.bm$trig = c(mmdat$trig.1,mmdat$trig.2,mmdat$trig.3)
+
+c.bm$chol = c(mmdat$chol.1,mmdat$chol.2,mmdat$chol.3)
+c.bm$creatinine = c(mmdat$creatinine.1,mmdat$creatinine.2,mmdat$creatinine.3)
+
+
+
 #############
 ### STOP HERE
 #############

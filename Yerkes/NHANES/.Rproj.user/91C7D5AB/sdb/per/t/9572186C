@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "### some plots\n\nlibrary(beanplot)\nlibrary(tidyr)\n\nvpers = rbind(sel.nbm[,c(3:32)],c.bm[,c(5:34)])\n\nvpers = gather(vpers, Marker, Measurement, wbc:osmolal)\n\nbm.labels = colnames(c.bm[5:33])\n\ntable(vpers$Measurement[vpers$Marker == \"mcv\"])\n\npar(mfrow=c(6,5))\n    #, oma = c(5,4,0,0) + 0.3\n    #, mar = c(0,0,1,1) + 0.5)\n\nfor (i in 1:length(bm.labels)){\n  \n  beanBM <- with(data=vpers[vpers$Marker == bm.labels[i],], beanplot(Measurement ~ species, side = 'both', bw = 0.5 , cutmax = 10, cutmin = 0,\n                                      overallline = \"median\", beanlines = 'median', what = c(0,1,1,0) ,# boxwex=0.9,\n                                      col = list(\"cadetblue3\", \"cadetblue1\", \"royalblue3\", \"royalblue1\",\"slateblue\",\"slateblue1\")\n                                      #, main='Dominance' \n                                      , log = \"auto\"\n                                      ,names=c(bm.labels[i]), show.names=T\n                                      #, ylim = c(0,300)\n                                      \n  ))\n}\n\n\npar(mfrow=c(1,1))\nbeanBM <- with(data=vpers[vpers$Marker == 'mcv',], beanplot(Measurement ~ species, side = 'both', bw = 0.3, cutmax = 200, cutmin = 0,\n                                                            overallline = \"median\", beanlines = 'median', what = c(0,1,1,0) ,# boxwex=0.9,\n                                                            col = list(\"cadetblue3\", \"cadetblue1\", \"royalblue3\", \"royalblue1\",\"slateblue\",\"slateblue1\")\n                                                            #, main='Dominance' \n                                                            , log = \"auto\"\n                                                            #,names=c(bm.labels[i]) \n                                                            , show.names=T\n                                                            #, ylim = c(0,300)\n                                    \n))\n",
+    "created" : 1459863945377.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1884339735",
+    "id" : "9572186C",
+    "lastKnownWriteTime" : 1459869469,
+    "last_content_update" : 1459869469663,
+    "path" : "C:/Users/s1229179/GitHub/R/Yerkes/NHANES/plotting.R",
+    "project_path" : "plotting.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 6,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

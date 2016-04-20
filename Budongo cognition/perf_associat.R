@@ -181,6 +181,7 @@ anova(mod.gm1,mod.gm2,mod.gm3,mod.gm4
 library(bbmle)
 AICtab(mod.gm1,mod.gm2,mod.gm4,mod.gm5,weights=TRUE, delta=TRUE, base=TRUE, logLik=TRUE, sort=TRUE)
 pchisq(2*-1284.9-2*-1287.9,1,lower.tail=F)
+# stepwise: gm1 vs. gm4
 
 library(lmerTest)
 library(car)
@@ -198,6 +199,22 @@ mod.gm2.4 <- glmer(Accuracy ~ dom + Trial + (1 | Group.1),
                    family = binomial, data=cz_bin_pers 
 )
 anova(mod.gm2,mod.gm2.1,mod.gm2.2,mod.gm2.3,mod.gm2.4)
+
+
+# Interactions, ala RS?
+
+mod.gm4.ints <- glmer(Accuracy ~ Dominance*day + Conscientiousness*day + Openness*day + Neuroticism*day
+                 + Agreeableness*day + Extraversion*day + (1 | Chimp),
+                 family = binomial, data=cz_bin_pers 
+)
+ci.accu.ints <- confint(mod.gm4.ints, method='Wald')
+# Nothing.
+
+mod.gm2.ints <- glmer(Accuracy ~ Dominance*Trial + Conscientiousness*Trial + Openness*Trial + Neuroticism*Trial
+                      + Agreeableness*Trial + Extraversion*Trial + (1 | Chimp),
+                      family = binomial, data=cz_bin_pers 
+)
+ci.accu.ints <- confint(mod.gm2.ints, method='Wald')
 
 
 ### testing some BLUP stuff from gm4
@@ -304,7 +321,7 @@ mod.itrw.1 <- lmer(log(inspecTime) ~ dom + neu + opn + agr + con + ext + (1 | Gr
                    , data=cz_bin_pers[cz_bin_pers$Accuracy==1,]
 )
 
-# nada
+# Nada.
 
 
 library(corrgram)

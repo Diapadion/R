@@ -110,7 +110,7 @@ inPodL = rbind(
 
 inPodL$Time = as.numeric(inPodL$Time)
   
-# may consider removing outliers, to be consisten
+# may consider removing outliers, to be consistent
 
 inPodL$secs[outliers(tatScreen$secs,3)]
 # happy days, no outliers above 3 SDs
@@ -264,7 +264,7 @@ aggPers = cbind(aggPers, EW3particip)
 mew.3.pm <- glm(EW3particip ~ Dominance + Neuroticism + Agreeableness +
                   Extraversion + Conscientiousness + Openness, data=aggPers, family=poisson)
 # again, need to ZIF
-# but ZIFing doesn't really work, so probably means it is unnecessary and we should stick to gm
+# but ZIFing doesn't really work, so probably means it is unnecessary and we should stick to gm, above
 
 library(pscl)
 mew.3.zpm <- zeroinfl(EW3particip ~ Dominance + Neuroticism + 

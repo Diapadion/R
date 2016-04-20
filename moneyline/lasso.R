@@ -10,6 +10,20 @@ load("C:/Users/s1229179/GitHub/R/moneyline/.RData")
 
 library(glmnet)
 
+# what does predict() output?
+x=matrix(rnorm(100*20),100,20)
+y=rnorm(100)
+g2=sample(1:2,100,replace=TRUE)
+g4=sample(1:4,100,replace=TRUE)
+fit1=glmnet(x,y)
+predict(fit1,newx=x[1:5,],s=c(0.01,0.005))
+predict(fit1,type="coef")
+
+library(c060)
+
+
+
+
 # 2014
 
 netform14 <- droplevels(kpDiffs14)
@@ -161,7 +175,7 @@ for (i in seq(1,dim(stacked)[1],2)){
   
 matchstack$wins <- ifelse(matchstack$Round.1.Results == 'W', matchstack$wins <- 1, matchstack$wins <- 0)
 
-
+matchstack$wins <- as.factor(matchstack$wins)
 
 ### okay it's model time
 
@@ -195,8 +209,8 @@ net.stk.cv <- cv.glmnet(netf_stk, matchstack$wins, family="binomial")
 plot(net.stk.cv)
 
 coef(net.stk, 
-     s=net.stk.cv$lambda.min
-     #s=net.stk.cv$lambda.1se
+     #s=net.stk.cv$lambda.min
+     s=net.stk.cv$lambda.1se
 )
 
 
@@ -213,3 +227,37 @@ gmm2.stk <- glmer(wins ~ 1 + OppO + AdjO + AdjD + Luck + OppD +
                                (1 + OppO + AdjO +
                                    AdjD + Luck + OppD | year)
                              , data = matchstack, family = binomial(logit))
+
+
+### Tuning 
+
+library(caret)
+
+eGrid <- expand.grid(.alpha = seq(0,1,0.01), 
+                     .lambda = seq(0,2,0.01))
+
+Control <- trainControl(method = "cv", number = 3,verboseIter = F)
+
+netFit <- train(x = netf_stk, y = matchstack$wins
+                , method = "glmnet",
+                metric = 'Kappa' #c("Accuracy","Kappa"),
+                , tuneGrid = eGrid,
+                trControl = Control )
+
+net.stk <- glmnet(netf_stk, matchstack$wins, family="binomial",
+                  standardize=T, alpha = 0.23,lambda.min.ratio=0.00001,  nlambda=1000)
+
+net.stk.cv <- cv.glmnet(netf_stk, matchstack$wins, alpha = 0.23, family="binomial") 
+plot(net.stk.cv)
+
+coef(net.stk, 
+     #s=net.stk.cv$lambda.min
+     #s=net.stk.cv$lambda.1se
+     s = 0.13
+)
+
+### Stability Selection
+
+stab = stabpath(matchstack$wins, netf_stk, family = "binomial", weakness = 0.5)
+
+plot(stab)

@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "exam <- read.csv(url(\"http://is.gd/RExam14\"))\n\n#### fix variables\nexam$ID <- as.factor(exam$ID)\n# exam$Perf1 has scores over 200\nexam$Perf1[exam$Perf1>200] <- NA\n# exam$Perf2 has some extraneous 2s\nexam$Perf2 <- factor(exam$Perf2,levels=c(0,1),labels=c('No','Yes'))\nexam$Diet <- factor(exam$Diet,labels=c('Med','Health','Meat','Veg','Junk'))\n# some under-18s seem to have crept in\nexam$Age[exam$Age < 18] <- NA\n# a gender \"6\", fixed by the following\nexam$Sex <- factor(exam$Sex,levels=c(1,2),labels=c('M','F'))\n\n## at this point I'd run \"summary(exam)\" and note the missing values, for reporting coding errors\n\n# now outliers\noutliers <- function(obs, x = 2.5)\n  abs(obs - mean(obs, na.rm = T)) > (sd(obs, na.rm = T) * x)\n\n# looking for outliers more than 2.5 SD from the mean\nwhich(outliers(exam$Alc))\n# looks like there are outliers here\nhist(exam$Alc)\n# yup. Some heavy drinkers, let's remove them\nexam$Alc[outliers(exam$Alc)] <- NA\n# everything looks good.\nhist(exam$Alc)\n\n#### obviously I'd check all the others, including...\nwhich(outliers(exam$Age))\n## weird.  Some very odd people.  Let's look at the data\nhist(exam$Age)\n## it looks fine.  Maybe the 30-40 range is just overrepresented? (we can ignore the NAs here)\nexam$Age[outliers(exam$Age)]\n## OK, I don't think there's anything too weird here.  Let's leave the \"outliers\" in.\n\n### thanks to Felix:  LifeSat\nexam$LifeSat[exam$LifeSat<1] <- NA\n\n## standard deviations are also useful, for continuous variables\n## this is a shorthand way of applying sd() to lots of columns\napply(exam[,c(2,4,6,8:10)],2,sd,na.rm=T)\n\n## alternatively you could use \"describe()\" from the \"psych\" package\n\ns <- function(x) {scale(x)}\n\n## let's cheat extensively here.  We were particularly interested in the interaction between\n## BMI and Age:\n## linear model\n## NB: it's wrong to compare models with different numbers of missing values.  So:\nexam <- exam[complete.cases(exam),]\n\nmod.l <- lm(s(Perf1) ~ s(BMI) + s(Age) + s(BMI):s(Age) + s(Alc) + Diet + s(LifeSat) + s(Ex) + Sex + Smoke, data=exam)\n\n## using step() is cheating, not least because it relies on AIC which hasn't been covered in the course yet.\n## But still, this is a quick way to find out what's significant...\n\n## alternatives include \"drop1()\" with \"test='F'\", or \nmod.fl <- step(mod.l)\n\n### \"plot(mod.fl)\" shows assumptions are fairly well met\nsummary(mod.fl)\n\n### now for the binomial model\nmod.b <- glm(Perf2 ~ s(BMI) + s(Age) + s(BMI):s(Age) + s(Alc) + Diet + s(LifeSat) + s(Ex) + Sex + Smoke, data=exam, family=binomial)\nmod.fb <- step(mod.b)\n\nsummary(mod.fb)\n\nmod.b1 <- glm(Perf2 ~ s(BMI) + s(Alc) + s(LifeSat), data=exam, family=binomial)\nmod.b2 <- glm(Perf2 ~ s(BMI) + s(Age) + s(Alc) + s(LifeSat), data=exam, family=binomial)\n\n\nqqplot(mod.fb)\n       simulate=TRUE)\n       main=\"Q-Q Plot\" )\n\n",
+    "created" : 1462532505988.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2118880993",
+    "id" : "7B9AC29C",
+    "lastKnownWriteTime" : 1422556022,
+    "last_content_update" : 1422556022,
+    "path" : "Z:/USMR marking 2014/Drew/analyse.R",
+    "project_path" : null,
+    "properties" : {
+    },
+    "relative_order" : 10,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

@@ -1,0 +1,25 @@
+{
+    "contents" : "",
+    "created" : 1463064483581.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "EF835AE2",
+    "lastKnownWriteTime" : 7011605692497750387,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "sn92971m15",
+        "caption" : "cz_bin_pers",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=cz_bin_pers&cache_key=sn92971m15",
+        "displayedObservations" : 1870,
+        "environment" : "",
+        "object" : "cz_bin_pers",
+        "totalObservations" : 1870,
+        "variables" : 28
+    },
+    "relative_order" : 7,
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}

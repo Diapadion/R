@@ -19,7 +19,10 @@ EWpartic = as.factor(c(1,0,1,0,1,1,0,1,0,0,0,1,0,0,1,0,0,0))
 
 aggPers = cbind(aggPers, EWpartic)
 
-write.csv(aggPers, file = "aggregatedPers.csv")
+#write.csv(aggPers, file = "aggregatedPers.csv")
+aggPers = aggPers[,1:16]
+
+
 
 EWtm <- aggregate(aggPers, by=list(aggPers$EWpartic), FUN=mean)
 EWts <- aggregate(aggPers, by=list(aggPers$EWpartic), FUN=sd)
@@ -148,6 +151,9 @@ pgm1.tbl = htmlreg(ext.pgm1,ci.force=TRUE, custom.model.names='Time spent in pod
                                       'Conscientiousness','Openness')
 )
 write(pgm1.tbl,"InPodPGLM.html")
+
+
+
 
 
 

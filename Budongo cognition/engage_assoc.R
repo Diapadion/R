@@ -34,7 +34,7 @@ cmm.2 <- clmm(Engagement ~ Dominance + I(Dominance^2) + Conscientiousness + Neur
               + (1 | Date) + (1|Chimp), data=DMAeng)
 
 library(bbmle)  
-AICctab(cmm.1, cmm.1.nA, cmm.2, weights=T, delta=T, base=T, logLik=T, sort=T)  
+AICtab(cmm.1, cmm.1.nA, cmm.2, weights=T, delta=T, base=T, logLik=T, sort=T)  
 # model 1 is the best
 summary(cmm.1)
 

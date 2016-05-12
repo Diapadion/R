@@ -1,0 +1,28 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1462970786374.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "6C9794EE",
+    "lastKnownWriteTime" : 7308604914264011873,
+    "last_content_update" : 1462970786374,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "qxw5wsm4im",
+        "caption" : "DMAeng",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=DMAeng&cache_key=qxw5wsm4im",
+        "displayedObservations" : 864,
+        "environment" : "",
+        "object" : "DMAeng",
+        "totalObservations" : 864,
+        "variables" : 14
+    },
+    "relative_order" : 8,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}

@@ -1,4 +1,4 @@
-# "glmmadmb.dat" produced by dat_write() from R2admb Mon Mar 21 13:56:35 2016
+# "glmmadmb.dat" produced by dat_write() from R2admb Wed May 11 17:43:02 2016
 # n 
  216 
 
@@ -917,7 +917,7 @@
  0 
 
 # zi_flag 
- 0 
+ 1 
 
 # zi_kluge 
  0 

@@ -262,7 +262,7 @@ mew.poisZIF.1 <- glmmadmb(Time ~ Dominance + Conscientiousness +
                             Openness + Neuroticism + Agreeableness +
                             Extraversion + (1 | Date)# + (1 | Chimp)
                           ,data=inPodL.mcmc, family = "poisson"
-                          #, zeroInflation=TRUE
+                          , zeroInflation=TRUE
                           , save.dir='./ADMB/',
                           admb.opts = admbControl(noinit=FALSE, shess=FALSE)
 )

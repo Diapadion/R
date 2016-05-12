@@ -1,0 +1,28 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1462878779738.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "A53E153C",
+    "lastKnownWriteTime" : 32651513914720368,
+    "last_content_update" : 1462878779738,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "dg91szhvqf",
+        "caption" : "melted",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=melted&cache_key=dg91szhvqf",
+        "displayedObservations" : 4640,
+        "environment" : "",
+        "object" : "melted",
+        "totalObservations" : 4640,
+        "variables" : 5
+    },
+    "relative_order" : 5,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}

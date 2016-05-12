@@ -576,7 +576,7 @@ rs.touch.lmm.0.d <- glmer(touches ~ Dominance + Conscientiousness + Openness + N
 
 
 AICtab(rs.touch.lmm, rs.touch.lmm.d, rs.touch.lmm.1,
-       rs.touch.lmm.1.d, rs.touch.lmm.0, rs.touch.lmm.0.d, 
+       rs.touch.lmm.1.d,# rs.touch.lmm.0, rs.touch.lmm.0.d, 
        weights=T, delta=T, base=T, logLik=T, sort=T) 
 
 
@@ -586,8 +586,8 @@ ci.touches <- confint(rs.touch.lmm, method='Wald')
 ci.touches.0 <- confint(rs.touch.lmm.0, method='profile')
 ci.touches.1 <- confint(rs.touch.lmm.1, method='profile')
 ci.touches.d <- confint(rs.touch.lmm.d, method='Wald')
-ci.touches.0.d <- confint(rs.touch.lmm.0.d, method='profile')
-ci.touches.1.d <- confint(rs.touch.lmm.1.d, method='profile')
+ci.touches.0.d <- confint(rs.touch.lmm.0.d, method='Wald')
+ci.touches.1.d <- confint(rs.touch.lmm.1.d, method='Wald')
 
 
 

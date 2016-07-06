@@ -154,3 +154,21 @@ m.creat.a2 <- lm(creat ~ age + I(age^2) + sex + BMI
 m.BMI.a2 <- lm(BMI ~ age + I(age^2) + sex
             + Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion, data = midus_cs)
 # see m3.BMIc
+
+
+
+### EXPERIMENTAL
+
+library(BayesFactor)
+
+BFm.test <- lmBF(sys ~ age, data=midus_cs)
+
+BFm.test <- lmBF(sys ~ age + sex, data=midus_cs)
+
+
+BFm.sys <- regressionBF(sys ~ age + sex + BMI #+ I(age^2)
+                + Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion, 
+                data = midus_cs[complete.cases(midus_cs),])
+
+#summary(BFm.sys)
+head(BFm.sys)

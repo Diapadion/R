@@ -180,10 +180,10 @@ anova(mod.gm1,mod.gm2,mod.gm3,mod.gm4
 # can't step is with lme4
 library(bbmle)
 AICtab(mod.gm1,mod.gm2,mod.gm4,mod.gm5,weights=TRUE, delta=TRUE, base=TRUE, logLik=TRUE, sort=TRUE)
-pchisq(2*-1284.9-2*-1287.9,1,lower.tail=F)
+pchisq(2*(-1284.9+1287.9),9-8,lower.tail=F)
 # stepwise: gm1 vs. gm4
 AICtab(mod.gm1,mod.gm4,weights=TRUE, delta=TRUE, base=TRUE, logLik=TRUE, sort=TRUE)
-pchisq(2*-1287.1-2*-1287.9,1,lower.tail=F)
+pchisq(2*(-1287.1+1287.9),9-8,lower.tail=F) # this one is reported
 
 library(lmerTest)
 library(car)

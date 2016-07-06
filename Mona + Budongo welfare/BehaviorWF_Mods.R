@@ -476,6 +476,17 @@ fwf2.ols <- lmer(totalwelfare ~ Regurgitated + Did.focal.eat.faeces + Did.focal.
 # http://stats.stackexchange.com/questions/34859/how-to-present-results-of-a-lasso-using-glmnet
 
 
+
+### summary stats on number of scans, focals
+summary(as.vector(table(droplevels(focals1$Focal.ID))))
+sd(as.vector(table(droplevels(focals1$Focal.ID))))
+
+summary(as.vector(table(droplevels(focals2$Focal.ID))))
+sd(as.vector(table(droplevels(focals2$Focal.ID))))
+
+
+
+
 ### Chimps 2016 abstract snippet
 # Welfare was found to be predicted by observed negative behaviours (e.g. regurgitation, cacophagy), using LASSO penalized linear modeling and covariance tests.
 

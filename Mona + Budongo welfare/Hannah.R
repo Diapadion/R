@@ -1,16 +1,33 @@
 
 
-library(lattice)
+
 
 wf$z_wfswb[1:18] = scale(wf$welfareswb[1:18])
 wf$z_wfswb[19:36] = scale(wf$welfareswb[19:36])
 
 wf$time <- as.factor(wf$time)
 
+wf$DMpartic = as.factor(c(2,0,2,1,1,2,0,2,0,0,2,1,0,1,1,1,0,0,
+                          2,0,2,1,1,2,0,2,0,0,2,1,0,1,1,1,0,0))
 
-xyplot(z_wfswb ~ time, data = wf, type = 'l')
+wf$DMpartic = as.factor(c(1,0,1,1,1,1,0,1,0,0,1,1,0,1,1,0,0,0,  # 10
+                          1,0,1,1,1,1,0,1,0,0,1,1,0,1,1,0,0,0))
+
+### Unsplit
+
+library(lattice)
+xyplot(welfareswb ~ time, data = wf, type = 'l')
+
+
+t.test(welfareswb ~ time, data = wf)
+
+
+### Individual
 
 interaction.plot(wf$time, wf$Chimp, wf$z_wfswb, type='b', col = c(1:18))
+
+
+
 
 library(ggplot2)
 
@@ -27,8 +44,6 @@ wf$EWpartic = as.factor(c(1,0,1,0,1,1,0,1,0,0,0,1,0,0,1,0,0,0,1,0,1,0,1,1,0,1,0,
 
 # complete session {2}
 # ED, LB, KL, FK, CI
-wf$DMpartic = as.factor(c(2,0,2,1,1,2,0,2,0,0,2,1,0,1,1,1,0,0,
-                          2,0,2,1,1,2,0,2,0,0,2,1,0,1,1,1,0,0))
 
 
 ggplot(wf, aes(time, welfareswb,colour=EWpartic)) +
@@ -40,7 +55,7 @@ interaction.plot(wf$time, wf$EWpartic, wf$z_wfswb, type='b')
 interaction.plot(wf$time, wf$DMpartic, wf$z_wfswb, type='b')
 
                     #      CI  DA  ED  EM  EV  FK  HE  KL  KD  LI  LB  LO  LU  PA  PE  Q   RE  SO
-wf$Compartic = as.factor(c(0,  0,  1,  0,  1,  1,  0,  1,  0,  0,  1,  0,  0,  0,  1,  0,  0,  0,
+wf$Compartic = as.factor(c(0,  0,  1,  0,  1,  1,  0,  1,  0,  0,  1,  0,  0,  0,  1,  0,  0,  0, #LO?
                            0,  0,  1,  0,  1,  1,  0,  1,  0,  0,  1,  0,  0,  0,  1,  0,  0,  0))
 
 interaction.plot(wf$time, wf$Compartic, wf$z_wfswb, type='b')
@@ -54,13 +69,35 @@ anova.comp <- aov(z_wfswb ~ Compartic * time, data=wf)
 summary(anova.DM)
 TukeyHSD(anova.DM)
 
+###
+wf.ag<- with(wf , aggregate(welfareswb, 
+                            list(participation=DMpartic, time=time), mean))
+wf.ag$se<- with(wf, aggregate(welfareswb,
+                              list(participation=DMpartic, time=time), sd))[,3]
+
+wf.ag$time = as.numeric(wf.ag$time)
+wf.ag$time[wf.ag$participation == 1] = wf.ag$time[wf.ag$participation == 1] + 0.1
+
+gp <- ggplot(data=wf.ag, aes(x=time, y=x, colour=participation, group=participation)) 
+gp + geom_line(aes(linetype=participation), size=.6) + 
+  geom_point(aes(shape=participation), size=3) + 
+  geom_errorbar(aes(ymax=x+se, ymin=x-se), width=.1) +
+  labs(x = "Time point", y = 'Welfare') +
+  scale_x_discrete(limits=c("1", "2"))
+
 
 
 library(lme4)
 
-lmm.DM <- lmer(z_wfswb ~ DMpartic * time + (1|Chimp), data=wf)
+anov.DM = aov(welfareswb ~ DMpartic * time, data=wf)
 
-confint(lmm.DM, type='boot')
+# HB-S main model
+lmm.DM <- lmer(welfareswb ~ DMpartic * time + (1|Chimp), data=wf)
+
+summary(lmm.DM)
+confint(lmm.DM, method='boot')
+
+lmm.DM.0 <- lmer(welfareswb ~ 1 + (1|Chimp), data=wf)
 
 
 lmm.comp <- lmer(z_wfswb ~ Compartic * time + (1|Chimp), data=wf)

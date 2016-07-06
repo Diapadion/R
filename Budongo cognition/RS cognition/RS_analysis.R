@@ -86,6 +86,11 @@ d.t = t.test(intLvlPers2$Dominance[intLvlPers2$RSpartic==1],intLvlPers2$Dominanc
 p.adjust(c(0.002396, 0.02227, 0.03598, 0.04071), 'BH', 4)
 # okay, all pass, post correction
 
+library(lsr)
+cohensD(intLvlPers2$Conscientiousness[intLvlPers2$RSpartic==1],intLvlPers2$Conscientiousness[intLvlPers2$RSpartic==0])
+cohensD(intLvlPers2$Neuroticism[intLvlPers2$RSpartic==1],intLvlPers2$Neuroticism[intLvlPers2$RSpartic==0])
+cohensD(intLvlPers2$Openness[intLvlPers2$RSpartic==1],intLvlPers2$Openness[intLvlPers2$RSpartic==0])
+cohensD(intLvlPers2$Dominance[intLvlPers2$RSpartic==1],intLvlPers2$Dominance[intLvlPers2$RSpartic==0])
 
 # starting from 'scratch'
 
@@ -216,7 +221,8 @@ dOut = Surv(aggTraTri$freq, aggTraTri$dropped, type='right')
 
 # which distribution should we use?
 themodel <- (dOut ~ aggTraTri$Dominance + aggTraTri$Conscientiousness + aggTraTri$Openness + 
-               aggTraTri$Neuroticism + aggTraTri$Agreeableness + aggTraTri$Extraversion)
+               aggTraTri$Neuroticism + aggTraTri$Agreeableness + aggTraTri$Extraversion
+             + frailty.gaussian(aggTraTri$chimp))
 thedistributions<-c("weibull","exponential","lognormal","loglogistic")
 
 distlist = 0
@@ -243,8 +249,8 @@ RS.drop.aft <- survreg(dOut ~ Dominance + Conscientiousness + Openness + Neuroti
 
 RS.drop.aft.frail <- survreg(dOut ~ Dominance + Conscientiousness + Openness + Neuroticism +
                      Agreeableness + Extraversion +
-                       frailty(stage)
-                       , data = aggTraTri, dist='lognormal')
+                       frailty.gaussian(chimp)
+                       , data = aggTraTri, dist='weibull')
 
 summary(RS.drop.aft.frail)
 ci.drop = confint(RS.drop.aft.frail, method='profile')
@@ -257,10 +263,25 @@ RS.drop.cox.f <- coxme(dOut ~ Dominance + Conscientiousness + Openness + Neuroti
                                Agreeableness + Extraversion +
                                (1 | stage) + (1 | chimp)
                              , data = aggTraTri)
-confint(RS.drop.aft.frail) # how to make this work?
+confint.merMod(RS.drop.cox.f, method='Wald') # how to make this work?
 summary(RS.drop.cox.f)
 # yes, the Cox ME {TODO}
 # probably just need to do the CIs by hand
+
+library(MuMIn)
+u.cox = updateable(coxme)
+u.cox.RS = u.cox(dOut ~ Dominance + Conscientiousness + Openness + Neuroticism +
+                   Agreeableness + Extraversion +
+                   (1 | stage) + (1 | chimp)
+                 , data = aggTraTri)
+u.ci = model.avg(u.cox.RS, u.cox.RS)
+confint(u.ci)
+# boom
+
+AICtab(RS.drop.cox.f, RS.drop.aft.frail,
+       weights=T, delta=T, base=T, logLik=T, sort=T) 
+
+pchisq(2*(-63.1+25), 7.78-7.72   ,lower.tail=F)
 
 
 
@@ -286,6 +307,8 @@ RS.drop.aft.f.tst <- survreg(dOut ~ Dominance + Conscientiousness + Openness + N
                                frailty(stage)
                              , data = TestTri, dist='lognormal')
 # not enough df... oh well
+
+
 
 
 
@@ -324,7 +347,7 @@ TrainOnlyTri <- aggTraTri[aggTraTri$stage!='test',]
 # TrainOnlyTri <- TrainOnlyTri[TrainOnlyTri$dropped == 0,]
 # # and some custom removals
 # # # dropping just the 0 adds
-TrainOnlyTri <- TrainOnlyTri[-c(1,2,4,8,11,12,13,14,19,22,24,26,27,29,32,36,38,40,42),]
+TrainOnlyTri <- TrainOnlyTri[-c(1,2,4,8,11,12,13,14,19,21,22,24,26,27,29,32,36,38,40,42),] # 21 is Frek's outlier
 # # these blocks were not trained to criterion
 
 
@@ -344,7 +367,7 @@ RS.trial.glmm.tot <- glmer(freq ~ Dominance + Conscientiousness + Openness + Neu
                            ) 
 summary(RS.trial.glmm.tot)
 #confint(RS.trial.lmm.tot)
-confint(RS.trial.glmm.tot)
+ci.RS.toCompletion = confint(RS.trial.glmm.tot, method = 'Wald')
 
 
 
@@ -385,6 +408,12 @@ RS.crit.cox <- coxme(dCrit ~ Dominance + Conscientiousness + Openness + Neurotic
                      , data = TrainOnlyTri)
 summary(RS.crit.cox)
 # Nope.
+u.cox.RS.crit = u.cox(dCrit ~ Dominance + Conscientiousness + Openness + Neuroticism +
+                   Agreeableness + Extraversion
+                 + (1 | stage) + (1 | chimp)
+                 , data = TrainOnlyTri)
+u.ci.crit = model.avg(u.cox.RS.crit, u.cox.RS.crit)
+confint(u.ci.crit)
 
 
 RS.crit.lmm <- lmer(log(freq) ~ Dominance + Conscientiousness + Openness + Neuroticism +
@@ -404,6 +433,7 @@ confint(RS.crit.glmm, method = 'Wald')
 
 # looks like there's nothing here
 # probably too few data points
+
 
 
 ### [3] Accuracy
@@ -455,7 +485,7 @@ write(RS2accu.tbl,"../presentation images/RS2accu.html")
 
 rs.glm2.0 <- glmer(Correctness ~ Dominance + Conscientiousness + Openness + Neuroticism +
                      Agreeableness + Extraversion +
-                     Trial +  # adding this does... well, very little.
+                     scale(Trial) +  # adding this does... well, very little.
                      (1 | chimp) + (1 | stage) + (1 | TrialType) #+ (1 | Section) + (1 | depend)
                    # last two look degenerate
                    , data = RStemp, family = binomial
@@ -464,20 +494,24 @@ rs.glm2.0 <- glmer(Correctness ~ Dominance + Conscientiousness + Openness + Neur
 
 rs.glm3.0 <- glmer(Correctness ~ Dominance + Conscientiousness + Openness + Neuroticism +
                      Agreeableness + Extraversion +
-                     day +  
+                     scale(day) +  
                      (1 | chimp) + (1 | stage) + (1 | TrialType) #+ (1 | Section) + (1 | depend)
                    # last two look degenerate
                    , data = RStemp, family = binomial
 )
+confint(rs.glm3.0, method='Wald')
+
+
 
 rs.glm3.td <- glmer(Correctness ~ Dominance + Conscientiousness + Openness + Neuroticism +
                      Agreeableness + Extraversion +
-                     day +  Trial +
+                     scale(day) +  scale(Trial) +
                      (1 | chimp) + (1 | stage) + (1 | TrialType) #+ (1 | Section) + (1 | depend)
                    # last two look degenerate
                    , data = RStemp, family = binomial
 )
-summary(rs.glm3.0)
+summary(rs.glm3.td)
+confint(rs.glm3.td, method = 'Wald')
 
 rs.glm3.ints <- glmer(Correctness ~ Dominance*day + Conscientiousness*day + Openness*day + Neuroticism*day +
                      Agreeableness*day + Extraversion*day +
@@ -500,6 +534,12 @@ AICtab(rs.glm2.0, rs.glm1.0,rs.glm3.0, rs.glm3.td, weights=T, delta=T, base=T, l
 AICtab(rs.glm3.iA, rs.glm3.ints,rs.glm3.0, rs.glm3.td, weights=T, delta=T, base=T, logLik=T, sort=T) 
 
 summary(rs.glm3.iA)
+
+# including date
+pchisq(2*(-8808.6+8836.8),11-10,lower.tail=F)
+# including trial, on top of date
+pchisq(2*(-8808.604+8808.625),12-11,lower.tail=F)
+
 
 ### Learning
 # after 33/48 trials, chimps progressed to next stage
@@ -567,7 +607,7 @@ rs.touch.lmm.0 <- glmer(touches ~ Dominance + Conscientiousness + Openness + Neu
                       , family = poisson(link = "log"), control = glmerControl(optimizer='Nelder_Mead')
 )
 rs.touch.lmm.0.d <- glmer(touches ~ Dominance + Conscientiousness + Openness + Neuroticism +
-                          Agreeableness + Extraversion + day +
+                          Agreeableness + Extraversion + day + 
                           (1 | chimp) + (1 | stage) + (1 | TrialType) #+ (1 | Section) + (1 | depend)
                         #, data = temp
                         ,  data = RStemp[(RStemp$Correctness==' Incorrect' & RStemp$touches > 0),]
@@ -583,12 +623,15 @@ AICtab(rs.touch.lmm, rs.touch.lmm.d, rs.touch.lmm.1,
 # won't complete with N_M
 # probably just have to deal with Wald
 ci.touches <- confint(rs.touch.lmm, method='Wald')
-ci.touches.0 <- confint(rs.touch.lmm.0, method='profile')
-ci.touches.1 <- confint(rs.touch.lmm.1, method='profile')
+#ci.touches.0 <- confint(rs.touch.lmm.0, method='profile')
+#ci.touches.1 <- confint(rs.touch.lmm.1, method='profile')
 ci.touches.d <- confint(rs.touch.lmm.d, method='Wald')
-ci.touches.0.d <- confint(rs.touch.lmm.0.d, method='Wald')
-ci.touches.1.d <- confint(rs.touch.lmm.1.d, method='Wald')
+#ci.touches.0.d <- confint(rs.touch.lmm.0.d, method='Wald')
+#ci.touches.1.d <- confint(rs.touch.lmm.1.d, method='Wald')
 
+
+# All - adding date
+pchisq(2*(-9050.7+9052.5),11-10,lower.tail=F)
 
 
 
@@ -604,7 +647,13 @@ rs.rt.lmm.pers <- lmer(log(RT) ~ Dominance + Conscientiousness + Openness + Neur
 )
 
 rs.rt.lmm.pers.day <- lmer(log(RT) ~ Dominance + Conscientiousness + Openness + Neuroticism +
-                             Agreeableness + Extraversion + day + 
+                             Agreeableness + Extraversion + scale(day) + 
+                             (1 | chimp) + (1 | stage) + (1 | TrialType) #+ (1 | Section) + (1 | depend)
+                           , data = RStemp, control = lmerControl(optimizer='Nelder_Mead')
+)
+
+rs.rt.lmm.pers.td <- lmer(log(RT) ~ Dominance + Conscientiousness + Openness + Neuroticism +
+                             Agreeableness + Extraversion + scale(day) + scale(Trial) + 
                              (1 | chimp) + (1 | stage) + (1 | TrialType) #+ (1 | Section) + (1 | depend)
                            , data = RStemp, control = lmerControl(optimizer='Nelder_Mead')
 )
@@ -614,7 +663,8 @@ rs.rt.lmm.pers.day <- lmer(log(RT) ~ Dominance + Conscientiousness + Openness + 
 rs.rt.lmm.1 <- lmer(log(RT) ~ Dominance + Conscientiousness + Openness + Neuroticism +
                       Agreeableness + Extraversion +
                       (1 | chimp) + (1 | stage) + (1 | TrialType) #+ (1 | Section) + (1 | depend)
-                    , data = RStemp[RStemp$Correctness==' Correct',]
+                    , data = RStemp[RStemp$Correctness==' Correct',],
+                    control = lmerControl(optimizer='Nelder_Mead')
 )
 
 
@@ -629,15 +679,36 @@ rs.rt.lmm.1.day <- lmer(log(RT) ~ Dominance + Conscientiousness + Openness + Neu
                           #                                  method='L-BFGS-G' )
                                               ))
 
-ci.RT.1 = confint(rs.rt.lmm.1)
+rs.rt.lmm.1.td <- lmer(log(RT) ~ Dominance + Conscientiousness + Openness + Neuroticism +
+                          Agreeableness + Extraversion + scale(day) + scale(Trial) + 
+                          (1 | chimp) + (1 | stage) + (1 | TrialType) #+ (1 | Section) + (1 | depend)
+                        , data = RStemp[RStemp$Correctness==' Correct',],
+                        control = lmerControl(optimizer='Nelder_Mead'))
+
+
+
+ci.RT.1 = confint(rs.rt.lmm.1, method='profile')
 ci.RT.1.d = confint(rs.rt.lmm.1.day, method='profile')
+ci.RT.1.td = confint(rs.rt.lmm.1.td, method='profile')
 
 
 ci.RT = confint(rs.rt.lmm.pers)
 ci.RT.d = confint(rs.rt.lmm.pers.day, method='profile')
+ci.RT.td = confint(rs.rt.lmm.pers.td, method='profile')
 
-AICtab(rs.rt.lmm.pers, rs.rt.lmm.pers.day, rs.rt.lmm.1, rs.rt.lmm.1.day, weights=T, delta=T, base=T, logLik=T, sort=T) 
+AICtab(rs.rt.lmm.pers, rs.rt.lmm.pers.day, rs.rt.lmm.pers.td,
+      #rs.rt.lmm.1, rs.rt.lmm.1.day, rs.rt.lmm.1.td,
+       weights=T, delta=T, base=T, logLik=T, sort=T) 
 
+# All - including date
+pchisq(2*(-19647.4+19647.2),12-11,lower.tail=F)
+# All - including date + trial : not a valid test
+pchisq(2*(-19643.5+19647.2),13-12,lower.tail=F)
+
+# Correct - including date
+pchisq(2*(-11753.0+11759.8),12-11,lower.tail=F)
+# Correct - including date + trial
+pchisq(2*(-11751.6+11753.0),13-12,lower.tail=F)
 
 
 

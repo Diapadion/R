@@ -127,8 +127,7 @@ inPodL.mcmc = merge(inPodL[,c(1:3)],aggPers[,c(1,8:13)], by.x= "Chimp", "Chimp")
 # what predicts the amount of total time spent in the pod, per day
 mew.pois.1 = glmer(Time ~ Dominance + Extraversion + Conscientiousness + Agreeableness
                    + Neuroticism + Openness + (1 | Date) + (1 | Chimp),
-                   data=inPodL, family = poisson)
-# the above model is almost certainly meaningless
+                   data=inPodL.mcmc, family = poisson)
 
 # scaling needs to be done properly, from the outset
 ## Update - need to see how goes GLMM respond when we just take out the zeros
@@ -155,7 +154,7 @@ write(pgm1.tbl,"InPodPGLM.html")
 
 
 
-
+library(pscl)
 
 library(MCMCglmm)
 
@@ -225,7 +224,76 @@ mew.mcmc.pZIF.4 <- MCMCglmm(Time ~ dom + ext + con + agr + neu + opn, random= ~D
 ### we will return here later for Prior investigation
 
 
+### Getting it publication ready
 
+library(broom)
+
+### Negative Binomial GLMMs
+mew.ng.1 <- glmer.nb(Time ~ Dominance + Conscientiousness + Openness + 
+                       Neuroticism + Agreeableness + Extraversion +
+                       (1 | Date) + (1 | Chimp), data = inPodL.mcmc,
+                     verbose = 2)
+summary(mew.ng.1)
+confint(mew.ng.1, method='Wald')
+glance(mew.ng.1)
+# so far, consistent with everything suspected
+# i.e.
+summary(mew.pois.1)
+glance(mew.pois.1)
+
+# Carried over from MCMCtests.R
+# zifp3 <- zeroinfl(Time ~ Dominance + Conscientiousness +
+# Openness + Neuroticism + Agreeableness +
+#   Extraversion
+# , data = inPodL.mcmc, dist="poisson")
+summary(zifp3)
+extractAIC(zifp3)
+
+# MCMC findings
+mcmc2$DIC
+mcmc3.us$DIC
+
+mcmc2.1$DIC
+summary(mcmc2.1)
+mcmc2.1.0$DIC
+mcmc2.0.0$DIC
+mcmc2.2$DIC
+
+overdisp_fun <- function(model) {
+  ## number of variance parameters in 
+  ##   an n-by-n variance-covariance matrix
+  vpars <- function(m) {
+    nrow(m)*(nrow(m)+1)/2
+  }
+  model.df <- sum(sapply(VarCorr(model),vpars))+length(fixef(model))
+  rdf <- nrow(model.frame(model))-model.df
+  rp <- residuals(model,type="pearson")
+  Pearson.chisq <- sum(rp^2)
+  prat <- Pearson.chisq/rdf
+  pval <- pchisq(Pearson.chisq, df=rdf, lower.tail=FALSE)
+  c(chisq=Pearson.chisq,ratio=prat,rdf=rdf,p=pval)
+}
+overdisp_fun(mew.ng.1)
+overdisp_fun(mew.pois.1)
+
+library(ggplot2)
+p.A <- ggplot(inPodL.mcmc, aes(Time, Agreeableness)) + geom_point(alpha=0.2) + theme_bw()
+p.D <- ggplot(inPodL.mcmc, aes(Time, Dominance)) + geom_point(alpha=0.2) + theme_bw()
+p.C <- ggplot(inPodL.mcmc, aes(Time, Conscientiousness)) + geom_point(alpha=0.2) + theme_bw()
+p.O <- ggplot(inPodL.mcmc, aes(Time, Openness)) + geom_point(alpha=0.2) + theme_bw()
+p.N <- ggplot(inPodL.mcmc, aes(Time, Neuroticism)) + geom_point(alpha=0.2) + theme_bw()
+p.E <- ggplot(inPodL.mcmc, aes(Time, Extraversion)) + geom_point(alpha=0.2) + theme_bw()
+p.E
+
+
+
+plot(inPodL.mcmc$Time, inPodL.mcmc$Agreeableness)
+plot(inPodL.mcmc$Time, inPodL.mcmc$Openness)
+plot(inPodL.mcmc$Time, inPodL.mcmc$Conscientiousness)
+plot(inPodL.mcmc$Time, inPodL.mcmc$Neuroticism)
+plot(inPodL.mcmc$Time, inPodL.mcmc$Dominance)
+plot(inPodL.mcmc$Time, inPodL.mcmc$Extraversion)
+hist(inPodL.mcmc$Time)
 
 
 # [3] Who continues to interact?
@@ -272,7 +340,7 @@ mew.3.pm <- glm(EW3particip ~ Dominance + Neuroticism + Agreeableness +
 # again, need to ZIF
 # but ZIFing doesn't really work, so probably means it is unnecessary and we should stick to gm, above
 
-library(pscl)
+
 mew.3.zpm <- zeroinfl(EW3particip ~ Dominance + Neuroticism + 
                         Agreeableness + Extraversion + 
                         Conscientiousness + Openness
@@ -287,6 +355,14 @@ mew.3.hm <- hurdle(EW3particip ~ Dominance + Neuroticism +
 # AICtab(mew.3.pm, mew.3.hm, weights=T, delta=T, base=T, logLik=T, sort=T)
 
 confint(mew.3.pm)
+
+library(MASS)
+mew.3.nbm <- glm.nb(EW3particip ~ Dominance + Neuroticism + Agreeableness +
+                  Extraversion + Conscientiousness + Openness, data=aggPers)
+glance(mew.3.nbm)
+glance(mew.3.pm)
+
+confint(mew.3.nbm, method= 'Wald')
 
 
 ### can this model can be done better?
@@ -324,6 +400,12 @@ write(pm3.tbl,"GotoScreen3PGLM.html")
 
 
 # how much time spent at the screen?
+
+mew.3.pgmm.0 <- glmer(secs ~ 1
+                    + (1 | Session.number) 
+                    + (1 | Individual)
+                    ,data = tatScreen, family = poisson)
+                    
 mew.3.pgmm <- glmer(secs ~ Dominance + Neuroticism + Agreeableness + Extraversion + Conscientiousness + 
                        Openness
                     + (1 | Session.number) 
@@ -331,6 +413,7 @@ mew.3.pgmm <- glmer(secs ~ Dominance + Neuroticism + Agreeableness + Extraversio
                     ,data = tatScreen, family = poisson
                     #,control=glmerControl(maxfun=10000)
                     )
+anova(mew.3.pgmm, mew.3.pgmm.0)
 
 mew.3.pgmm.s <- glmer(secs ~ s(Dominance) + s(Neuroticism) + s(Agreeableness) + s(Extraversion) + s(Conscientiousness) + 
                       s(Openness)
@@ -340,6 +423,8 @@ mew.3.pgmm.s <- glmer(secs ~ s(Dominance) + s(Neuroticism) + s(Agreeableness) + 
                     #,control=glmerControl(maxfun=10000)
 )
 vif.mer(mew.3.pgmm)
+
+
 
 
 # MCMC test check again

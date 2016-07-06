@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "# importing and processing the spreadsheets of points (A-H)\n\n# based on the first OHSU macaque photos:\n#\n# A is Middle of the brows, where it meets the hairline\n# B is Bottom of chin\n# C is Top of left eye\n# D is Top of the right eye\n# E is Left edge of the face\n# F is Right edge of the face\n# G is Top of the lip\n\nlibrary(alphahull)\nlibrary(tidyr)\n\n\ndfOHSU1 <- read.csv(\"ORmacaq1.csv\", header=T)\n\n#test <- data.frame(do.call('rbind', strsplit(as.character(dfOHSU1$A),',',fixed=TRUE)))\n\ndfOHSU1 <- separate(data = dfOHSU1, col = A, into = c(\"A.x\", \"A.y\"), sep = \"\\\\,\")\ndfOHSU1 <- separate(data = dfOHSU1, col = B, into = c(\"B.x\", \"B.y\"), sep = \"\\\\,\")\ndfOHSU1 <- separate(data = dfOHSU1, col = C, into = c(\"C.x\", \"C.y\"), sep = \"\\\\,\")\ndfOHSU1 <- separate(data = dfOHSU1, col = D, into = c(\"D.x\", \"D.y\"), sep = \"\\\\,\")\ndfOHSU1 <- separate(data = dfOHSU1, col = E, into = c(\"E.x\", \"E.y\"), sep = \"\\\\,\")\ndfOHSU1 <- separate(data = dfOHSU1, col = F, into = c(\"F.x\", \"F.y\"), sep = \"\\\\,\")\ndfOHSU1 <- separate(data = dfOHSU1, col = G, into = c(\"G.x\", \"G.y\"), sep = \"\\\\,\")\n\ndfOHSU1[,c(2:15)] <- as.numeric(unlist(dfOHSU1[,c(2:15)]))\n\ntabl <- dfOHSU1\nfWHR1 <- NULL\n#i = 28\n\nfor (i in seq_len(dim(tabl)[1])){\n  #i = 38\n  points <- matrix(c(c(tabl$C.x[i], tabl$D.x[i], tabl$E.x[i], tabl$F.x[i], tabl$G.x[i]), \n                     c(tabl$C.y[i], tabl$D.y[i], tabl$E.y[i], tabl$F.y[i], tabl$G.y[i]))\n                     ,nrow = 5, ncol = 2)\n  \n  \n  fWHR1[i] =   fWHR(points, i)\n  \n}\n\n# There appear to be some problems. Are these points not always in the right order?\n\n# [28] bobby05228 seems to have some points placed incorrectly, \n# as well as having the crossbar not drawn in the right place\n\n# redo these faces as something seems wrong with the first measures:\n# Ramsay05178\n# Dougal05056\n# Bobby05228\n# BJ05023\n\n",
+    "created" : 1467629876681.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "460076837",
+    "id" : "7CABB7C8",
+    "lastKnownWriteTime" : 1467731721,
+    "last_content_update" : 1467731721562,
+    "path" : "C:/Users/s1229179/GitHub/R/fWHR/calcRatios.R",
+    "project_path" : "calcRatios.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

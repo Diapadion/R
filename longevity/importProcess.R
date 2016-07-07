@@ -29,7 +29,7 @@ all$status[(all$status == 'alive') & (all$sample == 'Japan')] <- 'Alive'
 
 # just for Bram - whach out for the number
 all$status[535] <- 'Alive'
-
+table()
 # for frailty purposes, we want to make Taronga part of AZA
 all$sample[all$sample=='Taronga'] = 'AZA'
 

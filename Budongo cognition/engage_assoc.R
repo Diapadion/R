@@ -25,18 +25,36 @@ cmm.1 <- clmm(Engagement ~ 1 + Dominance + Conscientiousness + Neuroticism + Ext
               Agreeableness + Openness + Pod
             + (1 | Date) + (1|Chimp), data=DMAeng)
 
-cmm.1.nA <- clmm(Engagement ~ Dominance + Conscientiousness + Neuroticism + Extraversion + 
-                Openness + Pod
+cmm.1.pD2 <- clmm(Engagement ~ Dominance + Conscientiousness + Neuroticism + Extraversion + 
+                Agreeableness + Openness + I(Dominance^2) + Pod
               + (1 | Date) + (1|Chimp), data=DMAeng)
+
+cmm.1.pN2 <- clmm(Engagement ~ Dominance + Conscientiousness + Neuroticism + Extraversion + 
+                    Agreeableness + Openness + I(Neuroticism^2) + Pod
+                  + (1 | Date) + (1|Chimp), data=DMAeng)
 
 cmm.2 <- clmm(Engagement ~ Dominance + I(Dominance^2) + Conscientiousness + Neuroticism + I(Neuroticism^2) + Extraversion + 
                          Agreeableness + Openness + Pod
               + (1 | Date) + (1|Chimp), data=DMAeng)
 
+cmm.2.nDN <- clmm(Engagement ~ I(Dominance^2) + Conscientiousness + I(Neuroticism^2) + Extraversion + 
+                Agreeableness + Openness + Pod
+              + (1 | Date) + (1|Chimp), data=DMAeng)
+
 library(bbmle)  
-AICtab(cmm.1, cmm.1.nA, cmm.2, weights=T, delta=T, base=T, logLik=T, sort=T)  
+AICtab(cmm.1, cmm.1.pD2, cmm.1.pN2, cmm.2, cmm.2.nDN, weights=T, delta=T, base=T, logLik=T, sort=T)  
 # model 1 is the best
+#summary(cmm.2)
 summary(cmm.1)
+
+pchisq(2*(-646.8+648.6), 13-11   ,lower.tail=F)
+
+pchisq(2*(-647.9+648.6), 12-11   ,lower.tail=F)
+pchisq(2*(-648.5+648.6), 12-11   ,lower.tail=F)
+
+
+# not strong enough evidence to reject model 1 in favor of an augmented model
+
 
 ci.DMApartic <- confint(cmm.1)
 
@@ -95,7 +113,7 @@ mp = barplot(height=as.matrix(tm[3:8]),beside=TRUE,
              #legend.text=c('Never participated','Incomplete participation','Completed full sessions'),
              names.arg=c('Dominance','Extraversion','Conscientiousness',
                          'Agreeableness','Neuroticism','Openness')
-              ,ylim=c(0,7))
+              ,ylim=c(0,7), xlab='Personality Dimension', ylab='Average score')
 
 segments(c(mp), c(t(t(tm[3:8] - ts[3:8]))), c(mp),c(t(t(tm[3:8] + ts[3:8]))), lwd=2)
 legend(legend = c('Never participated','Incomplete participation','Completed full sessions'),

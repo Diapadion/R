@@ -29,7 +29,9 @@ EWts <- aggregate(aggPers, by=list(aggPers$EWpartic), FUN=sd)
 
 EWp = barplot(height=as.matrix(EWtm[3:8]),beside=TRUE,
               legend.text=c('Non-participants','Participants'),
-              ylim=c(0,7))
+              ylim=c(0,7), xlab = 'Personality Dimension', ylab = 'Average score',
+              names.arg = c('Dominance','Extraversion','Conscientiousness',
+                            'Agreeableness','Neuroticism','Openness'))
 segments(c(EWp), c(t(t(EWtm[3:8] - EWts[3:8]))), c(EWp),c(t(t(EWtm[3:8] + EWts[3:8]))), lwd=2)
 
 # logit glm for seeing how pers affects this
@@ -259,6 +261,7 @@ mcmc2.1.0$DIC
 mcmc2.0.0$DIC
 mcmc2.2$DIC
 
+# works for mixed models, not so well for others
 overdisp_fun <- function(model) {
   ## number of variance parameters in 
   ##   an n-by-n variance-covariance matrix
@@ -273,8 +276,13 @@ overdisp_fun <- function(model) {
   pval <- pchisq(Pearson.chisq, df=rdf, lower.tail=FALSE)
   c(chisq=Pearson.chisq,ratio=prat,rdf=rdf,p=pval)
 }
-overdisp_fun(mew.ng.1)
+#overdisp_fun(mew.ng.1) # I don't think you can do this on non-Poisson
 overdisp_fun(mew.pois.1)
+
+pchisq(2*(-1882.397+749.7257), 207-206   ,lower.tail=F)
+# Neither the overdispersion nor chi-sq test seems very informative
+# just look at the AICs
+
 
 library(ggplot2)
 p.A <- ggplot(inPodL.mcmc, aes(Time, Agreeableness)) + geom_point(alpha=0.2) + theme_bw()
@@ -357,10 +365,17 @@ mew.3.hm <- hurdle(EW3particip ~ Dominance + Neuroticism +
 confint(mew.3.pm)
 
 library(MASS)
+library(AER)
 mew.3.nbm <- glm.nb(EW3particip ~ Dominance + Neuroticism + Agreeableness +
                   Extraversion + Conscientiousness + Openness, data=aggPers)
+
+#overdisp_fun(mew.3.nbm)
+#overdisp_fun(mew.3.pm)
+dispersiontest(mew.3.pm, alternative = 'greater')
+
 glance(mew.3.nbm)
 glance(mew.3.pm)
+
 
 confint(mew.3.nbm, method= 'Wald')
 
@@ -406,8 +421,8 @@ mew.3.pgmm.0 <- glmer(secs ~ 1
                     + (1 | Individual)
                     ,data = tatScreen, family = poisson)
                     
-mew.3.pgmm <- glmer(secs ~ Dominance + Neuroticism + Agreeableness + Extraversion + Conscientiousness + 
-                       Openness
+mew.3.pgmm <- glmer(secs ~ Dominance + Conscientiousness + Openness + 
+                      Neuroticism + Agreeableness + Extraversion
                     + (1 | Session.number) 
                     + (1 | Individual)
                     ,data = tatScreen, family = poisson
@@ -415,6 +430,7 @@ mew.3.pgmm <- glmer(secs ~ Dominance + Neuroticism + Agreeableness + Extraversio
                     )
 anova(mew.3.pgmm, mew.3.pgmm.0)
 
+# below is unnecessary
 mew.3.pgmm.s <- glmer(secs ~ s(Dominance) + s(Neuroticism) + s(Agreeableness) + s(Extraversion) + s(Conscientiousness) + 
                       s(Openness)
                     + (1 | Session.number) 
@@ -424,6 +440,8 @@ mew.3.pgmm.s <- glmer(secs ~ s(Dominance) + s(Neuroticism) + s(Agreeableness) + 
 )
 vif.mer(mew.3.pgmm)
 
+summary(mew.3.pgmm)
+confint(mew.3.pgmm, method='Wald')
 
 
 

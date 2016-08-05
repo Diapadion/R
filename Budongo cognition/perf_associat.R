@@ -292,36 +292,88 @@ qqnorm(cz_bin_pers$procTime.1.log)
 #cz_bin_pers$loginspecTime[outliers(cz_bin_pers$loginspecTime,2.5)] <- NA
 
 
-mod.pt1 <- lmer(log(procTime) ~ dom + neu + opn + agr + con + ext + (1 | Group.1)
+mod.pt1 <- lmer(log(procTime) ~ Dominance + Conscientiousness + Openness + Neuroticism
+                + Agreeableness + Extraversion + (1 | Chimp)
                 , data=cz_bin_pers
 )
-mod.pt2 <- lmer(log(procTime) ~ Trial + dom + neu + opn + agr + con + ext + (1 | Group.1)
+mod.pt2 <- lmer(log(procTime) ~ Dominance + Conscientiousness + Openness + Neuroticism
+                + Agreeableness + Extraversion + s(day) + (1 | Chimp)
                , data=cz_bin_pers
                )
-mod.pt3 <- lmer(log(procTime) ~ Trial + (1 | Group.1)
+mod.pt3 <- lmer(log(procTime) ~ Dominance + Conscientiousness + Openness + Neuroticism
+                + Agreeableness + Extraversion + s(day) +  s(Trial) + (1 | Chimp)
+                , data=cz_bin_pers
+)
+AICtab(mod.pt1, mod.pt2, mod.pt3,weights=TRUE, delta=TRUE, base=TRUE, logLik=TRUE, sort=TRUE)
+pchisq(2*(-2379.5+2438.2),10-9,lower.tail=F) # step 1: +day
+pchisq(2*(-2368.3+2379.5),11-10,lower.tail=F) # step 2: +trial
+
+ci.pt3 <- confint(mod.pt3)
+
+
+mod.pt4 <- lmer(log(procTime) ~ Trial + (1 | Group.1)
                 , data=cz_bin_pers
 )
 
 
-mod.it1 <- lmer(log(inspecTime) ~ dom + neu + opn + agr + con + ext + (1 | Group.1)
+mod.it1 <- lmer(log(inspecTime) ~ Dominance + Conscientiousness + Openness + Neuroticism
+                + Agreeableness + Extraversion + (1 | Chimp)
                 , data=cz_bin_pers
 )
-mod.it2 <- lmer(log(inspecTime) ~ dom + neu + opn + agr + con + ext + Trial + (1 | Group.1)
+mod.it2 <- lmer(log(inspecTime) ~ Dominance + Conscientiousness + Openness + Neuroticism
+                + Agreeableness + Extraversion + s(day) + (1 | Chimp)
                 , data=cz_bin_pers
 )
-mod.it3 <- lmer(log(inspecTime) ~ Trial + (1 | Group.1)
+mod.it3 <- lmer(log(inspecTime) ~ Dominance + Conscientiousness + Openness + Neuroticism
+                + Agreeableness + Extraversion + s(day) +  s(Trial) + (1 | Chimp)
+                , data=cz_bin_pers
+)
+AICtab(mod.it1, mod.it2, mod.it3,weights=TRUE, delta=TRUE, base=TRUE, logLik=TRUE, sort=TRUE)
+pchisq(2*(-2580.9+2634.9),10-9,lower.tail=F) # step 1: +day
+pchisq(2*(-2567.3+2582.9),11-10,lower.tail=F) # step 2: +trial
+
+ci.it3 <- confint(mod.it3)
+
+
+mod.it4 <- lmer(log(inspecTime) ~ Trial + (1 | Group.1)
                 , data=cz_bin_pers
 )
 
 # now with corrects (rewarded) only
 
-mod.ptrw.1 <- lmer(log(procTime) ~ dom + neu + opn + agr + con + ext + (1 | Group.1)
+mod.ptrw.1 <- lmer(log(procTime) ~ Dominance + Conscientiousness + Openness + Neuroticism
+                   + Agreeableness + Extraversion + (1 | Chimp)
                            , data=cz_bin_pers[cz_bin_pers$Accuracy==1,]
 )
-
-mod.itrw.1 <- lmer(log(inspecTime) ~ dom + neu + opn + agr + con + ext + (1 | Group.1)
+mod.ptrw.2 <- lmer(log(procTime) ~ Dominance + Conscientiousness + Openness + Neuroticism
+                   + Agreeableness + Extraversion + day + (1 | Chimp)
                    , data=cz_bin_pers[cz_bin_pers$Accuracy==1,]
 )
+mod.ptrw.3 <- lmer(log(procTime) ~ Dominance + Conscientiousness + Openness + Neuroticism
+                   + Agreeableness + Extraversion + day + Trial + (1 | Chimp)
+                   , data=cz_bin_pers[cz_bin_pers$Accuracy==1,]
+)
+
+mod.itrw.1 <- lmer(log(inspecTime) ~ Dominance + Conscientiousness + Openness + Neuroticism
+                   + Agreeableness + Extraversion + (1 | Chimp)
+                   , data=cz_bin_pers[cz_bin_pers$Accuracy==1,]
+)
+mod.itrw.2 <- lmer(log(inspecTime) ~ Dominance + Conscientiousness + Openness + Neuroticism
+                   + Agreeableness + Extraversion + day + (1 | Chimp)
+                   , data=cz_bin_pers[cz_bin_pers$Accuracy==1,]
+)
+mod.itrw.3 <- lmer(log(inspecTime) ~ Dominance + Conscientiousness + Openness + Neuroticism
+                   + Agreeableness + Extraversion + day + Trial + (1 | Chimp)
+                   , data=cz_bin_pers[cz_bin_pers$Accuracy==1,]
+)
+AICtab(mod.ptrw.1, mod.ptrw.2, mod.ptrw.3,mod.itrw.1, mod.itrw.2, mod.itrw.3,
+       weights=TRUE, delta=TRUE, base=TRUE, logLik=TRUE, sort=TRUE)
+pchisq(2*(-1309.5+1338.1),11-9,lower.tail=F) # PT
+pchisq(2*(-1364.0+1395.9),11-9,lower.tail=F) # IT
+
+ci.ptrw.3 <- confint(mod.ptrw.3)
+ci.itrw.3 <- confint(mod.itrw.3, method = 'Wald')
+
 
 # Nada.
 

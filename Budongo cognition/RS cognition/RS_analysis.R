@@ -66,10 +66,12 @@ RStm <- aggregate(intLvlPers2, by=list(intLvlPers2$RSpartic), FUN=mean)
 RSts <- aggregate(intLvlPers2, by=list(intLvlPers2$RSpartic), FUN=sd)
 
 mp = barplot(height=as.matrix(RStm[5:10]),beside=TRUE,
-             #legend.text=c('Never participated','Incomplete participation','Completed full sessions')
+             #legend.text=c('Non-participants','Participants'),
              ,ylim=c(0,7),
              names.arg=c('Dominance','Extraversion','Conscientiousness',
-                         'Agreeableness','Neuroticism','Openness'))
+                         'Agreeableness','Neuroticism','Openness'),
+             xlab="Personality Dimension", ylab="Average Score"
+             )
 
 segments(c(mp), c(t(t(RStm[5:10] - RSts[5:10]))), c(mp),c(t(t(RStm[5:10] + RSts[5:10]))), lwd=2)
 

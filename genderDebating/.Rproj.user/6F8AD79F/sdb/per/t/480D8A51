@@ -1,0 +1,17 @@
+{
+    "contents" : "### starting out with EP's data\n\nEPdf <- read.csv('all_data.csv',header=T)\n\n\nf.mean <- mean(EPdf$Average.Speaker.Score[EPdf$Speaker.Sex=='Female'])\nf.sd <- sd(EPdf$Average.Speaker.Score[EPdf$Speaker.Sex=='Female'])\n\nm.mean <- mean(EPdf$Average.Speaker.Score[EPdf$Speaker.Sex=='Male'])\nm.sd <- sd(EPdf$Average.Speaker.Score[EPdf$Speaker.Sex=='Male'])\n\nEPdf.trim <- EPdf[EPdf$Speaker.Sex!='Unknown',]\n\nEP.anova = aov(EPdf.trim$Average.Speaker.Score ~ EPdf.trim$Speaker.Sex)\n\nEP.lm = lm(EPdf.trim$Average.Speaker.Score ~ EPdf.trim$Speaker.Sex)\nr.sq = summary(EP.lm)$r.squared\n\nomega.sq = omega_sq(EP.anova)\n\nlibrary(ez)\n\n#ezANOVA(EPdf.trim, Average.Speaker.Score, wid=Speaker.Name, between=Speaker.Sex)\neta_sq(EP.anova)\n\n###\n\neta.sq = 0.01\nomega.sq = 0.0127\n\nf2 = r.sq / (1 - r.sq)\n\nf = sqrt(f2)\n\n### Power analysis\n\nlibrary(pwr)\n\n\npwr.f2.test(u = 2, \n            f2 = f2, sig.level = .05, power = .8)\n\n52.5 + 1 + 2 + 3\n\n# many hundreds ...\n\n\n\n\n# Well, what if we merged the team scores and looked at a 3 level category like that?\n\n\nlevels(EPdf$Speaker.Sex) = c(0,1,-7)\nEPdf$Speaker.Sex = as.numeric(levels(EPdf$Speaker.Sex))[EPdf$Speaker.Sex]\n\n\n# EP.agg = aggregate(EPdf$Average.Speaker.Score ~ EPdf$Team.Name, FUN=sum)\n# EP.agg = aggregate(cbind(Tournament, Team.Name) ~ Average.Speaker.Score, data=EPdf, FUN=sum)\n\nEP.agg = aggregate(cbind(Average.Speaker.Score, Speaker.Sex) ~ Tournament + Team.Name, data=EPdf, FUN=sum)\n\nEP.agg = EP.agg[EP.agg$Speaker.Sex>-1,]\n\n\nEP.agg$Speaker.Sex = ordered(EP.agg$Speaker.Sex)\n\nEPa.lm = lm(EP.agg$Average.Speaker.Score ~ EP.agg$Speaker.Sex)\n\nr.sq = summary(EPa.lm)$r.squared\n\n# EP.agg$subnum = rownames(EP.agg)\n# ezANOVA(EP.agg, Average.Speaker.Score, between=Speaker.Sex, wid=subnum)\n\n\neta.sq = 0.01895722\n\nf2 = eta.sq / (1 - eta.sq)\n\n\n\nomega_sq <- function(aov_in, neg2zero=T){\n  aovtab <- summary(aov_in)[[1]]\n  n_terms <- length(aovtab[[\"Sum Sq\"]]) - 1\n  output <- rep(-1, n_terms)\n  SSr <- aovtab[[\"Sum Sq\"]][n_terms + 1]\n  MSr <- aovtab[[\"Mean Sq\"]][n_terms + 1]\n  SSt <- sum(aovtab[[\"Sum Sq\"]])\n  for(i in 1:n_terms){\n    SSm <- aovtab[[\"Sum Sq\"]][i]\n    DFm <- aovtab[[\"Df\"]][i]\n    output[i] <- (SSm-DFm*MSr)/(SSt+MSr)\n    if(neg2zero & output[i] < 0){output[i] <- 0}\n  }\n  names(output) <- rownames(aovtab)[1:n_terms]\n  \n  return(output)\n}\n\n\n### Design Effects approach\nlibrary(sjstats)\n\ndeff(8)\n\nsmpsize_lmm(0.14, power=0.8, sig.level=0.05, k=8,\n            df.n = 3 # number of tested predictors?\n            )\n\n\n### Let's try simulations for the MM method\nlibrary(simr)\n\nx <- rep(1:10)\ng <- c('a', 'b', 'c')\n\nX <- expand.grid(x=x, g=g)\n\nb <- c(2, -0.1) # fixed intercept and slope\nV1 <- 0.5 # random intercept variance\nV2 <- matrix(c(0.5,0.05,0.05,0.1), 2) # random intercept and slope variance-covariance matrix\ns <- 1 # residual variance\n\nmodel1 <- makeLmer(y ~ x + (1|g), fixef=b, VarCorr=V1, sigma=s, data=X)\n\nsummary(model1)\n",
+    "created" : 1472755559199.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3063703138",
+    "id" : "480D8A51",
+    "lastKnownWriteTime" : 1472760777,
+    "path" : "~/GitHub/R/genderDebating/powerAnal.R",
+    "project_path" : "powerAnal.R",
+    "properties" : {
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "type" : "r_source"
+}

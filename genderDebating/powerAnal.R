@@ -20,7 +20,8 @@ omega.sq = omega_sq(EP.anova)
 
 library(ez)
 
-ezANOVA(EPdf.trim, Average.Speaker.Score, wid=Speaker.Name, between=Speaker.Sex)
+#ezANOVA(EPdf.trim, Average.Speaker.Score, wid=Speaker.Name, between=Speaker.Sex)
+eta_sq(EP.anova)
 
 ###
 
@@ -45,6 +46,7 @@ pwr.f2.test(u = 2,
 
 
 
+
 # Well, what if we merged the team scores and looked at a 3 level category like that?
 
 
@@ -66,8 +68,9 @@ EPa.lm = lm(EP.agg$Average.Speaker.Score ~ EP.agg$Speaker.Sex)
 
 r.sq = summary(EPa.lm)$r.squared
 
-EP.agg$subnum = rownames(EP.agg)
-ezANOVA(EP.agg, Average.Speaker.Score, between=Speaker.Sex, wid=subnum)
+# EP.agg$subnum = rownames(EP.agg)
+# ezANOVA(EP.agg, Average.Speaker.Score, between=Speaker.Sex, wid=subnum)
+
 
 eta.sq = 0.01895722
 
@@ -92,3 +95,31 @@ omega_sq <- function(aov_in, neg2zero=T){
   
   return(output)
 }
+
+
+### Design Effects approach
+library(sjstats)
+
+deff(8)
+
+smpsize_lmm(0.14, power=0.8, sig.level=0.05, k=8,
+            df.n = 3 # number of tested predictors?
+            )
+
+
+### Let's try simulations for the MM method
+library(simr)
+
+x <- rep(1:10)
+g <- c('a', 'b', 'c')
+
+X <- expand.grid(x=x, g=g)
+
+b <- c(2, -0.1) # fixed intercept and slope
+V1 <- 0.5 # random intercept variance
+V2 <- matrix(c(0.5,0.05,0.05,0.1), 2) # random intercept and slope variance-covariance matrix
+s <- 1 # residual variance
+
+model1 <- makeLmer(y ~ x + (1|g), fixef=b, VarCorr=V1, sigma=s, data=X)
+
+summary(model1)

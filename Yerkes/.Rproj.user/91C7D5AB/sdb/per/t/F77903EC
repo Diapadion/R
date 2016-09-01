@@ -1,0 +1,28 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1472661063792.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "F77903EC",
+    "lastKnownWriteTime" : 7308604914264011873,
+    "last_content_update" : 1472661063792,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "sdbefuqi4n",
+        "caption" : "Demo.growth",
+        "contentUrl" : "grid_resource/gridviewer.html?env=package%3Alavaan&obj=Demo.growth&cache_key=sdbefuqi4n",
+        "displayedObservations" : 400,
+        "environment" : "package:lavaan",
+        "object" : "Demo.growth",
+        "totalObservations" : 400,
+        "variables" : 10
+    },
+    "relative_order" : 12,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}

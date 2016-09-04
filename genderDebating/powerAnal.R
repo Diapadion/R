@@ -16,21 +16,32 @@ EP.anova = aov(EPdf.trim$Average.Speaker.Score ~ EPdf.trim$Speaker.Sex)
 EP.lm = lm(EPdf.trim$Average.Speaker.Score ~ EPdf.trim$Speaker.Sex)
 r.sq = summary(EP.lm)$r.squared
 
-omega.sq = omega_sq(EP.anova)
 
-library(ez)
+
+#library(ez)
 
 #ezANOVA(EPdf.trim, Average.Speaker.Score, wid=Speaker.Name, between=Speaker.Sex)
-eta_sq(EP.anova)
+#eta_sq(EP.anova)
+
+# omega.sq = omega_sq(EP.anova)
+
+library(sjstats)
+
+eta.sq = eta_sq(EP.anova)
+
+
+
 
 ###
 
-eta.sq = 0.01
-omega.sq = 0.0127
+omega.sq = 0.012747
 
-f2 = r.sq / (1 - r.sq)
+f2 = eta.sq / (1 - eta.sq)
+# f2 = omega.sq / (1 - omega.sq)
 
 f = sqrt(f2)
+
+
 
 ### Power analysis
 
@@ -102,8 +113,8 @@ library(sjstats)
 
 deff(8)
 
-smpsize_lmm(0.14, power=0.8, sig.level=0.05, k=8,
-            df.n = 3 # number of tested predictors?
+smpsize_lmm(0.13, power=0.8, sig.level=0.05, k=8,
+            df.n = 2 # number of tested predictors?
             )
 
 

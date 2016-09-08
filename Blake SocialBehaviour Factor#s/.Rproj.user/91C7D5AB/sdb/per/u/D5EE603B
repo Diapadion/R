@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "# PARAFAC alt anal\n\nlibrary(PTAk)\n",
+    "created" : 1473329516264.000,
+    "dirty" : true,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "398116399",
+    "id" : "D5EE603B",
+    "lastKnownWriteTime" : 32932769850130529,
+    "last_content_update" : 1473329532768,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

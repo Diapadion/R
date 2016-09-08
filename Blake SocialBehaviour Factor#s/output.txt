@@ -16,21 +16,21 @@
                                Urbano Lorenzo-Seva
                                  Pere J. Ferrando
 
-                            Date: Tuesday, May 12, 2015
-                            Time: 16:31:8
+                            Date: Tuesday, September 06, 2016
+                            Time: 9:50:32
 --------------------------------------------------------------------------------
 
 DETAILS OF ANALYSIS
 
-Participants' scores data file                       : C:\Users\s1229179\git-repos\R\Blake SocialBehaviour Factor#s\FACTORpreprocess2.dat
-Number of participants                               : 62
-Number of variables                                  : 11
-Variables included in the analysis                   : V2, V3, V4, V5, V6, V7, V8, V9, V10, V11
-Variables excluded in the analysis                   : V1
+Participants' scores data file                       : C:\Users\s1229179\GitHub\R\Blake SocialBehaviour Factor#s\FACTORpreprocess2.dat
+Number of participants                               : 18
+Number of variables                                  : 10
+Variables included in the analysis                   : ALL
+Variables excluded in the analysis                   : NONE
 Number of factors                                    : 0
 Number of second order factors                       : 0
 Procedure for determining the number of dimensions   : Hull method for selecting the number of common factors (Lorenzo-Seva, Timmerman, & Kiers, 2011)
-Dispersion matrix                                    : Polychoric Correlations
+Dispersion matrix                                    : Pearson Correlations
 Method for factor extraction                         : Unweighted Least Squares (ULS)
 Rotation to achieve factor simplicity                : Promin (Lorenzo-Seva, 1999)
 Clever rotation start                                : Weighted Varimax
@@ -45,16 +45,16 @@ UNIVARIATE DESCRIPTIVES
 Variable     Mean       Confidence Interval     Variance   Skewness     Kurtosis
                         (95%)                                          (Zero centered)
 
-V   2       -7.323     ( -10.66    -3.99)      103.412     -2.032        3.494
-V   3        0.500     (   0.18     0.82)       0.927      2.588        7.309
-V   4        0.242     (   0.03     0.45)       0.409      2.737        6.553
-V   5        1.097     (   0.57     1.62)       2.539      1.614        2.144
-V   6        1.887     (   0.73     3.04)      12.455      3.593       15.681
-V   7        5.258     (   3.49     7.03)      29.127      1.209        0.690
-V   8       13.468     (   8.94    17.99)      190.668      2.536       10.231
-V   9       -0.081     (  -1.10     0.94)       9.687     -3.923       25.511
-V  10        0.613     (   0.07     1.15)       2.721      1.605        3.503
-V  11        0.016     (  -0.28     0.31)       0.790      2.489       14.492
+V   1        0.000     (   0.00     0.00)       0.000     -1.#IO       -1.#IO
+V   2       -8.444     ( -16.79    -0.10)      180.802     -1.744        1.620
+V   3        0.556     (  -0.20     1.31)       1.469      2.935        7.790
+V   4        0.500     (  -0.06     1.06)       0.806      1.709        1.544
+V   5        1.722     (   0.52     2.93)       3.756      1.339        1.076
+V   6        2.556     (   0.80     4.31)       8.025      1.522        1.605
+V   7        4.944     (   1.09     8.80)      38.497      1.370        0.306
+V   8       11.000     (   3.67    18.33)      139.444      1.307        0.772
+V   9        0.556     (  -0.54     1.66)       3.136     -0.224        0.247
+V  10        1.389     (   0.16     2.62)       3.904      1.525        1.761
 
 Polychoric correlation is advised when the univariate distributions of ordinal items are 
 asymmetric or with excess of kurtosis. If both indices are lower than one in absolute value, 
@@ -62,327 +62,6 @@ then Pearson correlation is advised. You can read more about this subject in:
 
 Muthén, B., & Kaplan D. (1985). A comparison of some methodologies for the factor analysis of non-normal Likert variables. British Journal of Mathematical and Statistical Psychology, 38, 171-189.
 Muthén, B., & Kaplan D. (1992). A comparison of some methodologies for the factor analysis of non-normal Likert variables: A note on the size of the model. British Journal of Mathematical and Statistical Psychology, 45, 19-30.
-
-
-
-BAR CHARTS FOR ORDINAL VARIABLES
-
-Variable    2  
-
- Value     Freq
-                |
-   -46       1  |  **
-   -45       0  |  
-   -44       0  |  
-   -43       0  |  
-   -42       0  |  
-   -41       0  |  
-   -40       0  |  
-   -39       0  |  
-   -38       0  |  
-   -37       0  |  
-   -36       0  |  
-   -35       1  |  **
-   -34       1  |  **
-   -33       0  |  
-   -32       0  |  
-   -31       2  |  *****
-   -30       0  |  
-   -29       0  |  
-   -28       0  |  
-   -27       0  |  
-   -26       0  |  
-   -25       1  |  **
-   -24       0  |  
-   -23       0  |  
-   -22       2  |  *****
-   -21       0  |  
-   -20       1  |  **
-   -19       0  |  
-   -18       0  |  
-   -17       0  |  
-   -16       0  |  
-   -15       0  |  
-   -14       1  |  **
-   -13       0  |  
-   -12       1  |  **
-   -11       0  |  
-   -10       3  |  ********
-    -9       0  |  
-    -8       2  |  *****
-    -7       3  |  ********
-    -6       5  |  **************
-    -5       5  |  **************
-    -4       3  |  ********
-    -3       2  |  *****
-    -2       8  |  **********************
-    -1       6  |  *****************
-     0      14  |  ****************************************
-                +-----------+---------+---------+-----------+
-                 0        3.5       7.0       10.5        14.0
-
-Variable    3  
-
- Value     Freq
-                |
-     0      43  |  ****************************************
-     1      13  |  ************
-     2       2  |  *
-     3       3  |  **
-     4       0  |  
-     5       1  |  
-                +-----------+---------+---------+-----------+
-                 0        10.8       21.5       32.3        43.0
-
-Variable    4  
-
- Value     Freq
-                |
-     0      53  |  ****************************************
-     1       4  |  ***
-     2       4  |  ***
-     3       1  |  
-                +-----------+---------+---------+-----------+
-                 0        13.3       26.5       39.8        53.0
-
-Variable    5  
-
- Value     Freq
-                |
-     0      34  |  ****************************************
-     1      11  |  ************
-     2       5  |  *****
-     3       6  |  *******
-     4       3  |  ***
-     5       2  |  **
-     6       0  |  
-     7       1  |  *
-                +-----------+---------+---------+-----------+
-                 0        8.5       17.0       25.5        34.0
-
-Variable    6  
-
- Value     Freq
-                |
-     0      31  |  ****************************************
-     1      10  |  ************
-     2       5  |  ******
-     3       6  |  *******
-     4       5  |  ******
-     5       0  |  
-     6       0  |  
-     7       0  |  
-     8       1  |  *
-     9       1  |  *
-    10       2  |  **
-    11       0  |  
-    12       0  |  
-    13       0  |  
-    14       0  |  
-    15       0  |  
-    16       0  |  
-    17       0  |  
-    18       0  |  
-    19       0  |  
-    20       0  |  
-    21       0  |  
-    22       1  |  *
-                +-----------+---------+---------+-----------+
-                 0        7.8       15.5       23.3        31.0
-
-Variable    7  
-
- Value     Freq
-                |
-     0      10  |  ************************************
-     1       8  |  *****************************
-     2      11  |  ****************************************
-     3       4  |  **************
-     4       2  |  *******
-     5       4  |  **************
-     6       4  |  **************
-     7       2  |  *******
-     8       2  |  *******
-     9       2  |  *******
-    10       1  |  ***
-    11       4  |  **************
-    12       1  |  ***
-    13       1  |  ***
-    14       0  |  
-    15       2  |  *******
-    16       0  |  
-    17       1  |  ***
-    18       2  |  *******
-    19       0  |  
-    20       0  |  
-    21       0  |  
-    22       1  |  ***
-                +-----------+---------+---------+-----------+
-                 0        2.8       5.5       8.3        11.0
-
-Variable    8  
-
- Value     Freq
-                |
-     0       5  |  *********************************
-     1       6  |  ****************************************
-     2       1  |  ******
-     3       4  |  **************************
-     4       1  |  ******
-     5       4  |  **************************
-     6       3  |  ********************
-     7       2  |  *************
-     8       1  |  ******
-     9       2  |  *************
-    10       2  |  *************
-    11       2  |  *************
-    12       3  |  ********************
-    13       1  |  ******
-    14       2  |  *************
-    15       1  |  ******
-    16       2  |  *************
-    17       0  |  
-    18       2  |  *************
-    19       2  |  *************
-    20       2  |  *************
-    21       0  |  
-    22       2  |  *************
-    23       1  |  ******
-    24       2  |  *************
-    25       0  |  
-    26       0  |  
-    27       1  |  ******
-    28       2  |  *************
-    29       0  |  
-    30       0  |  
-    31       3  |  ********************
-    32       0  |  
-    33       0  |  
-    34       0  |  
-    35       1  |  ******
-    36       0  |  
-    37       0  |  
-    38       0  |  
-    39       0  |  
-    40       0  |  
-    41       1  |  ******
-    42       0  |  
-    43       0  |  
-    44       0  |  
-    45       0  |  
-    46       0  |  
-    47       0  |  
-    48       0  |  
-    49       0  |  
-    50       0  |  
-    51       0  |  
-    52       0  |  
-    53       0  |  
-    54       0  |  
-    55       0  |  
-    56       0  |  
-    57       0  |  
-    58       0  |  
-    59       0  |  
-    60       0  |  
-    61       0  |  
-    62       0  |  
-    63       0  |  
-    64       0  |  
-    65       0  |  
-    66       0  |  
-    67       0  |  
-    68       0  |  
-    69       0  |  
-    70       0  |  
-    71       0  |  
-    72       0  |  
-    73       0  |  
-    74       0  |  
-    75       0  |  
-    76       0  |  
-    77       0  |  
-    78       0  |  
-    79       0  |  
-    80       0  |  
-    81       0  |  
-    82       0  |  
-    83       0  |  
-    84       0  |  
-    85       0  |  
-    86       1  |  ******
-                +-----------+---------+---------+-----------+
-                 0        1.5       3.0       4.5        6.0
-
-Variable    9  
-
- Value     Freq
-                |
-   -20       1  |  *
-   -19       0  |  
-   -18       0  |  
-   -17       0  |  
-   -16       0  |  
-   -15       0  |  
-   -14       0  |  
-   -13       0  |  
-   -12       0  |  
-   -11       0  |  
-   -10       0  |  
-    -9       0  |  
-    -8       0  |  
-    -7       0  |  
-    -6       0  |  
-    -5       0  |  
-    -4       1  |  *
-    -3       2  |  **
-    -2       3  |  ***
-    -1       7  |  ********
-     0      33  |  ****************************************
-     1       6  |  *******
-     2       3  |  ***
-     3       2  |  **
-     4       3  |  ***
-     5       0  |  
-     6       0  |  
-     7       0  |  
-     8       1  |  *
-                +-----------+---------+---------+-----------+
-                 0        8.3       16.5       24.8        33.0
-
-Variable   10  
-
- Value     Freq
-                |
-    -3       1  |  *
-    -2       1  |  *
-    -1       5  |  *****
-     0      36  |  ****************************************
-     1       7  |  *******
-     2       4  |  ****
-     3       4  |  ****
-     4       1  |  *
-     5       2  |  **
-     6       0  |  
-     7       1  |  *
-                +-----------+---------+---------+-----------+
-                 0        9.0       18.0       27.0        36.0
-
-Variable   11  
-
- Value     Freq
-                |
-    -2       2  |  *
-    -1       8  |  *******
-     0      43  |  ****************************************
-     1       8  |  *******
-     2       0  |  
-     3       0  |  
-     4       0  |  
-     5       1  |  
-                +-----------+---------+---------+-----------+
-                 0        10.8       21.5       32.3        43.0
-
 
 --------------------------------------------------------------------------------
 
@@ -392,47 +71,33 @@ Analysis of the Mardia's (1970) multivariate asymmetry skewness and kurtosis.
 
                                             Coefficient        Statistic     df       P
 
-Skewness                                        100.767         1041.264    220     1.0000
-SKewness corrected for small sample             100.767         1101.182    220     1.0000
-Kurtosis                                        188.179           17.327            0.0000**
-
-** Significant at 0.05
+Skewness                                         -1.#IO           -1.#IO    220     0.5000
+SKewness corrected for small sample              -1.#IO           -1.#IO    220     0.5000
+Kurtosis                                         -1.#IO           -1.#IO            0.5000
 
 --------------------------------------------------------------------------------
-
-
-
-WARNING: Polychoric correlation could not converge. Pearson correlation is computed.
-         You may also inspect the distribution of frequenties for ordinal variables
-         and exclude the variables with strange distributions.
-
-
-
-
---------------------------------------------------------------------------------
-
 
 STANDARIZED VARIANCE / COVARIANCE MATRIX (PEARSON CORRELATION)
 
-Variable     2        3        4        5        6        7        8        9       10       11     
-V   2        1.000  
-V   3       -0.397    1.000  
-V   4       -0.295    0.484    1.000  
-V   5       -0.059   -0.231   -0.118    1.000  
-V   6       -0.102    0.387    0.541   -0.075    1.000  
-V   7       -0.582    0.459    0.599   -0.074    0.526    1.000  
-V   8       -0.291    0.367    0.478   -0.105    0.754    0.651    1.000  
-V   9       -0.012   -0.213   -0.249    0.154   -0.452   -0.359   -0.522    1.000  
-V  10       -0.041   -0.071   -0.064    0.689   -0.005   -0.065   -0.003    0.142    1.000  
-V  11       -0.251    0.349    0.504    0.101    0.391    0.302    0.145   -0.046    0.103    1.000  
+Variable     1        2        3        4        5        6        7        8        9       10     
+V   1       -1.#IO  
+V   2       -1.#IO    1.000  
+V   3       -1.#IO   -0.537    1.000  
+V   4       -1.#IO   -0.497    0.664    1.000  
+V   5       -1.#IO    0.144   -0.265   -0.367    1.000  
+V   6       -1.#IO   -0.505    0.476    0.765   -0.103    1.000  
+V   7       -1.#IO   -0.841    0.551    0.673   -0.260    0.738    1.000  
+V   8       -1.#IO   -0.695    0.357    0.692   -0.092    0.659    0.824    1.000  
+V   9       -1.#IO    0.013    0.141    0.035    0.450    0.094   -0.215   -0.125    1.000  
+V  10       -1.#IO    0.036   -0.183   -0.266    0.870   -0.168   -0.130    0.014    0.335    1.000  
 
 --------------------------------------------------------------------------------
 
 ADEQUACY OF THE CORRELATION MATRIX 
 
-Determinant of the matrix     = 0.009817340572362
-Bartlett's statistic          =   262.8 (df =    45; P = 0.000010)
-Kaiser-Meyer-Olkin (KMO) test = 0.70509 (fair)
+Determinant of the matrix     = -1.#IND00000000000
+Bartlett's statistic          =    -1.$ (df =    45; P = 0.500000)
+Kaiser-Meyer-Olkin (KMO) test = 0.00000 (inaceptable)
 
 --------------------------------------------------------------------------------
 
@@ -441,16 +106,16 @@ EXPLAINED VARIANCE BASED ON EIGENVALUES
 Variable  Eigenvalue   Proportion of   Cumulative Proportion
                        Variance        of Variance
 
-   1      3.82190      0.38219  
-   2      1.78888      0.17889  
-   3      1.26180      0.12618  
-   4      0.95197      0.09520  
-   5      0.58506      0.05851  
-   6      0.52688      0.05269  
-   7      0.41219      0.04122  
-   8      0.27384      0.02738  
-   9      0.22430      0.02243  
-  10      0.15317      0.01532  
+   1      4.33452      0.00000  
+   2     -1.#IND0      0.00000  
+   3      0.28579      0.00000  
+   4      0.42244      0.00000  
+   5      0.62168      0.00000  
+   6      1.06283      0.00000  
+   7      2.04426      0.00000  
+   8      0.11559      0.00000  
+   9      0.08307      0.00000  
+  10      0.02982      0.00000  
        
 --------------------------------------------------------------------------------
 
@@ -467,12 +132,13 @@ Number of   Goodness-of-fit      Degrees of      Scree test
 factors     values               freedom         values       
 
    0         0.000                 10               0.000
-   1         0.636                 20               3.788*
-   2         0.787                 29               1.187
-   3         0.900                 37               0.000
+   1         1.#QO                 20               1.#QO
+   2         1.#QO                 29               1.#QO
+   3         1.#QO                 37               1.#QO*
+   4         1.#QO                 44               0.000
        
 
-*  Advised number of common factors:    1
+*  Advised number of common factors:    3
 
 --------------------------------------------------------------------------------
 
@@ -483,33 +149,11 @@ WARNING: The GLB and Omega can only be trusted in large samples, preferably 1,00
          due to a positive sampling bias (ten Berge & Socan, 2004). 
 
 
-Greatest Lower Bound to Reliability =   0.927714  
-                   McDonald's Omega =   0.783009  
-      Standardized Cronbach's alpha =   0.787649  
-            Total observed variance =  10.000  
-              Total Common Variance =   7.517  
+                   McDonald's Omega =  -1.#IND00  
+      Standardized Cronbach's alpha =  -1.#IND00  
 
 
 
-ASSOCIATED COMMUNALITIES 
-
-Variable  Communality
-
-V   2        0.974178  
-V   3        0.571865  
-V   4        0.800228  
-V   5        0.808889  
-V   6        0.840196  
-V   7        0.778104  
-V   8        1.000103  
-V   9        0.454113  
-V  10        0.737272  
-V  11        0.551983  
-
-
-The greatest lower bound (glb) to reliability represents the smallest reliability possible
-given observed covariance matrix under the restriction that the sum of error variances 
-is maximized for errors that correlate 0 with other variables (Ten Berge, Snijders, & Zegers, 1981).
 
 Omega can be interpreted as the square of the correlation between the scale score and the latent
 variable common to all the indicators in the infinite universe of indicators of which the scale
@@ -528,10 +172,6 @@ Lorenzo-Seva, U., Timmerman, M. E., & Kiers, H.A.L. (2011). The Hull method for 
 McDonald, R.P. (1999). Test theory: A unified treatment. Mahwah, NJ: Lawrence Erlbaum.
 
 Mardia, K. V. (1970), Measures of multivariate skewnees and kurtosis with applications. Biometrika, 57, 519-530.
-
-Olsson, U. (1979a). Maximum likelihood estimation of the polychoric correlation coefficient. Psychometrika, 44, 443-460. 
-
-Olsson, U. (1979b). On the robustness of factor analysis against crude classification of the observations. Multivariate Behavioral Research, 14, 485-500. 
 
 Mislevy, R.J., & Bock, R.D. (1990). BILOG 3 Item analysis and test scoring with binary logistic models. Mooresville: Scientific Software.
 
@@ -553,5 +193,5 @@ Lorenzo-Seva, U., & Ferrando, P.J. (2006). FACTOR: A computer program to fit the
 
 FACTOR completed
 
-Computing time     : 0.01666667 minutes.
-Matrices generated : 198882 
+Computing time     : 0.00000000 minutes.
+Matrices generated : 15296 

@@ -5,7 +5,7 @@ library(memisc)
 bsbd <- as.data.frame(as.data.set(spss.system.file('PCA_relationship_qualities.sav')))
 
 
-write.csv(as.data.frame(bsdb),file='excel.csv')
+#write.csv(as.data.frame(bsdb),file='excel.csv')
 
 
 library(psych)
@@ -26,17 +26,17 @@ w.2 = omega(bsbd[,2:11],2,fm='pc')
 w.3 = omega(bsbd[,2:11],3,fm='pc')
 
 
-library(nFactors)
-
-nfn = nScree(x=bsbd[complete.cases(bsbd),2:11], model = 'factors')
-
-ncn = nScree(x=bsbd[complete.cases(bsbd),2:11], model = 'components')
+# library(nFactors)
+# 
+# nfn = nScree(x=bsbd[complete.cases(bsbd),2:11], model = 'factors')
+# 
+# ncn = nScree(x=bsbd[complete.cases(bsbd),2:11], model = 'components')
 
 
 
 # not appropriate for components...
-EFA.Comp.Data(Data=bsbd[complete.cases(bsbd),2:11],F.Max=6,
-              ,Graph=TRUE)
+# EFA.Comp.Data(Data=bsbd[complete.cases(bsbd),2:11],F.Max=6,
+#               ,Graph=TRUE)
 
 
 
@@ -48,11 +48,11 @@ EFA.Comp.Data(Data=bsbd[complete.cases(bsbd),2:11],F.Max=6,
 ##### Actual extractions
 
 
-sb.f2 = fa(bsbd[,2:11], nfactors = 2, rotate="varimax")
-sb.pc2 = principal(bsbd[,2:11], nfactors = 2, rotate="varimax")
+sb.f2 = fa(bsbd[,2:11], nfactors = 2, rotate="varimax", n.iter=1000, fm='ml')
+sb.pc2 = principal(bsbd[,2:11], nfactors = 2, rotate="varimax") 
 # replace current solution in text (???)
 
-sb.f3 = fa(bsbd[,2:11], nfactors = 3, rotate="varimax")
+sb.f3 = fa(bsbd[,2:11], nfactors = 3, rotate="varimax", n.iter=1000)
 sb.pc3 = principal(bsbd[,2:11], nfactors = 3, rotate="varimax")
 
 sb.f4 = fa(bsbd[,2:11], nfactors = 4, rotate="varimax")
@@ -80,6 +80,33 @@ cor(bsbd[,2:11], use = 'na.or.complete')
 
 # Tucker congruence
 factor.congruence(sb.pc2$loadings,sb.pc3$loadings)
+
+
+
+# Bootstrapped PCA
+
+boot.3 <- PCAboot(bsbd[,-1], nfactors = 2, rotate="varimax")
+
+
+PCAboot <- function (x, permutations=1000, ...)
+{
+  pcnull <- pca(x, ... )
+  res <- pcnull$loadings[,1]
+  bsresults = matrix( rep.int(NA, permutations*NROW(res)) ,
+                      nrow=permutations, ncol=NROW(res) )
+  N <- nrow(x)
+  for (i in 1:permutations) {
+    pc <- pca(x[sample(N, replace=TRUE), ], ... )
+    pred <- predict(pc, data = x)
+    r <-  cor(pcnull$scores, pred)
+    k <- apply(abs(r), 2, which.max)
+    reve <- sign(diag(r[k,]))
+    sol <- pc$loadings[ k,]
+    sol <- sweep(sol, 2, reve, "*")
+    bsresults[i,] <- t(sol[,1])
+  }
+  apply( bsresults, 2, quantile, c(0.05, 0.95) )
+} 
 
 
 

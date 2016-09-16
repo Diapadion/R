@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "# library(BayesFactor)\n\n\n\n\n\n\n\n\n\n\n\nretrodesign(.013, 4.9)\n\nretrodesign(1.2, 4.9/sqrt(2300), df=2312)\n\n\nretrodesign(1.2, 4.9/sqrt(100), df=100) # prospective S and M errors?\n\n\n\n\nretrodesign <- function(A, s, alpha=.05, df=Inf, n.sims=10000){\n  z <- qt(1-alpha/2, df)\n  p.hi <- 1 - pt(z-A/s, df)\n  p.lo <- pt(-z-A/s, df)\n  power <- p.hi + p.lo\n  typeS <- p.lo/power\n  estimate <- A + s*rt(n.sims,df)\n  significant <- abs(estimate) > s*z\n  exaggeration <- mean(abs(estimate)[significant])/A\n  return(list(power=power, typeS=typeS, exaggeration=exaggeration))\n}\n\n# Example: true effect size of 0.1, standard error 3.28, alpha=0.05\nretrodesign(.1, 3.28)\n# Example: true effect size of 2, standard error 8.1, alpha=0.05\nretrodesign(2, 8.1)\n# Producing Figures 2a and 2b for the Gelman and Carlin paper\nD_range <- c(seq(0,1,.01),seq(1,10,.1),100)\nn <- length(D_range)\npower <- rep(NA, n)\ntypeS <- rep(NA, n)\nexaggeration <- rep(NA, n)\nfor (i in 1:n){\n  a <- retrodesign(D_range[i], 1)\n  power[i] <- a$power\n  typeS[i] <- a$typeS\n  exaggeration[i] <- a$exaggeration\n}\npdf(\"pow1.pdf\", height=2.5, width=3)\npar(mar=c(3,3,0,0), mgp=c(1.7,.5,0), tck=-.01)\nplot(power, typeS, type=\"l\", xlim=c(0,1.05), ylim=c(0,0.54), xaxs=\"i\", yaxs=\"i\",\n     xlab=\"Power\", ylab=\"Type S error rate\", bty=\"l\", cex.axis=.9, cex.lab=.9)\ndev.off()\npdf(\"pow2.pdf\", height=2.5, width=3)\npar(mar=c(3,3,0,0), mgp=c(1.7,.5,0), tck=-.01)\nplot(power, exaggeration, type=\"l\", xlim=c(0,1.05), ylim=c(0,12), xaxs=\"i\", yaxs=\"i\",\n     xlab=\"Power\", ylab=\"Exaggeration ratio\", bty=\"l\", yaxt=\"n\", cex.axis=.9, cex.lab=.9)\naxis(2, c(0,5,10))\nsegments(.05, 1, 1, 1, col=\"gray\")\ndev.off()",
+    "created" : 1473089225459.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "4035082116",
+    "id" : "C3A7D1DA",
+    "lastKnownWriteTime" : 1473671425,
+    "last_content_update" : 1473671425724,
+    "path" : "C:/Users/s1229179/GitHub/R/genderDebating/exprmental.R",
+    "project_path" : "exprmental.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

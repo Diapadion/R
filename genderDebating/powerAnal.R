@@ -1,5 +1,7 @@
 ### starting out with EP's data
 
+library(pwr) #?
+
 EPdf <- read.csv('all_data.csv',header=T)
 
 
@@ -8,6 +10,11 @@ f.sd <- sd(EPdf$Average.Speaker.Score[EPdf$Speaker.Sex=='Female'])
 
 m.mean <- mean(EPdf$Average.Speaker.Score[EPdf$Speaker.Sex=='Male'])
 m.sd <- sd(EPdf$Average.Speaker.Score[EPdf$Speaker.Sex=='Male'])
+
+
+t.test(EPdf.trim$Average.Speaker.Score ~ EPdf.trim$Speaker.Sex)
+
+
 
 EPdf.trim <- EPdf[EPdf$Speaker.Sex!='Unknown',]
 
@@ -45,7 +52,6 @@ f = sqrt(f2)
 
 ### Power analysis
 
-library(pwr)
 
 
 pwr.f2.test(u = 2, 

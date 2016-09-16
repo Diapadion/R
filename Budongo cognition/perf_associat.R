@@ -254,6 +254,33 @@ library(MASS)
 #mod.l <- lda(LBdata$Accuracy ~ LBlong)
 mod.l <- lda()
 
+### "MxRE" structs
+
+#£ basis:
+# mod.gm5 <- glmer(Accuracy ~ + Dominance + Conscientiousness + Openness + Neuroticism
+#                  + Agreeableness + Extraversion + Trial + day + (1 | Chimp),
+#                  family = binomial, data=cz_bin_pers)
+
+mxre.1 <- glmer(Accuracy ~ + Dominance + Conscientiousness + Openness + Neuroticism
+                 + Agreeableness + Extraversion + 
+                  (1 + Dominance + Conscientiousness + Openness + Neuroticism + Agreeableness + Extraversion | Chimp),
+                 family = binomial, data=cz_bin_pers 
+)
+
+mxre.2 <- glmer(Accuracy ~ + Dominance + Conscientiousness + Openness + Neuroticism
+                + Agreeableness + Extraversion + Trial + date +
+                  (1 + Trial + date + Dominance + Conscientiousness + Openness + Neuroticism + Agreeableness + Extraversion | Chimp), 
+                family = binomial, data=cz_bin_pers 
+)
+# not converging
+
+mxre.3 <- glmer(Accuracy ~ + Dominance + Conscientiousness + Openness + Neuroticism
+                + Agreeableness + Extraversion + date +
+                  (1 + date + Dominance + Conscientiousness + Openness + Neuroticism + Agreeableness + Extraversion | Chimp), 
+                family = binomial, data=cz_bin_pers 
+)
+# not converging
+
 
 
 ####### Processing Time #######

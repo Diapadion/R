@@ -59,6 +59,7 @@ pchisq(2*(-648.5+648.6), 12-11   ,lower.tail=F)
 ci.DMApartic <- confint(cmm.1)
 
 
+
 library(texreg)
 ext.cmm1=extract(cmm.1, include.aic = FALSE, include.bic=FALSE, include.dic=FALSE,
                  include.deviance=FALSE, include.loglik=FALSE,include.nobs=FALSE,

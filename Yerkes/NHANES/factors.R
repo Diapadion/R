@@ -12,7 +12,7 @@ colnames(sel.nbm)[3:31] <- colnames(c.bm)[5:33]
 fa.parallel(sel.nbm[complete.cases(sel.nbm),c(3:31)], fm = 'gls') #  pa?
 # seem like 10
 
-nfactors(sel.nbm[complete.cases(sel.nbm),c(3:31)], fm = 'gls')
+plot(nfactors(sel.nbm[complete.cases(sel.nbm),c(3:31)], fm = 'gls')$map)
 
 
 EFA.Comp.Data(sel.nbm[complete.cases(sel.nbm),c(3:31)], F.Max = 15, Graph = T)
@@ -104,3 +104,12 @@ pcrusta = procrustes(pa.1$loadings, pa.c.1$loadings)
 0.841861752  0.892964096  0.864579231  0.756832481  0.803025736  0.891505227  0.7185726578
 0.311983995  0.629106243  0.816920692  0.7742925
 
+
+
+
+# based on screes, maybe 6
+
+fa.6 = fa(sel.nbm[complete.cases(sel.nbm),c(3:31)], nfactors = 6, fm = 'gls')
+
+fa.c.6 = fa(c.bm[,c(5:33)], nfactors = 6, fm = 'gls')
+       

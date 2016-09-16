@@ -1,0 +1,28 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1473948863393.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "EDE8D989",
+    "lastKnownWriteTime" : 7308604914264011873,
+    "last_content_update" : 1473948863393,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "jjpjq35929",
+        "caption" : "hiv.train$x",
+        "contentUrl" : "grid_resource/gridviewer.html?env=_rs_no_env&obj=&cache_key=jjpjq35929",
+        "displayedObservations" : 704,
+        "environment" : "_rs_no_env",
+        "object" : "",
+        "totalObservations" : 704,
+        "variables" : 208
+    },
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}

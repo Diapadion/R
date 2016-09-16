@@ -48,11 +48,11 @@ w.3 = omega(bsbd[,2:11],3,fm='pc')
 ##### Actual extractions
 
 
-sb.f2 = fa(bsbd[,2:11], nfactors = 2, rotate="varimax", n.iter=1000, fm='ml')
+#sb.f2 = fa(bsbd[,2:11], nfactors = 2, rotate="varimax", n.iter=1000, fm='ml')
 sb.pc2 = principal(bsbd[,2:11], nfactors = 2, rotate="varimax") 
 # replace current solution in text (???)
 
-sb.f3 = fa(bsbd[,2:11], nfactors = 3, rotate="varimax", n.iter=1000)
+#sb.f3 = fa(bsbd[,2:11], nfactors = 3, rotate="varimax", n.iter=1000)
 sb.pc3 = principal(bsbd[,2:11], nfactors = 3, rotate="varimax")
 
 sb.f4 = fa(bsbd[,2:11], nfactors = 4, rotate="varimax")
@@ -85,28 +85,81 @@ factor.congruence(sb.pc2$loadings,sb.pc3$loadings)
 
 # Bootstrapped PCA
 
-boot.3 <- PCAboot(bsbd[,-1], nfactors = 2, rotate="varimax")
+boot.3 <- PCAboot(bsbd[,-1], nf = 3, permutations=10) #,rot="varimax")
+boot.2 <- PCAboot(bsbd[,-1], nf = 2, rot="varimax")
 
 
-PCAboot <- function (x, permutations=1000, ...)
-{
-  pcnull <- pca(x, ... )
+# x = bsbd[,-1]
+# nf = 2
+# rot = 'varimax'
+
+PCAboot <- function (x, permutations=1000, nf){
+  pcnull <- pca(x, nfactors=nf, rotate='varimax')
   res <- pcnull$loadings[,1]
-  bsresults = matrix( rep.int(NA, permutations*NROW(res)) ,
-                      nrow=permutations, ncol=NROW(res) )
-  N <- nrow(x)
+  # bsresults = matrix( rep.int(NA, permutations*NROW(res)) ,
+  #                     nrow=permutations, ncol=NROW(res) )
+  N <- ncol(x)
+  bsresults <- array(NA,dim=c(permutations,N,nf))
   for (i in 1:permutations) {
-    pc <- pca(x[sample(N, replace=TRUE), ], ... )
+    pc <- pca(x[sample(N, replace=TRUE), ], nfactors=nf) #, rotate=rot )
     pred <- predict(pc, data = x)
-    r <-  cor(pcnull$scores, pred)
+    r <-  cor(pcnull$scores, pred,use="pairwise.complete.obs")
     k <- apply(abs(r), 2, which.max)
     reve <- sign(diag(r[k,]))
-    sol <- pc$loadings[ k,]
-    sol <- sweep(sol, 2, reve, "*")
-    bsresults[i,] <- t(sol[,1])
+    sol <- pc$loadings[,k]
+    #sol <- sweep(sol, 2, reve, "*")
+    bsresults[i,,] <- sol
   }
-  apply( bsresults, 2, quantile, c(0.05, 0.95) )
+  #print(apply( bsresults, 2, quantile, c(0.05, 0.95) ))
+  return(bsresults)
 } 
+
+
+library(boot)
+
+# this version seems to work the best
+key2 <- matrix(c(1,1,1,1,1,1,1,1,0,0,
+                0,0,0,0,0,0,0,0,1,1),ncol=2)
+key3 <- matrix(c(1,1,1,0,0,0,0,0,0,0,
+                 0,0,0,1,1,1,1,1,0,0,
+                 0,0,0,0,0,0,0,0,1,1),ncol=3)
+  
+perms = 100
+nf = 3
+
+efa <- function(data, indices, key) {
+  dd <- data[indices,]
+  bsresults <- array(NA,dim=c(perms,ncol(data),nf))
+  fitefa <- pca(r=dd, nfactors=3, rotate = "varimax") #, keys = key2)
+  #fitefa <- target.rot(pca(r=dd, nfactors=nf) , keys = key3)
+  return(c(fitefa$loadings))
+  #bsresults[i,,] <- fitefa
+  
+}
+epcaresults <- boot(data=bsbd[,-1], statistic=efa, R=perms)
+
+
+# getPrcStat <- function (bsbd,vname,pcnum,nf){
+#   prcs <- pca(bsbd[,-1],nf) # returns matrix
+#   return(prcs$loadings)   # pick out the thing we need
+# }
+# 
+# bootEst <- function(df,d){
+#   sampledDf <- df[ d, ]  # resample dataframe 
+#   return(getPrcStat(sampledDf,nf=3))
+# }
+# 
+# bootOut <- boot(bsbd,bootEst,R=100)
+# boot.ci(bootOut,type=c("basic"))
+
+
+# pcaLoad <- function(x, ...){
+#   z <- pca(x, ...)
+#   return(pca$loadings)
+#   
+# }
+# 
+# b.obj.2 <- boot(bsbd[,-1],pcaLoad, R=999, nfactor=2)
 
 
 

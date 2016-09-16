@@ -35,7 +35,7 @@ rcorr(as.matrix(intLvlPers2[,c(4:9)]), type="spearman")
 # this section may be doomed to failure, and ought to be only used for visualization
 # see [2] for replacement
 
-# a. HE, LI, RE, Q, KD, LU, SO
+# a. HE, LI, RE, Q, KD, LU, SO, Lindsay
 # b. EM, LB, ED, LO, DA
 # c. CI, EV, PA
 # d. FK, KL, PE 
@@ -256,8 +256,15 @@ RS.drop.aft.frail <- survreg(dOut ~ Dominance + Conscientiousness + Openness + N
 
 summary(RS.drop.aft.frail)
 ci.drop = confint(RS.drop.aft.frail, method='profile')
-# Significant effect for Conscientiousness
+# Significant effect for Conscientiousness, Agr
 # high Conscientious chimps stay in the task for more trials
+#
+# 2.956
+# Scale= 0.546
+# shape = 1/RS.drop.aft.frail$scale
+# #HazRat = 
+#   exp(RS.drop.aft.frail$coefficients * -1 * shape)
+  
 
 # perhaps, for consistency
 library(coxme)

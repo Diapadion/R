@@ -1,0 +1,28 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1473948652655.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "17F2CA4A",
+    "lastKnownWriteTime" : 7308604914264011873,
+    "last_content_update" : 1473948652655,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "zwpco6bjet",
+        "caption" : "hiv.test",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=hiv.test&cache_key=zwpco6bjet",
+        "displayedObservations" : 353,
+        "environment" : "",
+        "object" : "hiv.test",
+        "totalObservations" : 353,
+        "variables" : 209
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}

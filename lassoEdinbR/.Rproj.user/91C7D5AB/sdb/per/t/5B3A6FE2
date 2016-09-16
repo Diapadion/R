@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "How to lasso: Least Absolute Shrinkage and Selection Operator\n========================================================\nauthor: Drew Altschul, Department of Psychology\ndate: \nautosize: true\ntransition: none\n\nThe Problem of Model Building\n========================================================\n\n\n- A while back, I was \n\n- can modern computing power improve model selection procedures?\n\n- the lasso\n  - shriking variable estimates to zero\n\n\nWhat is the lasso?\n========================================================\n\n- Regularization method\n- penalizes estimates \n  - reduce complexity\n  - increase generalizability\n- similar to ridge regression\n  - but lasso can shrink to 0\n  - and usually performs better\n  \n  \nFeatures of the lasso\n========================================================\n- Estimates are biased due to penalization\n  - Usually closer to the true mean\n  - Does not produce standard errors\n\n\n\n- Can fit data with more variables than observations\n  - particularly good at this is a variant called the Elastic Net\n\n\nFeatures of the lasso\n========================================================\n![optional caption text](biasEst.png)\n\n\nWorking with the elastic net\n========================================================\npackage 'glmnet'\n```{r}\nlibrary(glmnet)\n?glmnet\n```\n\nVariants\n========================================================\n* Mixed Models\n  - `lmmlasso`\n* Genomics\n  - `LDlasso`\n* Bayesian\n  - `EBglmnet`\n* Hazard models\n  - `ahaz`\n* Significant testing\n  - `covTest`\n  \n***\n\n* SEM\n  - `regSEM`\n  - `sparseSEM`\n  - `qgraph`\n* Variable, or rather, stability selection\n  - `stabsel`\n  - `c060`\n  \n\n\n\nSlide With Code\n========================================================\n```{r}\n\n```\n\n```{r}\nsummary(cars)\n```\n\nSlide With Plot\n========================================================\n\n```{r, echo=FALSE}\nplot(cars)\n```\n",
+    "created" : 1473938772690.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2806590459",
+    "id" : "5B3A6FE2",
+    "lastKnownWriteTime" : 1474040538,
+    "last_content_update" : 1474040538101,
+    "path" : "C:/Users/s1229179/GitHub/R/lassoEdinbR/howtolasso.Rpres",
+    "project_path" : "howtolasso.Rpres",
+    "properties" : {
+        "docOutlineVisible" : "0"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_presentation"
+}

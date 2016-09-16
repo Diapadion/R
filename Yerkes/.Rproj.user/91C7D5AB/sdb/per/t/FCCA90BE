@@ -1,0 +1,28 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1473427513920.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "FCCA90BE",
+    "lastKnownWriteTime" : 7308604914264011873,
+    "last_content_update" : 1473427513920,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "o4bzx6o376",
+        "caption" : "cwp.df1",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=cwp.df1&cache_key=o4bzx6o376",
+        "displayedObservations" : 175,
+        "environment" : "",
+        "object" : "cwp.df1",
+        "totalObservations" : 175,
+        "variables" : 18
+    },
+    "relative_order" : 9,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}

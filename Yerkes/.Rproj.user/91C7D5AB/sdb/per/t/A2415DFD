@@ -1,0 +1,28 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1473427720006.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "A2415DFD",
+    "lastKnownWriteTime" : 7308604914264011873,
+    "last_content_update" : 1473427720006,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "5lv7wis9cl",
+        "caption" : "dmdob",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=dmdob&cache_key=5lv7wis9cl",
+        "displayedObservations" : 175,
+        "environment" : "",
+        "object" : "dmdob",
+        "totalObservations" : 175,
+        "variables" : 348
+    },
+    "relative_order" : 9,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}

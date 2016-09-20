@@ -1,3 +1,4 @@
 {
-    "docOutlineVisible" : "0"
+    "docOutlineVisible" : "0",
+    "ignored_words" : "glmnet,generalizable,dremalt,stepwise,generalizability,leq\n"
 }

@@ -152,10 +152,14 @@ Basic linear model: $\hat{y} = b_0 + b_1*x_1+ b_2*x_2 + ... b_p*x_p$
 
 The lasso fits this with criteria
 * minimize: $\sum (y - \hat{y})^2$
-* such that: $\sum |b_j| \leq \lambda$
+* such that: $\sum |b_j| \leq s$
 
-- when $\lambda$ is large, the constraint has no effect and the solution is the usual multiple regression
-- and $\lambda$ becomes small, the coefficients are shrunk, sometimes even to 0
+- when $s$ is large, the constraint has no effect and the solution is the usual multiple regression
+- and $s$ becomes small, the coefficients are shrunk, sometimes even to 0
+
+
+Features of the lasso
+========================================================
 
   
 Features of the lasso
@@ -311,13 +315,13 @@ Stability selection
 Stability selection
 ========================================================
 If you're using glmnet to its fullest potential, 
-  in many cases you won't really need variable selection anymore
+  in many cases you won't need variable selection anymore
 
 
 Stability selection
 ========================================================
 If you're using glmnet to its fullest potential, 
-  in many cases you won't really need variable selection anymore
+  in many cases you won't need variable selection anymore
 
 But if you do
 
@@ -325,7 +329,7 @@ But if you do
 Stability selection
 ========================================================
 If you're using glmnet to its fullest potential, 
-  in many cases you won't really need variable selection anymore
+  in many cases you won't need variable selection anymore
 
 But if you do
 

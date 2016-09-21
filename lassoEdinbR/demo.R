@@ -4,7 +4,7 @@
 library(glmnet)
   
 #download.file("http://www.shatterline.com/MachineLearning/data/hiv.rda","hiv.rda", mode="wb") # Done.
-load("hiv.rda")	
+load("hiv.rda")	# big matrix of genes, and conference of drug resistance (score)
 
 visualize.matrix <- function(mat) {
   print(names(mat))
@@ -19,6 +19,7 @@ visualize.matrix <- function(mat) {
 }
 
 visualize.matrix(hiv.train)
+visualize.matrix(hiv.test)
 
 # N.B. glmnet needs to work with data as a matrix or sprase.matrix, not a data.frame
 
@@ -31,15 +32,15 @@ indx = seq(1,200,by=10)
 
 
 fit <- glmnet(hiv.train$x[,indx], hiv.train$y, alpha = 0)
-plot(fit, "lambda")
+plot(fit, "lambda", label = T)
 
 
 fit <- glmnet(hiv.train$x[,indx], hiv.train$y, alpha = 1)
-plot(fit, "lambda")
+plot(fit, "lambda", label = T)
 
 
-fit <- glmnet(hiv.train$x[,indx], hiv.train$y, alpha = 0.3)
-plot(fit, "lambda")
+fit <- glmnet(hiv.train$x[,indx], hiv.train$y, alpha = 0.03)
+plot(fit, "lambda", label = T)
 
 
 
@@ -64,9 +65,9 @@ coef(fit,s=cv.f$lambda.1se)
 ### Prediction
 fit.full = glmnet(hiv.train$x, hiv.train$y, alpha = 0.3) # return to the full set
 pred.y <- predict(fit.full, hiv.test$x) # predict from the test data
+
 mean.sq.test.error <- apply((pred.y - hiv.test$y)^2,2,mean)
 
-#plot(cv.f)
 points(log(fit.full$lambda), mean.sq.test.error, col="blue",pch="*")
 legend("topleft",legend=c("10-fold Cross Validation","Test HIV Data"),pch="*",col=c("red","blue"))
 # pretty good...
@@ -86,7 +87,8 @@ library(stabs)
 
 
 stab.lasso <- stabsel(x = hiv.train$x[,indx], y = hiv.train$y,
-                      fitfun = glmnet.lasso, cutoff = 0.75, PFER = 1)
+                      fitfun = glmnet.lasso, cutoff = 0.75, PFER = 1,
+                      B = 1000)
 
 # cutoff: Semi-arbitrary, hardline used for counting variables as in or out
 #         guidelines: [0.6 to 0.9] (maybe even [0.5 to 1])

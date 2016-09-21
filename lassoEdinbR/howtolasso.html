@@ -1052,9 +1052,9 @@ hljs.initHighlightingOnLoad();
 
 <ul>
 <li>minimize: \( \sum (y - \hat{y})^2 \)</li>
-<li><p>such that: \( \sum |b_j| \leq \lambda \)</p></li>
-<li><p>when \( \lambda \) is large, the constraint has no effect and the solution is the usual multiple regression</p></li>
-<li><p>and \( \lambda \) becomes small, the coefficients are shrunk, sometimes even to 0</p></li>
+<li><p>such that: \( \sum |b_j| \leq s \)</p></li>
+<li><p>when \( s \) is large, the constraint has no effect and the solution is the usual multiple regression</p></li>
+<li><p>and \( s \) becomes small, the coefficients are shrunk, sometimes even to 0</p></li>
 </ul>
 
 </div>
@@ -1063,22 +1063,6 @@ hljs.initHighlightingOnLoad();
 <section data-transition="none" data-transition-speed="default">
 <h3>Features of the lasso</h3>
 <div class="slideContent" >
-<ul>
-<li>Estimates are biased due to penalization
-
-<ul>
-<li>Bias-variance trade-off</li>
-<li>lasso estimates usually more accurate, if biased</li>
-<li>Does not produce standard errors</li>
-</ul></li>
-<li>Performs well when data are sparse</li>
-<li>Copes with well correlated variables</li>
-<li>Can fit data with more variables than observations
-
-<ul>
-<li>particularly good at this is a variant called the Elastic Net</li>
-</ul></li>
-</ul>
 
 </div>
 
@@ -1367,7 +1351,7 @@ hljs.initHighlightingOnLoad();
 <h3>Stability selection</h3>
 <div class="slideContent" >
 <p>If you&#39;re using glmnet to its fullest potential, 
-  in many cases you won&#39;t really need variable selection anymore</p>
+  in many cases you won&#39;t need variable selection anymore</p>
 
 </div>
 
@@ -1376,7 +1360,7 @@ hljs.initHighlightingOnLoad();
 <h3>Stability selection</h3>
 <div class="slideContent" >
 <p>If you&#39;re using glmnet to its fullest potential, 
-  in many cases you won&#39;t really need variable selection anymore</p>
+  in many cases you won&#39;t need variable selection anymore</p>
 
 <p>But if you do</p>
 
@@ -1387,7 +1371,7 @@ hljs.initHighlightingOnLoad();
 <h3>Stability selection</h3>
 <div class="slideContent" >
 <p>If you&#39;re using glmnet to its fullest potential, 
-  in many cases you won&#39;t really need variable selection anymore</p>
+  in many cases you won&#39;t need variable selection anymore</p>
 
 <p>But if you do</p>
 

@@ -1,0 +1,28 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1474628105394.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "4E59D85D",
+    "lastKnownWriteTime" : 5991033703968812646,
+    "last_content_update" : 1474628105394,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "5fz0uy3s1t",
+        "caption" : "EPdf.trim$Average.Speaker.Score[EPdf.trim$Speaker.Sex == \"Female\"]",
+        "contentUrl" : "grid_resource/gridviewer.html?env=_rs_no_env&obj=&cache_key=5fz0uy3s1t",
+        "displayedObservations" : 1223,
+        "environment" : "_rs_no_env",
+        "object" : "",
+        "totalObservations" : 1223,
+        "variables" : 1
+    },
+    "relative_order" : 6,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}

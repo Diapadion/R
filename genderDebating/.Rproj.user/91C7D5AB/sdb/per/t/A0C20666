@@ -1,0 +1,28 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1474628074063.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "A0C20666",
+    "lastKnownWriteTime" : 1473671428,
+    "last_content_update" : 1474628074063,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "1ur2jzrere",
+        "caption" : "EPdf$Average.Speaker.Score[EPdf$Speaker.Sex == \"Female\"]",
+        "contentUrl" : "grid_resource/gridviewer.html?env=_rs_no_env&obj=&cache_key=1ur2jzrere",
+        "displayedObservations" : 0,
+        "environment" : "_rs_no_env",
+        "object" : "",
+        "totalObservations" : 0,
+        "variables" : 1
+    },
+    "relative_order" : 5,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}

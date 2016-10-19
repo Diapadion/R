@@ -14,6 +14,11 @@ m.sd <- sd(EPdf$Average.Speaker.Score[EPdf$Speaker.Sex=='Male'])
 
 t.test(EPdf.trim$Average.Speaker.Score ~ EPdf.trim$Speaker.Sex)
 
+library(lsr)
+cohensD(EPdf.trim$Average.Speaker.Score[EPdf.trim$Speaker.Sex=='Female'], 
+        EPdf.trim$Average.Speaker.Score[EPdf.trim$Speaker.Sex=='Male'],
+        method="unequal")
+# 0.240975
 
 
 EPdf.trim <- EPdf[EPdf$Speaker.Sex!='Unknown',]

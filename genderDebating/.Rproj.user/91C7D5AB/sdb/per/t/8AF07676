@@ -12,14 +12,14 @@
     "path" : null,
     "project_path" : null,
     "properties" : {
-        "cacheKey" : "15kg4bywyr",
+        "cacheKey" : "i2limsmdwv",
         "caption" : "EPdf",
-        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=EPdf&cache_key=15kg4bywyr",
-        "displayedObservations" : 4296,
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=EPdf&cache_key=i2limsmdwv",
+        "displayedObservations" : "4296",
         "environment" : "",
         "object" : "EPdf",
-        "totalObservations" : 4296,
-        "variables" : 5
+        "totalObservations" : "4296",
+        "variables" : "5"
     },
     "relative_order" : 2,
     "source_on_save" : false,

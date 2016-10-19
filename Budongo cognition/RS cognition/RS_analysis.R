@@ -20,6 +20,14 @@ library(bbmle)
 library(lme4)
 
 library(Hmisc)
+library(reshape2)
+
+library(ggplot2)
+library(devtools)
+#install_github("easyGgplot2", "kassambara")
+library(easyGgplot2)
+
+
 
 ### [0] Correlations among personality domains
 
@@ -72,10 +80,42 @@ mp = barplot(height=as.matrix(RStm[5:10]),beside=TRUE,
                          'Agreeableness','Neuroticism','Openness'),
              xlab="Personality Dimension", ylab="Average Score"
              )
-
 segments(c(mp), c(t(t(RStm[5:10] - RSts[5:10]))), c(mp),c(t(t(RStm[5:10] + RSts[5:10]))), lwd=2)
 
+# convert to long format for stripchart
+stripRS <- intLvlPers2[,c(1,3:9)]
+colnames(stripRS) <- c('Participate', 'Chimp','Dominance','Extraversion','Conscientiousness',
+                       'Agreeableness','Neuroticism','Openness')
+stripRS <- melt(stripRS)
+colnames(stripRS) <- c('Participant', 'Chimp','Personality','Rating')
+levels(stripRS$Participate) <- c('No','Yes')
 
+# stripchart(value ~ variable : RSpartic, data = stripRS, method='jitter', pch=19, #col=point_col,
+#            xlab='Personality',  vertical=TRUE)
+
+
+gRS = ggplot(stripRS, aes(x=Personality, y=Rating, shape=Participant, fill=Participant)) +
+  geom_point(size=2, 
+             position=position_jitterdodge(dodge.width=0.8)) +
+  scale_shape_manual(values=c(21, 24)) +
+  scale_fill_manual(values=c("black", NA)) +
+  theme_bw()
+
+gRS + theme(legend.justification=c(1,0), legend.position=c(0.4,0), 
+            legend.background = element_rect(fill="white",
+                                             size=0.5, linetype="solid", 
+                                             colour ="black"),
+            axis.title.x = element_text(face='bold'),
+            axis.title.y = element_text(face='bold')
+            ) +
+  xlab("Personality Dimension") + 
+  ylab("Average Rating") +
+  scale_y_continuous(limits = c(1, 7))
+  
+
+
+
+### T-tests of significance between dimensions
 c.t = t.test(intLvlPers2$Conscientiousness[intLvlPers2$RSpartic==1],intLvlPers2$Conscientiousness[intLvlPers2$RSpartic==0])
 # definitely
 n.t = t.test(intLvlPers2$Neuroticism[intLvlPers2$RSpartic==1],intLvlPers2$Neuroticism[intLvlPers2$RSpartic==0])

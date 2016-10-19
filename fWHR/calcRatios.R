@@ -147,4 +147,19 @@ for (i in 59:124){
 # Topher6884
 # Estrella6886
 
+# Another 10:
+
+sample(df.CA$monkey..photo.id, 10)
+# Kyra6521
+# Cecil6952
+# Hazel7001
+# Maggie6599
+# Sherri6548
+# Veicht6839
+# Vermouth6733
+# Sourpatch6894
+# Crabapple6584
+# Obscure6832
+
+
 

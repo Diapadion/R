@@ -25,7 +25,8 @@ dt = aggWelSWBall;
 load aggWelall.txt;
 dt = aggWelall;
 
-dt = SWB;
+load aggregatedSWB.txt;
+dt = aggregatedSWB;
 
 %load aggregatedWel.txt;
 %dt = aggregatedWel;

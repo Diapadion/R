@@ -146,9 +146,11 @@ plot(Dataset$age_pr_adj, Dataset$Ext_CZ)
 
 library(psych)
 
-corr.test(as.matrix(Dataset[,c(73:78)]),as.matrix(as.numeric(Dataset$DoB)), 
-          method = "pearson", adjust='holm'
+pxt.cors = corr.test(as.matrix(Dataset[,c(73:78)]),as.matrix(as.numeric(Dataset$DoB)), 
+          method = "spearman", adjust='bonferroni'
           , ci=TRUE)
+cor.ci(cbind(as.matrix(Dataset[,c(73:78)]),as.matrix(as.numeric(Dataset$DoB))),
+       method = 'spearman', plot=T)
 # Dom, Neu, Opn, Ext
 # as of 28/03/16, with 529 data points, all are sig
 

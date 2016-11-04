@@ -29,7 +29,7 @@ all$status[(all$status == 'alive') & (all$sample == 'Japan')] <- 'Alive'
 
 # just for Bram - whach out for the number
 all$status[535] <- 'Alive'
-table()
+table(all$status)
 # for frailty purposes, we want to make Taronga part of AZA
 all$sample[all$sample=='Taronga'] = 'AZA'
 
@@ -449,9 +449,9 @@ plot(datX$age_pr, datX$A.r.DoB)
 # let's try a LASSO...
 
 library(glmnet)
-# #library(c060)
+library(c060)
 # #detach('package:c060')
-# library(stabs)
+library(stabs)
 # library(caret)
 # # see also chimpAnalyses.R
 # 
@@ -462,40 +462,40 @@ colnames(netform) = c("DoB1","DoB2","DoB3")
 
 rmatx = model.matrix( ~ DoB1 + DoB2 + DoB3 - 1, netform)
 
-# #stab.E = stabpath(datX$Ext_CZ, rmatx, weakness = 0.7 ) # 0.2 to 0.8
-# stab.E = stabsel(rmatx, datX$Ext_CZ, fitfun=glmnet.lasso,
-#                  cutoff = 0.9,
-#                  #q = 3 ,
-#                  PFER = 1
-#                  )
-# parameters(stab.E)
-# 
-# stab.D = stabsel(rmatx, datX$Dom_CZ, fitfun=glmnet.lasso, #q = 3
-#                  cutoff = 0.9, PFER = 1)
-# stab.A = stabsel(rmatx, datX$Agr_CZ, fitfun=glmnet.lasso, #q = 3
-#                  cutoff = 0.9, PFER = 1)
-# stab.C = stabsel(rmatx, datX$Con_CZ, fitfun=glmnet.lasso, #q = 3
-#                  cutoff = 0.9, PFER = 1)
-# stab.N = stabsel(rmatx, datX$Neu_CZ, fitfun=glmnet.lasso, #q = 3
-#                  cutoff = 0.9, PFER = 1)
-# stab.O = stabsel(rmatx, datX$Opn_CZ, fitfun=glmnet.lasso, #q = 3
-#                  cutoff = 0.9, PFER = 1)
-# 
-#                  
-# 
-# 
-# stab.D = stabpath(datX$Dom_CZ, rmatx, weakness = 0.7 )
-# stab.C = stabpath(datX$Con_CZ, rmatx, weakness = 0.7 )
-# stab.N = stabpath(datX$Neu_CZ, rmatx, weakness = 0.7 )
-# stab.A = stabpath(datX$Agr_CZ, rmatx, weakness = 0.7 )
-# stab.O = stabpath(datX$Opn_CZ, rmatx, weakness = 0.7 )
-# 
-# plot(stab.E, type = 'paths')
-# plot(stab.D, type = 'paths')
-# plot(stab.C, type = 'paths')
-# plot(stab.N, type = 'paths')
-# plot(stab.A, type = 'paths')
-# plot(stab.O, type = 'paths')
+#stab.E = stabpath(datX$Ext_CZ, rmatx, weakness = 0.7 ) # 0.2 to 0.8
+stab.E = stabsel(rmatx, datX$Ext_CZ, fitfun=glmnet.lasso,
+                 cutoff = 0.9,
+                 #q = 3 ,
+                 PFER = 1
+                 )
+parameters(stab.E)
+
+stab.D = stabsel(rmatx, datX$Dom_CZ, fitfun=glmnet.lasso, #q = 3
+                 cutoff = 0.8, PFER = 1)
+stab.A = stabsel(rmatx, datX$Agr_CZ, fitfun=glmnet.lasso, #q = 3
+                 cutoff = 0.8, PFER = 1)
+stab.C = stabsel(rmatx, datX$Con_CZ, fitfun=glmnet.lasso, #q = 3
+                 cutoff = 0.8, PFER = 1)
+stab.N = stabsel(rmatx, datX$Neu_CZ, fitfun=glmnet.lasso, #q = 3
+                 cutoff = 0.8, PFER = 1)
+stab.O = stabsel(rmatx, datX$Opn_CZ, fitfun=glmnet.lasso, #q = 3
+                 cutoff = 0.8, PFER = 1)
+
+
+
+
+stab.D = stabpath(datX$Dom_CZ, rmatx, weakness = 0.7 )
+stab.C = stabpath(datX$Con_CZ, rmatx, weakness = 0.7 )
+stab.N = stabpath(datX$Neu_CZ, rmatx, weakness = 0.7 )
+stab.A = stabpath(datX$Agr_CZ, rmatx, weakness = 0.7 )
+stab.O = stabpath(datX$Opn_CZ, rmatx, weakness = 0.7 )
+
+plot(stab.E, type = 'paths')
+plot(stab.D, type = 'paths')
+plot(stab.C, type = 'paths')
+plot(stab.N, type = 'paths')
+plot(stab.A, type = 'paths')
+plot(stab.O, type = 'paths')
 # 
 # data("bodyfat", package = "TH.data")
 # stab.lasso <- stabsel(x = bodyfat[, -2], y = bodyfat[,2],

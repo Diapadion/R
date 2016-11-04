@@ -1,129 +1,32 @@
-# Progressive regression models of main analysis sequence
-
+# Survival Analyses
+#   (only)
 
 library(survival)
-library(bbmle)
-library(ggplot2)
-library(powerSurvEpi)
-# library(NPHMC)
 
-library(LTRCtrees)
-
-
-
-### Power Analysis
-
-## formula for Hazard ratio from AFT:
-#  HazRat = exp(coefficient(s) * -1 * 1/scale)
-
-gorillaEHR = exp(0.272 * -1 * 1/(exp(-0.317)))
-# print(gorillaEHR)
-# [1] 0.6883508
-# round to a more conservative 0.7
-
-
-
-powerEpiCont(formula = (age - age_pr) ~ as.factor(sex) + 
-               as.factor(origin) +  
-               Dom_CZ + Ext_CZ + Con_CZ +
-               Agr_CZ + Neu_CZ + Opn_CZ,
-             dat=datX, X1 = Con_CZ,
-             failureFlag = datX$status  ,
-             n = 538, theta = 0.7)
-# $power
-# [1] 0.800775
+# library(OutlierDC)
 # 
-# $rho2
-# [1] 0.114313
+# foA <- odc(themodel, data=Dataset, method="score")
+# foB <- odc(themodel, data=Dataset, method="residual")
+# foC <- odc(themodel, data=Dataset, method="boxplot")
 # 
-# $sigma2
-# [1] 0.4262737
-# 
-# $psi
-# [1] 0.3043478
-
-# this is jsut for E
-               
-
-### Plot the data over time
-pdx = gather(datX, Personality, Measurement, Dom:Opn)
-
-p <- ggplot(pdx, aes(age_pr, Measurement, colour = factor(Personality))) + geom_point() + 
-  theme_bw() + theme(legend.position="none") + labs(x='Age at Personality Rating')
-
-# Figure 3:
-p + facet_wrap(~ Personality, nrow = 2)
-
-
-
-### Testing for correlations between time and personality
-
-pxt.cors = corr.test(as.matrix(Dataset[,c(73:78)]),as.matrix(as.numeric(Dataset$DoB)), 
-                     method = "spearman", adjust='bonferroni'
-                     , ci=TRUE)
-# only correlations between DoB and D, E, N, and O are significant
-
-
-
-### Extraversion: identifying relationship with time
-fit.e0 <- lm(Ext_CZ ~ 1, data=datX)
-fit.e1.DoB <- lm(Ext_CZ ~ scale(DoB), data=datX)
-fit.e2.DoB <- lm(Ext_CZ ~ scale(DoB) + I(scale(DoB)^2), data=datX) # this seems to be the best (see anova)
-fit.e3.DoB <- lm(Ext_CZ ~ scale(DoB) + I(scale(DoB)^2) + I(scale(DoB)^3), data=datX)
-
-AICctab(fit.e0,fit.e1.DoB,fit.e2.DoB,fit.e3.DoB
-        ,logLik=T,weights=T,base=T,delta=T)
-# Either Q or C
-plot(fit.e2.DoB)
-plot(fit.e3.DoB)
-# Quadratic is better.
-
-
-### Openness: identifying relationship with time
-fit.o0 <- lm(Opn_CZ ~ 1, data=datX)
-fit.o1.DoB <- lm(Opn_CZ ~ scale(DoB), data=datX) # this, according to LASSO
-fit.o2.DoB <- lm(Opn_CZ ~ scale(DoB) + I(scale(DoB)^2), data=datX) # or this, according to stabsel
-fit.o3.DoB <- lm(Opn_CZ ~ scale(DoB) + I(scale(DoB)^2) + I(scale(DoB)^3), data=datX)
-
-AICctab(fit.o0,fit.o1.DoB,fit.o2.DoB,fit.o3.DoB
-        , logLik=T,weights=T,base=T,delta=T)
-# Either Q or C
-plot(fit.o2.DoB)
-plot(fit.o3.DoB)
-# Quadratic is better.
-
-
-### Dominance: identifying relationship with time
-fit.d0 <- lm(Dom_CZ ~ 1, data=datX)
-fit.d1.DoB <- lm(Dom_CZ ~ scale(DoB), data=datX)
-fit.d2.DoB <- lm(Dom_CZ ~ scale(DoB) + I(scale(DoB)^2), data=datX)
-fit.d3.DoB <- lm(Dom_CZ ~ scale(DoB) + I(scale(DoB)^2) + I(scale(DoB)^3), data=datX) 
-
-AICctab(fit.d0, fit.d1.DoB,fit.d2.DoB,fit.d3.DoB
-        ,logLik=T,weights=T,base=T,delta=T)
-# Either Q or C
-plot(fit.d2.DoB)
-plot(fit.d3.DoB)
-# Quadratic is better.
-
-
-### Neuroticism: identifying relationship with time
-fit.n0 <- lm(Neu_CZ ~ 1, data=datX)
-fit.n1.DoB <- lm(Neu_CZ ~ scale(DoB), data=datX)
-fit.n2.DoB <- lm(Neu_CZ ~ scale(DoB) + I(scale(DoB)^2), data=datX)
-fit.n3.DoB <- lm(Neu_CZ ~ scale(DoB) + I(scale(DoB)^2) + I(scale(DoB)^3), data=datX)
-
-AICctab(fit.n0, fit.n1.DoB,fit.n2.DoB,fit.n3.DoB
-        ,logLik=T,weights=T,base=T,delta=T)
-# Linear is better.
-
-
-### Creating residualized versions of these personality vars
-
-
+# fo1 <- odc(yLt ~ as.factor(sex) + 
+#              as.factor(origin) + as.factor(LvZ) + 
+#              Dom_CZ + Ext_CZ + Con_CZ +
+#              Agr_CZ + Neu_CZ + Opn_CZ, data=datX, method="score")
+# fo2 <- odc(yLt ~ as.factor(sex) + 
+#              as.factor(origin) + as.factor(LvZ) + 
+#              Dom_CZ + Ext_CZ + Con_CZ +
+#              Agr_CZ + Neu_CZ + Opn_CZ, data=datX, method="residual")
+# fo3 <- odc(yLt ~ as.factor(sex) + 
+#              as.factor(origin) + as.factor(LvZ) + 
+#              Dom_CZ + Ext_CZ + Con_CZ +
+#              Agr_CZ + Neu_CZ + Opn_CZ, data=datX, method="boxplot")
+## seem pretty meaningless
+detach("package:OutlierDC")
 
 
 # Alex's code for finding the ideal distribution
+
 thedistributions<-c("weibull","exponential","lognormal","loglogistic")
 
 themodel <- (y ~ as.factor(Dataset$sex) + #Dataset$DoB + #Dataset$age_pr + Dataset$age + 

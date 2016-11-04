@@ -46,7 +46,7 @@ frail.AFT.wild <- survreg(yLt ~ as.factor(sex) +
                      + frailty.gaussian(sample)
                      + strata(strt)
                      , data=datX, dist='logistic') # this model is NOT informed by LASSO
-summary(frail.AFT.wild)
+summary(frail.AFT)
 confint(frail.AFT.wild)
 
 

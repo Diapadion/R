@@ -2,12 +2,14 @@
 
 
 library(survival)
+library(psych)
 library(bbmle)
 library(ggplot2)
 library(powerSurvEpi)
 # library(NPHMC)
 
 library(LTRCtrees)
+library(rpart.plot)
 
 
 
@@ -42,8 +44,9 @@ powerEpiCont(formula = (age - age_pr) ~ as.factor(sex) +
 # $psi
 # [1] 0.3043478
 
-# this is jsut for E
-               
+# this is just for E
+             
+  
 
 ### Plot the data over time
 pdx = gather(datX, Personality, Measurement, Dom:Opn)
@@ -59,8 +62,9 @@ p + facet_wrap(~ Personality, nrow = 2)
 ### Testing for correlations between time and personality
 
 pxt.cors = corr.test(as.matrix(Dataset[,c(73:78)]),as.matrix(as.numeric(Dataset$DoB)), 
-                     method = "spearman", adjust='bonferroni'
+                     method = "kendall", adjust='none'
                      , ci=TRUE)
+print(pxt.cors, short=F)
 # only correlations between DoB and D, E, N, and O are significant
 
 
@@ -455,4 +459,51 @@ plot.flexsurvreg(m.flx.EOr)
 #                        datX$Dom_CZ + datX$E.r2.DoB + datX$Con_CZ + datX$Agr_CZ + datX$Neu_CZ + datX$O.r1.DoB)
 # testSurvDist(truncdistributions, model.Ltrunc.spec)
 
-attr(yLt, 'type') <- 'mcounting'
+attr(yLt, 'type') <- 'counting'
+
+
+
+### TREES ###
+# RR = relative risk
+# CI = conditional inference
+
+RR.a <- LTRCART(Surv(age_pr, age, stat.log) ~ as.factor(sex) + 
+                  as.factor(origin) +  
+                  Dom_CZ + Ext_CZ + Con_CZ +
+                  Agr_CZ + Neu_CZ + Opn_CZ, data = datX, 
+                control = rpart.control(minsplot = 10, cp = 0.0001, xval = 100)
+                )
+CI.a <- LTRCIT(Surv(age_pr, age, stat.log) ~ as.factor(sex) + 
+                  as.factor(origin) +  
+                  Dom_CZ + Ext_CZ + Con_CZ +
+                  Agr_CZ + Neu_CZ + Opn_CZ,
+                Data = datX)
+plot(CI.a)
+
+RR.a.samp <- LTRCART(Surv(age_pr, age, stat.log) ~ as.factor(sex) + 
+                       as.factor(origin) +
+                       as.factor(sample=='Japan') + as.factor(sample=='Yerkes') +
+                     as.factor(sample=='Edinburgh') +
+                       Dom_CZ + Ext_CZ + Con_CZ +
+                       Agr_CZ + Neu_CZ + Opn_CZ, data = datX,
+                     control = rpart.control(minsplot = 10, cp = 0.0001, xval = 100)
+                     )
+CI.a.samp <- LTRCIT(Surv(age_pr, age, stat.log) ~ as.factor(sex) + 
+                       as.factor(origin) +
+                       as.factor(sample=='Japan') + as.factor(sample=='Yerkes') +
+                       as.factor(sample=='Edinburgh') +
+                       Dom_CZ + Ext_CZ + Con_CZ +
+                       Agr_CZ + Neu_CZ + Opn_CZ, Data = datX) #,
+                     
+plot(CI.a.samp)
+
+
+
+  (as.factor(datX$sex),
+   as.factor(datX$sample=='Japan'),as.factor(datX$sample=='Yerkes'),
+   as.factor(datX$sample=='Edinburgh'),
+   as.factor(datX$origin), 
+   datX$Dom_CZ, datX$Ext_CZ, datX$Con_CZ,
+   datX$Agr_CZ, datX$Neu_CZ, datX$Opn_CZ))
+
+

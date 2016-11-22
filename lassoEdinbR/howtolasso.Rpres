@@ -142,7 +142,7 @@ Basic linear model: $\hat{y} = b_0 + b_1*x_1+ b_2*x_2 + ... b_p*x_p$
 
 The lasso fits this with criteria
 * minimize: $\sum (y - \hat{y})^2$
-* such that: $\sum |b_j| \leq \lambda$
+* such that: $\sum |b_j| \leq s$
 
 
 What does the lasso do?

@@ -6,11 +6,14 @@ library(psych)
 
 dim(sel.nbm[complete.cases(sel.nbm),])
 
+## TODO
+# still need BPs and BMI
+
 colnames(sel.nbm)[3:31] <- colnames(c.bm)[5:33]
 
 
 fa.parallel(sel.nbm[complete.cases(sel.nbm),c(3:31)], fm = 'gls') #  pa?
-# seem like 10
+ # seem like 10
 
 plot(nfactors(sel.nbm[complete.cases(sel.nbm),c(3:31)], fm = 'gls')$map)
 

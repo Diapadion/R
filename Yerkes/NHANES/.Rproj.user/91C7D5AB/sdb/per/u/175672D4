@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "### Analysis plan\n\n# Divide NHANES 28863 NHANES data into 3 parts:\n# 9000, 9000, 10863\n\n# 1. Determine number of factors with first 9000",
+    "created" : 1479737216715.000,
+    "dirty" : true,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "2348748481",
+    "id" : "175672D4",
+    "lastKnownWriteTime" : 1479734270,
+    "last_content_update" : 1479744482389,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

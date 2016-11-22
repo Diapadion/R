@@ -1,9 +1,11 @@
 ### NHANES III data
+library(SAScii)
 
 nhanes.bm <- read.SAScii('Z:/NHANES III/DS0010/02231-0010-Data.txt',
                          'Z:/NHANES III/DS0010/02231-0010-Setup.sas')
 
-
+nhanes.ex <- read.SAScii('Z:/NHANES III/exam/DS0002/02231-0002-Data.txt',
+                         'Z:/NHANES III/exam/DS0002/02231-0002-Setup.sas')
 
 sort( sapply(ls(),function(x){object.size(get(x))}))
 
@@ -20,7 +22,6 @@ hist(nhanes.bm$HSSEX) # sex
 hist(nhanes.bm$HSAGEIR) # age at 'interview'
 
 
-Weight?
 
 HEMATOLOGY
 WCP - WBC count - I think this needs to be /1000 in the chimps
@@ -62,8 +63,14 @@ GGPSI - Gamma-glutamyl transpeptidase (GGTP)
 ! - Magnesium
 OSPSI - Osmolality
 
+EXAM DATA (*NEW* - from different file)
+BMPBMI - BMI
+PEPMNK1R - Systolic BP (avg)
+PEPMNK5R - Diastolic BP (avg)
 
-BMI, Height, Weight, BP and shit
+
+
+
 
 
 
@@ -72,7 +79,7 @@ BMI, Height, Weight, BP and shit
 # temp: for now, using the vars in common with the chimp set
 
 
-bmlabels = c("HSSEX","HSAGEIR", 
+bmlabels = c('SEQN',"HSSEX","HSAGEIR", 
              'WCP','RCP','HTP','HGP','MVPSI','MCPSI','MHP',
              'LMPDIF','MOPDIF','EOP',#'BOP', not in chimps
              'SGP','BUP','CEP','TPP','AMP','TBP','APPSI','ATPSI','ASPSI',
@@ -82,6 +89,10 @@ bmlabels = c("HSSEX","HSAGEIR",
 
 
 sel.nbm = nhanes.bm[,bmlabels]
+
+sel.nx = nhanes.ex[,c('SEQN','BMPBMI','PEPMNK1R','PEPMNK5R')]
+
+sel.nbm = merge(sel.nbm, sel.nx, by = c('SEQN'))
 
 # fixing the NA coding
 #table(sel.nbm[,'SGP'])
@@ -145,6 +156,19 @@ sel.nbm$TGP[sel.nbm$TGP == 8888] = NA
 sel.nbm$GGPSI[sel.nbm$GGPSI == 8888] = NA
 
 sel.nbm$OSPSI[sel.nbm$OSPSI == 888] = NA
+
+sel.nbm$PEPMNK1R[sel.nbm$PEPMNK1R == 888] = NA
+
+sel.nbm$PEPMNK5R[sel.nbm$PEPMNK5R == 888] = NA
+
+sel.nbm$BMPBMI[sel.nbm$BMPBMI == 8888] = NA
+
+
+# remove rows with all NAs for non-demographic data
+# 35 vars, 32 of which are BMs
+
+sel.nbm <- sel.nbm[(rowSums(is.na(sel.nbm))<32),]
+
 
 
 

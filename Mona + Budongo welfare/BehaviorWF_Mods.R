@@ -490,3 +490,75 @@ sd(as.vector(table(droplevels(focals2$Focal.ID))))
 ### Chimps 2016 abstract snippet
 # Welfare was found to be predicted by observed negative behaviours (e.g. regurgitation, cacophagy), using LASSO penalized linear modeling and covariance tests.
 
+
+
+### Katie Slocombe directed model revisions - 11/11/2016
+
+netform1f = netform1f[,c(-9,-11)]
+
+fwf1f.net <- glmnet(netform1f, focals1$welfareswb,
+                    family = "gaussian",
+                    standardize=T, alpha = 1,lambda.min.ratio=0.00001,  nlambda=1000
+                    #nlambda=1000, lambda.min.ratio = 0.00001
+)
+
+fwf1.cvnet <- cv.glmnet(netform1f, focals1$welfareswb,
+                         family = "gaussian", nfolds=20)
+plot(fwf1f.cvnet)
+
+coef(fwf1f.net, 
+     s=fwf1f.cvnet$lambda.min
+     #s=fwf1.cvnet$lambda.1se
+)
+
+
+netform2f = netform2f[,c(-9,-11)]
+
+fwf2f.net <- glmnet(netform2f, focals2$welfareswb,
+                    family = "gaussian",
+                    standardize=T, alpha = 1,lambda.min.ratio=0.00001,  nlambda=1000
+                    #nlambda=1000, lambda.min.ratio = 0.00001
+)
+
+fwf2f.cvnet <- cv.glmnet(netform2f, focals2$welfareswb,
+                         family = "gaussian", nfolds=20)
+plot(fwf2f.cvnet)
+
+coef(fwf2f.net, 
+     s=fwf2f.cvnet$lambda.min
+     #s=fwf2.cvnet$lambda.1se
+)
+ 
+
+netform1s = netform1s[,c(-2, -3, -5, -15)]   # remove EA, FO, TR, CL
+
+fwf1s.net <- glmnet(netform1s, scans1$welfareswb,
+                    family = "gaussian",
+                    standardize=T, alpha = 1,lambda.min.ratio=0.00001,  nlambda=1000
+)
+
+fwf1s.cvnet <- cv.glmnet(netform1s, scans1$welfareswb,
+                         family = "gaussian", nfolds=20)
+plot(fwf1s.cvnet)
+
+coef(fwf1s.net, 
+     s=fwf1s.cvnet$lambda.min
+     #s=fwf1s.cvnet$lambda.1se
+)
+
+
+netform2s = netform2s[,c(-2, -3, -5, -15)]   # remove EA, FO, TR, CL
+
+fwf2s.net <- glmnet(netform2s, scans2$welfareswb,
+                    family = "gaussian",
+                    standardize=T, alpha = 1,lambda.min.ratio=0.00001,  nlambda=1000
+)
+
+fwf2s.cvnet <- cv.glmnet(netform2s, scans2$welfareswb,
+                         family = "gaussian", nfolds=20)
+plot(fwf2s.cvnet)
+
+coef(fwf2s.net, 
+     s=fwf2s.cvnet$lambda.min
+     #s=fwf1s.cvnet$lambda.1se
+)

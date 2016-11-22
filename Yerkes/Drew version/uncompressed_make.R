@@ -390,7 +390,7 @@ const$age <- as.numeric(yeart) - as.numeric(const$DoB)
 
 
 
-# for NHANES temporary use
+# for NHANES use
 
 # remove the NA filled non BM rows
 
@@ -405,14 +405,40 @@ c.bm = fullcast[,c('chimp','sex','ageDays','wbc','rbc','hct','hgb',
                    'mcv','mch','mchc','lymph','monos','eos',
                    'Glucose','BUN','Creatine','Protein','Albumn','Bilirubn','alkphos',
                    'sgpt','sgot','cholesterol','calcium','phosphate','sodium','potassium',
-                   'chloride','globulin','triglycerides','ggtp','osmolal'
-                  
+                   'chloride','globulin','triglycerides','ggtp','osmolal','BMI','BP'
 )]
+# removing the slashes from systolic / diastolic & putting them in their own vars
+c.bm$BPd = NA
+
+#bps <- strsplit(as.character($BP.1),"[/]")
+for (i in 1:dim(c.bm)[1]){
+  bps <- strsplit(as.character(c.bm$BP),"[/]")
+  if (!is.na(bps)[[i]]){
+    
+    c.bm$BP[i] = as.numeric(bps[[i]][1])
+    c.bm$BPd[i] = as.numeric(bps[[i]][2]) 
+    
+  }
+  else{
+    c.bm$BP[i] = NA
+    c.bm$BPd[i] == NA    
+  }
+}
+colnames(c.bm)[34] <- 'BPs'
+  
 c.bm$ageDays = c.bm$ageDays / 365
 c.bm$lymph = c.bm$lymph/1000
 
-#DO THIS
-nh.cast <- fullcast[!(is.na(fullcast$Glucose) & is.na(fullcast$wbc)),]
+#DO THIS - not functional...?
+#nh.cast <- fullcast[!(is.na(fullcast$Glucose) & is.na(fullcast$wbc)),]
 
 write.csv(c.bm, 'cNHANES.csv')
+
+
+
+### What about an averaged version?
+
+c.bm.m = aggregate(c.bm, by = list(c.bm$chimp), FUN=mean, na.rm=T
+                   , na.action=na.pass)
+head(c.bm.m)
                   

@@ -169,13 +169,27 @@ sel.nbm$BMPBMI[sel.nbm$BMPBMI == 8888] = NA
 
 sel.nbm <- sel.nbm[(rowSums(is.na(sel.nbm))<32),]
 
+colnames(c.bm)[c(2,4)] = c('subject','age')
+
+colnames(sel.nbm)[1:35] <- colnames(c.bm)[2:36]
+
+c.bm$species = as.factor('chimp')
+sel.nbm$species = as.factor('human')
 
 
+### What about an averaged version?
 
-colnames(sel.nbm)[3:31] <- colnames(c.bm)[5:33]
+c.bm.m = aggregate(c.bm, by = list(c.bm$subject), FUN=mean, na.rm=T
+                   , na.action=na.pass)
+# head(c.bm.m)
+c.bm.m$subject = c.bm.m$Group.1
+c.bm.m$species = 'chimp'
+c.bm.m = c.bm.m[,c(-1,-2)]
 
-c.bm$species = 'chimp'
-sel.nbm$species = 'human'
+### Composite df
 
+all.bm = rbind(c.bm.m,
+               sel.nbm[complete.cases(sel.nbm),])
+all.bm[,c(3:35)] = data.frame(lapply(all.bm[,c(3:35)], function(x) scale(x, center = T)))
 
 

@@ -9,17 +9,19 @@ dim(sel.nbm[complete.cases(sel.nbm),])
 ## TODO
 # still need BPs and BMI
 
-colnames(sel.nbm)[3:31] <- colnames(c.bm)[5:33]
+#colnames(sel.nbm)[3:31] <- colnames(c.bm)[5:33]
+colnames(sel.nbm)[4:35] <- colnames(c.bm)[5:36]
 
 
-fa.parallel(sel.nbm[complete.cases(sel.nbm),c(3:31)], fm = 'gls') #  pa?
+fa.parallel(sel.nbm[complete.cases(sel.nbm),c(4:35)], fm = 'gls') #  pa?
  # seem like 10
 
-plot(nfactors(sel.nbm[complete.cases(sel.nbm),c(3:31)], fm = 'gls')$map)
+plot(nfactors(sel.nbm[complete.cases(sel.nbm),c(4:35)], fm = 'gls')$map)
 
 
-EFA.Comp.Data(sel.nbm[complete.cases(sel.nbm),c(3:31)], F.Max = 15, Graph = T)
+EFA.Comp.Data(sel.nbm[complete.cases(sel.nbm),c(4:35)], F.Max = 15, Graph = T)
 # okay fine, 10
+# no wait... 9
 
 
 fa.1 <- fa(sel.nbm[,c(3:31)], nfactors = 10, fm = 'minres'
@@ -31,26 +33,29 @@ fa.1a <- fa(sel.nbm[complete.cases(sel.nbm),c(3:31)], nfactors = 10, fm = 'minre
 fa.1x <- fa(sel.nbm[complete.cases(sel.nbm),c(3:31)], nfactors = 10, fm = 'ml'
 )
 
-pa.1 <- principal(sel.nbm[,c(3:31)], nfactors = 10
+# pa.1 <- principal(sel.nbm[,c(3:31)], nfactors = 10
+# )
+pa.1 <- principal(sel.nbm[,c(4:35)], nfactors = 10, rotate='varimax'
 )
+
 
 
 ### Chimps
 
-nfactors(c.bm[,c(5:33)], fm = 'gls') #  pa?
+nfactors(c.bm[,c(5:36)], fm = 'gls') #  pa?
 
-fa.parallel(c.bm[,c(5:33)], fm = 'minres') #  pa?
+#fa.parallel(c.bm[,c(5:36)], fm = 'minres') #  pa?
+fa.parallel(c.bm.m[,c(4:35)], fm = 'ml') #  pa?
 
-# chokes on missing data:
-# EFA.Comp.Data(
-#   aggregate(c.bm[,c(3:32)], by = list(c.bm$chimp), mean)
-#   ,F.Max = 15, Graph = T)
+# chokes on missing data...
+EFA.Comp.Data(c.bm.m[complete.cases(c.bm.m),c(4:35)], F.Max = 15, Graph = T)
 
-fa.c.1 <- fa(c.bm[,c(5:33)], nfactors = 10, fm = 'minres'
+fa.c.1 <- fa(c.bm[,c(5:36)], nfactors = 10, fm = 'minres'
 )
 
-
-pa.c.1 <- principal(c.bm[,c(5:33)], nfactors = 10)
+pa.c.1 <- principal(#c.bm[,c(5:36)],
+  c.bm.m[,c(6:37)],
+  nfactors = 10)
 
 
 
@@ -71,7 +76,7 @@ MR8   0.03  0.06  0.16  0.15 -0.14  0.17  0.19 -0.04  0.08  0.20
 MR7  -0.01 -0.07  0.30  0.13  0.08  0.05 -0.08 -0.09  0.10  0.00
 MR9   0.02  0.08 -0.08  0.23  0.02 -0.01 -0.23  0.10  0.03  0.65
 
-# components with decent similarity:
+# factors with decent similarity:
 # (C)   (H)
 # MR3 - MR2
 # MR4 - MR9
@@ -81,6 +86,33 @@ MR9   0.02  0.08 -0.08  0.23  0.02 -0.01 -0.23  0.10  0.03  0.65
 # MR10 - MR6
 # MR9 - MR8
 
+
+
+factor.congruence(pa.c.1$loadings, pa.1$loadings)
+       PC1   PC2   PC5   PC4   PC9  PC10   PC3   PC6   PC7   PC8
+PC1   0.81  0.16  0.13  0.03 -0.14  0.28 -0.06 -0.16 -0.11  0.01
+PC3   0.13  0.89  0.06 -0.06  0.09  0.03  0.18 -0.24 -0.17  0.07
+PC2   0.22  0.10  0.85 -0.02  0.20  0.06  0.18 -0.02  0.04  0.02
+PC4  -0.07 -0.06 -0.06  0.68 -0.17  0.04 -0.17 -0.10 -0.17 -0.04
+PC5  -0.09 -0.18  0.09 -0.16  0.03 -0.21  0.27  0.59 -0.46 -0.02
+PC6   0.01 -0.03  0.10  0.25  0.88  0.12  0.15  0.10 -0.10  0.05
+PC10 -0.04  0.23 -0.02 -0.16 -0.18  0.46 -0.47  0.08  0.25 -0.10
+PC8   0.06  0.04  0.23  0.05  0.16 -0.16  0.35  0.18 -0.07  0.16
+PC7  -0.04 -0.03 -0.09  0.08 -0.04  0.17  0.18  0.21  0.56  0.23
+PC9  -0.14 -0.06 -0.01  0.23 -0.09  0.34  0.05 -0.04 -0.02  0.66
+
+# components with decent similarity:
+# (C)   (H)
+PC1 - PC1
+PC3 - PC2
+PC2 - PC5
+PC4 ~ PC4
+PC5 ~ PC6
+PC6 ~ PC9
+PC7 ~ PC7?
+PC9 ~ PC8
+PC8 ~ ?
+PC10 ~ ?
 
 
 

@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "# CFA and measurement invariance\n\n\nlibrary(lavaan)\nlibrary(semTools)\n\n\nmod.1 <- \"\nPC1 =~ rbc + hct + hgb \nPC2 =~ mcv + mch + mchc\nPC3 =~ cholesterol + triglycerides + BPs + BPd + BMI + Glucose\nPC4 =~ sgot + sgpt + ggtp + Bilirubn\nPC5 =~ BUN + Creatine + potassium\nPC6 =~ Albumn + calcium + lymph\n#PC7 =~ sodium + chloride + osmolal\nPC8 =~ alkphos + phosphate\n#PC9 =~ globulin + Protein\n#PC10 =~ wbc + monos + eos\n\"\n\n\nfit.1 <- cfa(mod.1, data=all.bm, group = \"species\")\nfit.h1 <- cfa(mod.1, data=sel.nbm[complete.cases(sel.nbm),])\n\nfitmeasures(fit.1)\nsummary(fit.1)\n\nmeasurementInvariance(mod.1, group = \"species\", data = all.bm, fit.measures=c('cfi','rmsea','srmr'))\n\nfit.config = cfa(mod.1, data=all.bm, group=\"species\", group.equal=c(\"means\"))\nfit.metric = cfa(mod.1, data=all.bm, group=\"species\", group.equal=c(\"means\", \"loadings\"))\nfit.scalar = cfa(mod.1, data=all.bm, group=\"species\", group.equal=c(\"loadings\", \"thresholds\"))\nfit.strict = cfa(mod.1, data=all.bm, group=\"species\", group.equal=c(\"loadings\", \"thresholds\", \"residuals\"))\nfit.all = cfa(mod.1, data=all.bm, group=\"species\", group.equal=c(\"loadings\", \"thresholds\", \"residuals\",\"means\"))\n\nfitMeasures(fit.config, c(\"chisq\", \"df\", \"pvalue\", \"cfi\", \"rmsea\",\"srmr\"))\nfitMeasures(fit.metric, c(\"chisq\", \"df\", \"pvalue\", \"cfi\", \"rmsea\",\"srmr\"))\nfitMeasures(fit.scalar, c(\"chisq\", \"df\", \"pvalue\", \"cfi\", \"rmsea\",\"srmr\"))\nfitMeasures(fit.strict, c(\"chisq\", \"df\", \"pvalue\", \"cfi\", \"rmsea\",\"srmr\"))\nfitMeasures(fit.all, c(\"chisq\", \"df\", \"pvalue\", \"cfi\", \"rmsea\",\"srmr\"))\n",
+    "created" : 1480088579461.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2641823306",
+    "id" : "9EAFBAD9",
+    "lastKnownWriteTime" : 1480093201,
+    "last_content_update" : 1480093201154,
+    "path" : "C:/Users/s1229179/GitHub/R/Yerkes/NHANES/cfa.R",
+    "project_path" : "cfa.R",
+    "properties" : {
+        "tempName" : "Untitled2"
+    },
+    "relative_order" : 7,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

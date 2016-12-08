@@ -1,4 +1,5 @@
 {
+    "collab_server" : "",
     "contents" : "library(BayesFactor)\n\n\ndata(puzzles)\n## neverExclude argument makes sure that participant factor ID\n## is in all models\nresult = generalTestBF(RT ~ shape*color + ID, data = puzzles, whichRandom = \"ID\",\n                       neverExclude=\"ID\", progress=FALSE)\nresult\n\n\n\n\nBF.p = lm(as.numeric(participat) ~ Dominance + Conscientiousness + Openness + \n     Neuroticism + Extraversion + Agreeableness, data=aggPers)\nsummary(BF.p)\n\nlmBF.1 = lmBF(as.numeric(participat) ~ Dominance + Conscientiousness + Openness + \n                Neuroticism + Extraversion + Agreeableness, data=aggPers, progress=F)\n\n\nregrBF.1 = regressionBF(as.numeric(participat) ~ Dominance + Conscientiousness + Openness + \n                Neuroticism + Extraversion + Agreeableness, data=aggPers)\n\n\n\n\nmod.gm1 <- generalTestBF(as.numeric(Accuracy) ~ Dominance + Conscientiousness + Openness + Neuroticism\n                 + Agreeableness + Extraversion + as.factor(Chimp),\n                 whichRandom = \"Chimp\",\n                 #family = binomial, \n                 data=cz_bin_pers \n)\n\n",
     "created" : 1463063545155.000,
     "dirty" : false,
@@ -7,6 +8,7 @@
     "hash" : "1078682083",
     "id" : "EBD21772",
     "lastKnownWriteTime" : 1463064797,
+    "last_content_update" : 0,
     "path" : "~/GitHub/R/Budongo cognition/BFactoring.R",
     "project_path" : "BFactoring.R",
     "properties" : {
@@ -14,5 +16,6 @@
     },
     "relative_order" : 5,
     "source_on_save" : false,
+    "source_window" : "",
     "type" : "r_source"
 }

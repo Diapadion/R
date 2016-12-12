@@ -66,7 +66,7 @@ fWHR <- function(points, i){
   limits <- apply(mbr, 2, function(x) c(min(x),max(x))) # Plotting limits
   plot(ashape(points, alpha=1000), col="Gray", pch=20, 
        xlim=limits[,1], ylim=limits[,2],                # The hull
-       xlab = )
+       xlab = i)
   lines(mbr, col="Blue", lwd=3)                         # The MBR
   points(points, pch=19)    
   

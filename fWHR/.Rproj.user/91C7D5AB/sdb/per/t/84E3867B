@@ -1,14 +1,14 @@
 {
     "collab_server" : "",
-    "contents" : "####### Chimp faces #######\n\n### TO MEASURE:\n#\n# - Yerkes\n# - Bastrop?\n# - sub-sample of Japan & Edi chimps\n#\n# > sample(c(2:260), 20)\n# [1]  14  54 224  77 191 177 240  21   8 139  15 162 100  40  75 145 182  87 114  93\n#\n# Holland - Edith 1.JPG\n# kilimi oct2013b.JPG\n# Pal.20060611\n# 2013-11-27 14.56.34\n# Konatsu.20030702\n# Gon.20070620\n# Shiomi.20030410\n# 2013-11-27 15.12.02-1.jpg\n# David P1010077.tem\n# 2013-11-27 13.57.01\n# Holland - Paul (left) and Edith (right).JPG\n# Cleo.20060611霊研屋外 024\n# Edinburgh - Lucy 2.JPG\n# Holland - Frek 1.JPG\n# 2013-11-27 14.22.24-1\n# 2013-11-27 14.37.34-1\n# James20041102\n# Liberius.JPG\n# Louis P1020290.JPG\n# 2013-11-27 14.12.13\n\n\n\n\n\n\n",
+    "contents" : "####### Chimp faces #######\n\nlibrary(alphahull)\nlibrary(tidyr)\n\n### TO MEASURE:\n#\n# - Yerkes\n# - Bastrop?\n# - sub-sample of Japan & Edi chimps\n#\n# > sample(c(2:260), 20)\n# [1]  14  54 224  77 191 177 240  21   8 139  15 162 100  40  75 145 182  87 114  93\n#\n# Holland - Edith 1.JPG\n# kilimi oct2013b.JPG\n# Pal.20060611\n# 2013-11-27 14.56.34\n# Konatsu.20030702\n# Gon.20070620\n# Shiomi.20030410\n# 2013-11-27 15.12.02-1.jpg\n# David P1010077.tem\n# 2013-11-27 13.57.01\n# Holland - Paul (left) and Edith (right).JPG\n# Cleo.20060611霊研屋外 024\n# Edinburgh - Lucy 2.JPG\n# Holland - Frek 1.JPG\n# 2013-11-27 14.22.24-1\n# 2013-11-27 14.37.34-1\n# James20041102\n# Liberius.JPG\n# Louis P1020290.JPG\n# 2013-11-27 14.12.13\n\n\ncPoints = read.csv(file = \"ChimpfWHR.csv\")\n\ncPoints = cPoints[cPoints$A != '',]\ncarmen = as.numeric(as.character(cPoints$fHWR))\ncPoints <- cPoints[,c(14:20)]\n\ncPoints <- separate(data = cPoints, col = A, into = c(\"A.x\", \"A.y\"), sep = \"\\\\,\")\ncPoints <- separate(data = cPoints, col = B, into = c(\"B.x\", \"B.y\"), sep = \"\\\\,\")\ncPoints <- separate(data = cPoints, col = C, into = c(\"C.x\", \"C.y\"), sep = \"\\\\,\")\ncPoints <- separate(data = cPoints, col = D, into = c(\"D.x\", \"D.y\"), sep = \"\\\\,\")\ncPoints <- separate(data = cPoints, col = E, into = c(\"E.x\", \"E.y\"), sep = \"\\\\,\")\ncPoints <- separate(data = cPoints, col = F, into = c(\"F.x\", \"F.y\"), sep = \"\\\\,\")\ncPoints <- separate(data = cPoints, col = G, into = c(\"G.x\", \"G.y\"), sep = \"\\\\,\")\n\ncPoints <- data.frame(lapply(cPoints, function(x) as.numeric(x)))\n\ntabl <- cPoints\nfWHRc <- NULL\n#i = 28\n\nfor (i in seq_len(dim(tabl)[1])){\n  #i = 8\n  points <- matrix(c(c(tabl$C.x[i], tabl$D.x[i], tabl$E.x[i], tabl$F.x[i], tabl$G.x[i]), \n                     c(tabl$C.y[i], tabl$D.y[i], tabl$E.y[i], tabl$F.y[i], tabl$G.y[i]))\n                   ,nrow = 5, ncol = 2)\n  \n  \n  fWHRc[i] =   fWHR(points, i)\n  \n}\n\n\n# Correlation\n# Paired t-test\n\nfWHRc = cbind(fWHRc, carmen)\nfWHRc = fWHRc[-21,]\n\ncor.test(fWHRc[,1], fWHRc[,2])\nplot(fWHRc[,1], fWHRc[,2])\nt.test(fWHRc[,1], fWHRc[,2], paired=TRUE)\n\n\n\n",
     "created" : 1481119125128.000,
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "2316572003",
+    "hash" : "943769308",
     "id" : "84E3867B",
-    "lastKnownWriteTime" : 1481120486,
-    "last_content_update" : 1481120486479,
+    "lastKnownWriteTime" : 1481561716,
+    "last_content_update" : 1481561716881,
     "path" : "C:/Users/s1229179/GitHub/R/fWHR/chimps.R",
     "project_path" : "chimps.R",
     "properties" : {

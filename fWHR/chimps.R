@@ -1,5 +1,8 @@
 ####### Chimp faces #######
 
+library(alphahull)
+library(tidyr)
+
 ### TO MEASURE:
 #
 # - Yerkes
@@ -31,10 +34,47 @@
 # 2013-11-27 14.12.13
 
 
+cPoints = read.csv(file = "ChimpfWHR.csv")
+
+cPoints = cPoints[cPoints$A != '',]
+carmen = as.numeric(as.character(cPoints$fHWR))
+cPoints <- cPoints[,c(14:20)]
+
+cPoints <- separate(data = cPoints, col = A, into = c("A.x", "A.y"), sep = "\\,")
+cPoints <- separate(data = cPoints, col = B, into = c("B.x", "B.y"), sep = "\\,")
+cPoints <- separate(data = cPoints, col = C, into = c("C.x", "C.y"), sep = "\\,")
+cPoints <- separate(data = cPoints, col = D, into = c("D.x", "D.y"), sep = "\\,")
+cPoints <- separate(data = cPoints, col = E, into = c("E.x", "E.y"), sep = "\\,")
+cPoints <- separate(data = cPoints, col = F, into = c("F.x", "F.y"), sep = "\\,")
+cPoints <- separate(data = cPoints, col = G, into = c("G.x", "G.y"), sep = "\\,")
+
+cPoints <- data.frame(lapply(cPoints, function(x) as.numeric(x)))
+
+tabl <- cPoints
+fWHRc <- NULL
+#i = 28
+
+for (i in seq_len(dim(tabl)[1])){
+  #i = 8
+  points <- matrix(c(c(tabl$C.x[i], tabl$D.x[i], tabl$E.x[i], tabl$F.x[i], tabl$G.x[i]), 
+                     c(tabl$C.y[i], tabl$D.y[i], tabl$E.y[i], tabl$F.y[i], tabl$G.y[i]))
+                   ,nrow = 5, ncol = 2)
+  
+  
+  fWHRc[i] =   fWHR(points, i)
+  
+}
+
 
 # Correlation
 # Paired t-test
 
+fWHRc = cbind(fWHRc, carmen)
+fWHRc = fWHRc[-21,]
+
+cor.test(fWHRc[,1], fWHRc[,2])
+plot(fWHRc[,1], fWHRc[,2])
+t.test(fWHRc[,1], fWHRc[,2], paired=TRUE)
 
 
 

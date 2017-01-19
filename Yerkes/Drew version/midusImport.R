@@ -62,3 +62,24 @@ midja <- read.csv('midja_cc.csv')
 midus_c <- read.csv('comboMIDUSpersBio.csv')
 
 
+
+### Redesignating personality
+
+# aligning MIDI items for better discriminability
+# as informed by the HPQ and Weiss 2009
+
+## This is probably not necessary.
+
+# Outgoing - E
+# Lively - E
+# Active - E
+# Talkative - E
+
+# Friendly - E?
+
+# 
+
+
+
+
+

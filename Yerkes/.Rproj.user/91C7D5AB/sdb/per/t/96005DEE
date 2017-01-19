@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "# 3 group SEMs\n# MiDUS, MIDJA, Yerkes\n\n\n\n\nall1 <- midja_cs[,c(1:16)]\ncolnames(all1)[1] <- 'M2ID'\nall1 <- cbind(all1,'Japan')\ncolnames(all1)[17] <- 'group'\n\nall2 <- cbind(midus_cs[,c(1:16)],'USA')\ncolnames(all2)[17] <- 'group'\n\nall3 <- rbind(all1,all2)\n              \n\n\nlibrary(lavaan)\nlibrary(semPlot)\nlibrary(semTools)\nlibrary(blavaan)\n\n\nsem.1 <- '\n\nAL =~ 1*chol + 1*creat + 1*trig + 1*sys + 1*dias + 1*BMI\n\nAL ~ sex + age + age2 + Dominance + Extraversion + Openness + Conscientiousness + Agreeableness + Neuroticism\n\nsys ~~ dias\nsys ~~ trig\nsys ~~ creat\nsys ~~ BMI\nsys ~~ chol\ndias ~~ trig\ndias ~~ creat\ndias ~~ BMI\ndias ~~ chol\ntrig ~~ creat\ntrig ~~ BMI\ntrig ~~ chol\ncreat ~~ BMI\ncreat ~~ chol\nBMI ~~ chol\n\n'\n\nf3.1 <- lavaan(sem.1, data = all3, missing=\"ML\", model.type='sem', group = 'group',\n               int.ov.free = TRUE, int.lv.free = FALSE, auto.fix.first = TRUE, \n               auto.fix.single = TRUE, auto.var = TRUE, auto.cov.lv.x = TRUE, auto.th = TRUE, auto.delta = TRUE, \n               auto.cov.y = TRUE\n               )\n\nsemPaths(f3.1, what='mod', whatLabels = 'par')\nsummary(f3.1)\nfitMeasures(f3.1, c(\"chisq\", \"df\", \"pvalue\", \"cfi\", \"rmsea\",\"srmr\"))\n\nmod_ind <- modificationindices(f3.1)\nhead(mod_ind[order(mod_ind$mi, decreasing=TRUE), ], 10)\nsubset(mod_ind[order(mod_ind$mi, decreasing=TRUE), ], mi > 5)\n\nmeasurementInvariance(sem.1, data = all3, missing=\"ML\", group = 'group')\n\n\n",
+    "created" : 1484840502535.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1943182106",
+    "id" : "96005DEE",
+    "lastKnownWriteTime" : 1484843024,
+    "last_content_update" : 1484843024271,
+    "path" : "C:/Users/s1229179/GitHub/R/Yerkes/Drew version/3groupSEMs.R",
+    "project_path" : "Drew version/3groupSEMs.R",
+    "properties" : {
+        "tempName" : "Untitled3"
+    },
+    "relative_order" : 13,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

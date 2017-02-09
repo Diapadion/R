@@ -177,6 +177,14 @@ c.bm$species = as.factor('chimp')
 sel.nbm$species = as.factor('human')
 
 
+### Set a seed and split the data into explorations and conformation batches
+
+set.seed(12345)
+sampl.nbm <- sample(29314)  
+sampl.pca <- sampl.nbm[1:9000]
+sampl.cfa <- sampl.nbm[9001:18000]
+
+### Chimp data -
 ### What about an averaged version?
 
 c.bm.m = aggregate(c.bm, by = list(c.bm$subject), FUN=mean, na.rm=T
@@ -186,10 +194,33 @@ c.bm.m$subject = c.bm.m$Group.1
 c.bm.m$species = 'chimp'
 c.bm.m = c.bm.m[,c(-1,-2)]
 
-### Composite df
 
-all.bm = rbind(c.bm.m,
-               sel.nbm[complete.cases(sel.nbm),])
+
+### Scaling
+
+# Independent for BMI
+
+c.bm.m.s = c.bm.m
+c.bm.m.s$BMI = scale(c.bm.m.s$BMI, center=T)
+#c.bm.m.s[,c(3:35)] = data.frame(lapply(c.bm.m.s[,c(3:35)], function(x) scale(x, center = T)))
+
+all.bm = sel.nbm[sampl.cfa,]
+all.bm$BMI = scale(all.bm$BMI, center=T)
+
+# Composite df
+
+all.bm = rbind(all.bm,
+               c.bm.m.s)
+                 #complete.cases(sel.nbm),])
+
+# Non-independent scaling for everything else
+
 all.bm[,c(3:35)] = data.frame(lapply(all.bm[,c(3:35)], function(x) scale(x, center = T)))
+
+describe(all.bm)
+
+
+
+
 
 

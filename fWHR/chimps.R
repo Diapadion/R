@@ -12,7 +12,7 @@ library(tidyr)
 # > sample(c(2:260), 20)
 # [1]  14  54 224  77 191 177 240  21   8 139  15 162 100  40  75 145 182  87 114  93
 #
-# Holland - Edith 1.JPG
+# Holland - Edith 1.JPG             
 # kilimi oct2013b.JPG
 # Pal.20060611
 # 2013-11-27 14.56.34
@@ -77,4 +77,35 @@ plot(fWHRc[,1], fWHRc[,2])
 t.test(fWHRc[,1], fWHRc[,2], paired=TRUE)
 
 
+
+### Comparing to Carmen's ratios
+
+# Issue: Our measurements are not as far apart as hers.
+# that is, points E and F should be further outside the chimp's face
+
+# Steps to take:
+# 1. Record points E & F
+# 2. Subtract larger from smaller - this will be the width
+# 3. This can now be directly compard with Carmen's measurements in "Chimp fWHR.xlsx"
+
+xE = 345
+yE = 876
+xF = 900
+yF = 800
+
+euc.dist(c( xE , yE ) , c( xF , yF )) # <- Template
+
+# Entries:
+
+# Gon.20070620
+xE = 
+yE = 
+xF = 
+yF = 
+# width = 
+
+
+
+########
+euc.dist <- function(x1, x2) sqrt(sum((x1 - x2) ^ 2))
 

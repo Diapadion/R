@@ -6,8 +6,6 @@ library(psych)
 
 dim(sel.nbm[complete.cases(sel.nbm),])
 
-## TODO
-# still need BPs and BMI
 
 #colnames(sel.nbm)[3:31] <- colnames(c.bm)[5:33]
 colnames(sel.nbm)[4:35] <- colnames(c.bm)[5:36]
@@ -33,10 +31,64 @@ fa.1a <- fa(sel.nbm[complete.cases(sel.nbm),c(3:31)], nfactors = 10, fm = 'minre
 fa.1x <- fa(sel.nbm[complete.cases(sel.nbm),c(3:31)], nfactors = 10, fm = 'ml'
 )
 
+# PCA - a better model for AL
+
+
+
+
 # pa.1 <- principal(sel.nbm[,c(3:31)], nfactors = 10
 # )
-pa.1 <- principal(sel.nbm[,c(4:35)], nfactors = 10, rotate='varimax'
+pa.10 <- principal(sel.nbm[sampl.pca,c(4:35)], nfactors = 10, rotate='varimax'
+) # S, B, C, T, G ...
+# this one is interesting: Do does load at 0.45, but it has a -0.5 higher loading elsewhere
+
+pa.9 <- principal(sel.nbm[sampl.pca,c(4:35)], nfactors = 9, rotate='varimax'
+) # S, B, C; Albu?, lymph?
+
+pa.8 <- principal(sel.nbm[sampl.pca,c(4:35)], nfactors = 8, rotate='varimax'
+) # S, D, B, C; Phos, ALP, Eos?
+
+pa.7 <- principal(sel.nbm[sampl.pca,c(4:35)], nfactors = 7, rotate='varimax'
+) # S, D, B, C; Phos, ALP, Eos?
+
+pa.6 <- principal(sel.nbm[sampl.pca,c(4:35)], nfactors = 6, rotate='varimax'
+) # S, D, B, C, T; ALP, Phos, Eos?
+
+pa.5 <- principal(sel.nbm[sampl.pca,c(4:35)], nfactors = 5, rotate='varimax',
+                  scores = T, missing = T, impute = 'median'
+) # S, D, B, G, C, T; ALP, Phos, Lymph, WBC?, Eos?
+
+pa.4 <- principal(sel.nbm[sampl.pca,c(4:35)], nfactors = 4, rotate='varimax'
+) # S, D, B, C; ... 
+# 4 is not a very good model - end here.
+
+fa.sort(pa.10)
+fa.sort(pa.5)
+
+# Note that Creatinine never loads with the main metabolic factor,
+# but essentially always does with BUN, and sometimes with Glucose, osmolal, potassium, protein, etc.
+
+
+
+### We want to do factor stuff, so do the component and factor structures look similar enough?
+
+efa.10 <- fa(sel.nbm[sampl.pca,c(4:35)], nfactors = 10, rotate='varimax', fm = 'minres'
+            , scores = 'tenBerge', missing = T, impute = 'median'
 )
+
+
+efa.5 <- fa(sel.nbm[sampl.pca,c(4:35)], nfactors = 5, rotate='varimax', fm = 'minres',
+            scores = 'tenBerge', missing = T, impute = 'median'
+)
+
+fa.sort(efa.5)
+fa.sort(pa.5)
+
+# They look identical. We can move ahead.
+
+
+
+
 
 
 
@@ -50,12 +102,29 @@ fa.parallel(c.bm.m[,c(4:35)], fm = 'ml') #  pa?
 # chokes on missing data...
 EFA.Comp.Data(c.bm.m[complete.cases(c.bm.m),c(4:35)], F.Max = 15, Graph = T)
 
+# DO NOT RUN
+
 fa.c.1 <- fa(c.bm[,c(5:36)], nfactors = 10, fm = 'minres'
 )
 
-pa.c.1 <- principal(#c.bm[,c(5:36)],
-  c.bm.m[,c(6:37)],
+pa.c.10 <- principal(#c.bm[,c(5:36)],
+  c.bm.m[,c(4:35)],
   nfactors = 10)
+pa.c.5 <- principal(#c.bm[,c(5:36)],
+  c.bm.m[,c(4:35)],
+  nfactors = 5)
+
+
+
+c.fa.10 <- fa(c.bm.m[,c(4:35)], nfactors = 10, rotate='varimax', fm = 'minres'
+      , scores = 'tenBerge', missing = T, impute = 'median'
+)
+
+
+c.fa.5 <- fa(c.bm.m[,c(4:35)], nfactors = 5, rotate='varimax', fm = 'minres',
+            scores = 'tenBerge', missing = T, impute = 'median'
+)
+fa.sort(c.fa.10)
 
 
 
@@ -142,9 +211,7 @@ pcrusta = procrustes(pa.1$loadings, pa.c.1$loadings)
 
 
 
-# based on screes, maybe 6
-
-fa.6 = fa(sel.nbm[complete.cases(sel.nbm),c(3:31)], nfactors = 6, fm = 'gls')
-
-fa.c.6 = fa(c.bm[,c(5:33)], nfactors = 6, fm = 'gls')
+pcrust = procrustes(pa.5$loadings, pa.c.5$loadings)
+pspc = permustats(pcrust)
        
+factor.congruence(pa.5$loadings, pa.c.5$loadings)

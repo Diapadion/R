@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "### for revisions\n\ntable(RSdat$chimp)\nView(RSdat[RSdat$chimp=='Lucy',])\n",
+    "created" : 1486574217222.000,
+    "dirty" : true,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "1177090427",
+    "id" : "8813793A",
+    "lastKnownWriteTime" : 4914875457544201587,
+    "last_content_update" : 1486574389189,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 9,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

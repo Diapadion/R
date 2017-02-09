@@ -23,6 +23,7 @@ DOBrm <- (!is.na(fulldata$DOB.x))|(!is.na(fulldata$DOB.y))
 dmdob <- fulldata[DOBrm,]
 
 DoB <- as.Date(as.character(dmdob$DOB.x),format = "%m/%d/%Y")
+DoPR <- as.Date(as.character(dmdob$DOPR.x),format = "%m/%d/%Y")
 
 
 bchemt1 <- structure(numeric(dim(dmdob)[1]), class="Date")
@@ -127,7 +128,7 @@ for (i in 1:(dim(dmdob)[1])){
 
 
 #age <- as.numeric(as.Date(dmdob$DOPR.x,format="%m/%d/%Y")-DoB)
-#age <- as.numeric(as.Date('01/01/2000')-DoB)
+age <- as.numeric(as.Date('01/01/2007', format = "%m/%d/%Y")-DoB)
 
 #library(pastecs) # what did I think I needed this for
 age <- as.numeric(bchemt1-DoB)

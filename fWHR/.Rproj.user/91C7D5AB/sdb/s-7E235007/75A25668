@@ -1,0 +1,28 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1467637695741.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "75A25668",
+    "lastKnownWriteTime" : 7308604914264011873,
+    "last_content_update" : 1467637695741,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "2y1f24bdh3",
+        "caption" : "dfOHSU1",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=dfOHSU1&cache_key=2y1f24bdh3",
+        "displayedObservations" : "99",
+        "environment" : "",
+        "object" : "dfOHSU1",
+        "totalObservations" : "99",
+        "variables" : "15"
+    },
+    "relative_order" : 6,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}

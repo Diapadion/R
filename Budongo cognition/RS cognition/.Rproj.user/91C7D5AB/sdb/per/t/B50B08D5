@@ -1,0 +1,28 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1457448470077.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "B50B08D5",
+    "lastKnownWriteTime" : 7308604914264011873,
+    "last_content_update" : 1457448470077,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "f2dl175uv5",
+        "caption" : "RStemp",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=RStemp&cache_key=f2dl175uv5",
+        "displayedObservations" : 13666,
+        "environment" : "",
+        "object" : "RStemp",
+        "totalObservations" : 13666,
+        "variables" : 32
+    },
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}

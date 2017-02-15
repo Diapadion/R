@@ -104,7 +104,7 @@ AL =~ 1*chol + 1*trig + 1*sys + 1*dias + 1*BMI
 
 AL ~ sex + age + age2 + Dominance + Extraversion + Openness + Conscientiousness + Agreeableness + Neuroticism
 
-AL ~ sex + age + age2 + Dominance + Extraversion + Openness + Conscientiousness + Agreeableness + Neuroticism
+# AL ~ sex + age + age2 + Dominance + Extraversion + Openness + Conscientiousness + Agreeableness + Neuroticism
 
 sys ~~ dias
 sys ~~ trig

@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "Dom  <-\n  ( dom - depd - fear + decs - tim - caut +\n      intll + pers + buly + stngy +32)/10\n# - subm \n# + indp \n\n  Ext  <-\n  (- sol - lazy + actv + play + soc - depr + frdy + affc + imit +24)/9\n\n  Con  <-\n  (- impl - defn - reckl - errc - irri + pred - aggr - jeals - dsor +64)/9\n\n  Agr  <-\n  ( symp + help + sens + prot + gntl )/5\n\n  Neu  <-\n  (- stbl + exct - unem +16)/3\n\n  Opn  <-\n  ( inqs + invt )/2",
+    "created" : 1460725576549.000,
+    "dirty" : true,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "3051723979",
+    "id" : "30647834",
+    "lastKnownWriteTime" : 27585050233536628,
+    "last_content_update" : 1460725923944,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

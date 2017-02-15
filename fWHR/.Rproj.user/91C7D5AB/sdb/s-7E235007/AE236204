@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "source('~/.active-rstudio-document')\ninstall.packages(\"alphahull\")\nsource('~/.active-rstudio-document')\nsource('~/.active-rstudio-document')\nsource('~/.active-rstudio-document')\nrandr\nrand\nhelp rand\nrandi\nRandom\nRandom()\nrand()\nsource('~/.active-rstudio-document')\nsource('~/.active-rstudio-document')\nsource('~/.active-rstudio-document')\nsource('~/.active-rstudio-document')\nsource('~/.active-rstudio-document')\nsource('~/.active-rstudio-document')\npoints\nmbr\nmatrix(c(c(1,2),c(3,4))\n)\nmatrix(c(c(1,2),c(3,4)),nrow = 2, ncol = 2)\nmatrix(c(c(1,2,3),c(3,4,5)),nrow = 2, ncol = 2)\nmatrix(c(c(1,2,3),c(3,4,5)),nrow = 3, ncol = 2)\nsource('~/.active-rstudio-document')\nsource('~/.active-rstudio-document')\nsource('~/.active-rstudio-document')\nsource('~/.active-rstudio-document')\nsource('~/.active-rstudio-document')\nsource('~/.active-rstudio-document')\nminmax\nsource('~/.active-rstudio-document')\nsource('~/.active-rstudio-document')\nsource('~/.active-rstudio-document')\nv\nw\nnorms\na\nareas\nx\ny\nk\nsource('~/.active-rstudio-document')\nsource('~/.active-rstudio-document')\nsource('~/.active-rstudio-document')\nsource('~/.active-rstudio-document')\nsource('~/.active-rstudio-document')\nsource('~/.active-rstudio-document')\nsource('~/.active-rstudio-document')\nsource('~/.active-rstudio-document')\nsource('~/.active-rstudio-document')\nsource('~/.active-rstudio-document')\nareas\nsource('~/.active-rstudio-document')\nsource('~/.active-rstudio-document')\nsource('C:/Users/s1229179/Dropbox/R/fWHR/MBRtopEdge.R')\nsource('C:/Users/s1229179/Dropbox/R/fWHR/MBRtopEdge.R')\npoints\nlimits\nlimits[2,1]\nlimits[1,1]\nlimits[1,2]\nheight = abs(limits[2,2]-limits[1,2])\nwidth = limits[2,1]-limits[1,1]\nfWHR = width/height\nfWHR\n838.2821 - 416.9489\nheight\npoints <- matrix(c(c(236, 430, 643, 869, 512),c(-459, -421, -427, -466, -831)),nrow = 5, ncol = 2)\nsource('~/.active-rstudio-document')\nfWHR\nload(\"C:/Users/s1229179/Dropbox/R/fWHR/.RData\")\nsource('C:/Users/s1229179/Dropbox/R/fWHR/MBRtopEdge.R')\ninstall.packages(\"alphahull\")\nsource('C:/Users/s1229179/Dropbox/R/fWHR/MBRtopEdge.R')\nload(\"C:/Users/s1229179/GitHub/R/fWHR/.RData\")\n",
+    "created" : 1465293646213.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "159318187",
+    "id" : "AE236204",
+    "lastKnownWriteTime" : 1465320420,
+    "last_content_update" : 1465320420,
+    "path" : "C:/Users/s1229179/GitHub/R/fWHR/.Rhistory",
+    "project_path" : ".Rhistory",
+    "properties" : {
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_history"
+}

@@ -98,11 +98,19 @@ euc.dist(c( xE , yE ) , c( xF , yF )) # <- Template
 # Entries:
 
 # Gon.20070620
-xE = 
-yE = 
-xF = 
-yF = 
-# width = 
+xE = 269.3
+yE = 68.7
+xF = 356
+yF = 69.3
+# width = 86.7
+
+# James20041102
+xE = 224.7
+yE = 92.7
+xF = 400
+yF = 88.7
+# width = 175.34
+
 
 
 

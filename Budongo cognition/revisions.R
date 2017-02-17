@@ -8,6 +8,21 @@ library(MuMIn)
 table(RSdat$chimp)
 View(RSdat[RSdat$chimp=='Lucy',])
 
+## General picture of accuracy
+table(RSdat$chimp[RSdat$Correctness==" Correct"])
+
+table(RSdat$chimp[RSdat$Correctness==" Correct"])/table(RSdat$chimp)
+
+## some descriptors for revision (Study 2)
+table(cz_bin_pers$Chimp)
+aggregate(as.numeric(cz_bin_pers$Accuracy)-1, by=list(Chimp=cz_bin_pers$Chimp), FUN=mean, na.action = na.omit)
+mean(as.numeric(cz_bin_pers$Accuracy)-1)
+
+sum(table(cz_bin_pers$Accuracy[cz_bin_pers$Chimp=='Liberius'])
+)
+
+
+
 
 
 ### Why are the RT simulations crashing? Let's try a few things
@@ -128,6 +143,7 @@ ci.RT = confint(rs.rt.logamma, method='Wald')
 ci.RT.1 = confint(rs.rt1.logamma, method='Wald')
 
 
+
 ### We were probably using the wrong model distr for RTs. Well, for consistency, we need to use log Gamma now anyway
 ### Study 2 RTs
 
@@ -197,6 +213,7 @@ pchisq(2*(-2472.9+2480.8),10-9,lower.tail=F)
 # 7.040251e-05
 
 # Model 3 is the best.
+pchisq(2*(-2472.9+2539.8),10-8,lower.tail=F)
 
 
 ## All trials - inspection time
@@ -256,6 +273,7 @@ pchisq(2*(-2547.6+2567.6),10-9,lower.tail=F)
 # 2.539629e-10
 
 # Model 3 is the best.
+pchisq(2*(-2547.6+2631.5),10-8,lower.tail=F)
 
 ## New CIs
 
@@ -269,7 +287,7 @@ ci.itrw.3.G <- confint(mod.itGrw.3, method='Wald')
 ### Power analysis results
 
 # D
-d.pwr = c(81,63,77)
+d.pwr = c(81,63,77, 95)
 mean(d.pwr)
   
 # C

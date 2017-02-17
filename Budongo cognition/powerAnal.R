@@ -151,6 +151,7 @@ pwr.2.ptAll.2.e <- powerSim(mod.ptG.2, test = fixed('Extraversion') , nsim = 100
 # pwr.2.pt1.1.e <- powerSim(mod.ptGrw.1, test = fixed('Extraversion') , nsim = 100)
 # pwr.2.pt1.2.e <- powerSim(mod.ptGrw.2, test = fixed('Extraversion') , nsim = 100)
 pwr.2.pt1.3.e <- powerSim(mod.ptGrw.3, test = fixed('Extraversion') , nsim = 100) # 84%
+pwr.2.pt1.3.d <- powerSim(mod.ptGrw.3, test = fixed('Dominance') , nsim = 100) # 95%
 
 # pwr.2.itAll.1.e <- powerSim(mod.itG.1, test = fixed('Extraversion') , nsim = 100)
 # pwr.2.itAll.2.e <- powerSim(mod.itG.2, test = fixed('Extraversion') , nsim = 100)

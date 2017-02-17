@@ -109,13 +109,13 @@ plot(1:length(PEdata$Accuracy),PEdata$Accuracy)
 library(lme4)
 
 
-## some descriptors for revision
-table(cz_bin_pers$Chimp)
-aggregate(as.numeric(cz_bin_pers$Accuracy)-1, by=list(Chimp=cz_bin_pers$Chimp), FUN=mean, na.action = na.omit)
-mean(as.numeric(cz_bin_pers$Accuracy)-1)
-
-sum(table(cz_bin_pers$Accuracy[cz_bin_pers$Chimp=='Liberius'])
-)
+# ## some descriptors for revision
+# table(cz_bin_pers$Chimp)
+# aggregate(as.numeric(cz_bin_pers$Accuracy)-1, by=list(Chimp=cz_bin_pers$Chimp), FUN=mean, na.action = na.omit)
+# mean(as.numeric(cz_bin_pers$Accuracy)-1)
+# 
+# sum(table(cz_bin_pers$Accuracy[cz_bin_pers$Chimp=='Liberius'])
+# )
 
 
 # GLM (first attempt)

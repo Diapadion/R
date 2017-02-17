@@ -1,0 +1,29 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1487248871811.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "D96F1E0D",
+    "lastKnownWriteTime" : 32651513914720368,
+    "last_content_update" : 1487248871811,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "756715ED",
+        "caption" : "RSdat",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=RSdat&cache_key=756715ED",
+        "displayedObservations" : 13686,
+        "environment" : "",
+        "object" : "RSdat",
+        "preview" : 0,
+        "totalObservations" : 13686,
+        "variables" : 15
+    },
+    "relative_order" : 10,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}

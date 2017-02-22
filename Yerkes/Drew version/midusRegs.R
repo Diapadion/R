@@ -157,6 +157,16 @@ m.BMI.a2 <- lm(BMI ~ age + I(age^2) + sex
 
 
 
+### coming out of the SEMs
+
+all2$AL = all2$sys + all2$dias + all2$chol + all2$trig + all2$BMI # these are medication adjusted, too
+maAL.1 <- lm(AL ~ age + age2 + sex
+            + Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion,
+            data = all2)
+
+
+
+
 ### EXPERIMENTAL
 
 library(BayesFactor)

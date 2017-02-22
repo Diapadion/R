@@ -1,5 +1,28 @@
 ### chimp models
 
+library(lme4)
+library(MuMIn)
+
+# should I rejigger data for this purpose, to be more like the SEM data?
+
+scoutput$AL = scoutput$sys + scoutput$dias + scoutput$chol + scoutput$trig + scoutput$BMI
+
+mcAL.1 <- lmer(AL ~ Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion
+               + age + I(age^2) + sex + (1 | chimp), 
+               data = scoutput,REML=FALSE)
+
+confint(mcAL.1, method="profile")
+r.squaredGLMM(mcAL.1)
+
+
+smeandat$AL = smeandat$sys + smeandat$dias + smeandat$chol + smeandat$trig + smeandat$BMI
+
+mcAL.1 <- lm(AL ~ age + age2 + sex
+             + Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion,
+             data = smeandat)
+
+
+
 # with mean data... big problem is missing BMI data
 mmc.sys <- lm(sys ~ age + dom + extra + cons + agree + neuro + open + sex + BMI,
               data=meandat,na.action = na.exclude)

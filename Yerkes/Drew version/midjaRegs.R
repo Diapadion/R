@@ -86,3 +86,12 @@ mj.dias.a2 <- lm(dias ~ age + I(age^2) + sex + BMI
 mj.BMI.a2 <- lm(BMI ~ age + I(age^2) + sex
              + Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion, data = midja_cs)
 
+
+
+### coming out of SEMs
+
+all$AL = all1$sys + all1$dias + all1$chol + all1$trig + all1$BMI # these are medication adjusted, too
+
+mjAL.1 <- lm(AL ~ age + age2 + sex
+             + Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion,
+             data = all1)

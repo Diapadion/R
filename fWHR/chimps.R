@@ -4,10 +4,42 @@ library(alphahull)
 library(tidyr)
 
 ### TO MEASURE:
-#
-# - Yerkes
-# - Bastrop?
-# - sub-sample of Japan & Edi chimps
+
+cPoints = read.csv(file = "ChimpfWHR.csv")
+
+### - Yerkes
+
+yCh = cPoints[cPoints$location=='Yerkes',]
+yCh = yCh[yCh$A!='X',c(14:20)]
+
+yCh <- separate(data = yCh, col = A, into = c("A.x", "A.y"), sep = "\\,")
+yCh <- separate(data = yCh, col = B, into = c("B.x", "B.y"), sep = "\\,")
+yCh <- separate(data = yCh, col = C, into = c("C.x", "C.y"), sep = "\\,")
+yCh <- separate(data = yCh, col = D, into = c("D.x", "D.y"), sep = "\\,")
+yCh <- separate(data = yCh, col = E, into = c("E.x", "E.y"), sep = "\\,")
+yCh <- separate(data = yCh, col = F, into = c("F.x", "F.y"), sep = "\\,")
+yCh <- separate(data = yCh, col = G, into = c("G.x", "G.y"), sep = "\\,")
+
+yCh <- data.frame(lapply(yCh, function(x) as.numeric(x)))
+
+tabl <- yCh
+fWHRc <- NULL
+
+for (i in seq_len(dim(tabl)[1])){
+  points <- matrix(c(c(tabl$C.x[i], tabl$D.x[i], tabl$E.x[i], tabl$F.x[i], tabl$G.x[i]), 
+                     c(tabl$C.y[i], tabl$D.y[i], tabl$E.y[i], tabl$F.y[i], tabl$G.y[i]))
+                   ,nrow = 5, ncol = 2)
+  
+  
+  fWHRc[i] =   fWHR(points, i)
+  
+}
+
+### - Bastrop
+
+
+
+### - sub-sample of Japan & Edi chimps
 #
 # > sample(c(2:260), 20)
 # [1]  14  54 224  77 191 177 240  21   8 139  15 162 100  40  75 145 182  87 114  93
@@ -34,7 +66,7 @@ library(tidyr)
 # 2013-11-27 14.12.13
 
 
-cPoints = read.csv(file = "ChimpfWHR.csv")
+
 
 cPoints = cPoints[cPoints$A != '',]
 carmen = as.numeric(as.character(cPoints$fHWR))

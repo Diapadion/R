@@ -8,6 +8,12 @@ library(corrplot)
 corrplot(cor(chFP[,c(3,4,5,79,80,81,82,83,84),]),  method = 'number')
 
 
+# rename fHWR column
+
+
+
+
+
 
 
 m1 <- lmer(fHWR ~ s(Age) + s(I(Age^2)) + s(I(Age^3)) +

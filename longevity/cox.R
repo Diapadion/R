@@ -8,12 +8,12 @@ cox.m <- coxph(themodel)
 
 
 attr(yLt, 'type') <- 'counting'
-attr(yLt, 'type') <- 'mcounting'
+#attr(yLt, 'type') <- 'mcounting'
 
 cox.trunc <- coxph(yLt ~ as.factor(sex) + as.factor(origin) + #as.factor(LvZ) + 
                                     Dom_CZ + Ext_CZ + Con_CZ +
                                     Agr_CZ + Neu_CZ + Opn_CZ,  data=datX,
-                   control=list(maxiter = 1000)
+                   #control=list(maxiter = 1000)
                                   #dist = "t"
 )
 
@@ -113,13 +113,39 @@ cox.tt2 <- coxph(yLt ~ as.factor(sex) + as.factor(origin) + as.factor(LvZ) +
                    Dom_CZ +  tt(Ext_CZ) + Con_CZ +
                    Agr_CZ + Neu_CZ + Opn_CZ
                  , tt=function(x,t,...){
-                   Ext = x - scale(1/(t + 1))   # to scale or not to scale
-                   cbind(Ext = Ext, Ext2 = (Ext)^2)
+                   # Ext = x - scale(1/(t + 1))   # to scale or not to scale
+                   # cbind(Ext = Ext, Ext2 = (Ext)^2)
                    
-                   #pspline(x + t)
+                   scale(pspline(x + t))
                  }
                  , data=datX, x=TRUE
 )
+
+
+zp <- cox.zph(cox.trunc)
+#zp <- cox.zph(vfit, transform= function(time) log(time +20))
+plot(zp[9])
+
+
+coxme.tt <- coxph(yLt ~ as.factor(sex) +# as.factor(origin) + 
+                   Dom_CZ +  tt(Ext_CZ) + Con_CZ +
+                   Agr_CZ + Neu_CZ + Opn_CZ +
+                  frailty.gamma(sample) #+ strata(strt)
+                 , tt=function(x,t,...){
+                   Ext = x - t   # to scale or not to scale
+                   cbind(Ext = scale(Ext), Ext2 = scale(Ext^2)
+                 }
+                 , data=datX, x=TRUE
+)
+
+summary(coxme.tt)
+
+zp <- cox.zph(coxme.tt)
+zp <- cox.zph(vfit, transform= function(time) log(time +20))
+plot(zp[8])
+abline(coef(coxme.tt)[4:6], col=2)
+
+
 cox.tt2$loglik
 plot(cox.zph(cox.tt2))
 

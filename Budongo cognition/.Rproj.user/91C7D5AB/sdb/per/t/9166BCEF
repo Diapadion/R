@@ -1,0 +1,29 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1487933535779.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "9166BCEF",
+    "lastKnownWriteTime" : 7308604914264011873,
+    "last_content_update" : 1487933535779,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "A611B1CF",
+        "caption" : "Drayd3.2",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=Drayd3.2&cache_key=A611B1CF",
+        "displayedObservations" : 72,
+        "environment" : "",
+        "object" : "Drayd3.2",
+        "preview" : 0,
+        "totalObservations" : 72,
+        "variables" : 5
+    },
+    "relative_order" : 8,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}

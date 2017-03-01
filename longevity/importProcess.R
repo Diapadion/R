@@ -317,6 +317,13 @@ datX = Dataset[rmNAs,]
 
 library(bbmle)
 
+datX$D.r2.DoB <- fit.d2.DoB$residuals
+datX$E.r2.DoB <- fit.e2.DoB$residuals
+datX$O.r2.DoB <- fit.o2.DoB$residuals
+datX$N.r1.DoB <- fit.n1.DoB$residuals
+
+
+
 ## Extraversion
 
 fit.e0 <- lm(Ext_CZ ~ 1, data=datX)

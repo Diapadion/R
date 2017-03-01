@@ -60,10 +60,8 @@ HazRat
 
 r.sq.M(frail.AFT.wild, datX)
 
-frail.AFT.unstrat <- survreg(yLt ~ as.factor(sex) + 
-                            as.factor(origin) +  
-                            Dom_CZ + Ext_CZ + Con_CZ +
-                            Agr_CZ + Neu_CZ + Opn_CZ
+frail.AFT.unstrat <- survreg(yLt ~ as.factor(sex) + as.factor(origin) +  
+                            Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ
                           + frailty.gaussian(sample)
                           , data=datX, dist='logistic') # this model is NOT informed by LASSO
 
@@ -357,10 +355,10 @@ attr(yLt, 'type') <- 'counting'
 #attr(yLt, 'type') <- 'mcounting'
 
 coxme.1 <- coxme(yLt ~ as.factor(sex) + 
-                       as.factor(origin) +  
+                       #as.factor(origin) +  
                        Dom_CZ + Ext_CZ + Con_CZ +
                        Agr_CZ + Neu_CZ + Opn_CZ
-                     + (1 | sample)
+                     + (1 | sample) + strata(strt)
                      , data=datX)
 
 coxme.2 <- coxme(yLt ~ as.factor(sex) + 
@@ -389,7 +387,7 @@ coxme.4 <- coxme(y.ahaz ~ as.factor(sex) +
                    as.factor(origin) +  
                    Dom_CZ + E.r2.DoB + Con_CZ + 
                    Agr_CZ + Neu_CZ + O.r2.DoB
-                   + (1 | sample)
+                   + (1 | sample) + 
                  , data=datX)
 
 

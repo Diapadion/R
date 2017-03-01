@@ -1,0 +1,29 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1487931947171.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "29C07916",
+    "lastKnownWriteTime" : 7308604914264011873,
+    "last_content_update" : 1487931947171,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "11D747FD",
+        "caption" : "Dryad1",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=Dryad1&cache_key=11D747FD",
+        "displayedObservations" : 13686,
+        "environment" : "",
+        "object" : "Dryad1",
+        "preview" : 0,
+        "totalObservations" : 13686,
+        "variables" : 15
+    },
+    "relative_order" : 11,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}

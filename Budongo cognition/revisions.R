@@ -308,3 +308,51 @@ mean(a.pwr)
 # E
 e.pwr = c(96,88,94,93,88,84,97,86,81,87)
 mean(e.pwr)
+
+
+
+### Combining and anonymizing data for Dryad
+
+chNames = c('A3850','B1436','C2114','D6517','E7774','F2037','G5131','H2266','I3971',
+            'J9399','K5443','L1147','M2488','N4140','O7218','P7437','Q6065','R0466'
+            #,'S8073' # Lyndsey is the last in the list
+)
+mapping = data.frame(old = aggPers$Chimp,
+                     new = chNames)
+
+## Study 1
+
+colnames(RSdat)
+Dryad1 <- RSdat[,c(-11,-12)]
+
+Dryad1$chimp <- with(mapping, new[match(Dryad1$chimp, old)])
+
+write.csv(Dryad1, file="../Study1.csv")
+
+
+## Study 2
+
+colnames(cz_bin_pers)
+Dryad2.1 <- cz_bin_pers[,c(1:2,8:14,27)]
+Dryad2.1$Chimp <- with(mapping, new[match(Dryad2.1$Chimp, old)])
+write.csv(Dryad2.1,file='Study2performance.csv')
+
+
+colnames(DMAeng)
+Dryad2.2 <- DMAeng[,c(1:4)]
+Dryad2.2$Chimp <- with(mapping, new[match(Dryad2.2$Chimp, old)])
+write.csv(Dryad2.2,file='Study2participation.csv')
+
+
+### Study 3
+
+colnames(inPodL) 
+Dryad3.1 <- inPodL[,c(1:3)]
+Dryad3.1$Chimp <- with(mapping, new[match(Dryad3.1$Chimp, old)])
+write.csv(Dryad3.1,file='Study3inPods.csv')
+
+colnames(tatScreen)
+Dryad3.2 <- tatScreen[,c(1:5)]
+Dryad3.2$Individual <- with(mapping, new[match(Dryad3.2$Individual, old)])
+write.csv(Dryad3.2,file='Study3atScreen.csv')
+

@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "### Permutations for Inferential Specification Curves\n\n\n\n# x <- 1:12\n# # a random permutation\n# sample(x)\n# # bootstrap resampling -- only if length(x) > 1 !\n# sample(x, replace = TRUE)\n\n# testing\n\nvar = 4\nreps = 1000\n\nresamp = data.frame(matrix(NA,nrow=reps,ncol=12))\nfor(i in 1:reps){\n  ind = sample(dim(yLt)[1], replace = T)\n  newY = yLt[ind,]\n  # fit = survreg(newY ~ as.factor(sex) + as.factor(origin) +  \n  #                 Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ\n  #               + frailty.gaussian(sample) + strata(datX$strt)\n  #               , data=datX, dist='t')\n  fit = survreg(newY ~ as.factor(sex) +\n                  Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ\n                + frailty.gaussian(sample)\n                , data=datX, dist='logistic')\n  resamp[i,] = fit$coefficients\n}\n\n#rs.u.x.l.6 = resamp\nquantile(rs.u.x.l.6[,4], c(0.025,0.975))\nmedian(rs.u.x.l.6[,4])\n\n#rs.s.i.t.6 = resamp\nquantile(rs.s.i.t.6[,7], c(0.025,0.975))\nmedian(rs.s.i.t.6[,7])\n\nsummary(AFT.u.x.l.6)\n\n\n\neffsz = function(mod, var){\n  \n  mod$coefficients[var]\n  \n  \n}\n\ncensboot(datX,)",
+    "created" : 1488283636639.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1997880581",
+    "id" : "92C8B3C7",
+    "lastKnownWriteTime" : 1488300907,
+    "last_content_update" : 1488300907714,
+    "path" : "C:/Users/s1229179/GitHub/R/longevity/SCresampl.R",
+    "project_path" : "SCresampl.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 7,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

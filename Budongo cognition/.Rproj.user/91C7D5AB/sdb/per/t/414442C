@@ -1,0 +1,29 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1487933381192.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "414442C",
+    "lastKnownWriteTime" : 7308604914264011873,
+    "last_content_update" : 1487933381192,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "295E738",
+        "caption" : "tatScreen",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=tatScreen&cache_key=295E738",
+        "displayedObservations" : 72,
+        "environment" : "",
+        "object" : "tatScreen",
+        "preview" : 0,
+        "totalObservations" : 72,
+        "variables" : 18
+    },
+    "relative_order" : 8,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}

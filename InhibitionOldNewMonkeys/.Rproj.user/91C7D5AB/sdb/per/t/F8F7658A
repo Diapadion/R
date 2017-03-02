@@ -1,0 +1,29 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1488381322370.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "F8F7658A",
+    "lastKnownWriteTime" : 7308604914264011873,
+    "last_content_update" : 1488381322370,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "BDB7FED",
+        "caption" : "BeranCaps",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=BeranCaps&cache_key=BDB7FED",
+        "displayedObservations" : 108,
+        "environment" : "",
+        "object" : "BeranCaps",
+        "preview" : 0,
+        "totalObservations" : 108,
+        "variables" : 64
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}

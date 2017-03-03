@@ -1,0 +1,29 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1488550888361.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "C6383941",
+    "lastKnownWriteTime" : 7308604914264011873,
+    "last_content_update" : 1488550888361,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "34027900",
+        "caption" : "bdf.2",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=bdf.2&cache_key=34027900",
+        "displayedObservations" : 15,
+        "environment" : "",
+        "object" : "bdf.2",
+        "preview" : 0,
+        "totalObservations" : 15,
+        "variables" : 106
+    },
+    "relative_order" : 7,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}

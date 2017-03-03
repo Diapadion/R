@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "### Analysis\n\n\n# are there enough t1, t2 experiments to do some kind of latent difference curve?\n\nlibrary(psych)\n\n\ncolnames(bdf.1)\n\nfa.parallel(bdf.1[,c(67,69:72,76:84,90:106)], fm='minres')\n  bdf.1[,c(66:84,90:106)], fm='pa')\n\n# Likely variables with missing values are  \n# Bramlett2012.4 Perdue2015.vis.3 Bramlett2012.5 Perdue2015.vis.1 Bramlett2012.3  \nb.pca.1 <- pca(bdf.1[,c(67,69:72,76:84,90:106)])\n\nb.pca.4 <- pca(bdf.1[,c(67,69:72,76:84,90:106)], nfactors=4)\n\n\n\n\nb.esem.1 = esem(bdf.1,varsX=90:105,varsY=5:58,1,2,rotate='varimax',fm='mle',plot=T)\n\nc(67,69:72,76:84,90:106)\n\n\n\n\n\nfx <-matrix(c( .9,.8,.6,rep(0,4),.6,.8,-.7),ncol=2)  \nfy <- matrix(c(.6,.5,.4),ncol=1)\nrownames(fx) <- c(\"V\",\"Q\",\"A\",\"nach\",\"Anx\")\nrownames(fy)<- c(\"gpa\",\"Pre\",\"MA\")\nPhi <-matrix( c(1,0,.7,.0,1,.7,.7,.7,1),ncol=3)\ngre.gpa <- sim.structural(fx,Phi,fy)\nprint(gre.gpa)\n",
+    "created" : 1488548734892.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1315292967",
+    "id" : "44C6D976",
+    "lastKnownWriteTime" : 1488556445,
+    "last_content_update" : 1488556445188,
+    "path" : "C:/Users/s1229179/GitHub/R/InhibitionOldNewMonkeys/exploratoryAnal.R",
+    "project_path" : "exploratoryAnal.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

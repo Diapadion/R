@@ -1,0 +1,29 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1488550190787.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "4D580A5A",
+    "lastKnownWriteTime" : 7308604914264011873,
+    "last_content_update" : 1488550190787,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "1F9C67A8",
+        "caption" : "bdf",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=bdf&cache_key=1F9C67A8",
+        "displayedObservations" : 15,
+        "environment" : "",
+        "object" : "bdf",
+        "preview" : 0,
+        "totalObservations" : 15,
+        "variables" : 106
+    },
+    "relative_order" : 5,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}

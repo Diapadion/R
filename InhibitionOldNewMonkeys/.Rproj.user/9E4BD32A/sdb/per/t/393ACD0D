@@ -1,0 +1,29 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1488726972097.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "393ACD0D",
+    "lastKnownWriteTime" : 27303364806049904,
+    "last_content_update" : 1488726972097,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "A9CCE317",
+        "caption" : "cvmat",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=cvmat&cache_key=A9CCE317",
+        "displayedObservations" : "31",
+        "environment" : "",
+        "object" : "cvmat",
+        "preview" : "0",
+        "totalObservations" : "31",
+        "variables" : "31"
+    },
+    "relative_order" : 9,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}

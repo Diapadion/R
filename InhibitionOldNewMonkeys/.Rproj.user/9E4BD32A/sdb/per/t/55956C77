@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "### Analysis\n\n\n# are there enough t1, t2 experiments to do some kind of latent difference curve?\n\nlibrary(psych)\n\n\ncolnames(bdf.1)\n\nfa.parallel(bdf.1[,c(67,69:72,76:84,90:106)], fm='wls')\nnfactors(bdf.1[,c(67,69:72,76:84,90:106)])\n\nfa.parallel(cmat.p)\nnfactors(cmat.p)\n\n\n  bdf.1[,c(66:84,90:106)], fm='pa')\n\n# Likely variables with missing values are  \n# Bramlett2012.4 Perdue2015.vis.3 Bramlett2012.5 Perdue2015.vis.1 Bramlett2012.3  \nb.pca.1 <- pca(bdf.1[,c(67,69:72,76:84,90:106)])\n\nb.pca.4 <- pca(bdf.1[,c(69:72,76:84,90:106)], nfactors=2)\n\n\n\n\n\nb.esem.1 = esem(cmat.p,60:90,1:54,1,5,rotate='varimax',fm='minres',plot=T)\n\nb.esem.1 = esem(cmat.p,1:55,60:90,1,1,plot=T, rotate='varimax')\n\nc(67,69:72,76:84,90:106)\n\ncolnames(cmat.p)\n\nb.esem.1 = esem(cmat.p,1:54,55:85,1,1,fm='mle')\nrotate='varimax',fm='wls',plot=T)\n\nib.0 = interbattery(cmat.p,1:54,60:90,5,1)\n                        rotate='varimax',fm='wls',plot=T)\n\nib.1 = interbattery(cmat.p,55:59,60:90,1)\nib.2 = interbattery(cmat.p,55:59,60:90,2)\nib.3 = interbattery(cmat.p,55:59,60:90,3)\nib.4 = interbattery(cmat.p,55:59,60:90,4)\nib.5 = interbattery(cmat.p,55:59,60:90,5)\n\nesem()\n\n\no.4 = omega(cmat, nfactors=4)\no.3 = omega(cmat, nfactors=3)\no.2 = omega(cmat, nfactors=2)\no.1 = omega(cmat, nfactors=1)\n\n\n\n\nomegaSem(cmat, nfactors=4)\n\n\n\n\niclust(cmat.p[c(55:90),c(55:90)])\n\n\n#compare two alternative solutions to the first 2 factors of the neo.\n#solution 1 is the normal 2 factor solution.\n#solution 2 is an esem with 1 factor for the first 6 variables, and 1 for the second 6.\nf2 <- fa(neo[1:12,1:12],2)\nes2 <- esem(bfi,1:12,13:24,1,1,plot=T,fm='pa')\nsummary(f2)\nsummary(es2)\nfa.congruence(f2,es2)\n\ntest.esem <- esem(bfi,1:15,16:28,1,1,plot=T)\n\n\n\n\n\nfx <-matrix(c( .9,.8,.6,rep(0,4),.6,.8,-.7),ncol=2)  \nfy <- matrix(c(.6,.5,.4),ncol=1)\nrownames(fx) <- c(\"V\",\"Q\",\"A\",\"nach\",\"Anx\")\nrownames(fy)<- c(\"gpa\",\"Pre\",\"MA\")\nPhi <-matrix( c(1,0,.7,.0,1,.7,.7,.7,1),ncol=3)\ngre.gpa <- sim.structural(fx,Phi,fy)\nprint(gre.gpa)\n",
+    "created" : 1488635496772.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "297416737",
+    "id" : "55956C77",
+    "lastKnownWriteTime" : 1488756030,
+    "last_content_update" : 1488756030528,
+    "path" : "~/GitHub/R/InhibitionOldNewMonkeys/exploratoryAnal.R",
+    "project_path" : "exploratoryAnal.R",
+    "properties" : {
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

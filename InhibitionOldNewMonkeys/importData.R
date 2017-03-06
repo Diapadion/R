@@ -62,7 +62,7 @@ tmpdf <- data.frame(capuchin=c('Gabe','Gambit','Griffin','Liam','Lily','Logan','
 )
 
 tmpdf2 <- data.frame(capuchin=c('Bias','Gonzo','Gretel','Bailey','Benny','Mason'),
-                    Beran2016.4.cccum.pretest=c(1.6,3.2,4.2,6.8,1,1.6),
+                    Beran2016.4.accum.pretest=c(1.6,3.2,4.2,6.8,1,1.6),
                     Beran2016.4.rotTray.1=c(1,1,1,1,1,1),
                     Beran2016.4.rotTray.2=c(1,3,1,3,3,3),
                     Beran2016.4.rotTray.3=c(1,4,3,3,2,6),
@@ -131,3 +131,15 @@ bcp = merge(bcp, tmpdf, all.x=T)
 
 bdf.1 = bcp[rowSums(is.na(bcp))<35,]
 bdf.2 = bcp[rowSums(is.na(bcp))<38,]                 
+
+
+
+### Matrix singularity issues
+
+## Diagnosis
+eigen(cmat)
+
+your.matrix = cmat
+
+rankifremoved <- sapply(1:ncol(your.matrix), function (x) qr(your.matrix[,-x])$rank)
+which(rankifremoved == max(rankifremoved))

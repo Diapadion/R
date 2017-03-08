@@ -134,6 +134,17 @@ bdf.2 = bcp[rowSums(is.na(bcp))<38,]
 
 
 
+### Creating a viable transpose
+
+t.bdf.1 = t(bdf.1)
+colnames(t.bdf.1)= t.bdf.1[1,]
+t.bdf.1 = t.bdf.1[rowSums(is.na(t.bdf.1))<5,]  
+t.bdf.1 = t.bdf.1[c(-1,-71),]
+storage.mode(t.bdf.1) <- "numeric"
+t.bdf.1 = t(apply(t.bdf.1,1,scale))
+
+
+
 ### Matrix singularity issues
 
 ## Diagnosis

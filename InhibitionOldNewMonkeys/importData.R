@@ -130,8 +130,21 @@ bcp = merge(bcp, tmpdf, all.x=T)
 ### Removing the caps with no data
 
 bdf.1 = bcp[rowSums(is.na(bcp))<35,]
-bdf.2 = bcp[rowSums(is.na(bcp))<38,]                 
+bdf.3 = bcp[rowSums(is.na(bcp))<38,]                 
 
+
+bdf.2 = merge(aggregate(BeranCaps, by=list(capuchin=BeranCaps$Capuchin), mean), tmpdf2, all.x=T)
+bdf.2 = bdf.2[rowSums(is.na(bdf.2))<10,] 
+
+bdf.2long = data.frame(rbind(cbind(bdf.2$cap_Neu,bdf.2$cap_Att,bdf.2$Beran2016.4.cccum.pretest),
+   #               cbind(bdf.2$cap_Neu,bdf.2$cap_Att,bdf.2$Beran2016.4.rotTray.1),
+                  cbind(bdf.2$cap_Neu,bdf.2$cap_Att,bdf.2$Beran2016.4.rotTray.2),
+                  cbind(bdf.2$cap_Neu,bdf.2$cap_Att,bdf.2$Beran2016.4.rotTray.3),
+                  cbind(bdf.2$cap_Neu,bdf.2$cap_Att,bdf.2$Beran2016.4.accum.posttest),
+                  cbind(bdf.2$cap_Neu,bdf.2$cap_Att,bdf.2$Beran2016.1.rotTray.1),
+                  cbind(bdf.2$cap_Neu,bdf.2$cap_Att,bdf.2$Beran2016.1.rotTray.2),
+                  cbind(bdf.2$cap_Neu,bdf.2$cap_Att,bdf.2$Beran2016.1.accum.1),
+                  cbind(bdf.2$cap_Neu,bdf.2$cap_Att,bdf.2$Beran2016.1.accum.2)))
 
 
 ### Creating a viable transpose

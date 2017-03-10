@@ -116,6 +116,15 @@ clusplot(f.pam, main='3 cluster plot',labels=3)
 
 
 
+### Corrs with new subjects
+
+corr.test(bdf.2[,c(66:74)], bdf.2[,c(63,65)], method = 'spearman') #pearson')
+
+# corr.test(bdf.2long, method='pearson')
+# 
+# summary(lm (X3 ~ X1 + X2, bdf.2long))
+
+
 kmeans(na.omit(t(bdf.1)[-1]),4 )
 View(na.omit(t(bdf.1)))
 

@@ -34,6 +34,10 @@ library(broom)
 # [7] _ : origin, i(including), x(cluding)
 # [9] _ : distribution, t, l(ogistic), e(xtreme)
 # [11] _ : personality covars, the usual abbrvs + 6 (all 6)
+# [13] _ : sub-sample restriction, a(ll), c(PQ), h(PQ), (a)z(a), j(apan), y(erkes)
+
+CPQ = datX$sample == 'Yerkes' | datX$sample == 'AZA'
+HPQ = datX$sample == 'Japan' | datX$sample == 'Edinburgh'
 
 
 # Independent pers dims in models?
@@ -165,6 +169,86 @@ AFT.r.x.e.6 <- survreg(yLt ~ as.factor(sex) +
 #           36        30
 #
 #         .22 .86     .61 .06 .25
+
+
+dtxc = datX[CPQ,]
+yltc = yLt[CPQ,]
+# All predictors, with subsamples
+AFT.s.i.l.6.y <- survreg(yltc ~ as.factor(sex) + as.factor(origin) +  
+                           Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ
+                         + frailty.gaussian(sample) + strata(strt)
+                         , data=dtxc, dist='logistic')
+AFT.s.i.t.6.y <- survreg(yLt ~ as.factor(sex) + as.factor(origin) +  
+                         Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ
+                       + frailty.gaussian(sample) + strata(datX$strt)
+                       , data=datX[datX$sample=='Yerkes',], dist='t')
+AFT.s.i.e.6.y <- survreg(yLt ~ as.factor(sex) + as.factor(origin) +  
+                         Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ
+                       + frailty.gaussian(sample) + strata(datX$strt)
+                       , data=datX[datX$sample=='Yerkes',], dist='extreme')
+AFT.s.x.l.6.y <- survreg(yLt ~ as.factor(sex) +  
+                         Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ
+                       + frailty.gaussian(sample) + strata(datX$strt)
+                       , data=datX[datX$sample=='Yerkes',], dist='logistic')
+AFT.s.x.t.6.y <- survreg(yLt ~ as.factor(sex) +  
+                         Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ
+                       + frailty.gaussian(sample) + strata(datX$strt)
+                       , data=datX[datX$sample=='Yerkes',], dist='t')
+AFT.s.x.e.6.y <- survreg(yLt ~ as.factor(sex) +  
+                         Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ
+                       + frailty.gaussian(sample) + strata(datX$strt)
+                       , data=datX[datX$sample=='Yerkes',], dist='extreme')
+
+AFT.u.i.l.6.y <- survreg(yLt ~ as.factor(sex) + as.factor(origin) +  
+                         Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ
+                       + frailty.gaussian(sample)
+                       , data=datX[datX$sample=='Yerkes',], dist='logistic')
+AFT.u.i.t.6.y <- survreg(yLt ~ as.factor(sex) + as.factor(origin) +  
+                         Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ
+                       + frailty.gaussian(sample)
+                       , data=datX[datX$sample=='Yerkes',], dist='t')
+AFT.u.i.e.6.y <- survreg(yLt ~ as.factor(sex) + as.factor(origin) +  
+                         Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ
+                       + frailty.gaussian(sample)
+                       , data=datX[datX$sample=='Yerkes',], dist='extreme')
+AFT.u.x.l.6.y <- survreg(yLt ~ as.factor(sex) +  
+                         Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ
+                       + frailty.gaussian(sample)
+                       , data=datX[datX$sample=='Yerkes',], dist='logistic')
+AFT.u.x.t.6.y <- survreg(yLt ~ as.factor(sex) +  
+                         Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ
+                       + frailty.gaussian(sample)
+                       , data=datX[datX$sample=='Yerkes',], dist='t')
+AFT.u.x.e.6.y <- survreg(yLt ~ as.factor(sex) +  
+                         Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ
+                       + frailty.gaussian(sample)
+                       , data=datX[datX$sample=='Yerkes',], dist='extreme') 
+
+AFT.r.i.l.6.y <- survreg(yLt ~ as.factor(sex) + as.factor(origin) +  
+                         D.r2.DoB + E.r2.DoB + Con_CZ + Agr_CZ + N.r1.DoB + O.r2.DoB
+                       + frailty.gaussian(sample)
+                       , data=datX[datX$sample=='Yerkes',], dist='logistic')
+AFT.r.i.t.6.y <- survreg(yLt ~ as.factor(sex) + as.factor(origin) +  
+                         D.r2.DoB + E.r2.DoB + Con_CZ + Agr_CZ + N.r1.DoB + O.r2.DoB
+                       + frailty.gaussian(sample)
+                       , data=datX[datX$sample=='Yerkes',], dist='t')
+AFT.r.i.e.6.y <- survreg(yLt ~ as.factor(sex) + as.factor(origin) +  
+                         D.r2.DoB + E.r2.DoB + Con_CZ + Agr_CZ + N.r1.DoB + O.r2.DoB
+                       + frailty.gaussian(sample)
+                       , data=datX[datX$sample=='Yerkes',], dist='extreme')
+AFT.r.x.l.6.y <- survreg(yLt ~ as.factor(sex) +  
+                         D.r2.DoB + E.r2.DoB + Con_CZ + Agr_CZ + N.r1.DoB + O.r2.DoB
+                       + frailty.gaussian(sample)
+                       , data=datX[datX$sample=='Yerkes',], dist='logistic')
+AFT.r.x.t.6.y <- survreg(yLt ~ as.factor(sex) +  
+                         D.r2.DoB + E.r2.DoB + Con_CZ + Agr_CZ + N.r1.DoB + O.r2.DoB
+                       + frailty.gaussian(sample)
+                       , data=datX[datX$sample=='Yerkes',], dist='t')
+AFT.r.x.e.6.y <- survreg(yLt ~ as.factor(sex) +  
+                         D.r2.DoB + E.r2.DoB + Con_CZ + Agr_CZ + N.r1.DoB + O.r2.DoB
+                       + frailty.gaussian(sample)
+                       , data=datX[datX$sample=='Yerkes',], dist='extreme') 
+
 
 
 

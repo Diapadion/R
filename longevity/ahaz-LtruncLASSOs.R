@@ -16,28 +16,64 @@ y.ahaz <- Surv(Dataset$age_pr#+runif(nrow(datX))*1e-7
 
 attr(y.ahaz, 'type') <- 'counting'
 
-#y.ahaz = yLt
 
 
-netform = data.frame(cbind(as.factor(datX$sex), as.numeric(datX$DoB), 
-                           as.factor(datX$sample=='Japan'),as.factor(datX$sample=='Yerkes'),
-                           as.factor(datX$sample=='Edinburgh'),
-                           as.factor(datX$origin=='WILD'),
-                          # as.factor(datX$origin), 
+###
+
+
+
+netform = data.frame(cbind(as.factor(datX$sex), 
+                           as.factor(datX$origin), 
                            datX$Dom_CZ, datX$Ext_CZ, datX$Con_CZ,
                            datX$Agr_CZ, datX$Neu_CZ, datX$Opn_CZ))
-  
-colnames(netform) = c("sex","DoB","Japan",'Yerkes','Edinburgh','origin',
+
+colnames(netform) = c("sex",'origin',
                       'Dom','Ext','Con','Agr','Neu','Opn') 
 
-rmatx1 = model.matrix( ~ sex + DoB + Japan + Yerkes + Edinburgh + origin + 
-                        Dom + Ext + Con + Agr + Neu + Opn - 1, netform)
+rmatx1 = model.matrix( ~ sex + origin + 
+                         Dom + Ext + Con + Agr + Neu + Opn - 1, netform)
 
-ahz.1 <- ahazpen(y.ahaz, rmatx1)
+ahz.1 <- ahazpen(y.ahaz, rmatx1, penalty=lasso.control(alpha=0.3))
 
 plot(ahz.1, labels=TRUE)
 
-coef(ahz.1)
+tune.ahz = tune.ahazpen(y.ahaz, rmatx1, 
+                        penalty = lasso.control(alpha=0.3),  #seq(0,1,0.01)
+                        lambda = lseq(0.0005, 10, 1000),
+                        tune = cv.control(nfolds=10, reps=10)
+)
+plot(tune.ahz)
+
+coef(ahz.1, lambda = tune.ahz$lambda.min)
+
+az.1 <- ahaz(y.ahaz, rmatx1)
+summary(az.1)
+
+
+
+netform = data.frame(cbind(as.factor(datX$sex), 
+                           as.factor(datX$origin), 
+                           datX$D.r2.DoB, datX$E.r2.DoB, datX$Con_CZ, 
+                           datX$Agr_CZ, datX$N.r1.DoB, datX$O.r2.DoB))
+
+colnames(netform) = c("sex",'origin',
+                      'Dom','Ext','Con','Agr','Neu','Opn') 
+
+rmatx1.r = model.matrix( ~ sex + origin + 
+                           Dom + Ext + Con + Agr + Neu + Opn - 1, netform)
+
+ahz.1.r <- ahazpen(y.ahaz, rmatx1.r, penalty=lasso.control(alpha=0.3))
+
+plot(ahz.1.r, labels=TRUE)
+
+tune.ahz.r = tune.ahazpen(y.ahaz, rmatx1.r, 
+                          penalty = lasso.control(alpha=0.3),  #seq(0,1,0.01)
+                          lambda = lseq(0.0005, 10, 1000),
+                          tune = cv.control(nfolds=10, reps=10)
+)
+plot(tune.ahz.r)
+
+coef(ahz.1.r, lambda = tune.ahz.r$lambda.min)
 
 
 ###
@@ -63,6 +99,27 @@ ahz.2 <- ahazpen(y.ahaz, rmatx2, penalty=lasso.control(alpha=0.3),
 plot(ahz.2, labels=TRUE)
 # > palette()[1:6]
 # [1:,7:] "black"   "red"     "green3"  "blue"    "cyan"    "magenta" 
+
+# 1 - sex {risk}
+# 2 - Japan {protect}
+# 3 - Yerkes
+# 11 - O
+# 5 - origin
+# 9 - A
+# 10 - N
+# ...
+
+tune.ahz = tune.ahazpen(y.ahaz, rmatx2, 
+                        penalty = lasso.control(alpha=0.3),  #seq(0,1,0.01)
+                        lambda = lseq(0.0005, 10, 1000),
+                        tune = cv.control(nfolds=10, reps=10)
+)
+plot(tune.ahz)
+
+coef(ahz.2, lambda = tune.ahz$lambda.min)
+
+az.2 <- ahaz(y.ahaz, rmatx2)
+
 
 coef(ahz.2)[,100]
 
@@ -366,7 +423,7 @@ View(cv.df)
 ####### Stability Selection #######
 
 ahazstab(rmatx4, y.ahaz, reps = 100, weakness = 0.3, a = 1,
-         lambda = lseq(0.0001, 0.01, 1000))
+         lambda = lseq(0.0001, 0.01, 10))
 
 # none of this seems to change the entry of these vars much
 # it goes O, then D or A
@@ -430,3 +487,73 @@ ahazstab <- function(data, y, lambda = lseq(0.0005, 0.05, 1000), reps = 100, wea
 
 
  
+library(LTRCtrees)
+library(rpart.plot)
+
+
+
+cit.1 = LTRCIT(Surv(age_pr, age, status) ~ 
+         as.factor(sex) + as.factor(origin) +  
+         Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ,
+         data=datX)
+
+cit.1.x = LTRCIT(Surv(age_pr, age, status) ~ 
+                # as.factor(sex) + as.factor(origin) +  
+                 Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ,
+               data=datX)
+
+
+cit.2 = LTRCIT(Surv(age_pr, age, status) ~ 
+                 as.factor(sex) + as.factor(origin) +  
+                 D.r2.DoB + E.r2.DoB + Con_CZ + Agr_CZ + N.r1.DoB + O.r2.DoB,
+               data=datX)
+
+cit.2.x = LTRCIT(Surv(age_pr, age, status) ~ 
+                  # as.factor(sex) + as.factor(origin) +  
+                   D.r2.DoB + E.r2.DoB + Con_CZ + Agr_CZ + N.r1.DoB + O.r2.DoB,
+                 data=datX)
+
+
+
+plot(cit.1)
+print(cit.1.x)
+
+
+cit.1.pred = predict(cit.1, newdata=datX, type = 'prob')
+
+rrt.1 = LTRCART(Surv(age_pr, age, status) ~
+                  as.factor(sex) + as.factor(origin) +
+                  Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ,
+                data=datX, model=T)
+rpart.plot(rrt.1)
+text(rrt.1)
+
+cv.rrt.1 = validate(rrt.1, data=datX)
+
+
+library(rms)
+
+
+
+library(randomForestSRC)
+
+rf.1 <- rfsrc(Surv(age, status) ~ 
+                as.factor(sex) + as.factor(origin) +  
+                Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ,
+              nsplit = 10, ntree=100, data=datX)
+print(rf.1)
+plot(rf.1)
+matplot(rf.1$time.interest, 100 * t(rf.1$survival[1:10, ]),
+        xlab = "Time", ylab = "Survival", type = "l", lty = 1)
+plot.survival(rf.1, subset = 1:10, haz.model='ggamma')
+
+vsel = var.select(Surv(age, status) ~
+             as.factor(sex) + as.factor(origin) +
+             Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ,
+             conservative = 'high', sub.order =T,
+           data=datX)
+
+#vsel = max.subtree(rf.1, max.order = 3, sub.order = T)
+
+
+plot.variable(rf.1, c("Dom_CZ","Ext_CZ","Con_CZ","Neu_CZ","Agr_CZ","Opn_CZ"))

@@ -2,6 +2,7 @@
 
 # from Simonsohn, Simmons, Nelson, 2015
 
+
 library(broom)
 
 ### How can the specification vary?
@@ -36,13 +37,224 @@ library(broom)
 # [11] _ : personality covars, the usual abbrvs + 6 (all 6)
 # [13] _ : sub-sample restriction, a(ll), c(PQ), h(PQ), (a)z(a), j(apan), y(erkes)
 
-CPQ = datX$sample == 'Yerkes' | datX$sample == 'AZA'
-HPQ = datX$sample == 'Japan' | datX$sample == 'Edinburgh'
+
 
 
 # Independent pers dims in models?
 
-attr(yLt, 'type') <- 'mcounting'
+attr(yLt, 'type') <- 'counting'
+
+###
+library(parfm)
+
+data(asthma)
+View(asthma)
+pstst = Surv(asthma$Begin[asthma$Fevent == 0], asthma$End[asthma$Fevent == 0], asthma$Status[asthma$Fevent == 0])
+View(pstst)
+
+parfm.tst = parfm(Surv(Begin, End, Status) ~ Drug + End, cluster = "Patid", 
+      data = asthma[asthma$Fevent == 0, ],
+      dist = "weibull", frailty = "lognormal", method = "Nelder-Mead")
+#pstst = Surv(asthma$Begin, asthma$End, asthma$Status)
+attr(pstst, 'type')
+
+datX$sample = as.integer(datX$sample)
+datX$status <- relevel(datX$status,'1')
+datX$status <- relevel(datX$status,'0')
+datX$status = as.integer(datX$status) - 1
+parfm.tst.all = parfm(Surv(age_pr, age, status) ~ 
+                        as.factor(sex) +# as.factor(origin) +  
+                      D.r2.DoB + E.r2.DoB + Con_CZ + Agr_CZ + N.r1.DoB + O.r2.DoB,
+      cluster="sample" #strata = "strt"
+      , frailty = 'gamma'
+       , data=datX, dist='gompertz', method ='nlminb')
+print(parfm.tst.all)
+# pppfffffffff
+
+modsel.pfm.r.i = select.parfm(Surv(age_pr, age, status) ~ 
+                              as.factor(sex) + as.factor(origin) +  
+                              D.r2.DoB + E.r2.DoB + Con_CZ + Agr_CZ + N.r1.DoB + O.r2.DoB,
+                            cluster="sample", method = 'nlminb', data = datX
+                            )
+modsel.pfm.u.i = select.parfm(Surv(age_pr, age, status) ~ 
+                              as.factor(sex) + as.factor(origin) +  
+                              Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ,
+                            cluster="sample", method = 'nlminb', data = datX
+)
+modsel.pfm.s.i = select.parfm(Surv(age_pr, age, status) ~ 
+                                as.factor(sex) + as.factor(origin) +  
+                                Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ,
+                              cluster="sample", strata = "strt", method = 'nlminb', data = datX
+)
+modsel.pfm.r.x = select.parfm(Surv(age_pr, age, status) ~ 
+                                as.factor(sex) +  
+                                D.r2.DoB + E.r2.DoB + Con_CZ + Agr_CZ + N.r1.DoB + O.r2.DoB,
+                              cluster="sample", method = 'nlminb', data = datX
+)
+modsel.pfm.u.x = select.parfm(Surv(age_pr, age, status) ~ 
+                                as.factor(sex) +  
+                                Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ,
+                              cluster="sample", method = 'nlminb', data = datX
+)
+modsel.pfm.s.x = select.parfm(Surv(age_pr, age, status) ~ 
+                                as.factor(sex) +  
+                                Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ,
+                              cluster="sample", strata = "strt", method = 'nlminb', data = datX
+)
+
+
+###
+
+library(eha)
+
+aft.tst = aftreg(Surv(age_pr, age, status) ~ 
+                   as.factor(sex) + as.factor(origin) +  
+                   Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ,
+                 data = datX, param = 'lifeAcc',
+                 dist = 'gompertz', shape=0)
+summary(aft.tst)
+
+aft.tst.X = aftreg(Surv(age_pr, age, status) ~ 
+                   as.factor(sex) + #as.factor(origin) +  
+                   Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ,
+                 data = datX, param = 'lifeAcc',
+                 dist = 'ev', shape=0)
+summary(aft.tst.X)
+
+
+aft.tst.R = aftreg(Surv(age_pr, age, status) ~ 
+                   as.factor(sex) + as.factor(origin) +  
+                  D.r2.DoB + E.r2.DoB + Con_CZ + Agr_CZ + N.r1.DoB + O.r2.DoB,
+                 data = datX, param = 'lifeAcc',
+                 dist = 'ev', shape=0)
+summary(aft.tst.R)
+
+# Dataset$strt[Dataset$age_pr < 8] <- 1
+# Dataset$strt[(Dataset$age_pr > 8) & (Dataset$age_pr < 15)] <- 2
+# Dataset$strt[(Dataset$age_pr > 15) & (Dataset$age_pr < 25)] <- 3
+# Dataset$strt[(Dataset$age_pr > 25) & (Dataset$age_pr < 35)] <- 4
+# Dataset$strt[(Dataset$age_pr > 35)] <- 5
+
+ph.tst = phreg(Surv(age_pr, age, status) ~ 
+                 as.factor(sex) + as.factor(origin) +  
+                 Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ,
+               data = datX, #cuts = c(8,25,35),
+               dist = 'pch')
+summary(ph.tst)
+plot(ph.tst)
+
+ph.tst1 = phreg(Surv(age_pr, age, status) ~ 
+                 as.factor(sex) + as.factor(origin) + # strata(strt) +
+                 Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ,
+               data = datX, 
+               dist = 'gompertz')
+#plot(ph.tst1)
+summary(ph.tst1)
+
+ph.tst2 = phreg(Surv(age_pr, age, status) ~ 
+                    as.factor(sex) + as.factor(origin) +  
+                    Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ #+ strata(strt),
+                  ,datX, dist='pch')
+                  # this is automatic: dist = 'pch')
+summary(ph.tst2)
+
+plot(ph.tst2)
+
+r.sq.M(ph.tst, datX)
+
+
+library(pch)
+
+pch.tst = pchreg(Surv(age_pr, age, status) ~ 
+                  as.factor(sex) + as.factor(origin) +  
+                  Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ,
+                data = datX)
+summary(pch.tst)
+
+
+
+library(flexPM)
+
+fPM.tst = flexPM(Surv(age_pr, age, status) ~ 
+                   as.factor(sex) + as.factor(origin) +  
+                   Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ,
+                 data = datX,
+                 df = 3, degree = 3)
+print(fPM.tst)
+plot(fPM.tst)
+
+### ***************************** notable
+ 
+library(frailtypack)
+# strata won't really work with these
+
+fpack.u = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) + #strata(strt)
+                       as.factor(sex) + as.factor(origin) +  
+                       Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ,
+                     data = datX, hazard =  'Piecewise-equi' , nb.int = 20
+                     #, n.knots = 4, kappa =1
+                     )
+
+fpack.r = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) + #strata(strt)
+                       as.factor(sex) + as.factor(origin) +  
+                       D.r2.DoB + E.r2.DoB + Con_CZ + Agr_CZ + N.r1.DoB + O.r2.DoB,
+                     data = datX, hazard =  'Piecewise-equi' , nb.int = 20
+                     #, n.knots = 4, kappa =1
+)
+summary(fpack.u)
+plot(fpack)
+
+# below is ick
+
+fpack.r.W = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) + #strata(strt)
+                         as.factor(sex) + as.factor(origin) +  
+                         D.r2.DoB + E.r2.DoB + Con_CZ + Agr_CZ + N.r1.DoB + O.r2.DoB,
+                       data = datX, hazard =  'Weibull'
+                       #, n.knots = 4, kappa =1
+)
+
+fpack.u.W = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) + #strata(strt) +
+                         as.factor(sex) + #as.factor(origin) +  
+                         Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ,
+                       data = datX, hazard =  'Weibull' 
+                       #, n.knots = 4, kappa =1
+)
+summary(fpack.u.W)
+
+fpack.u.S = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) + #strata(strt) +
+                           as.factor(sex) + as.factor(origin) +  
+                           Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ,
+                         data = datX, hazard =  'Splines' 
+                         , n.knots = 2, kappa = 5
+)
+summary(fpack.u.S)
+
+
+
+
+?frailtypack
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # All
 AFT.s.i.l.6 <- frail.AFT.wild

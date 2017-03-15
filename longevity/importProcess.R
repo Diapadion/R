@@ -307,10 +307,16 @@ y.Ltrunc <- Surv(Dataset$age_pr, Dataset$age,Dataset$stat.log,  # previously age
 
 rmNAs = !is.na(y.Ltrunc)
 
-yLt = y.Ltrunc[rmNAs]
+datX = Dataset[rmNAs,]
+yLt = Surv(datX$age_pr, datX$age, datX$stat.log)
+
+#yLt = y.Ltrunc[rmNAs]
 #attr(y.Ltrunc, 'type')
 #attr(yLt, 'type')
-datX = Dataset[rmNAs,]
+
+
+
+
 
 
 ### P dimensions confounded with age
@@ -453,56 +459,56 @@ plot(datX$age_pr, datX$A.r.DoB)
 
 
 
-# let's try a LASSO...
-
-library(glmnet)
-library(c060)
-# #detach('package:c060')
-library(stabs)
-# library(caret)
-# # see also chimpAnalyses.R
+# # let's try a LASSO...
 # 
-netform = data.frame(cbind(scale(datX$DoB),
-                scale(datX$DoB)^2,
-                scale(datX$DoB)^3))
-colnames(netform) = c("DoB1","DoB2","DoB3")
-
-rmatx = model.matrix( ~ DoB1 + DoB2 + DoB3 - 1, netform)
-
-#stab.E = stabpath(datX$Ext_CZ, rmatx, weakness = 0.7 ) # 0.2 to 0.8
-stab.E = stabsel(rmatx, datX$Ext_CZ, fitfun=glmnet.lasso,
-                 cutoff = 0.9,
-                 #q = 3 ,
-                 PFER = 1
-                 )
-parameters(stab.E)
-
-stab.D = stabsel(rmatx, datX$Dom_CZ, fitfun=glmnet.lasso, #q = 3
-                 cutoff = 0.8, PFER = 1)
-stab.A = stabsel(rmatx, datX$Agr_CZ, fitfun=glmnet.lasso, #q = 3
-                 cutoff = 0.8, PFER = 1)
-stab.C = stabsel(rmatx, datX$Con_CZ, fitfun=glmnet.lasso, #q = 3
-                 cutoff = 0.8, PFER = 1)
-stab.N = stabsel(rmatx, datX$Neu_CZ, fitfun=glmnet.lasso, #q = 3
-                 cutoff = 0.8, PFER = 1)
-stab.O = stabsel(rmatx, datX$Opn_CZ, fitfun=glmnet.lasso, #q = 3
-                 cutoff = 0.8, PFER = 1)
-
-
-
-
-stab.D = stabpath(datX$Dom_CZ, rmatx, weakness = 0.7 )
-stab.C = stabpath(datX$Con_CZ, rmatx, weakness = 0.7 )
-stab.N = stabpath(datX$Neu_CZ, rmatx, weakness = 0.7 )
-stab.A = stabpath(datX$Agr_CZ, rmatx, weakness = 0.7 )
-stab.O = stabpath(datX$Opn_CZ, rmatx, weakness = 0.7 )
-
-plot(stab.E, type = 'paths')
-plot(stab.D, type = 'paths')
-plot(stab.C, type = 'paths')
-plot(stab.N, type = 'paths')
-plot(stab.A, type = 'paths')
-plot(stab.O, type = 'paths')
+# library(glmnet)
+# library(c060)
+# # #detach('package:c060')
+# library(stabs)
+# # library(caret)
+# # # see also chimpAnalyses.R
+# # 
+# netform = data.frame(cbind(scale(datX$DoB),
+#                 scale(datX$DoB)^2,
+#                 scale(datX$DoB)^3))
+# colnames(netform) = c("DoB1","DoB2","DoB3")
+# 
+# rmatx = model.matrix( ~ DoB1 + DoB2 + DoB3 - 1, netform)
+# 
+# #stab.E = stabpath(datX$Ext_CZ, rmatx, weakness = 0.7 ) # 0.2 to 0.8
+# stab.E = stabsel(rmatx, datX$Ext_CZ, fitfun=glmnet.lasso,
+#                  cutoff = 0.9,
+#                  #q = 3 ,
+#                  PFER = 1
+#                  )
+# parameters(stab.E)
+# 
+# stab.D = stabsel(rmatx, datX$Dom_CZ, fitfun=glmnet.lasso, #q = 3
+#                  cutoff = 0.8, PFER = 1)
+# stab.A = stabsel(rmatx, datX$Agr_CZ, fitfun=glmnet.lasso, #q = 3
+#                  cutoff = 0.8, PFER = 1)
+# stab.C = stabsel(rmatx, datX$Con_CZ, fitfun=glmnet.lasso, #q = 3
+#                  cutoff = 0.8, PFER = 1)
+# stab.N = stabsel(rmatx, datX$Neu_CZ, fitfun=glmnet.lasso, #q = 3
+#                  cutoff = 0.8, PFER = 1)
+# stab.O = stabsel(rmatx, datX$Opn_CZ, fitfun=glmnet.lasso, #q = 3
+#                  cutoff = 0.8, PFER = 1)
+# 
+# 
+# 
+# 
+# stab.D = stabpath(datX$Dom_CZ, rmatx, weakness = 0.7 )
+# stab.C = stabpath(datX$Con_CZ, rmatx, weakness = 0.7 )
+# stab.N = stabpath(datX$Neu_CZ, rmatx, weakness = 0.7 )
+# stab.A = stabpath(datX$Agr_CZ, rmatx, weakness = 0.7 )
+# stab.O = stabpath(datX$Opn_CZ, rmatx, weakness = 0.7 )
+# 
+# plot(stab.E, type = 'paths')
+# plot(stab.D, type = 'paths')
+# plot(stab.C, type = 'paths')
+# plot(stab.N, type = 'paths')
+# plot(stab.A, type = 'paths')
+# plot(stab.O, type = 'paths')
 # 
 # data("bodyfat", package = "TH.data")
 # stab.lasso <- stabsel(x = bodyfat[, -2], y = bodyfat[,2],
@@ -655,32 +661,32 @@ plot(stab.O, type = 'paths')
 # datX$N.cv.r = datX$Neu_CZ - predict(lasso.rN, rmatx, s = 0.541)
 # 
 
-lasso.rE = glmnet(rmatx, datX$Ext_CZ)
-lasso.rE.cv = cv.glmnet(rmatx, datX$Ext_CZ)
-coef(lasso.rE, s=lasso.rE.cv$lambda.1se)
-lasso.rD = glmnet(rmatx, datX$Dom_CZ)
-lasso.rD.cv = cv.glmnet(rmatx, datX$Dom_CZ)
-coef(lasso.rD, s=lasso.rD.cv$lambda.1se)
-lasso.rC = glmnet(rmatx, datX$Con_CZ)
-lasso.rC.cv = cv.glmnet(rmatx, datX$Con_CZ)
-coef(lasso.rC, s=lasso.rC.cv$lambda.1se)
-lasso.rA = glmnet(rmatx, datX$Agr_CZ)
-lasso.rA.cv = cv.glmnet(rmatx, datX$Agr_CZ)
-coef(lasso.rA, s=lasso.rA.cv$lambda.1se)
-lasso.rO = glmnet(rmatx, datX$Opn_CZ)
-lasso.rO.cv = cv.glmnet(rmatx, datX$Opn_CZ)
-coef(lasso.rO, s=lasso.rO.cv$lambda.1se)
-lasso.rN = glmnet(rmatx, datX$Neu_CZ)
-lasso.rN.cv = cv.glmnet(rmatx, datX$Neu_CZ)
-coef(lasso.rN, s=lasso.rN.cv$lambda.1se)
-# lasso.rE.cv$lambda.1se
+# lasso.rE = glmnet(rmatx, datX$Ext_CZ)
+# lasso.rE.cv = cv.glmnet(rmatx, datX$Ext_CZ)
 # coef(lasso.rE, s=lasso.rE.cv$lambda.1se)
-datX$N.cv.r = datX$Neu_CZ - predict(lasso.rN, rmatx, s = lasso.rN.cv$lambda.1se )
-datX$D.cv.r = datX$Dom_CZ - predict(lasso.rD, rmatx, s = lasso.rD.cv$lambda.1se )
-datX$E.cv.r = datX$Ext_CZ - predict(lasso.rE, rmatx, s = lasso.rE.cv$lambda.1se )
-datX$A.cv.r = datX$Agr_CZ - predict(lasso.rA, rmatx, s = lasso.rA.cv$lambda.1se )
-datX$C.cv.r = datX$Con_CZ - predict(lasso.rC, rmatx, s = lasso.rC.cv$lambda.1se )
-datX$O.cv.r = datX$Opn_CZ - predict(lasso.rO, rmatx, s = lasso.rO.cv$lambda.1se )
+# lasso.rD = glmnet(rmatx, datX$Dom_CZ)
+# lasso.rD.cv = cv.glmnet(rmatx, datX$Dom_CZ)
+# coef(lasso.rD, s=lasso.rD.cv$lambda.1se)
+# lasso.rC = glmnet(rmatx, datX$Con_CZ)
+# lasso.rC.cv = cv.glmnet(rmatx, datX$Con_CZ)
+# coef(lasso.rC, s=lasso.rC.cv$lambda.1se)
+# lasso.rA = glmnet(rmatx, datX$Agr_CZ)
+# lasso.rA.cv = cv.glmnet(rmatx, datX$Agr_CZ)
+# coef(lasso.rA, s=lasso.rA.cv$lambda.1se)
+# lasso.rO = glmnet(rmatx, datX$Opn_CZ)
+# lasso.rO.cv = cv.glmnet(rmatx, datX$Opn_CZ)
+# coef(lasso.rO, s=lasso.rO.cv$lambda.1se)
+# lasso.rN = glmnet(rmatx, datX$Neu_CZ)
+# lasso.rN.cv = cv.glmnet(rmatx, datX$Neu_CZ)
+# coef(lasso.rN, s=lasso.rN.cv$lambda.1se)
+# # lasso.rE.cv$lambda.1se
+# # coef(lasso.rE, s=lasso.rE.cv$lambda.1se)
+# datX$N.cv.r = datX$Neu_CZ - predict(lasso.rN, rmatx, s = lasso.rN.cv$lambda.1se )
+# datX$D.cv.r = datX$Dom_CZ - predict(lasso.rD, rmatx, s = lasso.rD.cv$lambda.1se )
+# datX$E.cv.r = datX$Ext_CZ - predict(lasso.rE, rmatx, s = lasso.rE.cv$lambda.1se )
+# datX$A.cv.r = datX$Agr_CZ - predict(lasso.rA, rmatx, s = lasso.rA.cv$lambda.1se )
+# datX$C.cv.r = datX$Con_CZ - predict(lasso.rC, rmatx, s = lasso.rC.cv$lambda.1se )
+# datX$O.cv.r = datX$Opn_CZ - predict(lasso.rO, rmatx, s = lasso.rO.cv$lambda.1se )
 
 # datX$N.cv.r = datX$Neu_CZ - predict(lasso.rN, rmatx, s = lasso.rN.cv$lambda.min )
 # datX$D.cv.r = datX$Dom_CZ - predict(lasso.rD, rmatx, s = lasso.rD.cv$lambda.min )

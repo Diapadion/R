@@ -1,11 +1,52 @@
 
 # looks like this isn't going to work
  
+
+
+library(ctqr)
+
+qT.1 = ctqr(Surv(age_pr, age, status) ~ 
+              as.factor(sex) + as.factor(origin) +  
+              Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ,
+            p = c(1:19/20), #CDF = pch.tst,
+            data = datX)
+summary(qT.1)
+plot(qT.1)
+
+
+
+library(qrcm)
+
+qT.1 = iqr(Surv(age_pr, age, status) ~ 
+             as.factor(sex) + as.factor(origin) +  
+             Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ,
+           #formula.p = ~ I(log(1 - p)), # misspecified
+           #formula.p = ~ slp(p,1) , # okay
+           #formula.p = ~plf(p, knots = c(1:4/5)), # okay
+           formula.p = 
+           data = datX)
+summary(qT.1)
+
+test.fit(qT.1)
+
+
+# p <- seq(0,1, 0.1)
+# a2 <- plf(p, knots = c(0.2,0.7))
+# plot(p, 3 + 1*a2[,1] - 1*a2[,2] + 2*a2[,3], type = "l") 
+
+
+
+
 require(quantreg)
 
 attr(y, 'type') <- 'right'
 
 
+           
+           
+           
+           
+           )
 
 qm.1 <- crq (y ~ 1 + as.factor(sex) + as.factor(datX$origin=='WILD') 
              + age_pr +

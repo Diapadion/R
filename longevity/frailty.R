@@ -193,7 +193,7 @@ f.10.DoB <-  survreg(y ~ as.factor(sex) +
                          as.factor(origin) + DoB +
                          Dom_CZ + Ext_CZ + Con_CZ +
                          Agr_CZ + Neu_CZ + Opn_CZ
-                       + frailty(sample), data=Dataset,
+                       + frailty.gaussian(sample), data=Dataset,
                        dist = 'weibull')
                          
                          
@@ -202,14 +202,14 @@ f.10.age_pr <-  survreg(y ~ as.factor(sex) +
                        as.factor(origin) + age_pr +
                      Dom_CZ + Ext_CZ + Con_CZ +
                        Agr_CZ + Neu_CZ + Opn_CZ
-                     + frailty(sample), data=Dataset,
+                     + frailty.gaussian(sample), data=Dataset,
                      dist = 'weibull')
 
 f.10.age <-  survreg(y ~ as.factor(sex) + 
                                 as.factor(origin) + age +
                               Dom_CZ + Ext_CZ + Con_CZ +
                                 Agr_CZ + Neu_CZ + Opn_CZ
-                              + frailty(sample), data=Dataset,
+                              + frailty.gaussian(sample), data=Dataset,
                               dist = 'weibull')
 
 
@@ -355,16 +355,22 @@ attr(yLt, 'type') <- 'counting'
 #attr(yLt, 'type') <- 'mcounting'
 
 coxme.1 <- coxme(yLt ~ as.factor(sex) + 
-                       #as.factor(origin) +  
+                       as.factor(origin) +  
                        Dom_CZ + Ext_CZ + Con_CZ +
                        Agr_CZ + Neu_CZ + Opn_CZ
-                     + (1 | sample) + strata(strt)
+                     + (1 | sample) #+ strata(strt)
                      , data=datX)
+
+coxme.1.s <- coxme(yLt ~ as.factor(sex) + 
+                   as.factor(origin) +  
+                   Dom_CZ + Ext_CZ + Con_CZ +
+                   Agr_CZ + Neu_CZ + Opn_CZ
+                 + (1 | sample) + strata(strt)
+                 , data=datX)
 
 coxme.2 <- coxme(yLt ~ as.factor(sex) + 
                    as.factor(origin) +  
-                   Dom_CZ + E.r2.DoB + Con_CZ + 
-                   Agr_CZ + Neu_CZ + O.r2.DoB
+                   D.r2.DoB + E.r2.DoB + Con_CZ + Agr_CZ + N.r1.DoB + O.r2.DoB
                  + (1 | sample)
                  , data=datX)
 
@@ -406,5 +412,5 @@ coxme.6 = coxme(yLt ~ as.factor(sex) +
                 , data=datX)
 
 
-AICtab(coxme.1, coxme.6, coxme.5,
+AICtab(coxme.1, coxme.6, coxme.5, coxme.1.s, coxme.2, coxme.2.1,
        logLik=T, sort=T, delta=T, base=T,weights=T)

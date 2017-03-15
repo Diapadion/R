@@ -2,6 +2,8 @@
 cpq = datX$sample == 'Yerkes' | datX$sample == 'AZA'
 hpq = datX$sample == 'Japan' | datX$sample == 'Edinburgh'
 
+library(flexsurv)
+
 
 # Sig table for just CPQ chimps
 # 

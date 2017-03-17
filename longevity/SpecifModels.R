@@ -186,23 +186,6 @@ plot(fPM.tst)
 ### ***************************** notable
  
 library(frailtypack)
-# strata won't really work with these
-
-fpack.u = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) + #strata(strt)
-                       as.factor(sex) + as.factor(origin) +  
-                       Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ,
-                     data = datX, hazard =  'Piecewise-equi' , nb.int = 20
-                     #, n.knots = 4, kappa =1
-                     )
-
-fpack.r = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) + #strata(strt)
-                       as.factor(sex) + as.factor(origin) +  
-                       D.r2.DoB + E.r2.DoB + Con_CZ + Agr_CZ + N.r1.DoB + O.r2.DoB,
-                     data = datX, hazard =  'Piecewise-equi' , nb.int = 20
-                     #, n.knots = 4, kappa =1
-)
-summary(fpack.u)
-plot(fpack)
 
 # below is ick
 
@@ -225,7 +208,7 @@ fpack.u.S = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) + #strata(s
                            as.factor(sex) + as.factor(origin) +  
                            Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ,
                          data = datX, hazard =  'Splines' 
-                         , n.knots = 2, kappa = 5
+                         , n.knots = 3, kappa = 5, betaknots = 3
 )
 summary(fpack.u.S)
 

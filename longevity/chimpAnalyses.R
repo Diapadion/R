@@ -493,6 +493,7 @@ CI.a <- LTRCIT(Surv(age_pr, age, stat.log) ~ as.factor(sex) +
                   Agr_CZ + Neu_CZ + Opn_CZ,
                 Data = datX)
 plot(CI.a)
+rpart.plot(RR.a)
 
 RR.a.samp <- LTRCART(Surv(age_pr, age, stat.log) ~ as.factor(sex) + 
                        as.factor(origin) +

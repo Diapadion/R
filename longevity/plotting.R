@@ -75,6 +75,11 @@ ggplot(data=datX[datX$stat.log==T,], aes(age)) + geom_histogram(binwidth=3) +
   
 
 
+### personality all on one plot
+
+
+
+
 ### age * pers issues
 
 pdx = gather(datX, Personality, Measurement, Dom:Opn)
@@ -101,7 +106,7 @@ pdx = gather(datX, Personality, Measurement, c(96,99))
 p <- ggplot(pdx, aes(age_pr, Measurement, colour = factor(Personality))) + geom_point() + 
   theme_bw() + theme(legend.position="none") + labs(x='Age at Personality Rating')
 
-p + facet_grid(~ Personality)
+p + facet_wrap(~ Personality)
 
 
 

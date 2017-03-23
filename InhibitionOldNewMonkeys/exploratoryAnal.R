@@ -166,3 +166,22 @@ rownames(fy)<- c("gpa","Pre","MA")
 Phi <-matrix( c(1,0,.7,.0,1,.7,.7,.7,1),ncol=3)
 gre.gpa <- sim.structural(fx,Phi,fy)
 print(gre.gpa)
+
+
+
+
+
+
+
+
+
+########
+
+library(rsvd)
+
+colnames(bdf.1)
+
+rpca.1 = rpca(bdf.1[,c(61:84,90:106)])
+summary(rpca.1)
+
+rpca.1

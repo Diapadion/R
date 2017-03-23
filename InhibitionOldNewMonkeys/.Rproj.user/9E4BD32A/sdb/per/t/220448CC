@@ -12,15 +12,15 @@
     "path" : null,
     "project_path" : null,
     "properties" : {
-        "cacheKey" : "663ACBC0",
+        "cacheKey" : "6B3BEB08",
         "caption" : "bdf.1",
-        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=bdf.1&cache_key=663ACBC0",
-        "displayedObservations" : 9,
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=bdf.1&cache_key=6B3BEB08",
+        "displayedObservations" : "9",
         "environment" : "",
         "object" : "bdf.1",
-        "preview" : 0,
-        "totalObservations" : 9,
-        "variables" : 106
+        "preview" : "0",
+        "totalObservations" : "9",
+        "variables" : "106"
     },
     "relative_order" : 10,
     "source_on_save" : false,

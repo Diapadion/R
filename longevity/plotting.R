@@ -83,6 +83,8 @@ ggplot(data=datX[datX$stat.log==T,], aes(age)) + geom_histogram(binwidth=3) +
 ### age * pers issues
 
 pdx = gather(datX, Personality, Measurement, Dom:Opn)
+pdx$Personality <- as.factor(pdx$Personality)
+levels(pdx$Personality) <- c('Agreeableness','Conscientiousness','Dominance','Extraversion','Neuroticism','Openness')
 
 p <- ggplot(pdx, aes(age_pr, Measurement, colour = factor(Personality))) + geom_point() + 
   theme_bw() + theme(legend.position="none") + labs(x='Age at Personality Rating')
@@ -101,7 +103,7 @@ p + facet_wrap(~ Personality, nrow = 2)
 
 ### after correction
 
-pdx = gather(datX, Personality, Measurement, c(96,99))
+pdx = gather(datX, Personality, Measurement, c(87:90))
 
 p <- ggplot(pdx, aes(age_pr, Measurement, colour = factor(Personality))) + geom_point() + 
   theme_bw() + theme(legend.position="none") + labs(x='Age at Personality Rating')

@@ -12,17 +12,17 @@
     "path" : null,
     "project_path" : null,
     "properties" : {
-        "cacheKey" : "C838153F",
+        "cacheKey" : "835DCA1E",
         "caption" : "datX",
-        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=datX&cache_key=C838153F",
-        "displayedObservations" : 538,
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=datX&cache_key=835DCA1E",
+        "displayedObservations" : "538",
         "environment" : "",
         "object" : "datX",
-        "preview" : 0,
-        "totalObservations" : 538,
-        "variables" : 101
+        "preview" : "0",
+        "totalObservations" : "538",
+        "variables" : "101"
     },
-    "relative_order" : 9,
+    "relative_order" : 8,
     "source_on_save" : false,
     "source_window" : "",
     "type" : "r_dataframe"

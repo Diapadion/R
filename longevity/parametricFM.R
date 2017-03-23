@@ -102,6 +102,72 @@ fpack.r$AIC
 
 
 
+fpack.u.0f = frailtyPenal(Surv(age_pr, age, status) ~ #cluster(sample) + 
+                         as.factor(sex) + as.factor(origin) +  
+                         Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ,
+                       data = datX, hazard =  'Piecewise-equi' , nb.int = 9
+                       #, n.knots = 4, kappa =1
+)
+
+fpack.r.0f = frailtyPenal(Surv(age_pr, age, status) ~ #cluster(sample) + 
+                            as.factor(sex) + as.factor(origin) +  
+                            D.r2.DoB + E.r2.DoB + Con_CZ + Agr_CZ + N.r1.DoB + O.r2.DoB,
+                          data = datX, hazard =  'Piecewise-equi' , nb.int = 9
+                          #, n.knots = 4, kappa =1
+)
+
+fpack.u.x = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) + 
+                            as.factor(sex) + #as.factor(origin) +  
+                            Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ,
+                          data = datX, hazard =  'Piecewise-equi' , nb.int = 9
+                          #, n.knots = 4, kappa =1
+)
+
+fpack.r.x = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) + 
+                            as.factor(sex) + #as.factor(origin) +  
+                            D.r2.DoB + E.r2.DoB + Con_CZ + Agr_CZ + N.r1.DoB + O.r2.DoB,
+                          data = datX, hazard =  'Piecewise-equi' , nb.int = 9
+                          #, n.knots = 4, kappa =1
+)
+
+fpack.u.x.sx = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) + 
+                           #as.factor(sex) + #as.factor(origin) +  
+                           Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ,
+                         data = datX, hazard =  'Piecewise-equi' , nb.int = 9
+                         #, n.knots = 4, kappa =1
+)
+
+fpack.r.x.sx = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) + 
+                           #as.factor(sex) + #as.factor(origin) +  
+                           D.r2.DoB + E.r2.DoB + Con_CZ + Agr_CZ + N.r1.DoB + O.r2.DoB,
+                         data = datX, hazard =  'Piecewise-equi' , nb.int = 9
+                         #, n.knots = 4, kappa =1
+)
+
+
+fpack.u.i.M = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) + 
+                             as.factor(sex) + as.factor(origin) +  
+                             Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ,
+                           data = datX[datX$sex=='Female',], hazard =  'Piecewise-equi' , nb.int = 9
+                           #, n.knots = 4, kappa =1
+                           , maxit = 3000
+)
+
+fpack.r.i.M = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) + 
+                             as.factor(sex) + as.factor(origin) +  
+                             D.r2.DoB + E.r2.DoB + Con_CZ + Agr_CZ + N.r1.DoB + O.r2.DoB,
+                           data = datX[datX$sex=='Female',], hazard =  'Piecewise-equi' , nb.int = 9
+                           #, n.knots = 4, kappa =1
+                           , maxit = 2000
+)
+
+                           
+                           
+
+
+
+
+
 
 
 

@@ -145,8 +145,15 @@ plot3 <- ggsurv(sf.Wild) + theme_bw() + theme(axis.title.y=element_blank(),
 
 
 
-###
-# library(rms)
+### Publication plot!
+library(rms)
+
+npsf.1 = npsurv(y.wild ~ Sample, data=wch)
+
+par(family = 'serif', cex.lab = 1.25, cex.axis = 1.1)
+survplot(npsf.1, xlab = 'Age')
+
+
 # 
 # par(mfrow=c(1,1))
 # 
@@ -183,6 +190,11 @@ plot3 <- ggsurv(sf.Wild) + theme_bw() + theme(axis.title.y=element_blank(),
 plot1 <- ggsurv(survfit(y ~ 1)) + theme_bw() #+ theme(axis.title.y=element_blank(),
 #       axis.title.x=element_blank())
 plot1
+
+
+plot1a <- ggsurv(survfit(y.wild ~ Sample, data=wch), CI=T, xlab='Age') + theme_bw() 
+plot1a
+
 
 
 #2. sex and wild-born

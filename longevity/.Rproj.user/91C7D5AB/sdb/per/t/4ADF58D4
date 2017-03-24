@@ -1,0 +1,29 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1490363495074.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "4ADF58D4",
+    "lastKnownWriteTime" : 7308604914264011873,
+    "last_content_update" : 1490363495074,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "434786EB",
+        "caption" : "pdx",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=pdx&cache_key=434786EB",
+        "displayedObservations" : "1800",
+        "environment" : "",
+        "object" : "pdx",
+        "preview" : "0",
+        "totalObservations" : "1800",
+        "variables" : "3"
+    },
+    "relative_order" : 12,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}

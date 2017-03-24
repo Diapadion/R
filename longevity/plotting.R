@@ -4,6 +4,76 @@ library(ggplot2)
 library(tidyr)
 library(survival)
 library(grid)
+library(powerSurvEpi)
+
+
+### Power curves
+
+n = 200
+pwr.df = data.frame(HR=1:n,Agreeableness=numeric(n),Conscientiousness=numeric(n), Dominance=numeric(n),
+                    Extraversion=numeric(n), Neuroticism=numeric(n), Openness=numeric(n))
+j = 0
+for (i in  seq(0.01,2, length.out = n)){
+  j = j + 1 
+  pwr.df$HR[j] = i
+  mod = powerEpiCont(formula = (age - age_pr) ~ as.factor(sex) + 
+                 as.factor(origin) +  
+                 Dom_CZ + Ext_CZ + Con_CZ +
+                 Agr_CZ + Neu_CZ + Opn_CZ,
+               dat=datX, 
+               X1 = Agr_CZ
+               ,failureFlag = datX$status  ,
+               n = 538, theta = i)
+  pwr.df$Agreeableness[j] = mod$power
+  mod = powerEpiCont(formula = (age - age_pr) ~ as.factor(sex) + 
+                       as.factor(origin) +  
+                       Dom_CZ + Ext_CZ + Con_CZ +
+                       Agr_CZ + Neu_CZ + Opn_CZ,
+                     dat=datX, X1 = Con_CZ
+                     ,failureFlag = datX$status ,
+                     n = 538, theta = i)
+  pwr.df$Conscientiousness[j] = mod$power
+  mod = powerEpiCont(formula = (age - age_pr) ~ as.factor(sex) + 
+                       as.factor(origin) +  
+                       Dom_CZ + Ext_CZ + Con_CZ +
+                       Agr_CZ + Neu_CZ + Opn_CZ,
+                     dat=datX, X1 = Dom_CZ
+                     ,failureFlag = datX$status ,
+                     n = 538, theta = i)
+  pwr.df$Dominance[j] = mod$power
+  mod = powerEpiCont(formula = (age - age_pr) ~ as.factor(sex) + 
+                       as.factor(origin) +  
+                       Dom_CZ + Ext_CZ + Con_CZ +
+                       Agr_CZ + Neu_CZ + Opn_CZ,
+                     dat=datX, X1 = Ext_CZ
+                     ,failureFlag = datX$status ,
+                     n = 538, theta = i)
+  pwr.df$Extraversion[j] = mod$power
+  mod = powerEpiCont(formula = (age - age_pr) ~ as.factor(sex) + 
+                       as.factor(origin) +  
+                       Dom_CZ + Ext_CZ + Con_CZ +
+                       Agr_CZ + Neu_CZ + Opn_CZ,
+                     dat=datX, X1 = Neu_CZ
+                     ,failureFlag = datX$status ,
+                     n = 538, theta = i)
+  pwr.df$Neuroticism[j] = mod$power
+  mod = powerEpiCont(formula = (age - age_pr) ~ as.factor(sex) + 
+                       as.factor(origin) +  
+                       Dom_CZ + Ext_CZ + Con_CZ +
+                       Agr_CZ + Neu_CZ + Opn_CZ,
+                     dat=datX, X1 = Opn_CZ
+                     ,failureFlag = datX$status ,
+                     n = 538, theta = i)
+  pwr.df$Openness[j] = mod$power
+  
+}
+pdx = gather(pwr.df, Personality, Power, Agreeableness:Openness)
+
+pwr.p = ggplot(pdx, aes(x = HR, y= Power, color = Personality)) +
+  geom_line(size = 2) + theme_bw() + facet_wrap(facets = 'Personality') + theme(legend.position="none")
+
+pwr.p  
+
 
 
 pdx = gather(datX, Personality, Measurement, Dom:Opn)

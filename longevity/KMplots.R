@@ -145,7 +145,7 @@ plot3 <- ggsurv(sf.Wild) + theme_bw() + theme(axis.title.y=element_blank(),
 
 
 
-### Publication plot!
+### Publication plot(s)!
 library(rms)
 
 npsf.1 = npsurv(y.wild ~ Sample, data=wch)
@@ -198,6 +198,11 @@ plot1a
 
 
 #2. sex and wild-born
+
+survplot(npsurv(y ~ origin, data=datX), loglog=T)
+survplot(npsurv(y ~ sex, data=datX), loglog=T)
+survplot(npsurv(y ~ Etert, data=datX), loglog=T)
+
 
 plot2 <- ggsurv(sf.Sex) + theme_bw() + theme(legend.position="none")
 plot3 <- ggsurv(sf.Wild) + theme_bw() + theme(axis.title.y=element_blank(),legend.position="none")#,

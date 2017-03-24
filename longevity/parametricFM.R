@@ -145,6 +145,8 @@ fpack.r.x.sx = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) +
 )
 
 
+### these won't converge
+
 fpack.u.i.M = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) + 
                              as.factor(sex) + as.factor(origin) +  
                              Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ,
@@ -161,7 +163,14 @@ fpack.r.i.M = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) +
                            , maxit = 2000
 )
 
-                           
+### nor does this
+
+fpack.u.i.w = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) + 
+                                         as.factor(sex) + as.factor(origin) +  
+                                         Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ,
+                                       data = datX, hazard =  'Weibull' 
+                                       #, n.knots = 4, kappa =1
+)
                            
 
 

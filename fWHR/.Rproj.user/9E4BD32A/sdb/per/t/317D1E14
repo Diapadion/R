@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "### Bastrop\n\n\nbCh = cPoints[cPoints$location=='Bastrop',]\nbCh = bCh[c(-1,-2),]\n\nsample(bCh$ID,16)\n# [1] Beta    Punch   Lexus   Austin  Dahpi   Minna   Michon  Xena    Alpha   Gremlin Bo     \n# [12] Samson  Kampani Mahsho  Cheopi  Maishpa\nsample(1:10,16, replace=T)\n# [1]  2 10  8  4  2  4  4  2  5  9  4  6 10  7  5  5\n\n\n\n# Are these ratings all okay?\n\nbCh = bCh[bCh$A!='X',c(14:20)]\n\nbCh <- separate(data = bCh, col = A, into = c(\"A.x\", \"A.y\"), sep = \"\\\\,\")\nbCh <- separate(data = bCh, col = B, into = c(\"B.x\", \"B.y\"), sep = \"\\\\,\")\nbCh <- separate(data = bCh, col = C, into = c(\"C.x\", \"C.y\"), sep = \"\\\\,\")\nbCh <- separate(data = bCh, col = D, into = c(\"D.x\", \"D.y\"), sep = \"\\\\,\")\nbCh <- separate(data = bCh, col = E, into = c(\"E.x\", \"E.y\"), sep = \"\\\\,\")\nbCh <- separate(data = bCh, col = F, into = c(\"F.x\", \"F.y\"), sep = \"\\\\,\")\nbCh <- separate(data = bCh, col = G, into = c(\"G.x\", \"G.y\"), sep = \"\\\\,\")\n\nbCh <- data.frame(lapply(bCh, function(x) as.numeric(x)))\n\ntabl <- bCh\nfWHRc <- NULL\n\n\nfor (i in seq_len(dim(tabl)[1])){\n  points <- matrix(c(c(tabl$C.x[i], tabl$D.x[i], tabl$E.x[i], tabl$F.x[i], tabl$G.x[i]), \n                     c(tabl$C.y[i], tabl$D.y[i], tabl$E.y[i], tabl$F.y[i], tabl$G.y[i]))\n                   ,nrow = 5, ncol = 2)\n  \n  \n  fWHRc[i] =   fWHR(points, i)\n  \n}\n\n# redos-\n# definite: c(16, 24, 56, 60)\n# possible: c(27, 28, 32, 44, 72, 74)\nbCh$ID[c(27, 28, 32, 44, 72, 74)]\n\n\n\n",
+    "created" : 1490856689237.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "45190329",
+    "id" : "317D1E14",
+    "lastKnownWriteTime" : 1490858506,
+    "last_content_update" : 1490858506796,
+    "path" : "~/GitHub/R/fWHR/bastrop.R",
+    "project_path" : "bastrop.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 6,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

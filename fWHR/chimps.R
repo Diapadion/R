@@ -149,3 +149,38 @@ yF = 88.7
 ########
 euc.dist <- function(x1, x2) sqrt(sum((x1 - x2) ^ 2))
 
+
+df2fWHR <- function(yCh){
+  
+  yCh = yCh[yCh$A!='X',c(2,14:20)]
+  
+  yCh <- separate(data = yCh, col = A, into = c("A.x", "A.y"), sep = "\\,")
+  yCh <- separate(data = yCh, col = B, into = c("B.x", "B.y"), sep = "\\,")
+  yCh <- separate(data = yCh, col = C, into = c("C.x", "C.y"), sep = "\\,")
+  yCh <- separate(data = yCh, col = D, into = c("D.x", "D.y"), sep = "\\,")
+  yCh <- separate(data = yCh, col = E, into = c("E.x", "E.y"), sep = "\\,")
+  yCh <- separate(data = yCh, col = F, into = c("F.x", "F.y"), sep = "\\,")
+  yCh <- separate(data = yCh, col = G, into = c("G.x", "G.y"), sep = "\\,")
+  
+  yCh <- data.frame(lapply(yCh, function(x) as.numeric(x)))
+  
+  tabl <- yCh
+  fWHRc <- data.frame()
+  
+  for (i in seq_len(dim(tabl)[1])){
+    points <- matrix(c(c(tabl$C.x[i], tabl$D.x[i], tabl$E.x[i], tabl$F.x[i], tabl$G.x[i]), 
+                       c(tabl$C.y[i], tabl$D.y[i], tabl$E.y[i], tabl$F.y[i], tabl$G.y[i]))
+                     ,nrow = 5, ncol = 2)
+    
+    
+    fWHRc[i] =   fWHR(points, i)
+    
+  }
+  
+  fWHRc = cbind(yCh$ID, fWHRc)
+  
+  return(fWHRc)
+  
+}  
+
+

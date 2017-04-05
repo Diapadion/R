@@ -10,16 +10,23 @@ View(RSdat[RSdat$chimp=='Lucy',])
 
 ## General picture of accuracy
 table(RSdat$chimp[RSdat$Correctness==" Correct"])
-
 table(RSdat$chimp[RSdat$Correctness==" Correct"])/table(RSdat$chimp)
+
+mean(as.numeric(RSdat$Correctness)-1)
+
 
 ## some descriptors for revision (Study 2)
 table(cz_bin_pers$Chimp)
 aggregate(as.numeric(cz_bin_pers$Accuracy)-1, by=list(Chimp=cz_bin_pers$Chimp), FUN=mean, na.action = na.omit)
+
 mean(as.numeric(cz_bin_pers$Accuracy)-1)
+# median(as.numeric(cz_bin_pers$Accuracy)-1)
 
 sum(table(cz_bin_pers$Accuracy[cz_bin_pers$Chimp=='Liberius'])
 )
+
+
+
 
 
 
@@ -356,3 +363,6 @@ Dryad3.2 <- tatScreen[,c(1:5)]
 Dryad3.2$Individual <- with(mapping, new[match(Dryad3.2$Individual, old)])
 write.csv(Dryad3.2,file='Study3atScreen.csv')
 
+
+
+### Final round

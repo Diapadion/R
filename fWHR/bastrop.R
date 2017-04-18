@@ -4,9 +4,10 @@
 bCh = cPoints[cPoints$location=='Bastrop',]
 bCh = bCh[c(-1,-2),]
 
-bChsub = bCh[c(88:103),]
+#bCh = bCh[bCh$A!='X',]
+bCh = bCh[bCh$Notes!='redo',]
 
-bCh = bCh[bCh$A!='X',]
+bChsub = bCh[c(78:93),]
 
 
 sample(bCh$ID,16)
@@ -15,47 +16,35 @@ sample(bCh$ID,16)
 sample(1:10,16, replace=T)
 # [1]  2 10  8  4  2  4  4  2  5  9  4  6 10  7  5  5
 
-# redos-
+### Redos -
 # definite: c(16, 24, 56, 60)
 # possible: c(27, 28, 32, 44, 72, 74)
 bCh$ID[c(16, 24, 56, 60)]
 
 
-duplicated(bCh$ID) | duplicated(bCh$ID[nrow(bCh):1])[nrow(bCh):1]
 
+### Testing correlations between morphs and composite images
 
+ind = duplicated(bCh$ID) | duplicated(bCh$ID[nrow(bCh):1])[nrow(bCh):1]
+ind = ind[1:77]
 
-
-
-bCh = bCh[,c(14:20)]
-
-bCh <- separate(data = bCh, col = A, into = c("A.x", "A.y"), sep = "\\,")
-bCh <- separate(data = bCh, col = B, into = c("B.x", "B.y"), sep = "\\,")
-bCh <- separate(data = bCh, col = C, into = c("C.x", "C.y"), sep = "\\,")
-bCh <- separate(data = bCh, col = D, into = c("D.x", "D.y"), sep = "\\,")
-bCh <- separate(data = bCh, col = E, into = c("E.x", "E.y"), sep = "\\,")
-bCh <- separate(data = bCh, col = F, into = c("F.x", "F.y"), sep = "\\,")
-bCh <- separate(data = bCh, col = G, into = c("G.x", "G.y"), sep = "\\,")
-
-bCh <- data.frame(lapply(bCh, function(x) as.numeric(x)))
-
-tabl <- bCh
-fWHRc <- NULL
-
-for (i in seq_len(dim(tabl)[1])){
-  points <- matrix(c(c(tabl$C.x[i], tabl$D.x[i], tabl$E.x[i], tabl$F.x[i], tabl$G.x[i]), 
-                     c(tabl$C.y[i], tabl$D.y[i], tabl$E.y[i], tabl$F.y[i], tabl$G.y[i]))
-                   ,nrow = 5, ncol = 2)
-  
-  
-  fWHRc[i] =   fWHR(points, i)
-  
-}
-
-
-
+bCHsup = NULL
+bChsup = bCh[ind,]
+bChsup = bChsup[1:16,] # don't know why this is necessary
 
 fWHR.Bsub = df2fWHR(bChsub)
+fWHR.Bsup = df2fWHR(bChsup)
+fWHR.Btemp = merge(fWHR.Bsub,fWHR.Bsup, by.x='ID', by.y='ID')
+plot(fWHR.Btemp[,2:3])
 
+cor.test(fWHR.Btemp$ratio.x,fWHR.Btemp$ratio.y)
+
+
+
+### Calculate fWHR for morphs
+
+fWHR.Bmorph = df2fWHR(bCh[1:77,])
+
+# copy and paste results back into CSV
 
 

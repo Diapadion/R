@@ -213,6 +213,8 @@ all.bm = rbind(all.bm,
                c.bm.m.s)
                  #complete.cases(sel.nbm),])
 
+max(complete.cases)
+
 # Non-independent scaling for everything else
 
 all.bm[,c(3:35)] = data.frame(lapply(all.bm[,c(3:35)], function(x) scale(x, center = T)))

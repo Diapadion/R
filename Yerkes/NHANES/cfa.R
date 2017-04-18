@@ -54,7 +54,7 @@ subset(mod_ind[order(mod_ind$mi, decreasing=TRUE), ], mi > 5)
 mod.comp10 <- "
 PC1 =~ rbc + hct + hgb 
 PC2 =~ mcv + mch + mchc
-PC3 =~ cholesterol + triglycerides + BPs + BPd + BMI + Glucose
+PC3 =~ cholesterol + triglycerides + BPs + BMI + Glucose # + BPd
 PC4 =~ sgot + sgpt + ggtp
 PC5 =~ BUN + Creatine + potassium + osmolal
 PC6 =~ Albumn + calcium + lymph
@@ -77,20 +77,18 @@ semPaths(fit1.comp10, what='est')
 
 ### Chimps
 
+fit1c.comp10 <- cfa(mod.comp10, data=c.bm.m[,c(4:35)], std.ov=T, 
+                    estimator = 'MLMV', # missing = 'direct', 
+                    orthogonal=T)
+semPaths(fit1c.comp10, what='est')
+fitmeasures(fit1c.comp10, c("chisq", "df", "pvalue", "cfi", "rmsea","srmr"))
+summary(fit1c.comp10)
+
 fit1c.comp5 <- cfa(mod.comp5, data=c.bm.m[,c(4:35)], std.ov=T, missing = 'fiml')
 
 semPaths(fit1c.comp5, what='est')
 fitmeasures(fit1c.comp5, c("chisq", "df", "pvalue", "cfi", "rmsea","srmr"))
 summary(fit1c.comp5)
-
-
-fit1c.comp10 <- cfa(mod.comp10, data=c.bm.m[,c(4:35)], std.ov=T, 
-                   estimator = 'MLMV', # missing = 'direct', 
-                    orthogonal=T)
-
-semPaths(fit1c.comp10, what='est')
-fitmeasures(fit1c.comp10, c("chisq", "df", "pvalue", "cfi", "rmsea","srmr"))
-summary(fit1c.comp10)
 
 # This doesn't really work; too many vars for the data, I think.
 
@@ -148,6 +146,7 @@ anova(fit.config, fit.metric)
 
 ### What if we restrict it down to the AL factor?
 
+# begin with all variables that have 
 
 modAL1.comp5 <- '
 AL =~ cholesterol + triglycerides + BPs + BPd + BMI + Glucose + phosphate
@@ -164,6 +163,7 @@ measurementInvariance(modAL1.comp5, group = "species",
                       data = all.bm, fit.measures=c('cfi','rmsea','srmr'), strict=T)
 
 
+
 modAL2.comp5 <- '
 AL =~ cholesterol + triglycerides + BPs + BPd + BMI + Glucose
 
@@ -177,16 +177,18 @@ semPaths(fitAL2.comp5, what='est')
 
 measurementInvariance(modAL2.comp5, group = "species", 
                       data = all.bm, fit.measures=c('cfi','rmsea','srmr'), strict=T)
+# I guess we should keep phosphates in the model
 
 
-modAL3.comp5 <- '
+
+modAL3.comp5_old <- '
 AL =~ cholesterol + triglycerides + BPs + BPd + BMI + phosphate
 
 '
 
-fitAL3.comp5 <- cfa(modAL3.comp5,data=sel.nbm[sampl.cfa,c(4:35)], std.ov=T, missing = 'fiml')
+fitAL3.comp5_old <- cfa(modAL3.comp5_old,data=sel.nbm[sampl.cfa,c(4:35)], std.ov=T, missing = 'fiml')
 
-fitMeasures(fitAL3.comp5, c("chisq", "df", "pvalue", "cfi", "rmsea","srmr"))
+fitMeasures(fitAL3.comp5_old, c("chisq", "df", "pvalue", "cfi", "rmsea","srmr"))
 summary(fitAL3.comp5)
 semPaths(fitAL3.comp5, what='est')
 
@@ -195,22 +197,23 @@ anova(fitAL2.comp5, fitAL3.comp5)
 
 compareFit(fitAL1.comp5, fitAL2.comp5, fitAL3.comp5)
 
-# I guess we should keep phosphates in the model
+
 
 # ModAL3 should be sufficiently good fit to test measurement Invariance
 
-measurementInvariance(modAL3.comp5, group = "species", 
+measurementInvariance(modAL3.comp5_old, group = "species", 
                       #group.partial = colnames(all.bm)[c(-1,-2,-3,-14,-23,-30,-33,-34,-35,-36,-25)],
                       data = all.bm, fit.measures=c('cfi','rmsea','srmr'), strict=T)
 
 # Invariance looks good.
 
-fitAL1.grp <- cfa(modAL1.comp5, data=all.bm, std.ov=T, missing = 'fiml', group = "species")
+fitAL3.grp <- cfa(modAL3.comp5, data=all.bm, std.ov=T, missing = 'fiml', group = "species",
+                  std.lv=T)
 # fitAl3.grp <- 
 
-fitMeasures(fitAL1.grp, c("chisq", "df", "pvalue", "cfi", "rmsea","srmr"))
-summary(fitAL1.grp)
-semPaths(fitAL1.grp, what='est')
+fitMeasures(fitAL3.grp, c("chisq", "df", "pvalue", "cfi", "rmsea","srmr"))
+summary(fitAL3.grp)
+semPaths(fitAL3.grp, what='est')
 
 
 # Group 1 [human]:
@@ -237,6 +240,115 @@ semPaths(fitAL1.grp, what='est')
 # BPd               6.503    4.621    1.407    0.159
 # BMI               0.125    1.089    0.115    0.908
 # phosphate        -0.974    1.135   -0.858    0.391
+
+
+
+
+
+
+
+###### NEW VERSION
+
+### What if we restrict it down to the AL factor?
+
+# begin with all variables that have 4 or more primary loadings on AL (from PCAs)
+# ... which means no glucose
+
+modAL1.comp5 <- '
+AL =~ cholesterol + triglycerides + BPs + BPd + BMI + phosphate + alkphos
+
+'
+
+fitAL1.comp5 <- cfa(modAL1.comp5,data=sel.nbm[sampl.cfa,c(4:35)], std.ov=T, missing = 'fiml')
+
+fitMeasures(fitAL1.comp5, c("chisq", "df", "pvalue", "cfi", "rmsea","srmr"))
+semPaths(fitAL1.comp5, what='est')
+
+# Does not converge. Remove vars first.
+# measurementInvariance(modAL1.comp5, group = "species", 
+#                       data = all.bm, fit.measures=c('cfi','rmsea','srmr'), strict=T)
+fitAL1c.comp5 <- cfa(modAL1.comp5,data=c.bm.m[,c(4:35)], std.ov=T, missing = 'fiml')
+fitMeasures(fitAL1c.comp5, c("chisq", "df", "pvalue", "cfi", "rmsea","srmr"))
+
+
+
+modAL2.comp5 <- '
+AL =~ cholesterol + triglycerides + BPs + BPd + BMI + phosphate
+
+'
+
+fitAL2.comp5 <- cfa(modAL2.comp5,data=sel.nbm[sampl.cfa,c(4:35)], std.ov=T, missing = 'fiml')
+
+fitMeasures(fitAL2.comp5, c("chisq", "df", "pvalue", "cfi", "rmsea","srmr"))
+semPaths(fitAL2.comp5, what='est')
+
+# measurementInvariance(modAL2.comp5, group = "species", 
+#                       data = all.bm, fit.measures=c('cfi','rmsea','srmr'), strict=T)
+
+# ALP doesn't look like it adds anything. Drop it.
+
+fitAL2c.comp5 <- cfa(modAL2.comp5,data=c.bm.m[,c(4:35)], std.ov=T, missing = 'fiml')
+fitMeasures(fitAL2c.comp5, c("chisq", "df", "pvalue", "cfi", "rmsea","srmr"))
+
+
+modAL3.comp5 <- '
+AL =~ cholesterol + triglycerides + BPs + BPd + BMI
+
+'
+
+fitAL3.comp5 <- cfa(modAL3.comp5,data=sel.nbm[sampl.cfa,c(4:35)], std.ov=T, missing = 'fiml')
+
+fitMeasures(fitAL3.comp5, c("chisq", "df", "pvalue", "cfi", "rmsea","srmr"))
+semPaths(fitAL3.comp5, what='est')
+
+# Taking phosphates out didn't help. Model 2 is our final model.
+
+fitAL3c.comp5 <- cfa(modAL3.comp5,data=c.bm.m[,c(4:35)], std.ov=T, missing = 'fiml')
+fitMeasures(fitAL3c.comp5, c("chisq", "df", "pvalue", "cfi", "rmsea","srmr"))
+
+
+
+# ModAL2 should also be sufficiently good fit to test measurement Invariance
+
+mi.6vars <- measurementInvariance(modAL2.comp5, group = "species", 
+                      #group.partial = colnames(all.bm)[c(-1,-2,-3,-14,-23,-30,-33,-34,-35,-36,-25)],
+                      data = all.bm, fit.measures=c('cfi','rmsea','srmr'), strict=T)
+
+# Invariance doesn't look good.
+
+fitAL2.grp <- cfa(modAL2.comp5, data=all.bm, std.ov=T, missing = 'fiml', group = "species",
+                  std.lv=T)
+# fitAl3.grp <- 
+
+fitMeasures(fitAL2.grp, c("chisq", "df", "pvalue", "cfi", "rmsea","srmr"))
+summary(fitAL2.grp)
+semPaths(fitAL2.grp, what='est')
+
+# (weak)
+partialInvariance(mi.6vars, type='metric', p.adjust = 'holm')
+partialInvariance(mi.6vars, type='metric', p.adjust = 'holm', fix='cholesterol')
+partialInvariance(mi.6vars, type='metric', p.adjust = 'holm', fix=c('cholesterol','BMI'))
+partialInvariance(mi.6vars, type='metric', p.adjust = 'holm', fix=c('cholesterol','BMI','triglycerides'))
+# BPs;d, Phosphates
+
+# (strong)
+partialInvariance(mi.6vars, type='scalar', p.adjust = 'holm')
+partialInvariance(mi.6vars, type='scalar', p.adjust = 'holm', fix='BPd')
+
+partialInvariance(mi.6vars, type='strict', p.adjust = 'holm')
+partialInvariance(mi.6vars, type='strict', p.adjust = 'holm', fix='cholesterol')
+
+partialInvariance(mi.6vars, type='means', p.adjust = 'holm')
+
+
+
+
+######################################
+
+
+
+
+
 
 
 

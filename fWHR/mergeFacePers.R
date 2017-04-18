@@ -2,7 +2,7 @@
 #
 # Run from the top
 
-
+library(dplyr)
 
 s <- function(x) {scale(x)}
 
@@ -17,11 +17,16 @@ colnames(chFP)[8] <- 'Age'
 chFP$Sex = as.factor(chFP$Sex)
 chFP$fHWR = as.numeric(as.character(chFP$fHWR))
 
+chFP = chFP[!is.na(chFP$fHWR),]
+
+#levels(chFP$ID) <- tolower(levels(chFP$ID))
+
 
 
 ### Aggregate face measurements first?
 
-chFP <- aggregate(cbind(fHWR,Age,Sex)~ID+location, chFP, mean) # need Yerkes ages, then Age can go back into LS
+chFP <- aggregate(cbind(fHWR,Sex)~ID+location, chFP, mean) # need Yerkes/Bastrop ages, then Age can go back into LS
+# not strictly necessay with MLM, but averaging is better for consistency
 
 #chFP <- aggregate(chFP, by = list(chFP$ID), FUN = mean)
 
@@ -116,6 +121,57 @@ cPers[ind,]$Opn <-
    + cPers[ind,]$Cur + cPers[ind,]$Innov) / 4
 
 
+
+### Bastrop personality scoring
+
+bPers <- read.csv('bastroppersonalitydata.csv')
+bPers = bPers[1:143,]
+
+bPers$Dom = NA
+bPers$Ext = NA
+bPers$Con = NA
+bPers$Agr = NA
+bPers$Neu = NA
+bPers$Opn = NA
+
+
+
+bPers$Dom <-
+  (-bPers$meananxious-bPers$meancautious-bPers$meandependent-bPers$meantimid
+   +bPers$meandominant+bPers$meanbold+bPers$meanbullying+bPers$meanstingy + 4*8
+   )/8
+
+bPers$Ext <-
+  (-bPers$meandepressed-bPers$meansolitary
+    +bPers$meanactive+bPers$meanaffectionatefriendly+bPers$meanaffiliative+bPers$meanplayful + 2*8
+  )/6
+
+bPers$Con <-
+  (-bPers$meanaggressive-bPers$meandefiant-bPers$meanimpulsive-bPers$meanirritable
+   -bPers$meanJealousattentionseeking-bPers$meantemperamentalmoody
+   + 6*8 #+bPers$meanpredictable
+  )/6
+     
+bPers$Agr <- 
+  (bPers$meanconsideratekind+bPers$meanprotective)/2
+
+bPers$Neu <- 
+  (-bPers$meancalm
+   +bPers$meaneccentric+bPers$meanexcitable + 1*8
+   )/3
+
+bPers$Opn <-
+  (bPers$meaninquisitivecurious+bPers$meaninventive) /2
+
+
+
+
+### Combine the two inventories
+
+cPers = rbind(cPers[,c(1,69:74)],bPers[,c(1,49:54)])
+
+
+
 # Scale each dimension across cPers chimps
 cPers$Dom_CZ <- scale(cPers$Dom)
 cPers$Ext_CZ <- scale(cPers$Ext)
@@ -131,9 +187,9 @@ cPers$Opn_CZ <- scale(cPers$Opn)
 
 ### Merge face with pers data
 
+#levels(cPers$chimp) <- tolower(levels(cPers$chimp))
 chFP <- merge(chFP,cPers, by.x= "ID", "chimp")
 
-
-
-
+# remove Yerkes
+chFP <- chFP[chFP$location!='Yerkes',]
 

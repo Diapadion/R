@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "### Models of Chimpanzee facial characteristics, age, sex, and personality\n\nlibrary(lme4)\nlibrary(car)\nlibrary(corrplot)\n\ncolnames(chFP)\ncorrplot(cor(chFP[,c(3,4,11,12,13,14,15,16),]),  method = 'number')\n\n\n# rename fHWR column\n\n\n\n\n\n\n\nm1 <- lmer(fHWR ~ s(Age) + s(I(Age^2)) + s(I(Age^3)) +\n             (1 | location) #+ (1 | ID)\n           ,data = chFP)\n\nsummary(m1)\n# No age effects. Oversampling of older individuals?\n\n\n\nm2 <- lmer(fHWR ~ Age*Sex +\n             (1 | location) #+ (1 | ID)\n           ,data = chFP)\n\nsummary(m2)\nconfint(m2)\n\n\n\n### Personality\n\nmp1 <- lmer(fHWR ~ Sex + Age\n            + Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ +\n              (1 | location) + (1 | ID)\n            ,data = chFP)\n\nsummary(mp1)\nconfint(mp1)\n\n\n\nmp2 <- lmer(fHWR ~ Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ +\n              (1 | location) + (1 | ID)\n            ,data = chFP)\n\nsummary(mp2)\nconfint(mp2)\n\nanova(mp1,mp2)\n",
+    "created" : 1487591599388.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1978251987",
+    "id" : "52D1C2D0",
+    "lastKnownWriteTime" : 1491407247,
+    "last_content_update" : 1491407247637,
+    "path" : "C:/Users/s1229179/GitHub/R/fWHR/chimpModels.R",
+    "project_path" : "chimpModels.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 7,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

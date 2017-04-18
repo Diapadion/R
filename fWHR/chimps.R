@@ -7,6 +7,8 @@ library(tidyr)
 
 cPoints = read.csv(file = "ChimpfWHR.csv")
 
+
+
 ### - Yerkes
 
 yCh = cPoints[cPoints$location=='Yerkes',]
@@ -152,6 +154,7 @@ euc.dist <- function(x1, x2) sqrt(sum((x1 - x2) ^ 2))
 
 df2fWHR <- function(yCh){
   
+  #yCh = bCh[bCh$A!='X',c(2,14:20)]
   yCh = yCh[yCh$A!='X',c(2,14:20)]
   
   yCh <- separate(data = yCh, col = A, into = c("A.x", "A.y"), sep = "\\,")
@@ -162,10 +165,13 @@ df2fWHR <- function(yCh){
   yCh <- separate(data = yCh, col = F, into = c("F.x", "F.y"), sep = "\\,")
   yCh <- separate(data = yCh, col = G, into = c("G.x", "G.y"), sep = "\\,")
   
-  yCh <- data.frame(lapply(yCh, function(x) as.numeric(x)))
+  yCh[,2:15] <- data.frame(lapply(yCh[,2:15], function(x) as.numeric(x)))
   
   tabl <- yCh
-  fWHRc <- data.frame()
+  fWHRc <- data.frame(ID=factor(dim(yCh)[1]),ratio=numeric(dim(yCh)[1]))
+  
+  #fWHRc$ID = as.character(yCh$ID)
+  fWHRc$ID = yCh$ID
   
   for (i in seq_len(dim(tabl)[1])){
     points <- matrix(c(c(tabl$C.x[i], tabl$D.x[i], tabl$E.x[i], tabl$F.x[i], tabl$G.x[i]), 
@@ -173,14 +179,13 @@ df2fWHR <- function(yCh){
                      ,nrow = 5, ncol = 2)
     
     
-    fWHRc[i] =   fWHR(points, i)
+    fWHRc$ratio[i] =   fWHR(points, i)
     
   }
-  
-  fWHRc = cbind(yCh$ID, fWHRc)
   
   return(fWHRc)
   
 }  
+
 
 

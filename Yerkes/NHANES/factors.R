@@ -14,6 +14,7 @@ colnames(sel.nbm)[4:35] <- colnames(c.bm)[5:36]
 fa.parallel(sel.nbm[complete.cases(sel.nbm),c(4:35)], fm = 'gls') #  pa?
  # seem like 10
 
+nfactors(sel.nbm[complete.cases(sel.nbm),c(4:35)], fm = 'gls')
 plot(nfactors(sel.nbm[complete.cases(sel.nbm),c(4:35)], fm = 'gls')$map)
 
 
@@ -40,7 +41,9 @@ fa.1x <- fa(sel.nbm[complete.cases(sel.nbm),c(3:31)], nfactors = 10, fm = 'ml'
 # )
 pa.10 <- principal(sel.nbm[sampl.pca,c(4:35)], nfactors = 10, rotate='varimax'
 ) # S, B, C, T, G ...
-# this one is interesting: Do does load at 0.45, but it has a -0.5 higher loading elsewhere
+# this one is interesting: D does load at 0.45, but it has a -0.5 higher loading elsewhere
+print(loadings(pa.10), cutoff = 0.3, sort =T)
+
 
 pa.9 <- principal(sel.nbm[sampl.pca,c(4:35)], nfactors = 9, rotate='varimax'
 ) # S, B, C; Albu?, lymph?
@@ -62,8 +65,12 @@ pa.4 <- principal(sel.nbm[sampl.pca,c(4:35)], nfactors = 4, rotate='varimax'
 ) # S, D, B, C; ... 
 # 4 is not a very good model - end here.
 
-fa.sort(pa.10)
+print(loadings(pa.5), cutoff = 0.3, sort =T)
+
 fa.sort(pa.5)
+
+fa.sort(pa.10)
+fa.sort(efa.10)
 
 # Note that Creatinine never loads with the main metabolic factor,
 # but essentially always does with BUN, and sometimes with Glucose, osmolal, potassium, protein, etc.
@@ -94,7 +101,7 @@ fa.sort(pa.5)
 
 ### Chimps
 
-nfactors(c.bm[,c(5:36)], fm = 'gls') #  pa?
+nfactors(c.bm[,c(4:35)], fm = 'ml') #  pa?
 
 #fa.parallel(c.bm[,c(5:36)], fm = 'minres') #  pa?
 fa.parallel(c.bm.m[,c(4:35)], fm = 'ml') #  pa?
@@ -214,4 +221,6 @@ pcrusta = procrustes(pa.1$loadings, pa.c.1$loadings)
 pcrust = procrustes(pa.5$loadings, pa.c.5$loadings)
 pspc = permustats(pcrust)
        
-factor.congruence(pa.5$loadings, pa.c.5$loadings)
+factor.congruence(pa.5$loadings, pa.c.5$loadings) # human - rows; chimps - columns
+# Human RC3
+# Chimp RC4

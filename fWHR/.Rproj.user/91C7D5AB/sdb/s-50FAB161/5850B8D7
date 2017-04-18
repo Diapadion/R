@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "### Bastrop\n\n\nbCh = cPoints[cPoints$location=='Bastrop',]\nbCh = bCh[c(-1,-2),]\n\n#bCh = bCh[bCh$A!='X',]\nbCh = bCh[bCh$Notes!='redo',]\n\nbChsub = bCh[c(78:93),]\n\n\nsample(bCh$ID,16)\n# [1] Beta    Punch   Lexus   Austin  Dahpi   Minna   Michon  Xena    Alpha   Gremlin Bo     \n# [12] Samson  Kampani Mahsho  Cheopi  Maishpa\nsample(1:10,16, replace=T)\n# [1]  2 10  8  4  2  4  4  2  5  9  4  6 10  7  5  5\n\n### Redos -\n# definite: c(16, 24, 56, 60)\n# possible: c(27, 28, 32, 44, 72, 74)\nbCh$ID[c(16, 24, 56, 60)]\n\n\n\n### Testing correlations between morphs and composite images\n\nind = duplicated(bCh$ID) | duplicated(bCh$ID[nrow(bCh):1])[nrow(bCh):1]\nind = ind[1:77]\n\nbCHsup = NULL\nbChsup = bCh[ind,]\nbChsup = bChsup[1:16,] # don't know why this is necessary\n\nfWHR.Bsub = df2fWHR(bChsub)\nfWHR.Bsup = df2fWHR(bChsup)\nfWHR.Btemp = merge(fWHR.Bsub,fWHR.Bsup, by.x='ID', by.y='ID')\nplot(fWHR.Btemp[,2:3])\n\ncor.test(fWHR.Btemp$ratio.x,fWHR.Btemp$ratio.y)\n\n\n\n### Calculate fWHR for morphs\n\nfWHR.Bmorph = df2fWHR(bCh[1:77,])\n\n# copy and paste results back into CSV\n\n\n",
+    "created" : 1491386094049.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2798302943",
+    "id" : "5850B8D7",
+    "lastKnownWriteTime" : 1491402932,
+    "last_content_update" : 1491402932516,
+    "path" : "C:/Users/s1229179/GitHub/R/fWHR/bastrop.R",
+    "project_path" : "bastrop.R",
+    "properties" : {
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

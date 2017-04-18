@@ -4,8 +4,8 @@ library(lme4)
 library(car)
 library(corrplot)
 
-
-corrplot(cor(chFP[,c(3,4,5,79,80,81,82,83,84),]),  method = 'number')
+colnames(chFP)
+corrplot(cor(chFP[,c(3,4,11,12,13,14,15,16),]),  method = 'number')
 
 
 # rename fHWR column
@@ -36,7 +36,8 @@ confint(m2)
 
 ### Personality
 
-mp1 <- lmer(fHWR ~ Age+Sex + Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ +
+mp1 <- lmer(fHWR ~ Sex + Age
+            + Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ +
               (1 | location) + (1 | ID)
             ,data = chFP)
 

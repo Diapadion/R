@@ -1,5 +1,6 @@
 ### NHANES III data
 library(SAScii)
+library(psych)
 
 nhanes.bm <- read.SAScii('Z:/NHANES III/DS0010/02231-0010-Data.txt',
                          'Z:/NHANES III/DS0010/02231-0010-Setup.sas')
@@ -14,6 +15,8 @@ sort( sapply(ls(),function(x){object.size(get(x))}))
 
 c.bm <- read.csv(file = 'cNHANES.csv')
 c.bm$wbc = c.bm$wbc/1000
+c.bm$lymph = c.bm$lymph*1000
+
 
 
 # Vars of interest
@@ -31,7 +34,7 @@ HGP - Hemaglobin
 MVPSI - Mean corpuscular / cell volume (SI)
 MCPSI - mean corpuscular / cell hemaglobin (SI)
 MHP - mean cell hemaglobin concentration
-LMPDIF - lymphocytes (% of 100 cells)
+LMPDIF - lymphocytes (% of 100 cells) - I think this need to be *1000 in chimps
 MOPDIF - monocytes (% of 100 cells)
 EOP - eosinophils (% of 100 cells)
 #BOP - basophils (% of 100 cells) # not in chimps
@@ -194,6 +197,9 @@ c.bm.m$subject = c.bm.m$Group.1
 c.bm.m$species = 'chimp'
 c.bm.m = c.bm.m[,c(-1,-2)]
 
+# in NHANES males are 1 and females are 2 so we change to that
+c.bm.m$sex[c.bm.m$sex==0] <- 2
+
 
 
 ### Scaling
@@ -203,6 +209,20 @@ c.bm.m = c.bm.m[,c(-1,-2)]
 c.bm.m.s = c.bm.m
 c.bm.m.s$BMI = scale(c.bm.m.s$BMI, center=T)
 #c.bm.m.s[,c(3:35)] = data.frame(lapply(c.bm.m.s[,c(3:35)], function(x) scale(x, center = T)))
+
+# filling in certain values for sex in chimps - TODO: find the origin of this problem ###!!!
+c.bm.m.s$subject[which(is.nan(c.bm.m.s$sex))]
+# [1]  15  90 107 132 134 156 157
+# Barbara  Justin   Lucas    Pericles Phineas  Sheila   Shirley 
+c.bm.m.s$sex[which(is.nan(c.bm.m.s$sex))] <- c(2,1,1,1,1,2,2)
+
+
+# Age adjustment for chimps
+
+c.bm.m.s$age = c.bm.m.s$age * 1.5
+
+
+
 
 all.bm = sel.nbm[sampl.cfa,]
 all.bm$BMI = scale(all.bm$BMI, center=T)
@@ -219,6 +239,8 @@ max(complete.cases)
 
 all.bm[,c(3:35)] = data.frame(lapply(all.bm[,c(3:35)], function(x) scale(x, center = T)))
 
+all.bm$sex = as.factor(all.bm$sex)
+
 describe(all.bm)
 
 
@@ -226,3 +248,4 @@ describe(all.bm)
 
 
 
+    

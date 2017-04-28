@@ -144,102 +144,102 @@ anova(fit.config, fit.metric)
 
 
 
-### What if we restrict it down to the AL factor?
-
-# begin with all variables that have 
-
-modAL1.comp5 <- '
-AL =~ cholesterol + triglycerides + BPs + BPd + BMI + Glucose + phosphate
-
-'
-
-fitAL1.comp5 <- cfa(modAL1.comp5,data=sel.nbm[sampl.cfa,c(4:35)], std.ov=T, missing = 'fiml')
-
-fitMeasures(fitAL1.comp5, c("chisq", "df", "pvalue", "cfi", "rmsea","srmr"))
-summary(fitAL1.comp5)
-semPaths(fitAL1.comp5, what='est')
-
-measurementInvariance(modAL1.comp5, group = "species", 
-                      data = all.bm, fit.measures=c('cfi','rmsea','srmr'), strict=T)
-
-
-
-modAL2.comp5 <- '
-AL =~ cholesterol + triglycerides + BPs + BPd + BMI + Glucose
-
-'
-
-fitAL2.comp5 <- cfa(modAL2.comp5,data=sel.nbm[sampl.cfa,c(4:35)], std.ov=T, missing = 'fiml')
-
-fitMeasures(fitAL2.comp5, c("chisq", "df", "pvalue", "cfi", "rmsea","srmr"))
-summary(fitAL2.comp5)
-semPaths(fitAL2.comp5, what='est')
-
-measurementInvariance(modAL2.comp5, group = "species", 
-                      data = all.bm, fit.measures=c('cfi','rmsea','srmr'), strict=T)
-# I guess we should keep phosphates in the model
-
-
-
-modAL3.comp5_old <- '
-AL =~ cholesterol + triglycerides + BPs + BPd + BMI + phosphate
-
-'
-
-fitAL3.comp5_old <- cfa(modAL3.comp5_old,data=sel.nbm[sampl.cfa,c(4:35)], std.ov=T, missing = 'fiml')
-
-fitMeasures(fitAL3.comp5_old, c("chisq", "df", "pvalue", "cfi", "rmsea","srmr"))
-summary(fitAL3.comp5)
-semPaths(fitAL3.comp5, what='est')
-
-anova(fitAL1.comp5, fitAL2.comp5, fitAL3.comp5)
-anova(fitAL2.comp5, fitAL3.comp5)
-
-compareFit(fitAL1.comp5, fitAL2.comp5, fitAL3.comp5)
-
-
-
-# ModAL3 should be sufficiently good fit to test measurement Invariance
-
-measurementInvariance(modAL3.comp5_old, group = "species", 
-                      #group.partial = colnames(all.bm)[c(-1,-2,-3,-14,-23,-30,-33,-34,-35,-36,-25)],
-                      data = all.bm, fit.measures=c('cfi','rmsea','srmr'), strict=T)
-
-# Invariance looks good.
-
-fitAL3.grp <- cfa(modAL3.comp5, data=all.bm, std.ov=T, missing = 'fiml', group = "species",
-                  std.lv=T)
-# fitAl3.grp <- 
-
-fitMeasures(fitAL3.grp, c("chisq", "df", "pvalue", "cfi", "rmsea","srmr"))
-summary(fitAL3.grp)
-semPaths(fitAL3.grp, what='est')
-
-
-# Group 1 [human]:
-#   
-#   Latent Variables:
-#   Estimate  Std.Err  z-value  P(>|z|)
-# AL =~                                               
-#   cholesterol       1.000                           
-# triglycerides     0.683    0.027   24.871    0.000
-# BPs               1.526    0.039   39.383    0.000
-# BPd               1.525    0.041   37.656    0.000
-# BMI               1.166    0.033   35.709    0.000
-# phosphate        -0.609    0.036  -16.964    0.000
+# ### What if we restrict it down to the AL factor?
+# 
+# # begin with all variables that have 
+# 
+# modAL1.comp5 <- '
+# AL =~ cholesterol + triglycerides + BPs + BPd + BMI + Glucose + phosphate
+# 
+# '
+# 
+# fitAL1.comp5 <- cfa(modAL1.comp5,data=sel.nbm[sampl.cfa,c(4:35)], std.ov=T, missing = 'fiml')
+# 
+# fitMeasures(fitAL1.comp5, c("chisq", "df", "pvalue", "cfi", "rmsea","srmr"))
+# summary(fitAL1.comp5)
+# semPaths(fitAL1.comp5, what='est')
+# 
+# measurementInvariance(modAL1.comp5, group = "species", 
+#                       data = all.bm, fit.measures=c('cfi','rmsea','srmr'), strict=T)
 # 
 # 
-# Group 2 [chimp]:
-#   
-#   Latent Variables:
-#   Estimate  Std.Err  z-value  P(>|z|)
-# AL =~                                               
-#   cholesterol       1.000                           
-# triglycerides     3.010    2.349    1.281    0.200
-# BPs               5.416    4.061    1.334    0.182
-# BPd               6.503    4.621    1.407    0.159
-# BMI               0.125    1.089    0.115    0.908
-# phosphate        -0.974    1.135   -0.858    0.391
+# 
+# modAL2.comp5 <- '
+# AL =~ cholesterol + triglycerides + BPs + BPd + BMI + Glucose
+# 
+# '
+# 
+# fitAL2.comp5 <- cfa(modAL2.comp5,data=sel.nbm[sampl.cfa,c(4:35)], std.ov=T, missing = 'fiml')
+# 
+# fitMeasures(fitAL2.comp5, c("chisq", "df", "pvalue", "cfi", "rmsea","srmr"))
+# summary(fitAL2.comp5)
+# semPaths(fitAL2.comp5, what='est')
+# 
+# measurementInvariance(modAL2.comp5, group = "species", 
+#                       data = all.bm, fit.measures=c('cfi','rmsea','srmr'), strict=T)
+# # I guess we should keep phosphates in the model
+# 
+# 
+# 
+# modAL3.comp5_old <- '
+# AL =~ cholesterol + triglycerides + BPs + BPd + BMI + phosphate
+# 
+# '
+# 
+# fitAL3.comp5_old <- cfa(modAL3.comp5_old,data=sel.nbm[sampl.cfa,c(4:35)], std.ov=T, missing = 'fiml')
+# 
+# fitMeasures(fitAL3.comp5_old, c("chisq", "df", "pvalue", "cfi", "rmsea","srmr"))
+# summary(fitAL3.comp5)
+# semPaths(fitAL3.comp5, what='est')
+# 
+# anova(fitAL1.comp5, fitAL2.comp5, fitAL3.comp5)
+# anova(fitAL2.comp5, fitAL3.comp5)
+# 
+# compareFit(fitAL1.comp5, fitAL2.comp5, fitAL3.comp5)
+# 
+# 
+# 
+# # ModAL3 should be sufficiently good fit to test measurement Invariance
+# 
+# measurementInvariance(modAL3.comp5_old, group = "species", 
+#                       #group.partial = colnames(all.bm)[c(-1,-2,-3,-14,-23,-30,-33,-34,-35,-36,-25)],
+#                       data = all.bm, fit.measures=c('cfi','rmsea','srmr'), strict=T)
+# 
+# # Invariance looks good.
+# 
+# fitAL3.grp <- cfa(modAL3.comp5, data=all.bm, std.ov=T, missing = 'fiml', group = "species",
+#                   std.lv=T)
+# # fitAl3.grp <- 
+# 
+# fitMeasures(fitAL3.grp, c("chisq", "df", "pvalue", "cfi", "rmsea","srmr"))
+# summary(fitAL3.grp)
+# semPaths(fitAL3.grp, what='est')
+# 
+# 
+# # Group 1 [human]:
+# #   
+# #   Latent Variables:
+# #   Estimate  Std.Err  z-value  P(>|z|)
+# # AL =~                                               
+# #   cholesterol       1.000                           
+# # triglycerides     0.683    0.027   24.871    0.000
+# # BPs               1.526    0.039   39.383    0.000
+# # BPd               1.525    0.041   37.656    0.000
+# # BMI               1.166    0.033   35.709    0.000
+# # phosphate        -0.609    0.036  -16.964    0.000
+# # 
+# # 
+# # Group 2 [chimp]:
+# #   
+# #   Latent Variables:
+# #   Estimate  Std.Err  z-value  P(>|z|)
+# # AL =~                                               
+# #   cholesterol       1.000                           
+# # triglycerides     3.010    2.349    1.281    0.200
+# # BPs               5.416    4.061    1.334    0.182
+# # BPd               6.503    4.621    1.407    0.159
+# # BMI               0.125    1.089    0.115    0.908
+# # phosphate        -0.974    1.135   -0.858    0.391
 
 
 
@@ -312,7 +312,8 @@ fitMeasures(fitAL3c.comp5, c("chisq", "df", "pvalue", "cfi", "rmsea","srmr"))
 
 mi.6vars <- measurementInvariance(modAL2.comp5, group = "species", 
                       #group.partial = colnames(all.bm)[c(-1,-2,-3,-14,-23,-30,-33,-34,-35,-36,-25)],
-                      data = all.bm, fit.measures=c('cfi','rmsea','srmr'), strict=T)
+                      data = all.bm, fit.measures=c('cfi','rmsea','srmr'), 
+                      std.lv=T,strict=T)
 
 # Invariance doesn't look good.
 
@@ -325,20 +326,77 @@ summary(fitAL2.grp)
 semPaths(fitAL2.grp, what='est')
 
 # (weak)
-partialInvariance(mi.6vars, type='metric', p.adjust = 'holm')
-partialInvariance(mi.6vars, type='metric', p.adjust = 'holm', fix='cholesterol')
-partialInvariance(mi.6vars, type='metric', p.adjust = 'holm', fix=c('cholesterol','BMI'))
-partialInvariance(mi.6vars, type='metric', p.adjust = 'holm', fix=c('cholesterol','BMI','triglycerides'))
-# BPs;d, Phosphates
+partialInvariance(mi.6vars, type='metric', p.adjust = 'BH')
+partialInvariance(mi.6vars, type='metric', p.adjust = 'BH', free='BPd')
+pI.teardown.metric = partialInvariance(mi.6vars, type='metric', p.adjust = 'BH', free=c('BPd','BPs'), return.fit=T)
+#partialInvariance(mi.6vars, type='metric', p.adjust = 'holm', free=c('BPd','BPs','phosphate'), return.fit = T)
+
+# partialInvariance(mi.6vars, type='metric', p.adjust = 'holm', fix='cholesterol')
+# partialInvariance(mi.6vars, type='metric', p.adjust = 'holm', fix=c('cholesterol','BMI'))
+# partialInvariance(mi.6vars, type='metric', p.adjust = 'holm', fix=c('cholesterol','BMI','triglycerides'))
+
+# BPs;d should have loadings freed across groups
+summary(pI.teardown.metric$models$nested)
+fitMeasures(pI.teardown.metric$models$nested, c("chisq", "df", "pvalue", "cfi", "rmsea","srmr"))
+
 
 # (strong)
-partialInvariance(mi.6vars, type='scalar', p.adjust = 'holm')
-partialInvariance(mi.6vars, type='scalar', p.adjust = 'holm', fix='BPd')
+partialInvariance(mi.6vars, type='scalar', p.adjust = 'BH')
+partialInvariance(mi.6vars, type='scalar', p.adjust = 'BH', free='BPs')
+partialInvariance(mi.6vars, type='scalar', p.adjust = 'BH', free=c('BPs','phosphate'))
+pI.teardown.scalar = partialInvariance(mi.6vars, type='scalar', p.adjust = 'BH', free=c('BPs','triglycerides','phosphate'), return.fit=T)
 
+summary(pI.teardown.scalar$models$nested)
+fitMeasures(pI.teardown.metric$models$nested, c("chisq", "df", "pvalue", "cfi", "rmsea","srmr"))
+# BPs, phosphates, trigs should have intercepts freed across groups
+
+
+# (strict)
 partialInvariance(mi.6vars, type='strict', p.adjust = 'holm')
-partialInvariance(mi.6vars, type='strict', p.adjust = 'holm', fix='cholesterol')
+partialInvariance(mi.6vars, type='strict', p.adjust = 'holm', free=c('phosphate'))
+partialInvariance(mi.6vars, type='strict', p.adjust = 'holm', free=c('phosphate','triglycerides'))
+partialInvariance(mi.6vars, type='strict', p.adjust = 'holm', free=c('phosphate','triglycerides','BPs'))
+partialInvariance(mi.6vars, type='strict', p.adjust = 'holm', free=c('phosphate','triglycerides','BPs','BPd'))
+partialInvariance(mi.6vars, type='strict', p.adjust = 'holm', free=c('phosphate','triglycerides','BPs','BPd','BMI'))
+# can't establish any partial invariance for fixed residuals
 
-partialInvariance(mi.6vars, type='means', p.adjust = 'holm')
+# mean
+partialInvariance(mi.6vars, type='mean', p.adjust = 'holm')
+# nothing.
+
+
+
+### Let's combine strong and weak 
+
+final.modAL = cfa(modAL2.comp5,data=all.bm, 
+                  group = 'species',
+                  std.ov=T, missing = 'fiml',std.lv=T,
+                  group.equal = c("loadings", "intercepts"),
+                  group.partial = c('AL=~BPs','AL=~BPd',
+                                    'BPs~1','triglycerides~1','phosphate~1')
+                  )
+
+fitMeasures(final.modAL, c("chisq", "df", "pvalue", "cfi", "rmsea","srmr"))
+
+summary(final.modAL)
+
+# and if we compare to a null model?
+
+final.0.modAL = cfa(modAL2.comp5,data=all.bm, 
+                    group='species',
+                  std.ov=T, missing = 'fiml',std.lv=T)
+fitMeasures(final.0.modAL, c("chisq", "df", "pvalue", "cfi", "rmsea","srmr"))
+
+final.00.modAL = cfa(modAL2.comp5,data=all.bm, 
+                    std.ov=T, missing = 'fiml',std.lv=T)
+fitMeasures(final.00.modAL, c("chisq", "df", "pvalue", "cfi", "rmsea","srmr"))
+                  
+
+compfit.final = compareFit(final.modAL, final.0.modAL)
+summary(compfit.final)
+
+clipboard(final.modAL, what='summary')
+
 
 
 
@@ -347,8 +405,12 @@ partialInvariance(mi.6vars, type='means', p.adjust = 'holm')
 
 
 
-
-
+# partialInvariance(mi.6vars, type='scalar', p.adjust = 'holm', fix='BPd')
+# 
+# partialInvariance(mi.6vars, type='strict', p.adjust = 'holm')
+# partialInvariance(mi.6vars, type='strict', p.adjust = 'holm', fix='cholesterol')
+# 
+# partialInvariance(mi.6vars, type='means', p.adjust = 'holm')
 
 
 

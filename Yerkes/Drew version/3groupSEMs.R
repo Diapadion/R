@@ -2,6 +2,7 @@
 # MiDUS, MIDJA, Yerkes
 
 
+
 ### Standardization:
 # Pers - across all groups
 #      > within groups may be the  better option
@@ -123,6 +124,20 @@ all3$creat <- s(all3$creat)
 
 s <- function(x) {scale(x)}
 
+
+
+### Data suitability
+
+library(psych)
+
+cortest.bartlett(all3[all3$sample=='MIDUS',3:16])
+cortest.bartlett(all3[all3$sample=='MIDJA',3:16])
+cortest.bartlett(all3[all3$sample=='YNPRC',3:16])
+
+#KMO(all3[all3$sample=='MIDJA',3:16])
+
+
+### SEM
 
 library(lavaan)
 library(semPlot)
@@ -274,6 +289,7 @@ BMI ~~ c(vBMIJ,vBMIA,vBMIC)*BMI
 
 vTrigC > 0
 vBMIJ > 0
+vChol > 0
 
 '
 
@@ -282,7 +298,7 @@ vBMIJ > 0
 f3.3b <- lavaan(sem.0.ALov0, data = all3, missing="ML", group = 'sample', 
                 group.equal = c("regressions"),
                 group.partial = c("AL ~ sex","AL ~ age","AL ~ age2")
-                ,model.type='sem', std.lv=F,int.ov.free = TRUE, int.lv.free = FALSE, auto.fix.first = TRUE,
+                ,model.type='sem', std.lv=T,int.ov.free = TRUE, int.lv.free = FALSE, auto.fix.first = F,
                 auto.fix.single = TRUE, auto.var = TRUE, auto.cov.lv.x = TRUE, auto.th = TRUE, auto.delta = TRUE,
                 auto.cov.y = TRUE#, se = "boot", bootstrap = 100
                 , estimator = 'MLR'
@@ -292,7 +308,7 @@ f3.3b <- lavaan(sem.0.ALov0, data = all3, missing="ML", group = 'sample',
 # All parameters freely estimated within groups
 # (this model has the same variance issues as f3.3b)
 f3.3 <- lavaan(sem.0.ALov0, data = all3, missing="ML", model.type='sem', group = 'sample',
-               std.lv=F,int.ov.free = TRUE, int.lv.free = FALSE, auto.fix.first = TRUE, 
+               std.lv=T,int.ov.free = TRUE, int.lv.free = FALSE, auto.fix.first = F, 
                auto.fix.single = TRUE, auto.var = TRUE, auto.cov.lv.x = TRUE, auto.th = TRUE, auto.delta = TRUE, 
                auto.cov.y = TRUE
 )
@@ -331,7 +347,7 @@ vBMIJ > 0
 f3.1x <- lavaan(sem.1, data = all3, missing="ML", model.type='sem', group = 'sample',
                 #                group.equal = c("regressions"),
                 #                group.partial = c("AL ~ sex","AL ~ age","AL ~ age2"),
-                std.lv = F, int.ov.free = TRUE, int.lv.free = FALSE, auto.fix.first = TRUE, 
+                std.lv = T, int.ov.free = TRUE, int.lv.free = FALSE, auto.fix.first = F, 
                 auto.fix.single = TRUE, auto.var = TRUE, auto.cov.lv.x = TRUE, auto.th = TRUE, auto.delta = TRUE, 
                 auto.cov.y = TRUE
 )
@@ -369,7 +385,7 @@ vBMIJ > 0
 f3.2x <- lavaan(sem.2, data = all3, missing="ML", model.type='sem', group = 'sample',
 #                group.equal = c("regressions"),
 #                group.partial = c("AL ~ sex","AL ~ age","AL ~ age2"),
-                std.lv = F, int.ov.free = TRUE, int.lv.free = FALSE, auto.fix.first = TRUE, 
+                std.lv = T, int.ov.free = TRUE, int.lv.free = FALSE, auto.fix.first = F, 
                 auto.fix.single = TRUE, auto.var = TRUE, auto.cov.lv.x = TRUE, auto.th = TRUE, auto.delta = TRUE, 
                 auto.cov.y = TRUE
 )
@@ -383,7 +399,7 @@ fitMeasures(f3.1x, c("chisq", "df", "pvalue", "cfi", "rmsea","srmr",'AIC','BIC')
 fitMeasures(f3.3, c("chisq", "df", "pvalue", "cfi", "rmsea","srmr",'AIC','BIC')) # sample
 fitMeasures(f3.3b, c("chisq", "df", "pvalue", "cfi", "rmsea","srmr",'AIC','BIC')) # all as one
 
-compareFit(f3.2x,f3.1x,f3.3,f3.3b)
+compareFit(f3.2x,f3.1x,f3.3,f3.3b))
 
 
 
@@ -468,3 +484,128 @@ fitMeasures(f3.5, c("chisq", "df", "pvalue", "cfi", "rmsea","srmr",'AIC','BIC'))
 
 
 
+### Freeing the LV loadings ###
+# (but, keeping them the same across groups)
+
+sem.1.free <- ' # model 1 groups the sample by species
+
+AL =~ chol + trig + sys + dias + BMI
+
+AL ~ sex + age + age2 + c(d1,d1,d2)*Dominance + c(e1,e1,e2)* Extraversion + c(o1,o1,o2)*Openness + 
+c(c1,c1,c2)*Conscientiousness + c(a1,a1,a2)*Agreeableness + c(n1,n1,n2)*Neuroticism
+
+sys ~~ dias
+sys ~~ trig
+sys ~~ BMI
+sys ~~ chol
+dias ~~ trig
+dias ~~ BMI
+dias ~~ chol
+trig ~~ BMI
+trig ~~ chol
+BMI ~~ chol
+
+# within particular samples these variances tend to go negative with f3.3b, so we set them = to 0
+# trig ~~ c(vTrigJ,vTrigA,vTrigC)*trig
+# BMI ~~ c(vBMIJ,vBMIA,vBMIC)*BMI
+# 
+# vTrigC > 0
+# vBMIJ > 0
+
+'
+
+sem.2.free <- ' # model 2 groups the sample by country
+
+AL =~ chol + trig + sys + dias + BMI
+
+AL ~ sex + age + age2 + c(d1,d2,d2)*Dominance + c(e1,e2,e2)* Extraversion + c(o1,o2,o2)*Openness + 
+c(c1,c2,c2)*Conscientiousness + c(a1,a2,a2)*Agreeableness + c(n1,n2,n2)*Neuroticism
+
+sys ~~ dias
+sys ~~ trig
+sys ~~ BMI
+sys ~~ chol
+dias ~~ trig
+dias ~~ BMI
+dias ~~ chol
+trig ~~ BMI
+trig ~~ chol
+BMI ~~ chol
+
+# within particular samples these variances tend to go negative with f3.3b, so we set them = to 0
+trig ~~ c(vTrigJ,vTrigA,vTrigC)*trig
+BMI ~~ c(vBMIJ,vBMIA,vBMIC)*BMI
+
+vTrigC > 0
+vBMIJ > 0
+
+'
+
+sem.0.free <- '
+
+AL =~ chol + trig + sys + dias + BMI
+
+AL ~ sex + age + age2 + Dominance + Extraversion + Openness + Conscientiousness + Agreeableness + Neuroticism
+
+sys ~~ dias
+sys ~~ trig
+sys ~~ BMI
+sys ~~ chol
+dias ~~ trig
+dias ~~ BMI
+dias ~~ chol
+trig ~~ BMI
+trig ~~ chol
+BMI ~~ chol
+
+## across sample, these variances tend to go negative with f3.3b, so we set them = to 0
+# trig ~~ c(vTrigJ,vTrigA,vTrigC)*trig
+# BMI ~~ c(vBMIJ,vBMIA,vBMIC)*BMI
+# chol ~~ vChol*chol
+# sys ~~ vSys*sys
+#dias ~~ vDias*dias
+
+# vTrigC > 0
+# vBMIJ > 0
+# vChol > 0
+# vSys > 0
+# vDias > 0
+
+'
+
+
+f3.3b.free <- lavaan(sem.0.free, data = all3, missing="ML", group = 'sample', 
+                group.equal = c("regressions","loadings")
+                group.partial = c("AL ~ sex","AL ~ age","AL ~ age2")
+                ,model.type='sem', std.lv=T,int.ov.free = TRUE, int.lv.free = FALSE, auto.fix.first = F,
+                auto.fix.single = TRUE, auto.var = TRUE, auto.cov.lv.x = TRUE, auto.th = TRUE, auto.delta = TRUE,
+                auto.cov.y = TRUE#, se = "boot", bootstrap = 100
+                , estimator = 'MLR')
+
+f3.3.free <- lavaan(sem.0.free, data = all3, missing="ML", group = 'sample', 
+                     group.equal = c("loadings")
+                     ,model.type='sem', std.lv=T,int.ov.free = TRUE, int.lv.free = FALSE, auto.fix.first = F,
+                     auto.fix.single = TRUE, auto.var = TRUE, auto.cov.lv.x = TRUE, auto.th = TRUE, auto.delta = TRUE,
+                     auto.cov.y = TRUE#, se = "boot", bootstrap = 100
+                     , estimator = 'MLR')
+
+f3.1.free <- lavaan(sem.1.free, data = all3, missing="ML", group = 'sample', 
+                     group.equal = c("loadings")
+                     ,model.type='sem', std.lv=T,int.ov.free = TRUE, int.lv.free = FALSE, auto.fix.first = F,
+                     auto.fix.single = TRUE, auto.var = TRUE, auto.cov.lv.x = TRUE, auto.th = TRUE, auto.delta = TRUE,
+                     auto.cov.y = TRUE#, se = "boot", bootstrap = 100
+                     , estimator = 'MLR')
+
+f3.2.free <- lavaan(sem.2.free, data = all3, missing="ML", group = 'sample', 
+                    group.equal = c("loadings")
+                    ,model.type='sem', std.lv=T,int.ov.free = TRUE, int.lv.free = FALSE, auto.fix.first = F,
+                    auto.fix.single = TRUE, auto.var = TRUE, auto.cov.lv.x = TRUE, auto.th = TRUE, auto.delta = TRUE,
+                    auto.cov.y = TRUE#, se = "boot", bootstrap = 100
+                    , estimator = 'MLR')
+
+fitMeasures(f3.1.free, c("chisq", "df", "pvalue", "cfi", "rmsea","srmr",'AIC','BIC')) #
+fitMeasures(f3.2.free, c("chisq", "df", "pvalue", "cfi", "rmsea","srmr",'AIC','BIC')) #
+fitMeasures(f3.3b.free, c("chisq", "df", "pvalue", "cfi", "rmsea","srmr",'AIC','BIC')) #
+fitMeasures(f3.3.free, c("chisq", "df", "pvalue", "cfi", "rmsea","srmr",'AIC','BIC')) #
+
+summary(f3.1.free)

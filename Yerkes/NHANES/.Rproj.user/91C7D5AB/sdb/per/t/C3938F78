@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "### Associations with age and sex\n\nlibrary(psych)\nlibrary(car)\nlibrary(lsr)\nlibrary(xtable)\n\n\n\nwith(all.bm[all.bm$species=='human',],cor.test(age,BMI))\nwith(all.bm[all.bm$species=='human',],cor.test(age,BPs))\nwith(all.bm[all.bm$species=='human',],cor.test(age,BPd))\nwith(all.bm[all.bm$species=='human',],cor.test(age,triglycerides))\nwith(all.bm[all.bm$species=='human',],cor.test(age,cholesterol))\nwith(all.bm[all.bm$species=='human',],cor.test(age,phosphate))\n\nwith(all.bm[all.bm$species=='chimp',],cor.test(age,BMI))\nwith(all.bm[all.bm$species=='chimp',],cor.test(age,BPs))\nwith(all.bm[all.bm$species=='chimp',],cor.test(age,BPd))\nwith(all.bm[all.bm$species=='chimp',],cor.test(age,triglycerides))\nwith(all.bm[all.bm$species=='chimp',],cor.test(age,cholesterol))\nwith(all.bm[all.bm$species=='chimp',],cor.test(age,phosphate))\n\nwith(all.bm[all.bm$species=='human',],cohensD(BMI~sex))\nwith(all.bm[all.bm$species=='human',],cohensD(BPs~sex))\nwith(all.bm[all.bm$species=='human',],cohensD(BPd~sex))\nwith(all.bm[all.bm$species=='human',],cohensD(triglycerides~sex))\nwith(all.bm[all.bm$species=='human',],cohensD(cholesterol~sex))\nwith(all.bm[all.bm$species=='human',],cohensD(phosphate~sex))\n\nwith(all.bm[all.bm$species=='chimp',],cohensD(BMI~sex))\nwith(all.bm[all.bm$species=='chimp',],cohensD(BPs~sex))\nwith(all.bm[all.bm$species=='chimp',],cohensD(BPd~sex))\nwith(all.bm[all.bm$species=='chimp',],cohensD(triglycerides~sex))\nwith(all.bm[all.bm$species=='chimp',],cohensD(cholesterol~sex))\nwith(all.bm[all.bm$species=='chimp',],cohensD(phosphate~sex))\n\n\n\ntable(all.bm$species)\ntable(all.bm$species=='human')\ncorr.test(\n  cbind(all.bm$BMI[all.bm$species=='human']),\n  all.bm$age[all.bm$species=='human'])\n)\n\n\nsex.aov <- manova(cbind(BPs,BPd,BMI,triglycerides,cholesterol,phosphate) ~ sex * species, data=all.bm)\nsummary(sex.aov, test='Wilks')\nsummary.aov(sex.aov)\n\n\nage.aov <- manova(cbind(BPs,BPd,BMI,triglycerides,cholesterol,phosphate) ~ age * species, data=all.bm)\nsummary(age.aov, test= 'Wilks')\nsummary.aov(age.aov)\n\n\nmancova <- manova(cbind(BPs,BPd,BMI,triglycerides,cholesterol,phosphate) ~ age * species * sex, data=all.bm)\nsummary(mancova)\nsummary.aov(mancova)\n\nxmancova <- xtable(mancova)\nprint.xtable(xmancova, type=\"html\", file=\"mancova.html\")\n\nxmancova <- xtable(summary.aov(mancova)[3])\nprint.xtable(xmancova, type=\"html\", file=\"mancova.html\")\n\n\nlibrary(heplots)\nlibrary(candisc)\n\n\netasq(mancova)\ncoef(mancova)\n\nprint.xtable(xtable(coef(mancova)),type='html',file='mancova.html')\n\n\ncoefplot(mancova, variables=3:4, Scheffe=T)\nheplot(mancova, variables=1:6)\nheplot(mancova)\nbiplot(mancova)\n\npairs(mancova)\n\n\n\n\n\n\n\nlda(cbind(BPs,BPd,BMI,triglycerides,cholesterol,phosphate) ~ age * species * sex, data=all.bm)\n\n\n\ntemp = aov(BPs ~ age * species * sex, data=all.bm)\nTukeyHSD(temp)\n\n\n\n# hist(all.bm$age[all.bm$species=='human'])\n# hist(all.bm$age[all.bm$species=='chimp'])\n\n\n",
+    "created" : 1493304407958.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2138808468",
+    "id" : "C3938F78",
+    "lastKnownWriteTime" : 1493389848,
+    "last_content_update" : 1493389848611,
+    "path" : "C:/Users/s1229179/GitHub/R/Yerkes/NHANES/AgeSex.R",
+    "project_path" : "AgeSex.R",
+    "properties" : {
+        "tempName" : "Untitled2"
+    },
+    "relative_order" : 11,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

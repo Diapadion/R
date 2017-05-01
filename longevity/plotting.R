@@ -69,10 +69,17 @@ for (i in  seq(0.01,2, length.out = n)){
 }
 pdx = gather(pwr.df, Personality, Power, Agreeableness:Openness)
 
-pwr.p = ggplot(pdx, aes(x = HR, y= Power, color = Personality)) +
-  geom_line(size = 2) + theme_bw() + facet_wrap(facets = 'Personality') + theme(legend.position="none")
+dat.vline <- data.frame(
+  Personality = c('Agreeableness','Conscientiousness','Dominance','Extraversion','Neuroticism','Openness'),
+  #xp = c(0.88, 0.80, 0.89, 0.80, 0.94, 0.98))
+  xp = rep_len(0.7,6))
 
-pwr.p  
+pwr.p = ggplot(pdx, aes(x = HR, y= Power, color = Personality)) +
+  geom_line(size = 2) + theme_bw() + facet_wrap(facets = 'Personality') + 
+  theme(legend.position="none") +
+  geom_vline(aes(xintercept = xp), linetype='dashed', data = dat.vline)
+
+pwr.p + labs(x = 'Hazard ratio')
 
 
 

@@ -102,6 +102,8 @@ fpack.r$AIC
 
 
 
+# Specifications of interest
+
 fpack.u.0f = frailtyPenal(Surv(age_pr, age, status) ~ #cluster(sample) + 
                          as.factor(sex) + as.factor(origin) +  
                          Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ,
@@ -145,6 +147,21 @@ fpack.r.x.sx = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) +
 )
 
 
+fpack.r.x.sx.D = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) + 
+                              #as.factor(sex) + #as.factor(origin) +  
+                              D.r2.DoB,
+                            data = datX, hazard =  'Piecewise-equi' , nb.int = 9
+                            #, n.knots = 4, kappa =1
+)
+fpack.r.x.sx.E = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) + 
+                                #as.factor(sex) + #as.factor(origin) +  
+                                E.r2.DoB,
+                              data = datX, hazard =  'Piecewise-equi' , nb.int = 9
+                              #, n.knots = 4, kappa =1
+)
+
+
+
 ### these won't converge
 
 fpack.u.i.M = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) + 
@@ -169,10 +186,9 @@ fpack.u.i.w = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) +
                                          as.factor(sex) + as.factor(origin) +  
                                          Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ,
                                        data = datX, hazard =  'Weibull' 
-                                       #, n.knots = 4, kappa =1
+                                       , n.knots = 2, kappa =1
 )
                            
-
 
 
 

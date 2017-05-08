@@ -1,0 +1,29 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1494262586491.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "E7E746DE",
+    "lastKnownWriteTime" : 32651513914720368,
+    "last_content_update" : 1494262586491,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "4E213C23",
+        "caption" : "netformC.2",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=netformC.2&cache_key=4E213C23",
+        "displayedObservations" : 157,
+        "environment" : "",
+        "object" : "netformC.2",
+        "preview" : 0,
+        "totalObservations" : 157,
+        "variables" : 20
+    },
+    "relative_order" : 12,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}

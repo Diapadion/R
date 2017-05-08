@@ -3,16 +3,76 @@
 library(lme4)
 library(MuMIn)
 
-# should I rejigger data for this purpose, to be more like the SEM data?
+# should I rejigger data for this purpose, to be more like the SEM data?[???]
 
-scoutput$AL = scoutput$sys + scoutput$dias + scoutput$chol + scoutput$trig + scoutput$BMI
+
+# Crucial line of code for all samples:
+all3$AL = rowMeans(cbind(all3$sys,all3$dias,all3$chol,all3$trig,all3$BMI), na.rm = T)
+
+scoutput$AL = rowMeans(cbind(scoutput$sys,scoutput$dias,scoutput$chol,scoutput$trig,scoutput$BMI), na.rm = T)
+
+
+
+mcAL.1.simplm <- lm(AL ~ Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion
+                    + age + age2 + sex, 
+                    data = all3[all3$sample=='YNPRC',])
+summary(mcAL.1.simplm)
 
 mcAL.1 <- lmer(AL ~ Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion
-               + age + I(age^2) + sex + (1 | chimp), 
+               + age + age2 + sex + (1 | chimp), 
                data = scoutput,REML=FALSE)
-
+summary(mcAL.1)
 confint(mcAL.1, method="profile")
 r.squaredGLMM(mcAL.1)
+
+
+
+### Item by item
+scoutput$AL = scoutput$sys + scoutput$dias + scoutput$chol + scoutput$trig + scoutput$BMI
+
+mcALallItems.1 <- lmer(AL ~ Depressed + Fearful + Persistent + Cautious + Stable + Autistic + Stingy  
+                       + Jealous + Reckless + Sociable + Timid + Sympathetic + Playful 
+                       + Solitary + Active + Helpful + Bullying + Aggressive + Manipiulative
+                       + Gentle + Affectionate + Excitable + Impulsive + Inquisitve + Submissive
+                       + Dependent + Irritible + Predictable + Decisive + Independent + Sensitive
+                       + Defiant + Intelligent + Protective + Inventive + Clumsy + Erratic + Friendly
+                       + Lazy + Disorganized + Unemotional + Imitative + Dominant
+               + age + I(age^2) + sex + (1 | chimp), 
+               data = scoutput,REML=FALSE)
+summary(mcALallItems.1)
+confint(mcALallItems.1, method="profile")
+r.squaredGLMM(mcALallItems.1)
+
+
+
+netformC = as.matrix(as.data.frame(lapply(scoutput[complete.cases(scoutput),], as.numeric)))
+
+net.C.AL = glmnet(netformC[,c(2,5,12:54)], netformC[,c(81)],
+                  family='gaussian',standardize=T,
+                  nlambda=1000, alpha = alif)
+cvnet.C.AL = cv.glmnet(netformC[,c(2,5,12:54)], netformC[,c(81)],family='gaussian',nfolds=100,alpha=alif)
+plot(cvnet.C.AL)
+
+coef(net.C.AL,s=cvnet.C.AL$lambda.1se)
+
+
+
+head(all3[all3$sample=='YNPRC',])
+
+netformC.1 = as.matrix(as.data.frame(lapply(all3[complete.cases(all3)&(all3$sample=='YNPRC'),], as.numeric)))
+netformC.2 = as.matrix(as.data.frame(lapply(all3[complete.cases(all3$AL)&(all3$sample=='YNPRC'),], as.numeric)))
+# fucking Tara. Fix her eventually...###
+netformC.2 = netformC.2[-149,]
+
+net.C.AL = glmnet(netformC[,c(2,5,12:54)], netformC[,c(81)],
+                  family='gaussian',standardize=T,
+                  nlambda=1000, alpha = alif)
+cvnet.C.AL = cv.glmnet(netformC[,c(2,5,12:54)], netformC[,c(81)],family='gaussian',nfolds=100,alpha=alif)
+plot(cvnet.C.AL)
+
+coef(net.C.AL,s=cvnet.C.AL$lambda.1se)
+
+
 
 
 smeandat$AL = smeandat$sys + smeandat$dias + smeandat$chol + smeandat$trig + smeandat$BMI

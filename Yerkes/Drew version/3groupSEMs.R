@@ -102,7 +102,10 @@ colnames(smeandat)[19] <- 'sample'
 
 all3 <- rbind(all1,all2)
 all3$BMI <- s(all3$BMI) 
-              
+
+all2 <- all3 # need to save this for later
+
+
 all3 <- rbind(all3, smeandat)
 
 all3$age <- s(all3$age)
@@ -142,7 +145,7 @@ cortest.bartlett(all3[all3$sample=='YNPRC',3:16])
 library(lavaan)
 library(semPlot)
 library(semTools)
-library(blavaan)
+
 
 
 sem.0 <- '
@@ -400,6 +403,12 @@ fitMeasures(f3.3, c("chisq", "df", "pvalue", "cfi", "rmsea","srmr",'AIC','BIC'))
 fitMeasures(f3.3b, c("chisq", "df", "pvalue", "cfi", "rmsea","srmr",'AIC','BIC')) # all as one
 
 compareFit(f3.2x,f3.1x,f3.3,f3.3b))
+
+
+
+summary(f3.3b)
+semPaths(f3.3, what='mod', intercepts=F,residuals=F, thresholds=F,exoCov=F
+         , whatLabels = 'par')
 
 
 

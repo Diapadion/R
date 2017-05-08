@@ -214,7 +214,56 @@ protein[outliers(protein,3.5)]<-NA
 
 #as.Date(as.character(dmdob$DOB.x[25]),format = "%m/%d/%y")
 
-# personality
+### Personality
+
+# this needs to be redone
+
+## @ present, no idea how far the error from this extends
+
+dmdob$fear.z <- apply(cbind(dmdob$fear.x,dmdob$fear.y),1,mean,na.rm=TRUE)
+dmdob$dom.z <- apply(cbind(dmdob$dom.x,dmdob$dom.y),1,mean,na.rm=TRUE)
+dmdob$pers.z <- apply(cbind(dmdob$pers.x,dmdob$pers.y),1,mean,na.rm=TRUE)
+dmdob$caut.z <- apply(cbind(dmdob$caut.x,dmdob$caut.y),1,mean,na.rm=TRUE)
+dmdob$stbl.z <- apply(cbind(dmdob$stbl.x,dmdob$stbl.y),1,mean,na.rm=TRUE)
+dmdob$aut.z <- apply(cbind(dmdob$aut.x,dmdob$aut.y),1,mean,na.rm=TRUE)
+dmdob$stngy.z <- apply(cbind(dmdob$stngy.x,dmdob$stngy.y),1,mean,na.rm=TRUE)
+dmdob$jeals.z <- apply(cbind(dmdob$jeals.x,dmdob$jeals.y),1,mean,na.rm=TRUE)
+dmdob$reckl.z <- apply(cbind(dmdob$reckl.x,dmdob$reckl.y),1,mean,na.rm=TRUE)
+dmdob$soc.z <- apply(cbind(dmdob$soc.x,dmdob$soc.y),1,mean,na.rm=TRUE)
+dmdob$tim.z <- apply(cbind(dmdob$tim.x,dmdob$tim.y),1,mean,na.rm=TRUE)
+dmdob$symp.z <- apply(cbind(dmdob$symp.x,dmdob$symp.y),1,mean,na.rm=TRUE)
+dmdob$play.z <- apply(cbind(dmdob$play.x,dmdob$play.y),1,mean,na.rm=TRUE)
+dmdob$sol.z <- apply(cbind(dmdob$sol.x,dmdob$sol.y),1,mean,na.rm=TRUE)
+dmdob$actv.z <- apply(cbind(dmdob$actv.x,dmdob$actv.y),1,mean,na.rm=TRUE)
+dmdob$help.z <- apply(cbind(dmdob$help.x,dmdob$help.y),1,mean,na.rm=TRUE)
+dmdob$buly.z <- apply(cbind(dmdob$buly.x,dmdob$buly.y),1,mean,na.rm=TRUE)
+dmdob$aggr.z <- apply(cbind(dmdob$aggr.x,dmdob$aggr.y),1,mean,na.rm=TRUE)
+dmdob$manp.z <- apply(cbind(dmdob$manp.x,dmdob$manp.y),1,mean,na.rm=TRUE)
+dmdob$gntl.z <- apply(cbind(dmdob$gntl.x,dmdob$gntl.y),1,mean,na.rm=TRUE)
+dmdob$affc.z <- apply(cbind(dmdob$affc.x,dmdob$affc.y),1,mean,na.rm=TRUE)
+dmdob$exct.z <- apply(cbind(dmdob$exct.x,dmdob$exct.y),1,mean,na.rm=TRUE)
+dmdob$impl.z <- apply(cbind(dmdob$impl.x,dmdob$impl.y),1,mean,na.rm=TRUE)
+dmdob$inqs.z <- apply(cbind(dmdob$inqs.x,dmdob$inqs.y),1,mean,na.rm=TRUE)
+dmdob$subm.z <- apply(cbind(dmdob$subm.x,dmdob$subm.y),1,mean,na.rm=TRUE)
+dmdob$depd.z <- apply(cbind(dmdob$depd.x,dmdob$depd.y),1,mean,na.rm=TRUE)
+dmdob$irri.z <- apply(cbind(dmdob$irri.x,dmdob$irri.y),1,mean,na.rm=TRUE)
+dmdob$pred.z <- apply(cbind(dmdob$pred.x,dmdob$pred.y),1,mean,na.rm=TRUE)
+dmdob$decs.z <- apply(cbind(dmdob$decs.x,dmdob$decs.y),1,mean,na.rm=TRUE)
+dmdob$depr.z <- apply(cbind(dmdob$depr.x,dmdob$depr.y),1,mean,na.rm=TRUE)
+dmdob$sens.z <- apply(cbind(dmdob$sens.x,dmdob$sens.y),1,mean,na.rm=TRUE)
+dmdob$defn.z <- apply(cbind(dmdob$defn.x,dmdob$defn.y),1,mean,na.rm=TRUE)
+dmdob$intll.z <- apply(cbind(dmdob$intll.x,dmdob$intll.y),1,mean,na.rm=TRUE)
+dmdob$prot.z <- apply(cbind(dmdob$prot.x,dmdob$prot.y),1,mean,na.rm=TRUE)
+dmdob$invt.z <- apply(cbind(dmdob$invt.x,dmdob$invt.y),1,mean,na.rm=TRUE)
+dmdob$clmy.z <- apply(cbind(dmdob$clmy.x,dmdob$clmy.y),1,mean,na.rm=TRUE)
+dmdob$errc.z <- apply(cbind(dmdob$errc.x,dmdob$errc.y),1,mean,na.rm=TRUE)
+dmdob$frdy.z <- apply(cbind(dmdob$frdy.x,dmdob$frdy.y),1,mean,na.rm=TRUE)
+dmdob$lazy.z <- apply(cbind(dmdob$lazy.x,dmdob$lazy.y),1,mean,na.rm=TRUE)
+dmdob$dsor.z <- apply(cbind(dmdob$dsor.x,dmdob$dsor.y),1,mean,na.rm=TRUE)
+dmdob$unem.z <- apply(cbind(dmdob$unem.x,dmdob$unem.y),1,mean,na.rm=TRUE)
+dmdob$imit.z <- apply(cbind(dmdob$imit.x,dmdob$imit.y),1,mean,na.rm=TRUE)
+dmdob$indp.z <- apply(cbind(dmdob$indp.x,dmdob$indp.y),1,mean,na.rm=TRUE)
+
 
 compare_data <- NULL
 
@@ -390,10 +439,17 @@ mmdat <- data.frame(dmdob$chimp,sex,BMI,DoB,age, # to get current age
                     mono[,3],lymph[,3],wbc[,3],
                     protein[,3],albumin[,3],calcium[,3],phos[,3],sodium[,3],potas[,3],
                     chlor[,3],globulin[,3],GGT[,3],osmolality[,3],ALP[,3],creatinine[,3],
-                    BUN[,3],rbc[,3],hct[,3],hgb[,3],eos[,3],systolic[,3],diastolic[,3],
-                    #trig[,4], chol[,4], glucose[,4],
-                    dmdob$depr.z
-                    
+                    BUN[,3],rbc[,3],hct[,3],hgb[,3],eos[,3],systolic[,3],diastolic[,3]
+                    #,trig[,4], chol[,4], glucose[,4],
+                    ,dmdob$depr.z, dmdob$fear.z, dmdob$pers.z, dmdob$caut.z, dmdob$stbl.z, dmdob$aut.z,
+                    dmdob$stngy.z, dmdob$jeals.z, dmdob$reckl.z, dmdob$soc.z, dmdob$tim.z, dmdob$symp.z,
+                    dmdob$play.z, dmdob$sol.z, dmdob$actv.z, dmdob$help.z, dmdob$buly.z, dmdob$aggr.z,
+                    dmdob$manp.z, dmdob$gntl.z, dmdob$affc.z, dmdob$exct.z, dmdob$impl.z, dmdob$inqs.z,
+                    dmdob$subm.z, dmdob$depd.z, dmdob$irri.z, dmdob$pred.z, dmdob$decs.z, dmdob$indp.z,
+                    dmdob$sens.z, dmdob$defn.z, dmdob$intll.z, dmdob$prot.z, dmdob$invt.z, dmdob$clmy.z,
+                    dmdob$errc.z, dmdob$frdy.z, dmdob$lazy.z, dmdob$dsor.z, dmdob$unem.z, dmdob$imit.z,
+                    dmdob$dom.z
+
                     #apply(systolic,1,mean,na.rm=TRUE),apply(diastolic,1,mean,na.rm=TRUE)
                     )
 
@@ -410,7 +466,12 @@ colnames(mmdat) <- c('chimp','sex','BMI','DoB','age','dom','extra','cons','agree
                      'protein.3','albumin.3','calcium,3','phos.3','sodium.3','potas.3',
                      'chlor.3','globulin.3','GGT.3','osmolality.3','ALP.3','creatinine.3',
                      'BUN.3','rbc.3','hct.3','hgb.3','eos.3','sys.3','dias.3',
-                     'depressed'
+                     'Depressed','Fearful','Persistent','Cautious','Stable','Autistic','Stingy','Jealous',
+                     'Reckless','Sociable','Timid','Sympathetic','Playful','Solitary','Active','Helpful',
+                     'Bullying','Aggressive','Manipiulative','Gentle','Affectionate','Excitable','Impulsive',
+                     'Inquisitve','Submissive','Dependent','Irritible','Predictable','Decisive','Independent',
+                     'Sensitive','Defiant','Intelligent','Protective','Inventive','Clumsy','Erratic',
+                     'Friendly','Lazy','Disorganized','Unemotional','Imitative','Dominant'
                      #'trig.4','chol.4','glucose.4',                   
                      #'sys','dias'
                      )
@@ -453,7 +514,7 @@ imp_mm = amelia(mmdat[,c(-4,-(12:87))],idvars="chimp",m=100,p2s=0)
 
 
              ### see just below
-output <- reshape(mmdat[,1:86], 
+output <- reshape(mmdat[,1:129], 
                   idvar = "chimp",
                   #idvar=c(colnames(mmdat)[1:11],'sys','dias'), 
                   varying=colnames(mmdat)[12:86], 
@@ -498,11 +559,16 @@ output$creatinine = c(mmdat$creatinine.1,mmdat$creatinine.2,mmdat$creatinine.3)
 # now scale and center it
 scoutput <- cbind(output[,1:2],scale(output[,3]),output[,4],scale(output[,5:12]),
                               #  output[,13],
-                  scale(output[,13:38]))
+                  scale(output[,13:80]))
 
 colnames(scoutput)[3] <- 'BMI'
 colnames(scoutput)[6:11]<- c('Dominance','Extraversion','Conscientiousness',
                              'Agreeableness','Neuroticism','Openness')
+
+scoutput$age2 = mmdat$age^2
+scoutput$age2 = s(scoutput$age2)
+
+
 
 #slongput <- reshape(scoutput, idvar = "chimp"
 #                    )

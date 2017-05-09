@@ -159,6 +159,19 @@ fpack.r.x.sx.E = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) +
                               data = datX, hazard =  'Piecewise-equi' , nb.int = 9
                               #, n.knots = 4, kappa =1
 )
+fpack.r.x.sx.A = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) + 
+                                #as.factor(sex) + #as.factor(origin) +  
+                                Agr_CZ,
+                              data = datX, hazard =  'Piecewise-equi' , nb.int = 9
+                              #, n.knots = 4, kappa =1
+)
+
+fpack.r.i.si.A = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) + 
+                                as.factor(sex) + as.factor(origin) +  
+                                Agr_CZ,
+                              data = datX, hazard =  'Piecewise-equi' , nb.int = 9
+                              #, n.knots = 4, kappa =1
+)
 
 
 
@@ -191,6 +204,14 @@ fpack.u.i.w = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) +
                            
 
 
+### prelim anal for Yerkes - AL connection
+
+fpack.u.i.si.6.Y = frailtyPenal(Surv(age_pr, age, status) ~ #cluster(sample) + 
+                                as.factor(sex) + as.factor(origin) +  
+                                Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ,
+                              data = datX[datX$sample==6,], hazard =  'Piecewise-equi' , nb.int = 9
+                              #, n.knots = 4, kappa =1
+)
 
 
 

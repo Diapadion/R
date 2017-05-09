@@ -1,6 +1,11 @@
 ### takes 
 
 
+### TODO
+### Fix Tara
+
+
+
 #dmdob.bak <- dmdob  # beware using this command and overwriting the backup
 
 setwd('./Drew version/')
@@ -489,7 +494,15 @@ meandat <- data.frame(dmdob$chimp,sex,age,DoB, # to get current age
                     apply(glucose,1,mean,na.rm=TRUE),
                     apply(lymph,1,mean,na.rm=TRUE),
                     apply(mono,1,mean,na.rm=TRUE),
-                    apply(wbc,1,mean,na.rm=TRUE)                    
+                    apply(wbc,1,mean,na.rm=TRUE)
+                    ,dmdob$depr.z, dmdob$fear.z, dmdob$pers.z, dmdob$caut.z, dmdob$stbl.z, dmdob$aut.z,
+                    dmdob$stngy.z, dmdob$jeals.z, dmdob$reckl.z, dmdob$soc.z, dmdob$tim.z, dmdob$symp.z,
+                    dmdob$play.z, dmdob$sol.z, dmdob$actv.z, dmdob$help.z, dmdob$buly.z, dmdob$aggr.z,
+                    dmdob$manp.z, dmdob$gntl.z, dmdob$affc.z, dmdob$exct.z, dmdob$impl.z, dmdob$inqs.z,
+                    dmdob$subm.z, dmdob$depd.z, dmdob$irri.z, dmdob$pred.z, dmdob$decs.z, dmdob$indp.z,
+                    dmdob$sens.z, dmdob$defn.z, dmdob$intll.z, dmdob$prot.z, dmdob$invt.z, dmdob$clmy.z,
+                    dmdob$errc.z, dmdob$frdy.z, dmdob$lazy.z, dmdob$dsor.z, dmdob$unem.z, dmdob$imit.z,
+                    dmdob$dom.z
                     
 )
 
@@ -498,6 +511,12 @@ colnames(meandat) <- c('Chimp','sex','age','DoB','Dominance','Extraversion','Ope
                        'chol','creat','trig','sys','dias',
                        'ALP','glucose',
                      'lymph','mono','wbc'
+                     ,'Depressed','Fearful','Persistent','Cautious','Stable','Autistic','Stingy','Jealous',
+                     'Reckless','Sociable','Timid','Sympathetic','Playful','Solitary','Active','Helpful',
+                     'Bullying','Aggressive','Manipiulative','Gentle','Affectionate','Excitable','Impulsive',
+                     'Inquisitve','Submissive','Dependent','Irritible','Predictable','Decisive','Independent',
+                     'Sensitive','Defiant','Intelligent','Protective','Inventive','Clumsy','Erratic',
+                     'Friendly','Lazy','Disorganized','Unemotional','Imitative','Dominant'
                      )
 
 
@@ -567,6 +586,18 @@ colnames(scoutput)[6:11]<- c('Dominance','Extraversion','Conscientiousness',
 
 scoutput$age2 = mmdat$age^2
 scoutput$age2 = s(scoutput$age2)
+
+
+
+### Again, for the meandata
+
+smeandat = cbind(meandat[,1:2],scale(meandat[,3]),scale(meandat[,3]^2),meandat[,4],
+                  scale(meandat[,5:64]))
+                  #  meandata[,13],
+colnames(smeandat)[3:5] <- c('age','age2','DoB')
+
+
+
 
 
 

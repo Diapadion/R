@@ -228,20 +228,20 @@ alif = 0.1
 
 netformA = as.matrix(as.data.frame(lapply(midus_cs[complete.cases(midus_cs),], as.numeric)))
 
-net.A = glmnet(netformA[,c(2,3,21:51)], netformA[,c(11,12,14:16)],
+net.A = glmnet(netformA[,c(2:4,21:51)], netformA[,c(11,12,14:16)],
                family='mgaussian',standardize=T,
                nlambda=1000, alpha = alif)
-cvnet.A = cv.glmnet(netformA[,c(2,3,21:51)], netformA[,c(11,12,14:16)],family='mgaussian',nfolds=100,alpha=alif)
+cvnet.A = cv.glmnet(netformA[,c(2:4,21:51)], netformA[,c(11,12,14:16)],family='mgaussian',nfolds=100,alpha=alif)
 plot(cvnet.A)
 
 coef(net.A,s=cvnet.A$lambda.min)
 
 
 
-net.A.AL = glmnet(netformA[,c(2,3,21:51)], netformA[,c(52)],
+net.A.AL = glmnet(netformA[,c(2:4,21:51)], netformA[,c(52)],
                family='gaussian',standardize=T,
                nlambda=1000, alpha = alif)
-cvnet.A.AL = cv.glmnet(netformA[,c(2,3,21:51)], netformA[,c(52)],family='gaussian',nfolds=100,alpha=alif)
+cvnet.A.AL = cv.glmnet(netformA[,c(2:4,21:51)], netformA[,c(52)],family='gaussian',nfolds=100,alpha=alif)
 plot(cvnet.A.AL)
 
 coef(net.A.AL,s=cvnet.A.AL$lambda.min)

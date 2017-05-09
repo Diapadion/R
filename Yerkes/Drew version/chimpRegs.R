@@ -2,6 +2,7 @@
 
 library(lme4)
 library(MuMIn)
+library(glmnet)
 
 # should I rejigger data for this purpose, to be more like the SEM data?[???]
 
@@ -64,18 +65,28 @@ netformC.2 = as.matrix(as.data.frame(lapply(all3[complete.cases(all3$AL)&(all3$s
 # fucking Tara. Fix her eventually...###
 netformC.2 = netformC.2[-149,]
 
-net.C.AL = glmnet(netformC[,c(2,5,12:54)], netformC[,c(81)],
+smeandat$AL = rowMeans(cbind(smeandat$sys,smeandat$dias,smeandat$chol,smeandat$trig,smeandat$BMI),na.rm=T)
+netformC.3 = as.matrix(as.data.frame(lapply(smeandat[complete.cases(smeandat$AL),],as.numeric)))
+netformC.3 = netformC.3[-149,]
+
+
+
+net.C.AL = glmnet(netformC.3[,c(2:4,23:65)], netformC.3[,c(66)],
                   family='gaussian',standardize=T,
                   nlambda=1000, alpha = alif)
-cvnet.C.AL = cv.glmnet(netformC[,c(2,5,12:54)], netformC[,c(81)],family='gaussian',nfolds=100,alpha=alif)
+cvnet.C.AL = cv.glmnet(netformC.3[,c(2:4,23:65)], netformC.3[,c(66)],family='gaussian',nfolds=100,alpha=alif)
 plot(cvnet.C.AL)
 
-coef(net.C.AL,s=cvnet.C.AL$lambda.1se)
+coef(net.C.AL,s=cvnet.C.AL$lambda.min)
 
 
 
 
-smeandat$AL = smeandat$sys + smeandat$dias + smeandat$chol + smeandat$trig + smeandat$BMI
+
+
+
+
+###...
 
 mcAL.1 <- lm(AL ~ age + age2 + sex
              + Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion,

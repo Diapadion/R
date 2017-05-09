@@ -12,15 +12,15 @@
     "path" : null,
     "project_path" : null,
     "properties" : {
-        "cacheKey" : "835DCA1E",
+        "cacheKey" : "6D56AB6D",
         "caption" : "datX",
-        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=datX&cache_key=835DCA1E",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=datX&cache_key=6D56AB6D",
         "displayedObservations" : "538",
         "environment" : "",
         "object" : "datX",
         "preview" : "0",
         "totalObservations" : "538",
-        "variables" : "101"
+        "variables" : "107"
     },
     "relative_order" : 8,
     "source_on_save" : false,

@@ -162,18 +162,18 @@ alif = 0.1
 
 netformJ = as.matrix(as.data.frame(lapply(midja_cs[complete.cases(midja_cs),], as.numeric)))
 
-net.J = glmnet(netformJ[,c(2,3,18:48)], netformJ[,c(11,12,14:16)],
+net.J = glmnet(netformJ[,c(2:4,18:48)], netformJ[,c(11,12,14:16)],
                family='mgaussian',standardize=T,
                nlambda=1000, alpha = alif)
-cvnet.J = cv.glmnet(netformJ[,c(2,3,18:48)], netformJ[,c(11,12,14:16)],family='mgaussian',nfolds=100,alpha=alif)
+cvnet.J = cv.glmnet(netformJ[,c(2:4,18:48)], netformJ[,c(11,12,14:16)],family='mgaussian',nfolds=100,alpha=alif)
 plot(cvnet.J)
 
 coef(net.J,s=cvnet.J$lambda.min)
 
-net.J.AL = glmnet(netformJ[,c(2,3,18:48)], netformJ[,c(49)],
+net.J.AL = glmnet(netformJ[,c(2:4,18:48)], netformJ[,c(49)],
                family='gaussian',standardize=T,
                nlambda=1000, alpha = alif)
-cvnet.J.AL = cv.glmnet(netformJ[,c(2,3,18:48)], netformJ[,c(49)],family='gaussian',nfolds=100,alpha=alif)
+cvnet.J.AL = cv.glmnet(netformJ[,c(2:4,18:48)], netformJ[,c(49)],family='gaussian',nfolds=100,alpha=alif)
 plot(cvnet.J.AL)
 
 coef(net.J.AL,s=cvnet.J.AL$lambda.min)

@@ -402,7 +402,7 @@ fitMeasures(f3.1x, c("chisq", "df", "pvalue", "cfi", "rmsea","srmr",'AIC','BIC')
 fitMeasures(f3.3, c("chisq", "df", "pvalue", "cfi", "rmsea","srmr",'AIC','BIC')) # sample
 fitMeasures(f3.3b, c("chisq", "df", "pvalue", "cfi", "rmsea","srmr",'AIC','BIC')) # all as one
 
-compareFit(f3.2x,f3.1x,f3.3,f3.3b))
+compareFit(f3.2x,f3.1x,f3.3,f3.3b)
 
 
 
@@ -618,3 +618,59 @@ fitMeasures(f3.3b.free, c("chisq", "df", "pvalue", "cfi", "rmsea","srmr",'AIC','
 fitMeasures(f3.3.free, c("chisq", "df", "pvalue", "cfi", "rmsea","srmr",'AIC','BIC')) #
 
 summary(f3.1.free)
+
+
+
+### What if we just use the AL variable composed at the top?
+
+sem.0.aggrd <- '
+AL ~ sex + age + age2 + Dominance + Extraversion + Openness + Conscientiousness + Agreeableness + Neuroticism
+
+'
+sem.1.aggrd <- ' # model 1 groups the sample by species
+
+AL ~ sex + age + age2 + c(d1,d1,d2)*Dominance + c(e1,e1,e2)* Extraversion + c(o1,o1,o2)*Openness + 
+c(c1,c1,c2)*Conscientiousness + c(a1,a1,a2)*Agreeableness + c(n1,n1,n2)*Neuroticism
+
+'
+sem.2.aggrd <- ' # model 2 groups the sample by country
+
+AL ~ sex + age + age2 + c(d1,d2,d2)*Dominance + c(e1,e2,e2)* Extraversion + c(o1,o2,o2)*Openness + 
+c(c1,c2,c2)*Conscientiousness + c(a1,a2,a2)*Agreeableness + c(n1,n2,n2)*Neuroticism
+'
+
+f3.3b.aggrd <- lavaan(sem.0.aggrd, data = all3, missing="ML", group = 'sample', 
+                     group.equal = c("regressions","loadings"),
+                     group.partial = c("AL ~ sex","AL ~ age","AL ~ age2")
+                     ,model.type='sem', std.lv=T,int.ov.free = TRUE, int.lv.free = FALSE, auto.fix.first = F,
+                     auto.fix.single = TRUE, auto.var = TRUE, auto.cov.lv.x = TRUE, auto.th = TRUE, auto.delta = TRUE,
+                     auto.cov.y = TRUE#, se = "boot", bootstrap = 100
+                     , estimator = 'MLR')
+f3.3.aggrd <- lavaan(sem.0.aggrd, data = all3, missing="ML", group = 'sample', 
+                    group.equal = c("loadings")
+                    ,model.type='sem', std.lv=T,int.ov.free = TRUE, int.lv.free = FALSE, auto.fix.first = F,
+                    auto.fix.single = TRUE, auto.var = TRUE, auto.cov.lv.x = TRUE, auto.th = TRUE, auto.delta = TRUE,
+                    auto.cov.y = TRUE#, se = "boot", bootstrap = 100
+                    , estimator = 'MLR')
+f3.1.aggrd <- lavaan(sem.1.aggrd, data = all3, missing="ML", group = 'sample', 
+                    group.equal = c("loadings")
+                    ,model.type='sem', std.lv=T,int.ov.free = TRUE, int.lv.free = FALSE, auto.fix.first = F,
+                    auto.fix.single = TRUE, auto.var = TRUE, auto.cov.lv.x = TRUE, auto.th = TRUE, auto.delta = TRUE,
+                    auto.cov.y = TRUE#, se = "boot", bootstrap = 100
+                    , estimator = 'MLR')
+f3.2.aggrd <- lavaan(sem.2.aggrd, data = all3, missing="ML", group = 'sample', 
+                    group.equal = c("loadings")
+                    ,model.type='sem', std.lv=T,int.ov.free = TRUE, int.lv.free = FALSE, auto.fix.first = F,
+                    auto.fix.single = TRUE, auto.var = TRUE, auto.cov.lv.x = TRUE, auto.th = TRUE, auto.delta = TRUE,
+                    auto.cov.y = TRUE#, se = "boot", bootstrap = 100
+                    , estimator = 'MLR')
+
+fitMeasures(f3.1.aggrd, c("chisq", "df", "pvalue", "cfi", "rmsea","srmr",'AIC','BIC')) #
+fitMeasures(f3.2.aggrd, c("chisq", "df", "pvalue", "cfi", "rmsea","srmr",'AIC','BIC')) #
+fitMeasures(f3.3b.aggrd, c("chisq", "df", "pvalue", "cfi", "rmsea","srmr",'AIC','BIC')) #
+fitMeasures(f3.3.aggrd, c("chisq", "df", "pvalue", "cfi", "rmsea","srmr",'AIC','BIC')) #
+
+summary(f3.3.aggrd)
+
+### inconclusive
+

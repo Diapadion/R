@@ -207,7 +207,7 @@ maAL.1 <- lm(AL ~ age + age2 + sex
             + Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion,
             data = all3[all3$sample=='MIDUS',])
 summary(maAL.1)
-
+confint(maAL.1)
 
 
 midus_cs$AL = midus_cs$sys + midus_cs$dias + midus_cs$chol + midus_cs$trig + midus_cs$BMI # these need medication adjustment

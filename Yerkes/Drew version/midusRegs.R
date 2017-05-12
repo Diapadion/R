@@ -97,6 +97,12 @@ midus_c$B1SE6CC[midus_c$B1SE6CC==8]<-NA
 midus_c$B1SE6DD[midus_c$B1SE6DD==8]<-NA
 midus_c$B1SE6EE[midus_c$B1SE6EE==8]<-NA
 
+
+midus_c$dias_adj = midus_c$B4P1GD23 + 5*(midus_c$B4XBPD==1)
+midus_c$sys_adj = midus_c$B4P1GS23 + 10*(midus_c$B4XBPD==1)
+midus_c$chol_adj = midus_c$B4BCHOL + 21.24*(midus_c$B4XCHD==1)
+
+
 midus_cs <- with(midus_c,data.frame(M2ID,sex=B1PRSEX, age=s(B4ZAGE), age2=s(B4ZAGE2),
                                     Dominance=s(B1SAGENC),Extraversion=s(B1SEXTRA),Openness=s(B1SOPEN),
                                     Conscientiousness=s(B1SCONS2),Agreeableness=s(B1SAGREE),Neuroticism=s(B1SNEURO),                               
@@ -114,7 +120,8 @@ midus_cs <- with(midus_c,data.frame(M2ID,sex=B1PRSEX, age=s(B4ZAGE), age2=s(B4ZA
                                     Curious=s(B1SE6V),Active=s(B1SE6W),Careless=s(B1SE6X),
                                     Broadminded=s(B1SE6Y),Sympathetic=s(B1SE6Z),Talkative=s(B1SE6AA),
                                     Sophisticated=s(B1SE6BB),Adventurous=s(B1SE6CC),Dominant=s(B1SE6DD),
-                                    Thorough=s(B1SE6EE)
+                                    Thorough=s(B1SE6EE),
+                                    sys_adj = s(sys_adj), dias_adj = s(dias_adj), chol_adj = s(chol_adj)
                                     ))
 
 
@@ -209,8 +216,20 @@ maAL.1 <- lm(AL ~ age + age2 + sex
 summary(maAL.1)
 confint(maAL.1)
 
+maAL.2 <- lm(AL ~ age + age2 + sex
+             + Dominance + Openness + Agreeableness * Conscientiousness + Neuroticism + Extraversion,
+             data = all3[all3$sample=='MIDUS',])
+summary(maAL.2)
+confint(maAL.2)
 
-midus_cs$AL = midus_cs$sys + midus_cs$dias + midus_cs$chol + midus_cs$trig + midus_cs$BMI # these need medication adjustment
+
+AICctab(maAL.1, maAL.2,
+        weights=T, delta=T,base=T,logLik=T,sort=T
+)
+
+
+
+midus_cs$AL = midus_cs$sys_adj + midus_cs$dias_adj + midus_cs$chol_adj + midus_cs$trig + midus_cs$BMI # these need medication adjustment
 maALallItems.1 <- lm(AL ~ age + age2 + sex
              + Outgoing + Helpful + Moody + Organized + Selfconfident + Friendly + Warm + Worrying
              + Responsible + Forceful + Lively + Caring + Nervous + Creative + Assertive
@@ -228,7 +247,7 @@ alif = 0.1
 
 netformA = as.matrix(as.data.frame(lapply(midus_cs[complete.cases(midus_cs),], as.numeric)))
 
-net.A = glmnet(netformA[,c(2:4,21:51)], netformA[,c(11,12,14:16)],
+net.A = glmnet(netformA[,c(2:4,21:51)], netformA[,c(11,14,52:54)], # finish fixing indexes
                family='mgaussian',standardize=T,
                nlambda=1000, alpha = alif)
 cvnet.A = cv.glmnet(netformA[,c(2:4,21:51)], netformA[,c(11,12,14:16)],family='mgaussian',nfolds=100,alpha=alif)
@@ -238,10 +257,10 @@ coef(net.A,s=cvnet.A$lambda.min)
 
 
 
-net.A.AL = glmnet(netformA[,c(2:4,21:51)], netformA[,c(52)],
+net.A.AL = glmnet(netformA[,c(2:4,21:51)], netformA[,c(55)],
                family='gaussian',standardize=T,
                nlambda=1000, alpha = alif)
-cvnet.A.AL = cv.glmnet(netformA[,c(2:4,21:51)], netformA[,c(52)],family='gaussian',nfolds=100,alpha=alif)
+cvnet.A.AL = cv.glmnet(netformA[,c(2:4,21:51)], netformA[,c(55)],family='gaussian',nfolds=100,alpha=alif)
 plot(cvnet.A.AL)
 
 coef(net.A.AL,s=cvnet.A.AL$lambda.min)

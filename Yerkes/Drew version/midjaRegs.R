@@ -65,8 +65,13 @@ midja_c$J1SG6CC[midja_c$J1SG6CC==8]<-NA
 midja_c$J1SG6DD[midja_c$J1SG6DD==8]<-NA
 midja_c$J1SG6EE[midja_c$J1SG6EE==8]<-NA
 
-
 midja_c$J2CAGE2 = (midja_c$J2CAGE)^2
+
+
+midja_c$dias_adj = midja_c$J2CBPD23 + 5*(midja_c$J2MBPD==1)
+midja_c$sys_adj = midja_c$J2CBPS23 + 10*(midja_c$J2MBPD==1)
+midja_c$chol_adj = midja_c$J2BCHOL + 21.24*(midja_c$J2MCHD==1)
+
 
 
 
@@ -86,7 +91,8 @@ midja_cs <- with(midja_c,data.frame(MIDJA_IDS, sex=J1SQ1, age=s(J2CAGE), age2=s(
                           Curious=s(J1SG6V),Active=s(J1SG6W),Careless=s(J1SG6X),
                           Broadminded=s(J1SG6Y),Sympathetic=s(J1SG6Z),Talkative=s(J1SG6AA),
                           Sophisticated=s(J1SG6BB),Adventurous=s(J1SG6CC),Dominant=s(J1SG6DD),
-                          Thorough=s(J1SG6EE)
+                          Thorough=s(J1SG6EE),
+                          sys_adj = s(sys_adj), dias_adj = s(dias_adj), chol_adj = s(chol_adj)
                           ))
 
                           
@@ -143,7 +149,19 @@ mjAL.1 <- lm(AL ~ age + age2 + sex
 summary(mjAL.1)
 
 
-midja_cs$AL = midja_cs$sys + midja_cs$dias + midja_cs$chol + midja_cs$trig + midja_cs$BMI # these need medication adjustment
+mjAL.2 <- lm(AL ~ age + age2 + sex
+             + Dominance + Openness + Agreeableness * Conscientiousness + Neuroticism + Extraversion,
+             data = all3[all3$sample=='MIDJA',])
+summary(mjAL.2)
+
+
+AICctab(mjAL.1, mjAL.2,
+        weights=T, delta=T,base=T,logLik=T,sort=T
+)
+
+
+# make AVERAGE
+midja_cs$AL = midja_cs$sys_adj + midja_cs$dias_adj + midja_cs$chol_adj + midja_cs$trig + midja_cs$BMI # these need medication adjustment
 mjALallItems.1 <- lm(AL ~ age + age2 + sex
                      + Outgoing + Helpful + Moody + Organized + Selfconfident + Friendly + Warm + Worrying
                      + Responsible + Forceful + Lively + Caring + Nervous + Creative + Assertive
@@ -154,7 +172,7 @@ mjALallItems.1 <- lm(AL ~ age + age2 + sex
 
 
 # LASSOs
-library(lasso)
+library(glmnet)
 
 
 
@@ -162,7 +180,7 @@ alif = 0.1
 
 netformJ = as.matrix(as.data.frame(lapply(midja_cs[complete.cases(midja_cs),], as.numeric)))
 
-net.J = glmnet(netformJ[,c(2:4,18:48)], netformJ[,c(11,12,14:16)],
+net.J = glmnet(netformJ[,c(2:4,18:48)], netformJ[,c(11,12,14:16)], # finish adj indices
                family='mgaussian',standardize=T,
                nlambda=1000, alpha = alif)
 cvnet.J = cv.glmnet(netformJ[,c(2:4,18:48)], netformJ[,c(11,12,14:16)],family='mgaussian',nfolds=100,alpha=alif)
@@ -170,10 +188,10 @@ plot(cvnet.J)
 
 coef(net.J,s=cvnet.J$lambda.min)
 
-net.J.AL = glmnet(netformJ[,c(2:4,18:48)], netformJ[,c(49)],
+net.J.AL = glmnet(netformJ[,c(2:4,18:48)], netformJ[,c(52)],
                family='gaussian',standardize=T,
                nlambda=1000, alpha = alif)
-cvnet.J.AL = cv.glmnet(netformJ[,c(2:4,18:48)], netformJ[,c(49)],family='gaussian',nfolds=100,alpha=alif)
+cvnet.J.AL = cv.glmnet(netformJ[,c(2:4,18:48)], netformJ[,c(52)],family='gaussian',nfolds=100,alpha=alif)
 plot(cvnet.J.AL)
 
 coef(net.J.AL,s=cvnet.J.AL$lambda.min)

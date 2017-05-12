@@ -3,6 +3,9 @@
 library(lme4)
 library(MuMIn)
 library(glmnet)
+library(bbmle)
+
+
 
 # should I rejigger data for this purpose, to be more like the SEM data?[???]
 
@@ -25,6 +28,17 @@ mcAL.1 <- lmer(AL ~ Dominance + Openness + Agreeableness + Conscientiousness + N
 summary(mcAL.1)
 confint(mcAL.1, method="profile")
 r.squaredGLMM(mcAL.1)
+
+
+mcAL.2 <- lmer(AL ~ Dominance + Openness + Agreeableness * Conscientiousness + Neuroticism + Extraversion
+               + age + age2 + sex + (1 | chimp), 
+               data = scoutput,REML=FALSE)
+summary(mcAL.2)
+
+
+AICctab(mcAL.1, mcAL.2,
+        weights=T, delta=T,base=T,logLik=T,sort=T
+        )
 
 
 

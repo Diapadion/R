@@ -1,9 +1,76 @@
-### Specification Curve analyses
+### pseudo Specification Curve analyses
 
-# from Simonsohn, Simmons, Nelson, 2015
+# inspired by Simonsohn, Simmons, Nelson, 2015
 
 
 library(broom)
+
+
+
+### How can the specification vary?
+
+
+# x2
+# In/exclude Origin
+
+# x2
+# In/exclude sex
+
+# x2
+# with and without other personality covariates
+
+# x2
+# Leave confounded
+# Residulaize data by DoB
+
+# x2 [?]
+# With and without frailty
+
+# x3 [ ??]
+# Distribution used??
+# t
+# logistic
+# extreme
+
+
+
+# Model sytax
+#
+# [1-3] ___ : either AFT or COX
+# [5] _ : unconfounding, either s(tratified), r(esidualized), t(ime varied), u(nadjusted)
+# [7] _ : origin, i(including), x(cluding)
+# [9] _ : distribution, t, l(ogistic), e(xtreme)
+# [11] _ : personality covars, the usual abbrvs + 6 (all 6)
+# [13] _ : sub-sample restriction, a(ll), c(PQ), h(PQ), (a)z(a), j(apan), y(erkes)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Incorrect variatins - AFT not valid
+
 
 ### How can the specification vary?
 

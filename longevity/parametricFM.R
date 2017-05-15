@@ -1,16 +1,17 @@
 ### Parametric frailty models
 
 
-
-
-
 library(survival)
 library(parfm)
 library(frailtypack)
 library(bbmle)
+
+attr(yLt, 'type') <- 'counting'
+
+
 # strata won't really work with these
 
-fpack.u = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) + #strata(strt)
+fpack.u = frailtyPenal(yLt ~ cluster(sample) + #strata(strt)
                          as.factor(sex) + as.factor(origin) +  
                          Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ,
                        data = datX, hazard =  'Piecewise-equi' , nb.int = 1
@@ -57,7 +58,7 @@ summary(fpack.u.9)
 #fpack.u.10$AIC
 
 
-fpack.r = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) + #strata(strt)
+fpack.r = frailtyPenal(yLt ~ cluster(sample) + #strata(strt)
                          as.factor(sex) + as.factor(origin) +  
                          D.r2.DoB + E.r2.DoB + Con_CZ + Agr_CZ + N.r1.DoB + O.r2.DoB,
                        data = datX, hazard =  'Piecewise-equi' , nb.int = 1
@@ -104,7 +105,10 @@ fpack.r$AIC
 
 # Specifications of interest
 
-fpack.u.0f = frailtyPenal(Surv(age_pr, age, status) ~ #cluster(sample) + 
+fp.u.x.x.x.D
+fp.r.i.s.f.6
+
+fpack.u.0f = frailtyPenal(Surv(age_pr, age, stat.log,type='counting') ~ #cluster(sample) + 
                          as.factor(sex) + as.factor(origin) +  
                          Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ,
                        data = datX, hazard =  'Piecewise-equi' , nb.int = 9
@@ -215,21 +219,46 @@ fpack.u.i.si.6.Y = frailtyPenal(Surv(age_pr, age, status) ~ #cluster(sample) +
 
 
 
+### Switch to parfm ###
 
 
+pf.test = parfm(Surv(Begin, End, Status, type='counting') ~ Drug, cluster = "Patid", 
+      data = asthma[asthma$Fevent == 0, ]
+      ,dist = "weibull", frailty = "gamma", method = "nlminb")
+  
 
-pfm.u.i.g.6 = parfm(Surv(age_pr, age, status) ~ 
+obsdatadi <- aggregate(yLt[,3],
+                        by=list(datX$sample), 
+                        FUN=sum)[,, drop=FALSE]
+
+a.tst.y = Surv(asthma$Begin,asthma$End,asthma$Status)
+c.tst.y = Surv(datX$age_pr, datX$age, datX$stat.log)
+
+attr(Surv(asthma$Begin,asthma$End,asthma$Status),'type')
+attr(Surv(datX$age_pr, datX$age, datX$stat.log,type = 'counting'),'type')
+attr(Surv(datX$age_pr, datX$age, datX$status,type = 'counting'),'type')
+attr(a.tst.y, 'type')
+attr(c.tst.y, 'type')
+
+pf.test = parfm(a.tst.y ~ Drug, cluster = "Patid", 
+                data = asthma,
+                dist = "weibull", frailty = "gamma", 
+                method = "nlminb")
+
+
+pfm.u.i.g.6 = parfm(yLt ~ 
                       as.factor(sex) + as.factor(origin) +  
-                      Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ,
-                    cluster="sample" #strata = "strt"
+                      Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ
+                    ,cluster="sample" #, strata = "strt"
                     , frailty = 'gamma'
                     , data=datX, dist='gompertz', method ='nlminb')
-pfm.r.i.g.6 = parfm(Surv(age_pr, age, status) ~ 
-                      as.factor(sex) + as.factor(origin) +  
-                      D.r2.DoB + E.r2.DoB + Con_CZ + Agr_CZ + N.r1.DoB + O.r2.DoB,
-                    cluster="sample" #strata = "strt"
+pfm.r.i.g.6 = parfm(#Surv(age_pr, age, stat.log, type='counting') ~ 
+                    c.tst.y~
+                      as.factor(sex) #+ as.factor(origin) 
+                      #+ D.r2.DoB + E.r2.DoB + Con_CZ + Agr_CZ + N.r1.DoB + O.r2.DoB,
+                    ,cluster="sample" #strata = "strt"
                     , frailty = 'gamma'
-                    , data=datX, dist='gompertz', method ='nlminb')
+                    , data=datX, dist='weibull', method ='Nelder-Mead')
 print(pfm.u.i.g.6)
 print(pfm.r.i.g.6)
 # pfm.s.i.g.6 = parfm(Surv(age_pr, age, status) ~ 
@@ -313,11 +342,11 @@ aft.parfm.eq1 = parfm(Surv(age_pr, age, status) ~
                       , frailty = 'none'
                       , data=datX, dist='gompertz', method ='nlminb')
 
-aft.parfm.eq2 = aftreg(Surv(age_pr, age, status) ~ 
+aft.parfm.eq2 = aftreg(Surv(age_pr, age, stat.log) ~ 
                      as.factor(sex) + as.factor(origin) +  
                      Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ,
                    data = datX, param = 'lifeAcc',
-                   dist = 'gompertz')
+                   dist = 'loglogistic')
 
-print(aft.parfm.eq1)
+#print(aft.parfm.eq1)
 summary(aft.parfm.eq2)

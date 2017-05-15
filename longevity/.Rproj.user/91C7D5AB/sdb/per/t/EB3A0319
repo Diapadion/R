@@ -1,0 +1,29 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1494862540613.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "EB3A0319",
+    "lastKnownWriteTime" : 32651513914720368,
+    "last_content_update" : 1494862540613,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "E977F149",
+        "caption" : "obsdatadi",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=obsdatadi&cache_key=E977F149",
+        "displayedObservations" : "4",
+        "environment" : "",
+        "object" : "obsdatadi",
+        "preview" : "0",
+        "totalObservations" : "4",
+        "variables" : "2"
+    },
+    "relative_order" : 11,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}

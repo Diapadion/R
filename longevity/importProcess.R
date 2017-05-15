@@ -330,6 +330,36 @@ datX$N.r1.DoB <- fit.n1.DoB$residuals
 
 
 
+### can stop here... 
+
+# TODO
+### ... but need the models that define these residuals
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## Extraversion
 
 fit.e0 <- lm(Ext_CZ ~ 1, data=datX)

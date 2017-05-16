@@ -6,12 +6,12 @@ library(parfm)
 library(frailtypack)
 library(bbmle)
 
-attr(yLt, 'type') <- 'counting'
+#attr(yLt, 'type')# <- 'counting'
 
 
 # strata won't really work with these
 
-fpack.u = frailtyPenal(yLt ~ cluster(sample) + #strata(strt)
+fpack.u = frailtyPenal(yLt ~ cluster(sample) + #strata(strt) +
                          as.factor(sex) + as.factor(origin) +  
                          Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ,
                        data = datX, hazard =  'Piecewise-equi' , nb.int = 1
@@ -41,7 +41,7 @@ fpfLL[13] = update(fpack.u, nb.int=13)$logLik
 fpfLL[12] = update(fpack.u, nb.int=12)$logLik
 fpfLL[11] = update(fpack.u, nb.int=11)$logLik
 fpfLL[10] = fpack.u.10$logLik
-fpfLL[9] = fpack.u.9$logLik
+fpfLL[9] = fpack.u.9$logLik/
 fpfLL[8] = fpack.u.8$logLik
 fpfLL[7] = fpack.u.7$logLik
 fpfLL[6] = fpack.u.6$logLik
@@ -50,6 +50,24 @@ fpfLL[4] = fpack.u.4$logLik
 fpfLL[3] = fpack.u.3$logLik
 fpfLL[2] = fpack.u.2$logLik
 fpfLL[1] = fpack.u$logLik
+
+plot(fpfLL)
+
+# Following Han et al. 2014's BE procedure
+
+pchisq(2*(fpfLL[20]-fpfLL[19]), df=20-19, lower.tail = F)
+pchisq(2*(fpfLL[19]-fpfLL[18]), df=19-18, lower.tail = F)
+pchisq(2*(fpfLL[18]-fpfLL[17]), df=18-17, lower.tail = F)
+pchisq(2*(fpfLL[17]-fpfLL[16]), df=17-16, lower.tail = F)
+pchisq(2*(fpfLL[16]-fpfLL[15]), df=16-15, lower.tail = F)
+pchisq(2*(fpfLL[15]-fpfLL[14]), df=15-14, lower.tail = F)
+pchisq(2*(fpfLL[14]-fpfLL[13]), df=14-13, lower.tail = F)
+pchisq(2*(fpfLL[13]-fpfLL[12]), df=13-12, lower.tail = F)
+pchisq(2*(fpfLL[12]-fpfLL[11]), df=12-11, lower.tail = F)
+pchisq(2*(fpfLL[11]-fpfLL[10]), df=11-10, lower.tail = F)
+pchisq(2*(fpfLL[10]-fpfLL[9]), df=10-9, lower.tail = F)
+pchisq(2*(fpfLL[9]-fpfLL[8]), df=9-8, lower.tail = F)
+
 
 
 pchisq(2*(fpack.u.9$logLik-fpack.u$logLik), df=9-1, lower.tail = F)
@@ -92,7 +110,7 @@ plot(fpfLLr)
 fpack.r.9 = update(fpack.r, nb.int=9)
 
 summary(fpack.r.9)
-plot(fpack)
+plot(fpack.r.9)
 
 # AICtab(fpack.u, fpack.r,
 #        logLik=T, sort=T, delta=T, base=T,weights=T)
@@ -246,16 +264,15 @@ pf.test = parfm(a.tst.y ~ Drug, cluster = "Patid",
                 method = "nlminb")
 
 
-pfm.u.i.g.6 = parfm(yLt ~ 
+pfm.u.i.g.6 = parfm(Surv(age_pr, age, stat.log) ~ 
                       as.factor(sex) + as.factor(origin) +  
                       Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ
                     ,cluster="sample" #, strata = "strt"
                     , frailty = 'gamma'
                     , data=datX, dist='gompertz', method ='nlminb')
-pfm.r.i.g.6 = parfm(#Surv(age_pr, age, stat.log, type='counting') ~ 
-                    c.tst.y~
+pfm.r.i.g.6 = parfm(Surv(age_pr, age, stat.log) ~ 
                       as.factor(sex) #+ as.factor(origin) 
-                      #+ D.r2.DoB + E.r2.DoB + Con_CZ + Agr_CZ + N.r1.DoB + O.r2.DoB,
+                      + D.r2.DoB + E.r2.DoB + Con_CZ + Agr_CZ + N.r1.DoB + O.r2.DoB,
                     ,cluster="sample" #strata = "strt"
                     , frailty = 'gamma'
                     , data=datX, dist='weibull', method ='Nelder-Mead')
@@ -283,7 +300,31 @@ pfm.r.x.g.6 = parfm(Surv(age_pr, age, status) ~
                     , frailty = 'gamma'
                     , data=datX, dist='gompertz', method ='ucminf')
 
-print(pfm.u.x.g.6)
+print(pfm.r.x.g.6)
+
+pfm.u.i.w.6 = parfm(Surv(age_pr, age, status) ~ 
+                      as.factor(sex) + as.factor(origin) +  
+                      Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ,
+                    cluster="sample" #strata = "strt"
+                    , frailty = 'gamma'
+                    , data=datX, dist='inweibull', method ='ucminf')
+pfm.r.i.w.6 = parfm(Surv(age_pr, age, status) ~ 
+                      as.factor(sex) + as.factor(origin) +  
+                      D.r2.DoB + E.r2.DoB + Con_CZ + Agr_CZ + N.r1.DoB + O.r2.DoB,
+                    cluster="sample" #strata = "strt"
+                    , frailty = 'gamma'
+                    , data=datX, dist='weibull', method ='ucminf')
+
+pfm.u.i.f.6 = parfm(Surv(age_pr, age, status) ~ 
+                      as.factor(sex) + as.factor(origin) +  
+                      Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ,
+                    cluster="sample" #strata = "strt"
+                    , frailty = 'gamma'
+                    , data=datX, dist='inweibull', method ='ucminf')
+
+
+print(pfm.u.i.f.6)
+
 
 pfm.u.i.g.D = parfm(Surv(age_pr, age, status) ~ 
                       as.factor(sex) + as.factor(origin) +  

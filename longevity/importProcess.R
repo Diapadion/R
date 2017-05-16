@@ -316,6 +316,10 @@ yLt = Surv(datX$age_pr, datX$age, datX$stat.log)
 
 
 
+datX$sample = as.integer(datX$sample)
+datX$status <- relevel(datX$status,'1')
+datX$status <- relevel(datX$status,'0')
+datX$status = as.integer(datX$status) - 1
 
 
 

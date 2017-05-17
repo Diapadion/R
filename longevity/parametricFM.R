@@ -9,6 +9,28 @@ library(bbmle)
 #attr(yLt, 'type')# <- 'counting'
 
 
+
+### Spine testing
+
+fp.test.sp =  frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) + 
+                             as.factor(sex) + as.factor(origin) +  
+                             Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ,
+                           data = datX, hazard =  'Splines' 
+                           , n.knots = 3, kappa = 1
+                           , betaknots = 3, betaorder = 3
+)
+summary(fp.test.sp)
+plot(fp.test.sp, type='Survival')
+
+
+fpack.r.x = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) + 
+                           as.factor(sex) + #as.factor(origin) +  
+                           D.r2.DoB + E.r2.DoB + Con_CZ + Agr_CZ + N.r1.DoB + O.r2.DoB,
+                         data = datX, hazard =  'Piecewise-equi' , nb.int = 9
+                         #, n.knots = 4, kappa =1
+
+
+
 # strata won't really work with these
 
 fpack.u = frailtyPenal(yLt ~ cluster(sample) + #strata(strt) +
@@ -123,8 +145,6 @@ fpack.r$AIC
 
 # Specifications of interest
 
-fp.u.x.x.x.D
-fp.r.i.s.f.6
 
 fpack.u.0f = frailtyPenal(Surv(age_pr, age, stat.log,type='counting') ~ #cluster(sample) + 
                          as.factor(sex) + as.factor(origin) +  
@@ -391,3 +411,11 @@ aft.parfm.eq2 = aftreg(Surv(age_pr, age, stat.log) ~
 
 #print(aft.parfm.eq1)
 summary(aft.parfm.eq2)
+
+
+pf.u.o.s.6.aft = aftreg(Surv(age_pr, age, stat.log) ~ 
+                          as.factor(sex) + as.factor(origin) +  
+                          Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ,
+                        data = datX, param = 'lifeExp',
+                        dist = 'gompertz')
+summary(pf.u.o.s.6.aft)

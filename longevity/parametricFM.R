@@ -28,7 +28,7 @@ fpack.r.x = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) +
                            D.r2.DoB + E.r2.DoB + Con_CZ + Agr_CZ + N.r1.DoB + O.r2.DoB,
                          data = datX, hazard =  'Piecewise-equi' , nb.int = 9
                          #, n.knots = 4, kappa =1
-
+)
 
 
 # strata won't really work with these
@@ -284,20 +284,27 @@ pf.test = parfm(a.tst.y ~ Drug, cluster = "Patid",
                 method = "nlminb")
 
 
-pfm.u.i.g.6 = parfm(Surv(age_pr, age, stat.log) ~ 
-                      as.factor(sex) + as.factor(origin) +  
-                      Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ
+#ptm = proc.time()
+pfm.u.i.g.6 = parfm(Surv(age_pr, age, status) ~ 
+                      as.factor(origin) + as.factor(sex) * Agr_CZ
+                      + Dom_CZ + Ext_CZ + Con_CZ + Neu_CZ + Opn_CZ
+                    #+ D.r2.DoB + E.r2.DoB + Con_CZ + N.r1.DoB + O.r2.DoB
                     ,cluster="sample" #, strata = "strt"
                     , frailty = 'gamma'
-                    , data=datX, dist='gompertz', method ='nlminb')
+                    , data=datX, dist='gompertz', method ='ucminf') #ucminf Nelder-Mead nlminb #BGFS
+#proc.time() - ptm
 pfm.r.i.g.6 = parfm(Surv(age_pr, age, stat.log) ~ 
                       as.factor(sex) #+ as.factor(origin) 
                       + D.r2.DoB + E.r2.DoB + Con_CZ + Agr_CZ + N.r1.DoB + O.r2.DoB,
                     ,cluster="sample" #strata = "strt"
                     , frailty = 'gamma'
                     , data=datX, dist='weibull', method ='Nelder-Mead')
+
 print(pfm.u.i.g.6)
-print(pfm.r.i.g.6)
+logLik(pfm.u.i.g.6)
+
+
+#print(pfm.r.i.g.6)
 # pfm.s.i.g.6 = parfm(Surv(age_pr, age, status) ~ 
 #                       as.factor(sex) + as.factor(origin) +  
 #                       Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ,
@@ -404,8 +411,8 @@ aft.parfm.eq1 = parfm(Surv(age_pr, age, status) ~
                       , data=datX, dist='gompertz', method ='nlminb')
 
 aft.parfm.eq2 = aftreg(Surv(age_pr, age, stat.log) ~ 
-                     as.factor(sex) + as.factor(origin) +  
-                     Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ,
+                         as.factor(origin) + as.factor(sex) * Agr_CZ
+                       + Dom_CZ + Ext_CZ + Con_CZ + Neu_CZ + Opn_CZ,
                    data = datX, param = 'lifeAcc',
                    dist = 'loglogistic')
 

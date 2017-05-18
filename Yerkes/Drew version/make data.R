@@ -1,3 +1,8 @@
+### Don't run this!
+### final_data.csv has had post script fixes made
+
+
+
 setwd('C:/Users/s1229179/Dropbox/R/blood chemistry/Drew version/')
 #setwd('C:/Users/Diapadion/Dropbox/R/blood chemistry/Drew version/')
 

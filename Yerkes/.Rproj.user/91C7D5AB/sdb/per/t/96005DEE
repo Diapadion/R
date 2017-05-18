@@ -7,14 +7,14 @@
     "folds" : "",
     "hash" : "672008424",
     "id" : "96005DEE",
-    "lastKnownWriteTime" : 1494426608,
-    "last_content_update" : 1494426608851,
+    "lastKnownWriteTime" : 1494844773,
+    "last_content_update" : 1494844773,
     "path" : "C:/Users/s1229179/GitHub/R/Yerkes/Drew version/3groupSEMs.R",
     "project_path" : "Drew version/3groupSEMs.R",
     "properties" : {
         "tempName" : "Untitled3"
     },
-    "relative_order" : 6,
+    "relative_order" : 4,
     "source_on_save" : false,
     "source_window" : "",
     "type" : "r_source"

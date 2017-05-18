@@ -30,10 +30,21 @@ confint(mcAL.1, method="profile")
 r.squaredGLMM(mcAL.1)
 
 
+mcAL.1.f <- lmer(AL ~ Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion
+               + age + age2 + (1 | chimp), 
+               data = scoutput[scoutput$sex==2,],REML=FALSE)
+mcAL.1.m <- lmer(AL ~ Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion
+                 + age + age2 + (1 | chimp), 
+                 data = scoutput[scoutput$sex==1,],REML=FALSE)
+summary(mcAL.1.m)
+summary(mcAL.1.f)
+
+
 mcAL.2 <- lmer(AL ~ Dominance + Openness + Agreeableness * Conscientiousness + Neuroticism + Extraversion
-               + age + age2 + sex + (1 | chimp), 
-               data = scoutput,REML=FALSE)
-summary(mcAL.2)
+                 + age + age2 + sex + (1 | chimp), 
+                 data = scoutput,REML=FALSE)
+
+
 
 
 AICctab(mcAL.1, mcAL.2,
@@ -43,7 +54,7 @@ AICctab(mcAL.1, mcAL.2,
 
 
 ### Item by item
-scoutput$AL = scoutput$sys + scoutput$dias + scoutput$chol + scoutput$trig + scoutput$BMI
+#scoutput$AL = scoutput$sys + scoutput$dias + scoutput$chol + scoutput$trig + scoutput$BMI
 
 mcALallItems.1 <- lmer(AL ~ Depressed + Fearful + Persistent + Cautious + Stable + Autistic + Stingy  
                        + Jealous + Reckless + Sociable + Timid + Sympathetic + Playful 
@@ -61,6 +72,8 @@ r.squaredGLMM(mcALallItems.1)
 
 
 netformC = as.matrix(as.data.frame(lapply(scoutput[complete.cases(scoutput),], as.numeric)))
+
+alif = 0.1
 
 net.C.AL = glmnet(netformC[,c(2,5,12:54)], netformC[,c(81)],
                   family='gaussian',standardize=T,

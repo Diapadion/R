@@ -9,7 +9,7 @@
 const <- NULL
 # some vars like personality, parentage, DoB,
 # stay constant, no matter the measurement point.
-names <- read.csv("matchNameBDates.csv")
+names <- read.csv("Drew version/matchNameBDates.csv")
 const$chimp = names$final
 
 # removes names with no DoB (i.e. NAs)
@@ -22,7 +22,10 @@ const$DoB = as.Date(const$DoB, format="%d/%m/%Y")
 
 ### coercing the composite full data file to remove junk 
 #final_data$chimp %in% const$chimp # this logically select the values common to both names lists
-sData <- final_data[final_data$chimp %in% const$chimp,]
+#(final_data = fulldata)
+#sData <- final_data[final_data$chimp %in% const$chimp,]
+sData <- fulldata[fulldata$chimp %in% const$chimp,]
+
 
 # parentage
 # merging dame, sire; maternity, paternity
@@ -421,7 +424,7 @@ for (i in 1:dim(c.bm)[1]){
   }
   else{
     c.bm$BP[i] = NA
-    c.bm$BPd[i] == NA    
+    c.bm$BPd[i] = NA    
   }
 }
 colnames(c.bm)[34] <- 'BPs'

@@ -36,6 +36,10 @@ bchemt2 <- structure(numeric(dim(dmdob)[1]), class="Date")
 bchemt3 <- structure(numeric(dim(dmdob)[1]), class="Date")
 bchemt4 <- structure(numeric(dim(dmdob)[1]), class="Date")
 
+
+# N.B.: There are NO blood cell measures in the AL construct
+# so dates can be ignored (for now)
+
 bcellt1 <- structure(numeric(dim(dmdob)[1]), class="Date")
 bcellt2 <- structure(numeric(dim(dmdob)[1]), class="Date")
 bcellt3 <- structure(numeric(dim(dmdob)[1]), class="Date")
@@ -132,6 +136,7 @@ for (i in 1:(dim(dmdob)[1])){
 }
 
 
+#
 #age <- as.numeric(as.Date(dmdob$DOPR.x,format="%m/%d/%Y")-DoB)
 age <- as.numeric(as.Date('01/01/2007', format = "%m/%d/%Y")-DoB)
 
@@ -524,12 +529,12 @@ detach(fulldata)
 
 ### Imputation
 ### (so far, this is just used for having BMI be a dependent var in regressions)
-library(Amelia)
-
-
-#imp_mean = mice(meandat[,c(-4)])
-imp_mean = amelia(meandat[,c(-4)],idvars="Chimp",m=100, p2s=0)
-imp_mm = amelia(mmdat[,c(-4,-(12:87))],idvars="chimp",m=100,p2s=0)
+# library(Amelia)
+# 
+# 
+# #imp_mean = mice(meandat[,c(-4)])
+# imp_mean = amelia(meandat[,c(-4)],idvars="Chimp",m=100, p2s=0)
+# imp_mm = amelia(mmdat[,c(-4,-(12:87))],idvars="chimp",m=100,p2s=0)
 
 
              ### see just below
@@ -570,9 +575,33 @@ output$dias = c(mmdat$dias.1,mmdat$dias.2,mmdat$dias.3)
 output$sys = c(mmdat$sys.1,mmdat$sys.2,mmdat$sys.3)
 output$chol = c(mmdat$chol.1,mmdat$chol.2,mmdat$chol.3)
 output$creatinine = c(mmdat$creatinine.1,mmdat$creatinine.2,mmdat$creatinine.3)
+
+
+
+colnames(dmdob)
+
+head(dmdob[,c('Year4','Year3','Year2','Year1',
+              #'date3','date2','date1',
+              'Survey.1','Survey.2','Survey.3',
+              'HeightDate'
+              
+              )],5)
+table(is.na(dmdob$Year1)) # 153 T
+table(is.na(dmdob$Survey.3)) # 82 T
+table(is.na(dmdob$BMI.1)) # 55 T -> 26 T   ... average these
+
+output$testDate = 
+
+
 #output$age2 = (output$age)^2
 # I'm not sure what the problem is with doing it this way, but it's not good
 # this needs to be applied in the other data sets as well
+
+
+output$age <- 1.5*as.numeric(as.Date(output$, format = "%m/%d/%Y")-output$DoB)/365
+colnames(smeandat)[4] <- 'age2'
+smeandat$age2 <- as.numeric(smeandat$age2)
+smeandat$age2 <- smeandat$age^2
 
 
 # now scale and center it
@@ -615,7 +644,7 @@ c.bm$age = c(mmdat$age,mmdat$age,mmdat$age)
 c.bm$WBC = c(mmdat$wbc.1,mmdat$wbc.2,mmdat$wbc.3)
 c.bm$RBC = c(mmdat$rbc.1,mmdat$rbc.2,mmdat$rbc.3)
 c.bm$hematocrit = c(mmdat$hct.1,mmdat$hct.2,mmdat$hct.3)
-c.bm$
+#c.bm$
 
 c.bm$trig = c(mmdat$trig.1,mmdat$trig.2,mmdat$trig.3)
 

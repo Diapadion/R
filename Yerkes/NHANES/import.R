@@ -96,6 +96,10 @@ sel.nbm = nhanes.bm[,bmlabels]
 sel.nx = nhanes.ex[,c('SEQN','BMPBMI','PEPMNK1R','PEPMNK5R')]
 
 sel.nbm = merge(sel.nbm, sel.nx, by = c('SEQN'))
+# can rm the original files past this point
+#rm(nhanes.bm)
+#rm(nhanes.ex)
+
 
 # fixing the NA coding
 #table(sel.nbm[,'SGP'])
@@ -210,11 +214,6 @@ c.bm.m.s = c.bm.m
 c.bm.m.s$BMI = scale(c.bm.m.s$BMI, center=T)
 #c.bm.m.s[,c(3:35)] = data.frame(lapply(c.bm.m.s[,c(3:35)], function(x) scale(x, center = T)))
 
-# filling in certain values for sex in chimps - TODO: find the origin of this problem ###!!!
-c.bm.m.s$subject[which(is.nan(c.bm.m.s$sex))]
-# [1]  15  90 107 132 134 156 157
-# Barbara  Justin   Lucas    Pericles Phineas  Sheila   Shirley 
-c.bm.m.s$sex[which(is.nan(c.bm.m.s$sex))] <- c(2,1,1,1,1,2,2)
 
 
 # Age adjustment for chimps

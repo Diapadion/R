@@ -3,13 +3,18 @@
 ### build a data set with all values
 ### from the observation sheet
 
+### *** we should be using YerkAggP.csv ONLY !!!
+# Tho the code used in here *does* the same thing
+
+
+
 # i.e. its a giant data.frame full of NAs
 # utility is questionable
 
 const <- NULL
 # some vars like personality, parentage, DoB,
 # stay constant, no matter the measurement point.
-names <- read.csv("Drew version/matchNameBDates.csv")
+names <- read.csv("./matchNameBDates.csv")
 const$chimp = names$final
 
 # removes names with no DoB (i.e. NAs)
@@ -20,11 +25,18 @@ const$DoB = names$DoB[!is.na(names$DoB)]
 # i.e. dd/mm/yyyy
 const$DoB = as.Date(const$DoB, format="%d/%m/%Y")
 
+
+
 ### coercing the composite full data file to remove junk 
 #final_data$chimp %in% const$chimp # this logically select the values common to both names lists
 #(final_data = fulldata)
 #sData <- final_data[final_data$chimp %in% const$chimp,]
 sData <- fulldata[fulldata$chimp %in% const$chimp,]
+
+### Reorder const so that names match with those in sdata
+const = as.data.frame(const)
+const = const[order(const$chimp),]
+
 
 
 # parentage
@@ -40,7 +52,7 @@ const$GroupSize <- ifelse(!is.na(sData$Group.size.x), sData$Group.size.x,
                           ifelse(!is.na(sData$Group.size.y), sData$Group.size.y, NA))           
 
 # sex
-const$sex <- sData$sex
+const$sex <- sData$Sex.x
 
 # personality - individual adjectives
 # const$fear  <- sData$fear.z
@@ -200,7 +212,7 @@ colnames(d) <- colnames(a)
 longBlood <- as.data.frame(rbind(a,b,c,d))
 yeart <- NULL
 for (i in 1:(dim(longBlood)[1])){
-  yeart[i] <- longBlood$date[i]
+  yeart[i] <- as.character(longBlood$date[i])
   if(nchar(yeart[i])==10){
     yeart[i] <- as.Date(yeart[i],format = "%m/%d/%Y")
   }
@@ -224,7 +236,7 @@ colnames(c) <- colnames(a)
 longHem <- as.data.frame(rbind(a,b,c))
 yeart <- NULL
 for (i in 1:(dim(longHem)[1])){
-  yeart[i] <- longHem$date[i]
+  yeart[i] <- as.character(longHem$date[i])
   yeart[i] <- as.Date(yeart[i],format = "%d/%m/%Y")
 }
 class(yeart) <- "Date"
@@ -247,7 +259,7 @@ longHeight <- as.data.frame(rbind(a,b,c))
 
 yeart <- NULL
 for (i in 1:(dim(longHeight)[1])){
-  yeart[i] <- longHeight$date[i]
+  yeart[i] <- as.character(longHeight$date[i])
   yeart[i] <- as.Date(yeart[i],format = "%m/%d/%Y")
   
 }
@@ -269,7 +281,7 @@ longMetab <- as.data.frame(rbind(a,b,c))
 
 yeart <- NULL
 for (i in 1:(dim(longMetab)[1])){
-  yeart[i] <- longMetab$date[i]
+  yeart[i] <- as.character(longMetab$date[i])
   if(nchar(yeart[i])==10){
     yeart[i] <- as.Date(yeart[i],format = "%m/%d/%Y")
   }
@@ -282,7 +294,14 @@ longMetab$date <- yeart
 
 
 
+### TODO: Convert dates to age 
+### and shrink the number of unique datapoints
 
+head(
+  merge(longMetab, const[,c('chimp','DoB')], by)
+  , 30
+)
+# ...
 
 
 
@@ -329,7 +348,7 @@ fullcast <-
 # to be processed.
 
 fullcast <- fullcast[!is.na(fullcast$date),]
-# there, fixed
+# There. This removes all the individuals with personality data but no biomarkers.
 
 
 
@@ -340,7 +359,7 @@ fullcast <- fullcast[!is.na(fullcast$date),]
 
 # we need to convert the date to the right format to do this
 
-fullcast['ageDays'] <- NA
+fullcast$ageDays <- NA
 #fullcast$ageDays <- difftime(fullcast$date, fullcast$DoB, units = 'days')
 fullcast$ageDays <- as.numeric(fullcast$date) - as.numeric(fullcast$DoB)
 
@@ -381,7 +400,7 @@ colnames(buff)[55] <- 'age'
 # some date formatting formalities
 yeart <- NULL
 for (i in 1:(dim(buff)[1])){
-  yeart[i] <- buff$age[i]
+  yeart[i] <- as.character(buff$age[i])
   if(nchar(yeart[i])==10){
     yeart[i] <- as.Date(yeart[i],format = "%m/%d/%Y")
   }
@@ -390,6 +409,7 @@ for (i in 1:(dim(buff)[1])){
 class(yeart) <- "Date"
 const$age <- as.numeric(yeart) - as.numeric(const$DoB)
 
+# not run
 
 
 
@@ -397,7 +417,7 @@ const$age <- as.numeric(yeart) - as.numeric(const$DoB)
 
 # remove the NA filled non BM rows
 
-table(is.na(fullcast$Glucose))
+# table(is.na(fullcast$Glucose))
 
 #nh.cast <- fullcast[(is.na(fullcast$Glucose) && is.na(fullcast$wbc)),]
 
@@ -408,27 +428,34 @@ c.bm = fullcast[,c('chimp','sex','ageDays','wbc','rbc','hct','hgb',
                    'mcv','mch','mchc','lymph','monos','eos',
                    'Glucose','BUN','Creatine','Protein','Albumn','Bilirubn','alkphos',
                    'sgpt','sgot','cholesterol','calcium','phosphate','sodium','potassium',
-                   'chloride','globulin','triglycerides','ggtp','osmolal','BMI','BP'
+                   'chloride','globulin','triglycerides','ggtp','osmolal','BMI','systolic','diastolic'
 )]
-# removing the slashes from systolic / diastolic & putting them in their own vars
-c.bm$BPd = NA
+# # removing the slashes from systolic / diastolic & putting them in their own vars
+# c.bm$BPd = NA
+# 
+# #bps <- strsplit(as.character($BP.1),"[/]")
+# for (i in 1:dim(c.bm)[1]){
+#   bps <- strsplit(as.character(c.bm$BP),"[/]")
+#   if (!is.na(bps)[[i]]){
+#     
+#     c.bm$BP[i] = as.numeric(bps[[i]][1])
+#     c.bm$BPd[i] = as.numeric(bps[[i]][2]) 
+#     
+#   }
+#   else{
+#     c.bm$BP[i] = NA
+#     c.bm$BPd[i] = NA    
+#   }
+# }
+# colnames(c.bm)[34] <- 'BPs'
 
-#bps <- strsplit(as.character($BP.1),"[/]")
-for (i in 1:dim(c.bm)[1]){
-  bps <- strsplit(as.character(c.bm$BP),"[/]")
-  if (!is.na(bps)[[i]]){
-    
-    c.bm$BP[i] = as.numeric(bps[[i]][1])
-    c.bm$BPd[i] = as.numeric(bps[[i]][2]) 
-    
-  }
-  else{
-    c.bm$BP[i] = NA
-    c.bm$BPd[i] = NA    
-  }
-}
-colnames(c.bm)[34] <- 'BPs'
-  
+# not run
+
+colnames(c.bm)[34:35] = c('BPs','BPd')
+
+
+
+
 c.bm$ageDays = c.bm$ageDays / 365
 c.bm$lymph = c.bm$lymph/1000
 

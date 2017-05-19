@@ -590,7 +590,8 @@ table(is.na(dmdob$Year1)) # 153 T
 table(is.na(dmdob$Survey.3)) # 82 T
 table(is.na(dmdob$BMI.1)) # 55 T -> 26 T   ... average these
 
-output$testDate = 
+output$testDate =    # this is the date of the blood tests
+  ### TODO: first need to make sure the test dates for bloods and metabolics are matched correctly
 
 
 #output$age2 = (output$age)^2

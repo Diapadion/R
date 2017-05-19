@@ -21,12 +21,22 @@ with(all.bm[all.bm$species=='chimp',],cor.test(age,triglycerides))
 with(all.bm[all.bm$species=='chimp',],cor.test(age,cholesterol))
 with(all.bm[all.bm$species=='chimp',],cor.test(age,phosphate))
 
-with(all.bm[all.bm$species=='human',],cohensD(BMI~sex))
+with(all.bm[all.bm$species=='human',],t.test(BMI~sex))
 with(all.bm[all.bm$species=='human',],cohensD(BPs~sex))
 with(all.bm[all.bm$species=='human',],cohensD(BPd~sex))
 with(all.bm[all.bm$species=='human',],cohensD(triglycerides~sex))
 with(all.bm[all.bm$species=='human',],cohensD(cholesterol~sex))
 with(all.bm[all.bm$species=='human',],cohensD(phosphate~sex))
+
+
+#female = 2
+# a positive d indicates mean in males (1) was higher
+with(all.bm[all.bm$species=='chimp',],t.test(BMI~sex))
+with(all.bm[all.bm$species=='chimp',],t.test(BPs~sex))
+with(all.bm[all.bm$species=='chimp',],t.test(BPd~sex))
+with(all.bm[all.bm$species=='chimp',],t.test(triglycerides~sex))
+with(all.bm[all.bm$species=='chimp',],plot(cholesterol~sex))
+with(all.bm[all.bm$species=='chimp',],t.test(phosphate~sex))
 
 with(all.bm[all.bm$species=='chimp',],cohensD(BMI~sex))
 with(all.bm[all.bm$species=='chimp',],cohensD(BPs~sex))
@@ -37,12 +47,12 @@ with(all.bm[all.bm$species=='chimp',],cohensD(phosphate~sex))
 
 
 
-table(all.bm$species)
-table(all.bm$species=='human')
-corr.test(
-  cbind(all.bm$BMI[all.bm$species=='human']),
-  all.bm$age[all.bm$species=='human'])
-)
+# table(all.bm$species)
+# table(all.bm$species=='human')
+# corr.test(
+#   cbind(all.bm$BMI[all.bm$species=='human']),
+#   all.bm$age[all.bm$species=='human'])
+# )
 
 
 sex.aov <- manova(cbind(BPs,BPd,BMI,triglycerides,cholesterol,phosphate) ~ sex * species, data=all.bm)

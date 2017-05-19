@@ -85,7 +85,7 @@ height <- read.csv("Chimpanzee heights bak.csv")
 final_data <- merge(final_minus_height, height, by="chimp", all=T)
 
 
-write.csv(final_data, 'C:/Users/s1229179/Dropbox/R/blood chemistry/Drew version/final_data.csv')
+#write.csv(final_data, 'C:/Users/s1229179/Dropbox/R/blood chemistry/Drew version/final_data.csv')
 #write.csv(final_data, 'C:/Users/Diapadion/Dropbox/R/blood chemistry/Drew version/final_data.csv')
 
 

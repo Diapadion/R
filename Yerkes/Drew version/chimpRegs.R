@@ -46,6 +46,16 @@ mcAL.2 <- lmer(AL ~ Dominance + Openness + Agreeableness * Conscientiousness + N
 
 
 
+fullcast$AL = rowMeans(cbind(fullcast$systolic,fullcast$diastolic,
+                             fullcast$cholesterol,fullcast$triglycerides,fullcast$BMI), na.rm = T)
+mcAL.3 <- lmer(AL ~ chimp_Dom_CZ + chimp_Ext_CZ + chimp_Con_CZ + chimp_Agr_CZ + chimp_Neu_CZ + chimp_Opn_CZ
+                         + sex + ageDays + I(ageDays^2) + (1 | chimp), 
+                         data = fullcast,REML=FALSE)
+summary(mcAL.3)
+confint(mcAL.3,method='boot')  
+  
+  
+
 
 AICctab(mcAL.1, mcAL.2,
         weights=T, delta=T,base=T,logLik=T,sort=T

@@ -1,6 +1,6 @@
 ### MIDUS II data
 
-setwd("C:/Users/s1229179/git-repos/R/blood chemistry/Drew version/")
+setwd("C:/Users/s1229179/GitHub/R/Yerkes/Drew version/")
 #midusIn <- read.table("midus-Data.csv")
 # right now, the manual load of the .rda file is working best for the biomarkers
 # tho I've no idea why
@@ -59,8 +59,11 @@ rm(midja,midjaBio,midjaByBio)
 midusP1 <- read.csv('midusP1cc.csv')
 midja <- read.csv('midja_cc.csv')
 
+
+
 midus_c <- read.csv('comboMIDUSpersBio.csv')
 
+midja_c <- read.csv('comboMIDJApersBio.csv')
 
 
 ### Redesignating personality

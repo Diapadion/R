@@ -97,7 +97,7 @@ midus_c$B1SE6CC[midus_c$B1SE6CC==8]<-NA
 midus_c$B1SE6DD[midus_c$B1SE6DD==8]<-NA
 midus_c$B1SE6EE[midus_c$B1SE6EE==8]<-NA
 
-
+# Adjustments for medication
 midus_c$dias_adj = midus_c$B4P1GD23 + 5*(midus_c$B4XBPD==1)
 midus_c$sys_adj = midus_c$B4P1GS23 + 10*(midus_c$B4XBPD==1)
 midus_c$chol_adj = midus_c$B4BCHOL + 21.24*(midus_c$B4XCHD==1)
@@ -222,14 +222,25 @@ maAL.2 <- lm(AL ~ age + age2 + sex
 summary(maAL.2)
 confint(maAL.2)
 
-
 AICctab(maAL.1, maAL.2,
         weights=T, delta=T,base=T,logLik=T,sort=T
 )
 
 
 
-midus_cs$AL = midus_cs$sys_adj + midus_cs$dias_adj + midus_cs$chol_adj + midus_cs$trig + midus_cs$BMI # these need medication adjustment
+maAL.1.m <- lm(AL ~ age + age2
+             + Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion,
+             data = all3[all3$sample=='MIDUS'&all3$sex==1,])
+summary(maAL.1.m)
+
+maAL.1.f <- lm(AL ~ age + age2
+               + Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion,
+               data = all3[all3$sample=='MIDUS'&all3$sex==2,])
+summary(maAL.1.f)
+
+
+
+midus_cs$AL = midus_cs$sys_adj + midus_cs$dias_adj + midus_cs$chol_adj + midus_cs$trig + midus_cs$BMI
 maALallItems.1 <- lm(AL ~ age + age2 + sex
              + Outgoing + Helpful + Moody + Organized + Selfconfident + Friendly + Warm + Worrying
              + Responsible + Forceful + Lively + Caring + Nervous + Creative + Assertive

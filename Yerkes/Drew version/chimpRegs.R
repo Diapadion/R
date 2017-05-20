@@ -10,8 +10,6 @@ library(bbmle)
 # should I rejigger data for this purpose, to be more like the SEM data?[???]
 
 
-# Crucial line of code for all samples:
-all3$AL = rowMeans(cbind(all3$sys,all3$dias,all3$chol,all3$trig,all3$BMI), na.rm = T)
 
 scoutput$AL = rowMeans(cbind(scoutput$sys,scoutput$dias,scoutput$chol,scoutput$trig,scoutput$BMI), na.rm = T)
 

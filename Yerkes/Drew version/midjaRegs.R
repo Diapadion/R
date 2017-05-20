@@ -160,6 +160,19 @@ AICctab(mjAL.1, mjAL.2,
 )
 
 
+
+mjAL.1.m <- lm(AL ~ age + age2
+               + Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion,
+               data = all3[all3$sample=='MIDJA'&all3$sex==1,])
+summary(mjAL.1.m)
+
+mjAL.1.f <- lm(AL ~ age + age2
+               + Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion,
+               data = all3[all3$sample=='MIDJA'&all3$sex==2,])
+summary(mjAL.1.f)
+
+
+
 # make AVERAGE
 midja_cs$AL = midja_cs$sys_adj + midja_cs$dias_adj + midja_cs$chol_adj + midja_cs$trig + midja_cs$BMI # these need medication adjustment
 mjALallItems.1 <- lm(AL ~ age + age2 + sex

@@ -138,6 +138,12 @@ s <- function(x) {scale(x)}
 
 
 
+# Crucial line of code for all samples:
+all3$AL = rowMeans(cbind(all3$sys,all3$dias,all3$chol,all3$trig,all3$BMI), na.rm = T)
+# for use in later analyses
+
+
+
 ### Data suitability
 
 library(psych)

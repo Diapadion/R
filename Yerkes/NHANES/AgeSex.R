@@ -35,7 +35,7 @@ with(all.bm[all.bm$species=='chimp',],t.test(BMI~sex))
 with(all.bm[all.bm$species=='chimp',],t.test(BPs~sex))
 with(all.bm[all.bm$species=='chimp',],t.test(BPd~sex))
 with(all.bm[all.bm$species=='chimp',],t.test(triglycerides~sex))
-with(all.bm[all.bm$species=='chimp',],plot(cholesterol~sex))
+with(all.bm[all.bm$species=='chimp',],t.test(cholesterol~sex))
 with(all.bm[all.bm$species=='chimp',],t.test(phosphate~sex))
 
 with(all.bm[all.bm$species=='chimp',],cohensD(BMI~sex))
@@ -72,11 +72,11 @@ summary.aov(mancova)
 xmancova <- xtable(mancova)
 print.xtable(xmancova, type="html", file="mancova.html")
 
-xmancova <- xtable(summary.aov(mancova)[3])
+xmancova <- xtable(summary.aov(mancova)[6])
 print.xtable(xmancova, type="html", file="mancova.html")
 
 
-library(heplots)
+#library(heplots)
 library(candisc)
 
 

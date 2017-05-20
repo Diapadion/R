@@ -16,11 +16,27 @@ all3$AL = rowMeans(cbind(all3$sys,all3$dias,all3$chol,all3$trig,all3$BMI), na.rm
 scoutput$AL = rowMeans(cbind(scoutput$sys,scoutput$dias,scoutput$chol,scoutput$trig,scoutput$BMI), na.rm = T)
 
 
-
+smeandat$AL = rowMeans(cbind(s(smeandat$sys),s(smeandat$dias),
+               s(smeandat$chol),s(smeandat$trig),
+               s(smeandat$BMI)), na.rm = T)
 mcAL.1.simplm <- lm(AL ~ Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion
-                    + age + age2 + sex, 
-                    data = all3[all3$sample=='YNPRC',])
+                    + s(age) + s(age2) + sex, 
+                    #data = all3[all3$sample=='YNPRC',]
+                    data = smeandat
+)
 summary(mcAL.1.simplm)
+
+mcAL.1.simpl.m <- lm(AL ~ Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion
+                    + s(age) + s(age2),
+                    data = smeandat[smeandat$sex==1,]
+)
+mcAL.1.simpl.f <- lm(AL ~ Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion
+                     + s(age) + s(age2),
+                     data = smeandat[smeandat$sex==2,]
+)
+summary(mcAL.1.simpl.m)
+summary(mcAL.1.simpl.f)
+
 
 mcAL.1 <- lmer(AL ~ Dominance + Openness + Agreeableness + Conscientiousness + Neuroticism + Extraversion
                + age + age2 + sex + (1 | chimp), 
@@ -46,14 +62,42 @@ mcAL.2 <- lmer(AL ~ Dominance + Openness + Agreeableness * Conscientiousness + N
 
 
 
-fullcast$AL = rowMeans(cbind(fullcast$systolic,fullcast$diastolic,
-                             fullcast$cholesterol,fullcast$triglycerides,fullcast$BMI), na.rm = T)
+fullcast$AL = rowMeans(cbind(s(fullcast$systolic),s(fullcast$diastolic),
+                             s(fullcast$cholesterol),s(fullcast$triglycerides),
+                             s(fullcast$BMI)), na.rm = T)
 mcAL.3 <- lmer(AL ~ chimp_Dom_CZ + chimp_Ext_CZ + chimp_Con_CZ + chimp_Agr_CZ + chimp_Neu_CZ + chimp_Opn_CZ
-                         + sex + ageDays + I(ageDays^2) + (1 | chimp), 
-                         data = fullcast,REML=FALSE)
+                         + sex + age + age2 +
+                 (1 | chimp)
+                # (1 + chimp_Opn_CZ | chimp)
+                  #+ sex + chimp_Dom_CZ + chimp_Con_CZ | chimp) 
+#                  (1 + chimp_Dom_CZ + chimp_Ext_CZ + chimp_Con_CZ + chimp_Agr_CZ +  chimp_Neu_CZ | chimp)
+                      #                        chimp_Opn_CZ | chimp)
+               
+               , 
+                         data = fullcast[!is.nan(fullcast$AL),],REML=FALSE)
 summary(mcAL.3)
 confint(mcAL.3,method='boot')  
   
+
+
+mcAL.3.m <- lmer(AL ~ chimp_Dom_CZ + chimp_Ext_CZ + chimp_Con_CZ + chimp_Agr_CZ + chimp_Neu_CZ + chimp_Opn_CZ
+               + age + age2 + 
+               #  (1 | chimp) 
+                (1 + chimp_Dom_CZ | chimp)
+               , data = fullcast[!is.nan(fullcast$AL)&(fullcast$sex==1),],REML=FALSE,
+               control = lmerControl(optimizer = 'Nelder_Mead')
+                 )
+summary(mcAL.3.m)
+confint(mcAL.3.m, method='Wald')
+
+mcAL.3.f <- lmer(AL ~ chimp_Dom_CZ + chimp_Ext_CZ + chimp_Con_CZ + chimp_Agr_CZ + chimp_Neu_CZ + chimp_Opn_CZ
+                 + age + age2 + 
+                  # (1 | chimp) 
+                  (1 + chimp_Dom_CZ | chimp)
+                 , data = fullcast[!is.nan(fullcast$AL)&(fullcast$sex==0),],REML=FALSE)
+summary(mcAL.3.f)
+
+
   
 
 

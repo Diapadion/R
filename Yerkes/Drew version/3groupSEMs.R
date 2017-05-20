@@ -69,33 +69,42 @@ all2$chol = all2$chol + 21.24*(midus_c$B4XCHD==1)
 
 # fixing the damn age
 smeandat = meandat
-smeandat$age <- 1.5*as.numeric(as.Date('01/01/2007', format = "%m/%d/%Y")-DoB)/365
-colnames(smeandat)[4] <- 'age2'
+#smeandat$age <- 1.5*as.numeric(as.Date('01/01/2007', format = "%m/%d/%Y")-DoB)/365
+#colnames(smeandat)[4] <- 'age2'
+smeandat$age = smeandat$age*1.5
 smeandat$age2 <- as.numeric(smeandat$age2)
 smeandat$age2 <- smeandat$age^2
 
-
-smeandat <- with(smeandat,data.frame(Chimp,sex=sex, age=age, age2=age2,
+smeandat <- with(smeandat,data.frame(chimp,sex=sex, age=age, age2=age2,
                         # Dominance=(((Dominance - 1) / 2) + 1),
                         # Extraversion=(((Extraversion - 1) / 2) + 1),
                         # Openness=(((Openness - 1) / 2) + 1),
                         # Conscientiousness=(((Conscientiousness - 1) / 2) + 1),
                         # Agreeableness=(((Agreeableness - 1) / 2) + 1),
                         # Neuroticism=(((Neuroticism - 1) / 2) + 1),         
-                        Dominance=s(Dominance),
-                        Extraversion=s(Extraversion),
-                        Openness=s(Openness),
-                        Conscientiousness=s(Conscientiousness),
-                        Agreeableness=s(Agreeableness),
-                        Neuroticism=s(Neuroticism), 
-                        BMI=s(BMI),chol=chol,creat=creat,trig=trig,#gluc=glucose
-                        sys=sys,dias=dias
-))
+                        # Dominance=s(Dominance),
+                        # Extraversion=s(Extraversion),
+                        # Openness=s(Openness),
+                        # Conscientiousness=s(Conscientiousness),
+                        # Agreeableness=s(Agreeableness),
+                        # Neuroticism=s(Neuroticism), 
+                        BMI=s(BMI),
+                        #chol=chol,creat=creat,trig=trig,#gluc=glucose
+                        #sys=sys,dias=dias
+                        chol=cholesterol,creat=Creatine,trig=triglycerides,
+                        sys=systolic,dias=diastolic,
+                        Dominance=s(chimp_Dom_CZ),
+                        Extraversion=s(chimp_Ext_CZ),
+                        Openness=s(chimp_Opn_CZ),
+                        Conscientiousness=s(chimp_Con_CZ),
+                        Agreeableness=s(chimp_Agr_CZ),
+                        Neuroticism=s(chimp_Neu_CZ)
+                    ))
                        
 colnames(smeandat)[1] <- "M2ID"
 smeandat <- cbind(smeandat, 'American')
 colnames(smeandat)[17] <- 'country'
-smeandat <- cbind(smeandat,'Chimp')
+smeandat <- cbind(smeandat,'chimp')
 colnames(smeandat)[18] <- 'species'  
 smeandat <- cbind(smeandat,'YNPRC')
 colnames(smeandat)[19] <- 'sample'

@@ -363,6 +363,11 @@ fullcast$ageDays <- NA
 #fullcast$ageDays <- difftime(fullcast$date, fullcast$DoB, units = 'days')
 fullcast$ageDays <- as.numeric(fullcast$date) - as.numeric(fullcast$DoB)
 
+fullcast$age = fullcast$ageDays / 365
+fullcast$age2 = fullcast$age^2
+
+
+  
 
 ### 
 # and we need to separate out the systolic and diastolic blood pressures and
@@ -453,14 +458,12 @@ c.bm = fullcast[,c('chimp','sex','ageDays','wbc','rbc','hct','hgb',
 
 colnames(c.bm)[34:35] = c('BPs','BPd')
 
-
-
-
-c.bm$ageDays = c.bm$ageDays / 365
 c.bm$lymph = c.bm$lymph/1000
 
 #DO THIS - not functional...?
 #nh.cast <- fullcast[!(is.na(fullcast$Glucose) & is.na(fullcast$wbc)),]
+
+### Age adjustment here has not been written in yet
 
 write.csv(c.bm, 'cNHANES.csv')
 
@@ -468,7 +471,14 @@ write.csv(c.bm, 'cNHANES.csv')
 
 ### What about an averaged version?
 
-c.bm.m = aggregate(c.bm, by = list(c.bm$chimp), FUN=mean, na.rm=T
+dim(fullcast)
+
+meandat = aggregate(fullcast, by = list(fullcast$chimp), FUN=mean, na.rm=T
                    , na.action=na.pass)
-head(c.bm.m)
+
+meandat$sex[meandat$sex==0] = 2
+
+# c.bm.m = aggregate(c.bm, by = list(c.bm$chimp), FUN=mean, na.rm=T
+#                    , na.action=na.pass)
+# head(c.bm.m)
                   

@@ -420,6 +420,19 @@ aft.parfm.eq2 = aftreg(Surv(age_pr, age, stat.log) ~
 summary(aft.parfm.eq2)
 
 
+aft.f = aftreg(Surv(age_pr, age, stat.log) ~ 
+                         as.factor(origin) + Agr_CZ
+                       + Dom_CZ + Ext_CZ + Con_CZ + Neu_CZ + Opn_CZ,
+                       data = datX[datX$sex==0,], param = 'lifeAcc',
+                       dist = 'loglogistic')
+aft.m = aftreg(Surv(age_pr, age, stat.log) ~ 
+                 as.factor(origin) + Agr_CZ
+               + Dom_CZ + Ext_CZ + Con_CZ + Neu_CZ + Opn_CZ,
+               data = datX[datX$sex==1,], param = 'lifeAcc',
+               dist = 'loglogistic')
+
+
+
 pf.u.o.s.6.aft = aftreg(Surv(age_pr, age, stat.log) ~ 
                           as.factor(sex) + as.factor(origin) +  
                           Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ,

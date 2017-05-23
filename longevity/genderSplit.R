@@ -114,13 +114,13 @@ pf.r.o.x.pwp.f = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) +
 
 pf.u.x.x.wb.f = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) + 
                                Agr_CZ + Dom_CZ + Ext_CZ + Con_CZ + Neu_CZ + Opn_CZ,
-                             RandDist = 'LogN'
+                             RandDist = 'Gamma' #LogN'
                              ,data=datX[datX$sex==0,], hazard =  'Weibull' 
 )
 pf.u.o.x.wb.f = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) + 
                                as.factor(origin) +  
                                Agr_CZ + Dom_CZ + Ext_CZ + Con_CZ + Neu_CZ + Opn_CZ,
-                             RandDist = 'LogN'
+                             RandDist = 'Gamma' #'LogN'
                              ,data=datX[datX$sex==0,], hazard =  'Weibull' 
 )
 pf.r.o.x.wb.f = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) + 
@@ -187,15 +187,22 @@ mnv.r.m = c('pf.r.o.x.wb.m','pf.r.o.x.pwp.m','pf.r.o.x.gm.m',
 
 
 
-### Origin
+### Wild
 
 estv.u.m.or = c(pf.u.o.x.wb.m$coef['originWILD'],pf.u.o.x.pwp.m$coef['originWILD'],coef(pf.u.o.x.gm.m)['as.factor(origin)WILD'])
 estv.r.m.or = c(pf.r.o.x.wb.m$coef['originWILD'],pf.r.o.x.pwp.m$coef['originWILD'],coef(pf.r.o.x.gm.m)['as.factor(origin)WILD'])
 ind = 2
 sev.u.m.or=c(sqrt(diag(pf.u.o.x.wb.m$varH))[ind-1],sqrt(diag(pf.u.o.x.pwp.m$varH))[ind-1],pf.u.o.x.gm.m[ind+2,'SE'])
 sev.r.m.or=c(sqrt(diag(pf.r.o.x.wb.m$varH))[ind-1],sqrt(diag(pf.r.o.x.pwp.m$varH))[ind-1],pf.r.o.x.gm.m[ind+2,'SE'])
-modavgCustom(LLv.u.m[1:3],Kv.u.m[1:3],mnv.u.m[1:3],estv.u.m.or,sev.u.m.or,second.ord=F)
-modavgCustom(LLv.r.m[1:3],Kv.r.m[1:3],mnv.r.m[1:3],estv.r.m.or,sev.r.m.or,second.ord=F)
+
+mavg.u.W.m = modavgCustom(LLv.u.m[1:3],Kv.u.m[1:3],mnv.u.m[1:3],estv.u.m.or,sev.u.m.or,second.ord=F)
+exp(mavg.u.W.m$Mod.avg.est)
+exp(mavg.u.W.m$Lower.CL)
+exp(mavg.u.W.m$Upper.CL)
+mavg.r.W.m = modavgCustom(LLv.r.m[1:3],Kv.r.m[1:3],mnv.r.m[1:3],estv.r.m.or,sev.r.m.or,second.ord=F)
+exp(mavg.r.W.m$Mod.avg.est)
+exp(mavg.r.W.m$Lower.CL)
+exp(mavg.r.W.m$Upper.CL)
 
 
 ### Agr
@@ -209,8 +216,15 @@ sev.u.m.A=c(sqrt(diag(pf.u.o.x.wb.m$varH))[ind-1],sqrt(diag(pf.u.o.x.pwp.m$varH)
           sqrt(diag(pf.u.x.x.wb.m$varH))[ind-2],sqrt(diag(pf.u.x.x.pwp.m$varH))[ind-2],pf.u.x.x.gm.m[ind+1,'SE'])
 sev.r.m.A=c(sqrt(diag(pf.r.o.x.wb.m$varH))[ind-1],sqrt(diag(pf.r.o.x.pwp.m$varH))[ind-1],pf.r.o.x.gm.m[ind+2,'SE'],
           sqrt(diag(pf.r.x.x.wb.m$varH))[ind-2],sqrt(diag(pf.r.x.x.pwp.m$varH))[ind-2],pf.r.x.x.gm.m[ind+1,'SE'])
-modavgCustom(LLv.u.m,Kv.u.m,mnv.u.m,estv.u.m.A,sev.u.m.A,second.ord=F)
-modavgCustom(LLv.r.m,Kv.r.m,mnv.r.m,estv.r.m.A,sev.r.m.A,second.ord=F)
+
+mavg.u.A.m = modavgCustom(LLv.u.m,Kv.u.m,mnv.u.m,estv.u.m.A,sev.u.m.A,second.ord=F)
+exp(mavg.u.A.m$Mod.avg.est)
+exp(mavg.u.A.m$Lower.CL)
+exp(mavg.u.A.m$Upper.CL)
+mavg.r.A.m = modavgCustom(LLv.r.m,Kv.r.m,mnv.r.m,estv.r.m.A,sev.r.m.A,second.ord=F)
+exp(mavg.r.A.m$Mod.avg.est)
+exp(mavg.r.A.m$Lower.CL)
+exp(mavg.r.A.m$Upper.CL)
 
 
 ### Dom
@@ -224,8 +238,15 @@ sev.u.m.D=c(sqrt(diag(pf.u.o.x.wb.m$varH))[ind-1],sqrt(diag(pf.u.o.x.pwp.m$varH)
             sqrt(diag(pf.u.x.x.wb.m$varH))[ind-2],sqrt(diag(pf.u.x.x.pwp.m$varH))[ind-2],pf.u.x.x.gm.m[ind+1,'SE'])
 sev.r.m.D=c(sqrt(diag(pf.r.o.x.wb.m$varH))[ind-1],sqrt(diag(pf.r.o.x.pwp.m$varH))[ind-1],pf.r.o.x.gm.m[ind+2,'SE'],
             sqrt(diag(pf.r.x.x.wb.m$varH))[ind-2],sqrt(diag(pf.r.x.x.pwp.m$varH))[ind-2],pf.r.x.x.gm.m[ind+1,'SE'])
-modavgCustom(LLv.u.m,Kv.u.m,mnv.u.m,estv.u.m.D,sev.u.m.D,second.ord=F)
-modavgCustom(LLv.r.m,Kv.r.m,mnv.r.m,estv.r.m.D,sev.r.m.D,second.ord=F)
+
+mavg.u.D.m = modavgCustom(LLv.u.m,Kv.u.m,mnv.u.m,estv.u.m.D,sev.u.m.D,second.ord=F)
+exp(mavg.u.D.m$Mod.avg.est)
+exp(mavg.u.D.m$Lower.CL)
+exp(mavg.u.D.m$Upper.CL)
+mavg.r.D.m = modavgCustom(LLv.r.m,Kv.r.m,mnv.r.m,estv.r.m.D,sev.r.m.D,second.ord=F)
+exp(mavg.r.D.m$Mod.avg.est)
+exp(mavg.r.D.m$Lower.CL)
+exp(mavg.r.D.m$Upper.CL)
 
 
 ### Ext
@@ -239,8 +260,14 @@ sev.u.m.E=c(sqrt(diag(pf.u.o.x.wb.m$varH))[ind-1],sqrt(diag(pf.u.o.x.pwp.m$varH)
             sqrt(diag(pf.u.x.x.wb.m$varH))[ind-2],sqrt(diag(pf.u.x.x.pwp.m$varH))[ind-2],pf.u.x.x.gm.m[ind+1,'SE'])
 sev.r.m.E=c(sqrt(diag(pf.r.o.x.wb.m$varH))[ind-1],sqrt(diag(pf.r.o.x.pwp.m$varH))[ind-1],pf.r.o.x.gm.m[ind+2,'SE'],
             sqrt(diag(pf.r.x.x.wb.m$varH))[ind-2],sqrt(diag(pf.r.x.x.pwp.m$varH))[ind-2],pf.r.x.x.gm.m[ind+1,'SE'])
-modavgCustom(LLv.u.m,Kv.u.m,mnv.u.m,estv.u.m.E,sev.u.m.E,second.ord=F)
-modavgCustom(LLv.r.m,Kv.r.m,mnv.r.m,estv.r.m.E,sev.r.m.E,second.ord=F)
+mavg.u.E.m = modavgCustom(LLv.u.m,Kv.u.m,mnv.u.m,estv.u.m.E,sev.u.m.E,second.ord=F)
+exp(mavg.u.E.m$Mod.avg.est)
+exp(mavg.u.E.m$Lower.CL)
+exp(mavg.u.E.m$Upper.CL)
+mavg.r.E.m = modavgCustom(LLv.r.m,Kv.r.m,mnv.r.m,estv.r.m.E,sev.r.m.E,second.ord=F)
+exp(mavg.r.E.m$Mod.avg.est)
+exp(mavg.r.E.m$Lower.CL)
+exp(mavg.r.E.m$Upper.CL)
 
 
 ### Con
@@ -254,8 +281,14 @@ sev.u.m.C=c(sqrt(diag(pf.u.o.x.wb.m$varH))[ind-1],sqrt(diag(pf.u.o.x.pwp.m$varH)
             sqrt(diag(pf.u.x.x.wb.m$varH))[ind-2],sqrt(diag(pf.u.x.x.pwp.m$varH))[ind-2],pf.u.x.x.gm.m[ind+1,'SE'])
 sev.r.m.C=c(sqrt(diag(pf.r.o.x.wb.m$varH))[ind-1],sqrt(diag(pf.r.o.x.pwp.m$varH))[ind-1],pf.r.o.x.gm.m[ind+2,'SE'],
             sqrt(diag(pf.r.x.x.wb.m$varH))[ind-2],sqrt(diag(pf.r.x.x.pwp.m$varH))[ind-2],pf.r.x.x.gm.m[ind+1,'SE'])
-modavgCustom(LLv.u.m,Kv.u.m,mnv.u.m,estv.u.m.C,sev.u.m.C,second.ord=F)
-modavgCustom(LLv.r.m,Kv.r.m,mnv.r.m,estv.r.m.C,sev.r.m.C,second.ord=F)
+mavg.u.C.m = modavgCustom(LLv.u.m,Kv.u.m,mnv.u.m,estv.u.m.C,sev.u.m.C,second.ord=F)
+exp(mavg.u.C.m$Mod.avg.est)
+exp(mavg.u.C.m$Lower.CL)
+exp(mavg.u.C.m$Upper.CL)
+mavg.r.C.m = modavgCustom(LLv.r.m,Kv.r.m,mnv.r.m,estv.r.m.C,sev.r.m.C,second.ord=F)
+exp(mavg.r.C.m$Mod.avg.est)
+exp(mavg.r.C.m$Lower.CL)
+exp(mavg.r.C.m$Upper.CL)
 
 
 ### Neu
@@ -269,8 +302,16 @@ sev.u.m.N=c(sqrt(diag(pf.u.o.x.wb.m$varH))[ind-1],sqrt(diag(pf.u.o.x.pwp.m$varH)
             sqrt(diag(pf.u.x.x.wb.m$varH))[ind-2],sqrt(diag(pf.u.x.x.pwp.m$varH))[ind-2],pf.u.x.x.gm.m[ind+1,'SE'])
 sev.r.m.N=c(sqrt(diag(pf.r.o.x.wb.m$varH))[ind-1],sqrt(diag(pf.r.o.x.pwp.m$varH))[ind-1],pf.r.o.x.gm.m[ind+2,'SE'],
             sqrt(diag(pf.r.x.x.wb.m$varH))[ind-2],sqrt(diag(pf.r.x.x.pwp.m$varH))[ind-2],pf.r.x.x.gm.m[ind+1,'SE'])
-modavgCustom(LLv.u.m,Kv.u.m,mnv.u.m,estv.u.m.N,sev.u.m.N,second.ord=F)
-modavgCustom(LLv.r.m,Kv.r.m,mnv.r.m,estv.r.m.N,sev.r.m.N,second.ord=F)
+
+mavg.u.N.m = modavgCustom(LLv.u.m,Kv.u.m,mnv.u.m,estv.u.m.N,sev.u.m.N,second.ord=F)
+exp(mavg.u.N.m$Mod.avg.est)
+exp(mavg.u.N.m$Lower.CL)
+exp(mavg.u.N.m$Upper.CL)
+
+mavg.r.N.m = modavgCustom(LLv.r.m,Kv.r.m,mnv.r.m,estv.r.m.N,sev.r.m.N,second.ord=F)
+exp(mavg.r.N.m$Mod.avg.est)
+exp(mavg.r.N.m$Lower.CL)
+exp(mavg.r.N.m$Upper.CL)
 
 
 ### Opn
@@ -284,11 +325,15 @@ sev.u.m.O=c(sqrt(diag(pf.u.o.x.wb.m$varH))[ind-1],sqrt(diag(pf.u.o.x.pwp.m$varH)
             sqrt(diag(pf.u.x.x.wb.m$varH))[ind-2],sqrt(diag(pf.u.x.x.pwp.m$varH))[ind-2],pf.u.x.x.gm.m[ind+1,'SE'])
 sev.r.m.O=c(sqrt(diag(pf.r.o.x.wb.m$varH))[ind-1],sqrt(diag(pf.r.o.x.pwp.m$varH))[ind-1],pf.r.o.x.gm.m[ind+2,'SE'],
             sqrt(diag(pf.r.x.x.wb.m$varH))[ind-2],sqrt(diag(pf.r.x.x.pwp.m$varH))[ind-2],pf.r.x.x.gm.m[ind+1,'SE'])
-modavgCustom(LLv.u.m,Kv.u.m,mnv.u.m,estv.u.m.O,sev.u.m.O,second.ord=F)
-modavgCustom(LLv.r.m,Kv.r.m,mnv.r.m,estv.r.m.O,sev.r.m.O,second.ord=F)
 
-
-
+mavg.u.O.m = modavgCustom(LLv.u.m,Kv.u.m,mnv.u.m,estv.u.m.O,sev.u.m.O,second.ord=F)
+exp(mavg.u.O.m$Mod.avg.est)
+exp(mavg.u.O.m$Lower.CL)
+exp(mavg.u.O.m$Upper.CL)
+mavg.r.O.m = modavgCustom(LLv.r.m,Kv.r.m,mnv.r.m,estv.r.m.O,sev.r.m.O,second.ord=F)
+exp(mavg.r.O.m$Mod.avg.est)
+exp(mavg.r.O.m$Lower.CL)
+exp(mavg.r.O.m$Upper.CL)
 
 
 
@@ -309,15 +354,22 @@ mnv.u.f = c('pf.u.o.x.wb.f','pf.u.o.x.pwp.f','pf.u.o.x.gm.f',
 mnv.r.f = c('pf.r.o.x.wb.f','pf.r.o.x.pwp.f','pf.r.o.x.gm.f',
             'pf.r.x.x.wb.f','pf.r.x.x.pwp.f','pf.r.x.x.gm.f')
 
-### Origin
+### Wild
 
 estv.u.f.or = c(pf.u.o.x.wb.f$coef['originWILD'],pf.u.o.x.pwp.f$coef['originWILD'],coef(pf.u.o.x.gm.f)['as.factor(origin)WILD'])
 estv.r.f.or = c(pf.r.o.x.wb.f$coef['originWILD'],pf.r.o.x.pwp.f$coef['originWILD'],coef(pf.r.o.x.gm.f)['as.factor(origin)WILD'])
 ind = 2
 sev.u.f.or=c(sqrt(diag(pf.u.o.x.wb.f$varH))[ind-1],sqrt(diag(pf.u.o.x.pwp.f$varH))[ind-1],pf.u.o.x.gm.f[ind+2,'SE'])
 sev.r.f.or=c(sqrt(diag(pf.r.o.x.wb.f$varH))[ind-1],sqrt(diag(pf.r.o.x.pwp.f$varH))[ind-1],pf.r.o.x.gm.f[ind+2,'SE'])
-modavgCustom(LLv.u.f[1:3],Kv.u.f[1:3],mnv.u.f[1:3],estv.u.f.or,sev.u.f.or,second.ord=F)
-modavgCustom(LLv.r.f[1:3],Kv.r.f[1:3],mnv.r.f[1:3],estv.r.f.or,sev.r.f.or,second.ord=F)
+
+mavg.u.W.f = modavgCustom(LLv.u.f[1:3],Kv.u.f[1:3],mnv.u.f[1:3],estv.u.f.or,sev.u.f.or,second.ord=F)
+exp(mavg.u.W.f$Mod.avg.est)
+exp(mavg.u.W.f$Lower.CL)
+exp(mavg.u.W.f$Upper.CL)
+mavg.r.W.f = modavgCustom(LLv.r.f[1:3],Kv.r.f[1:3],mnv.r.f[1:3],estv.r.f.or,sev.r.f.or,second.ord=F)
+exp(mavg.r.W.f$Mod.avg.est)
+exp(mavg.r.W.f$Lower.CL)
+exp(mavg.r.W.f$Upper.CL)
 
 
 ### Agr
@@ -331,8 +383,15 @@ sev.u.f.A=c(sqrt(diag(pf.u.o.x.wb.f$varH))[ind-1],sqrt(diag(pf.u.o.x.pwp.f$varH)
             sqrt(diag(pf.u.x.x.wb.f$varH))[ind-2],sqrt(diag(pf.u.x.x.pwp.f$varH))[ind-2],pf.u.x.x.gm.f[ind+1,'SE'])
 sev.r.f.A=c(sqrt(diag(pf.r.o.x.wb.f$varH))[ind-1],sqrt(diag(pf.r.o.x.pwp.f$varH))[ind-1],pf.r.o.x.gm.f[ind+2,'SE'],
             sqrt(diag(pf.r.x.x.wb.f$varH))[ind-2],sqrt(diag(pf.r.x.x.pwp.f$varH))[ind-2],pf.r.x.x.gm.f[ind+1,'SE'])
-modavgCustom(LLv.u.f,Kv.u.f,mnv.u.f,estv.u.f.A,sev.u.f.A,second.ord=F)
-modavgCustom(LLv.r.f,Kv.r.f,mnv.r.f,estv.r.f.A,sev.r.f.A,second.ord=F)
+
+mavg.u.A.f = modavgCustom(LLv.u.f,Kv.u.f,mnv.u.f,estv.u.f.A,sev.u.f.A,second.ord=F)
+exp(mavg.u.A.f$Mod.avg.est)
+exp(mavg.u.A.f$Lower.CL)
+exp(mavg.u.A.f$Upper.CL)
+mavg.r.A.f = modavgCustom(LLv.r.f,Kv.r.f,mnv.r.f,estv.r.f.A,sev.r.f.A,second.ord=F)
+exp(mavg.r.A.f$Mod.avg.est)
+exp(mavg.r.A.f$Lower.CL)
+exp(mavg.r.A.f$Upper.CL)
 
 
 ### Dom
@@ -346,8 +405,15 @@ sev.u.f.D=c(sqrt(diag(pf.u.o.x.wb.f$varH))[ind-1],sqrt(diag(pf.u.o.x.pwp.f$varH)
             sqrt(diag(pf.u.x.x.wb.f$varH))[ind-2],sqrt(diag(pf.u.x.x.pwp.f$varH))[ind-2],pf.u.x.x.gm.f[ind+1,'SE'])
 sev.r.f.D=c(sqrt(diag(pf.r.o.x.wb.f$varH))[ind-1],sqrt(diag(pf.r.o.x.pwp.f$varH))[ind-1],pf.r.o.x.gm.f[ind+2,'SE'],
             sqrt(diag(pf.r.x.x.wb.f$varH))[ind-2],sqrt(diag(pf.r.x.x.pwp.f$varH))[ind-2],pf.r.x.x.gm.f[ind+1,'SE'])
-modavgCustom(LLv.u.f,Kv.u.f,mnv.u.f,estv.u.f.D,sev.u.f.D,second.ord=F)
-modavgCustom(LLv.r.f,Kv.r.f,mnv.r.f,estv.r.f.D,sev.r.f.D,second.ord=F)
+
+mavg.u.D.f = modavgCustom(LLv.u.f,Kv.u.f,mnv.u.f,estv.u.f.D,sev.u.f.D,second.ord=F)
+exp(mavg.u.D.f$Mod.avg.est)
+exp(mavg.u.D.f$Lower.CL)
+exp(mavg.u.D.f$Upper.CL)
+mavg.r.D.f = modavgCustom(LLv.r.f,Kv.r.f,mnv.r.f,estv.r.f.D,sev.r.f.D,second.ord=F)
+exp(mavg.r.D.f$Mod.avg.est)
+exp(mavg.r.D.f$Lower.CL)
+exp(mavg.r.D.f$Upper.CL)
 
 
 ### Ext
@@ -361,8 +427,15 @@ sev.u.f.E=c(sqrt(diag(pf.u.o.x.wb.f$varH))[ind-1],sqrt(diag(pf.u.o.x.pwp.f$varH)
             sqrt(diag(pf.u.x.x.wb.f$varH))[ind-2],sqrt(diag(pf.u.x.x.pwp.f$varH))[ind-2],pf.u.x.x.gm.f[ind+1,'SE'])
 sev.r.f.E=c(sqrt(diag(pf.r.o.x.wb.f$varH))[ind-1],sqrt(diag(pf.r.o.x.pwp.f$varH))[ind-1],pf.r.o.x.gm.f[ind+2,'SE'],
             sqrt(diag(pf.r.x.x.wb.f$varH))[ind-2],sqrt(diag(pf.r.x.x.pwp.f$varH))[ind-2],pf.r.x.x.gm.f[ind+1,'SE'])
-modavgCustom(LLv.u.f,Kv.u.f,mnv.u.f,estv.u.f.E,sev.u.f.E,second.ord=F)
-modavgCustom(LLv.r.f,Kv.r.f,mnv.r.f,estv.r.f.E,sev.r.f.E,second.ord=F)
+
+mavg.u.E.f = modavgCustom(LLv.u.f,Kv.u.f,mnv.u.f,estv.u.f.E,sev.u.f.E,second.ord=F)
+exp(mavg.u.E.f$Mod.avg.est)
+exp(mavg.u.E.f$Lower.CL)
+exp(mavg.u.E.f$Upper.CL)
+mavg.r.E.f = modavgCustom(LLv.r.f,Kv.r.f,mnv.r.f,estv.r.f.E,sev.r.f.E,second.ord=F)
+exp(mavg.r.E.f$Mod.avg.est)
+exp(mavg.r.E.f$Lower.CL)
+exp(mavg.r.E.f$Upper.CL)
 
 
 ### Con
@@ -376,8 +449,15 @@ sev.u.f.C=c(sqrt(diag(pf.u.o.x.wb.f$varH))[ind-1],sqrt(diag(pf.u.o.x.pwp.f$varH)
             sqrt(diag(pf.u.x.x.wb.f$varH))[ind-2],sqrt(diag(pf.u.x.x.pwp.f$varH))[ind-2],pf.u.x.x.gm.f[ind+1,'SE'])
 sev.r.f.C=c(sqrt(diag(pf.r.o.x.wb.f$varH))[ind-1],sqrt(diag(pf.r.o.x.pwp.f$varH))[ind-1],pf.r.o.x.gm.f[ind+2,'SE'],
             sqrt(diag(pf.r.x.x.wb.f$varH))[ind-2],sqrt(diag(pf.r.x.x.pwp.f$varH))[ind-2],pf.r.x.x.gm.f[ind+1,'SE'])
-modavgCustom(LLv.u.f,Kv.u.f,mnv.u.f,estv.u.f.C,sev.u.f.C,second.ord=F)
-modavgCustom(LLv.r.f,Kv.r.f,mnv.r.f,estv.r.f.C,sev.r.f.C,second.ord=F)
+
+mavg.u.C.f = modavgCustom(LLv.u.f,Kv.u.f,mnv.u.f,estv.u.f.C,sev.u.f.C,second.ord=F)
+exp(mavg.u.C.f$Mod.avg.est)
+exp(mavg.u.C.f$Lower.CL)
+exp(mavg.u.C.f$Upper.CL)
+mavg.r.C.f = modavgCustom(LLv.r.f,Kv.r.f,mnv.r.f,estv.r.f.C,sev.r.f.C,second.ord=F)
+exp(mavg.r.C.f$Mod.avg.est)
+exp(mavg.r.C.f$Lower.CL)
+exp(mavg.r.C.f$Upper.CL)
 
 
 ### Neu
@@ -391,8 +471,15 @@ sev.u.f.N=c(sqrt(diag(pf.u.o.x.wb.f$varH))[ind-1],sqrt(diag(pf.u.o.x.pwp.f$varH)
             sqrt(diag(pf.u.x.x.wb.f$varH))[ind-2],sqrt(diag(pf.u.x.x.pwp.f$varH))[ind-2],pf.u.x.x.gm.f[ind+1,'SE'])
 sev.r.f.N=c(sqrt(diag(pf.r.o.x.wb.f$varH))[ind-1],sqrt(diag(pf.r.o.x.pwp.f$varH))[ind-1],pf.r.o.x.gm.f[ind+2,'SE'],
             sqrt(diag(pf.r.x.x.wb.f$varH))[ind-2],sqrt(diag(pf.r.x.x.pwp.f$varH))[ind-2],pf.r.x.x.gm.f[ind+1,'SE'])
-modavgCustom(LLv.u.f,Kv.u.f,mnv.u.f,estv.u.f.N,sev.u.f.N,second.ord=F)
-modavgCustom(LLv.r.f,Kv.r.f,mnv.r.f,estv.r.f.N,sev.r.f.N,second.ord=F)
+
+mavg.u.N.f = modavgCustom(LLv.u.f,Kv.u.f,mnv.u.f,estv.u.f.N,sev.u.f.N,second.ord=F)
+exp(mavg.u.N.f$Mod.avg.est)
+exp(mavg.u.N.f$Lower.CL)
+exp(mavg.u.N.f$Upper.CL)
+mavg.r.N.f = modavgCustom(LLv.r.f,Kv.r.f,mnv.r.f,estv.r.f.N,sev.r.f.N,second.ord=F)
+exp(mavg.r.N.f$Mod.avg.est)
+exp(mavg.r.N.f$Lower.CL)
+exp(mavg.r.N.f$Upper.CL)
 
 
 ### Opn
@@ -406,5 +493,14 @@ sev.u.f.O=c(sqrt(diag(pf.u.o.x.wb.f$varH))[ind-1],sqrt(diag(pf.u.o.x.pwp.f$varH)
             sqrt(diag(pf.u.x.x.wb.f$varH))[ind-2],sqrt(diag(pf.u.x.x.pwp.f$varH))[ind-2],pf.u.x.x.gm.f[ind+1,'SE'])
 sev.r.f.O=c(sqrt(diag(pf.r.o.x.wb.f$varH))[ind-1],sqrt(diag(pf.r.o.x.pwp.f$varH))[ind-1],pf.r.o.x.gm.f[ind+2,'SE'],
             sqrt(diag(pf.r.x.x.wb.f$varH))[ind-2],sqrt(diag(pf.r.x.x.pwp.f$varH))[ind-2],pf.r.x.x.gm.f[ind+1,'SE'])
-modavgCustom(LLv.u.f,Kv.u.f,mnv.u.f,estv.u.f.O,sev.u.f.O,second.ord=F)
-modavgCustom(LLv.r.f,Kv.r.f,mnv.r.f,estv.r.f.O,sev.r.f.O,second.ord=F)
+
+mavg.u.O.f = modavgCustom(LLv.u.f,Kv.u.f,mnv.u.f,estv.u.f.O,sev.u.f.O,second.ord=F)
+exp(mavg.u.O.f$Mod.avg.est)
+exp(mavg.u.O.f$Lower.CL)
+exp(mavg.u.O.f$Upper.CL)
+mavg.r.O.f = modavgCustom(LLv.r.f,Kv.r.f,mnv.r.f,estv.r.f.O,sev.r.f.O,second.ord=F)
+exp(mavg.r.O.f$Mod.avg.est)
+exp(mavg.r.O.f$Lower.CL)
+exp(mavg.r.O.f$Upper.CL)
+
+

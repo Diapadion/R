@@ -183,7 +183,7 @@ summary(pf.r.x.s.pwp.int)
 pf.u.o.s.wb = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) +
                              as.factor(origin) + as.factor(sex) + 
                                 Agr_CZ + Dom_CZ + Ext_CZ + Con_CZ + Neu_CZ + Opn_CZ,
-                             RandDist = 'LogN'
+                             RandDist = 'Gamma'
                              ,data = datX, hazard =  'Weibull' 
 )
 pf.u.x.x.wb = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) + 
@@ -208,13 +208,13 @@ pf.u.o.x.wb = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) +
 pf.r.x.s.wb = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) + 
                              as.factor(sex) +
                              Agr_CZ + D.r2.DoB + E.r2.DoB + Con_CZ + N.r1.DoB + O.r2.DoB,
-                             RandDist = 'LogN'
+                             RandDist = 'Gamma'
                              ,data = datX, hazard =  'Weibull' 
 )
 pf.r.o.x.wb = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) + 
                              as.factor(origin) +  
                              Agr_CZ + D.r2.DoB + E.r2.DoB + Con_CZ + N.r1.DoB + O.r2.DoB,
-                           RandDist = 'LogN'
+                           RandDist = 'Gamma'
                            ,data = datX, hazard =  'Weibull' 
 )
 pf.r.o.s.wb = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) +
@@ -485,7 +485,55 @@ mnv.r = c('pf.r.o.s.wb',
         # 'pf.u.x.s.wb.int','pf.u.x.s.pwe.int','pf.u.x.s.pwp.int','pf.u.x.s.gm.int',
         # 'pf.r.o.s.wb.int','pf.r.o.s.pwe.int','pf.r.o.s.pwp.int','pf.r.o.s.gm.int',
         # 'pf.r.x.s.wb.int','pf.r.x.s.pwe.int','pf.r.x.s.pwp.int','pf.r.x.s.gm.int'
-        
+      
+
+### Wild
+estv.u.W = c(pf.u.o.s.wb$coef['originWILD'],pf.u.o.s.pwe$coef['originWILD'],pf.u.o.s.pwp$coef['originWILD'],coef(pf.u.o.s.gm)['as.factor(origin)WILD'],
+             pf.u.o.x.wb$coef['originWILD'],pf.u.o.x.pwe$coef['originWILD'],pf.u.o.x.pwp$coef['originWILD'],coef(pf.u.o.x.gm)['as.factor(origin)WILD'])
+estv.r.W = c(pf.r.o.s.wb$coef['originWILD'],
+             pf.r.o.s.pwe$coef['originWILD'],pf.r.o.s.pwp$coef['originWILD'],coef(pf.r.o.s.gm)['as.factor(origin)WILD'],
+             pf.r.o.x.wb$coef['originWILD'],pf.r.o.x.pwe$coef['originWILD'],pf.r.o.x.pwp$coef['originWILD'],coef(pf.r.o.x.gm)['as.factor(origin)WILD'])
+ind=1
+sev.u.W=c(sqrt(diag(pf.u.o.s.wb$varH))[ind],sqrt(diag(pf.u.o.s.pwe$varH))[ind],sqrt(diag(pf.u.o.s.pwp$varH))[ind],pf.u.o.s.gm[ind+3,'SE'],
+          sqrt(diag(pf.u.o.x.wb$varH))[ind],sqrt(diag(pf.u.o.x.pwe$varH))[ind],sqrt(diag(pf.u.o.x.pwp$varH))[ind],pf.u.o.x.gm[ind+2,'SE'])
+sev.r.W=c(sqrt(diag(pf.r.o.s.wb$varH))[ind],
+          sqrt(diag(pf.r.o.s.pwe$varH))[ind],sqrt(diag(pf.r.o.s.pwp$varH))[ind],pf.r.o.s.gm[ind+3,'SE'],
+          sqrt(diag(pf.r.o.x.wb$varH))[ind],sqrt(diag(pf.r.o.x.pwe$varH))[ind],sqrt(diag(pf.r.o.x.pwp$varH))[ind],pf.r.o.x.gm[ind+2,'SE'])
+
+mavg.u.W = modavgCustom(LLv.u[1:8],Kv.u[1:8],mnv.u[1:8],estv.u.W,sev.u.W,second.ord=F)
+exp(mavg.u.W$Mod.avg.est)
+exp(mavg.u.W$Lower.CL)
+exp(mavg.u.W$Upper.CL)
+
+mavg.r.W = modavgCustom(LLv.r[1:8],Kv.r[1:8],mnv.r[1:8],estv.r.W,sev.r.W,second.ord=F)
+exp(mavg.r.W$Mod.avg.est)
+exp(mavg.r.W$Lower.CL)
+exp(mavg.r.W$Upper.CL)
+
+  
+  
+### Sex
+estv.u.S = c(pf.u.o.s.wb$coef['sex1'],pf.u.o.s.pwe$coef['sex1'],pf.u.o.s.pwp$coef['sex1'],coef(pf.u.o.s.gm)['as.factor(sex)1'],
+             pf.u.x.s.wb$coef['sex1'],pf.u.x.s.pwe$coef['sex1'],pf.u.x.s.pwp$coef['sex1'],coef(pf.u.x.s.gm)['as.factor(sex)1'])
+estv.r.S = c(pf.r.o.s.wb$coef['sex1'],
+             pf.r.o.s.pwe$coef['sex1'],pf.r.o.s.pwp$coef['sex1'],coef(pf.r.o.s.gm)['as.factor(sex)1'],
+             pf.r.x.s.wb$coef['sex1'],pf.r.x.s.pwe$coef['sex1'],pf.r.x.s.pwp$coef['sex1'],coef(pf.r.x.s.gm)['as.factor(sex)1'])
+ind = 2
+sev.u.S=c(sqrt(diag(pf.u.o.s.wb$varH))[ind],sqrt(diag(pf.u.o.s.pwe$varH))[ind],sqrt(diag(pf.u.o.s.pwp$varH))[ind],pf.u.o.s.gm[ind+3,'SE'],
+          sqrt(diag(pf.u.x.s.wb$varH))[ind-1],sqrt(diag(pf.u.x.s.pwe$varH))[ind-1],sqrt(diag(pf.u.x.s.pwp$varH))[ind-1],pf.u.x.s.gm[ind+2,'SE'])
+sev.r.S=c(sqrt(diag(pf.r.o.s.wb$varH))[ind],
+          sqrt(diag(pf.r.o.s.pwe$varH))[ind],sqrt(diag(pf.r.o.s.pwp$varH))[ind],pf.r.o.s.gm[ind+3,'SE'],
+          sqrt(diag(pf.r.x.s.wb$varH))[ind-1],sqrt(diag(pf.r.x.s.pwe$varH))[ind-1],sqrt(diag(pf.r.x.s.pwp$varH))[ind-1],pf.r.x.s.gm[ind+2,'SE'])
+
+mavg.u.S = modavgCustom(LLv.u[c(1:4,9:12)],Kv.u[c(1:4,9:12)],mnv.u[c(1:4,9:12)],estv.u.S,sev.u.S,second.ord=F)
+exp(mavg.u.S$Mod.avg.est)
+exp(mavg.u.S$Lower.CL)
+exp(mavg.u.S$Upper.CL)
+
+mavg.r.S = modavgCustom(LLv.r[c(1:4,9:12)],Kv.r[c(1:4,9:12)],mnv.r[c(1:4,9:12)],estv.r.S,sev.r.S,second.ord=F)          
+exp(mavg.r.S$Mod.avg.est)
+exp(mavg.r.S$Lower.CL)
+exp(mavg.r.S$Upper.CL)
 
 
 ### Agreeableness
@@ -516,8 +564,143 @@ sev.r.A=c(sqrt(diag(pf.r.o.s.wb$varH))[ind],
       # sqrt(diag(pf.u.x.s.wb.int$varH))[ind-1],sqrt(diag(pf.u.x.s.pwe.int$varH))[ind-1],sqrt(diag(pf.u.x.s.pwp.int$varH))[ind-1],pf.u.x.s.gm.int[ind+2,'SE'],
       # sqrt(diag(pf.r.o.s.wb.int$varH))[ind],sqrt(diag(pf.r.o.s.pwe.int$varH))[ind],sqrt(diag(pf.r.o.s.pwp.int$varH))[ind],pf.r.o.s.gm.int[ind+3,'SE'],
       # sqrt(diag(pf.r.x.s.wb.int$varH))[ind-1],sqrt(diag(pf.r.x.s.pwe.int$varH))[ind-1],sqrt(diag(pf.r.x.s.pwp.int$varH))[ind-1],pf.r.x.s.gm.int[ind+2,'SE']
-modavgCustom(LLv.u,Kv.u,mnv.u,estv.u.A,sev.u.A,second.ord=F)
-modavgCustom(LLv.r,Kv.r,mnv.r,estv.r.A,sev.r.A,second.ord=F)
+mavg.u.A = modavgCustom(LLv.u,Kv.u,mnv.u,estv.u.A,sev.u.A,second.ord=F)
+exp(mavg.u.A$Mod.avg.est)
+exp(mavg.u.A$Lower.CL)
+exp(mavg.u.A$Upper.CL)
+
+mavg.r.A = modavgCustom(LLv.r,Kv.r,mnv.r,estv.r.A,sev.r.A,second.ord=F)
+exp(mavg.r.A$Mod.avg.est)
+exp(mavg.r.A$Lower.CL)
+exp(mavg.r.A$Upper.CL)
+
+
+### Dominance
+estv.u.D = c(pf.u.o.s.wb$coef['Dom_CZ'],pf.u.o.s.pwe$coef['Dom_CZ'],pf.u.o.s.pwp$coef['Dom_CZ'],coef(pf.u.o.s.gm)['Dom_CZ'],
+             pf.u.o.x.wb$coef['Dom_CZ'],pf.u.o.x.pwe$coef['Dom_CZ'],pf.u.o.x.pwp$coef['Dom_CZ'],coef(pf.u.o.x.gm)['Dom_CZ'],
+             pf.u.x.s.wb$coef['Dom_CZ'],pf.u.x.s.pwe$coef['Dom_CZ'],pf.u.x.s.pwp$coef['Dom_CZ'],coef(pf.u.x.s.gm)['Dom_CZ'],
+             pf.u.x.x.wb$coef['Dom_CZ'],pf.u.x.x.pwe$coef['Dom_CZ'],pf.u.x.x.pwp$coef['Dom_CZ'],coef(pf.u.x.x.gm)['Dom_CZ'])
+estv.r.D = c(pf.r.o.s.wb$coef['D.r2.DoB'],
+             pf.r.o.s.pwe$coef['D.r2.DoB'],pf.r.o.s.pwp$coef['D.r2.DoB'],coef(pf.r.o.s.gm)['D.r2.DoB'],
+             pf.r.o.x.wb$coef['D.r2.DoB'],pf.r.o.x.pwe$coef['D.r2.DoB'],pf.r.o.x.pwp$coef['D.r2.DoB'],coef(pf.r.o.x.gm)['D.r2.DoB'],
+             pf.r.x.s.wb$coef['D.r2.DoB'],pf.r.x.s.pwe$coef['D.r2.DoB'],pf.r.x.s.pwp$coef['D.r2.DoB'],coef(pf.r.x.s.gm)['D.r2.DoB'],
+             pf.r.x.x.wb$coef['D.r2.DoB'],pf.r.x.x.pwe$coef['D.r2.DoB'],pf.r.x.x.pwp$coef['D.r2.DoB'],coef(pf.r.x.x.gm)['D.r2.DoB'])
+ind = 4
+sev.u.D=c(sqrt(diag(pf.u.o.s.wb$varH))[ind],sqrt(diag(pf.u.o.s.pwe$varH))[ind],sqrt(diag(pf.u.o.s.pwp$varH))[ind],pf.u.o.s.gm[ind+3,'SE'],
+          sqrt(diag(pf.u.o.x.wb$varH))[ind-1],sqrt(diag(pf.u.o.x.pwe$varH))[ind-1],sqrt(diag(pf.u.o.x.pwp$varH))[ind-1],pf.u.o.x.gm[ind+2,'SE'],
+          sqrt(diag(pf.u.x.s.wb$varH))[ind-1],sqrt(diag(pf.u.x.s.pwe$varH))[ind-1],sqrt(diag(pf.u.x.s.pwp$varH))[ind-1],pf.u.x.s.gm[ind+2,'SE'],
+          sqrt(diag(pf.u.x.x.wb$varH))[ind-2],sqrt(diag(pf.u.x.x.pwe$varH))[ind-2],sqrt(diag(pf.u.x.x.pwp$varH))[ind-2],pf.u.x.s.gm[ind+1,'SE'])
+sev.r.D=c(sqrt(diag(pf.r.o.s.wb$varH))[ind],
+          sqrt(diag(pf.r.o.s.pwe$varH))[ind],sqrt(diag(pf.r.o.s.pwp$varH))[ind],pf.r.o.s.gm[ind+3,'SE'],
+          sqrt(diag(pf.r.o.x.wb$varH))[ind-1],sqrt(diag(pf.r.o.x.pwe$varH))[ind-1],sqrt(diag(pf.r.o.x.pwp$varH))[ind-1],pf.r.o.x.gm[ind+2,'SE'],
+          sqrt(diag(pf.r.x.s.wb$varH))[ind-1],sqrt(diag(pf.r.x.s.pwe$varH))[ind-1],sqrt(diag(pf.r.x.s.pwp$varH))[ind-1],pf.r.x.s.gm[ind+2,'SE'],
+          sqrt(diag(pf.r.x.x.wb$varH))[ind-2],sqrt(diag(pf.r.x.x.pwe$varH))[ind-2],sqrt(diag(pf.r.x.x.pwp$varH))[ind-2],pf.r.x.x.gm[ind+1,'SE'])
+
+mavg.u.D = modavgCustom(LLv.u,Kv.u,mnv.u,estv.u.D,sev.u.D,second.ord=F)
+exp(mavg.u.D$Mod.avg.est)
+exp(mavg.u.D$Lower.CL)
+exp(mavg.u.D$Upper.CL)
+
+mavg.r.D = modavgCustom(LLv.r,Kv.r,mnv.r,estv.r.D,sev.r.D,second.ord=F)
+exp(mavg.r.D$Mod.avg.est)
+exp(mavg.r.D$Lower.CL)
+exp(mavg.r.D$Upper.CL)
+
+
+### Extraversion
+estv.u.E = c(pf.u.o.s.wb$coef['Ext_CZ'],pf.u.o.s.pwe$coef['Ext_CZ'],pf.u.o.s.pwp$coef['Ext_CZ'],coef(pf.u.o.s.gm)['Ext_CZ'],
+             pf.u.o.x.wb$coef['Ext_CZ'],pf.u.o.x.pwe$coef['Ext_CZ'],pf.u.o.x.pwp$coef['Ext_CZ'],coef(pf.u.o.x.gm)['Ext_CZ'],
+             pf.u.x.s.wb$coef['Ext_CZ'],pf.u.x.s.pwe$coef['Ext_CZ'],pf.u.x.s.pwp$coef['Ext_CZ'],coef(pf.u.x.s.gm)['Ext_CZ'],
+             pf.u.x.x.wb$coef['Ext_CZ'],pf.u.x.x.pwe$coef['Ext_CZ'],pf.u.x.x.pwp$coef['Ext_CZ'],coef(pf.u.x.x.gm)['Ext_CZ'])
+estv.r.E = c(pf.r.o.s.wb$coef['E.r2.DoB'],
+             pf.r.o.s.pwe$coef['E.r2.DoB'],pf.r.o.s.pwp$coef['E.r2.DoB'],coef(pf.r.o.s.gm)['E.r2.DoB'],
+             pf.r.o.x.wb$coef['E.r2.DoB'],pf.r.o.x.pwe$coef['E.r2.DoB'],pf.r.o.x.pwp$coef['E.r2.DoB'],coef(pf.r.o.x.gm)['E.r2.DoB'],
+             pf.r.x.s.wb$coef['E.r2.DoB'],pf.r.x.s.pwe$coef['E.r2.DoB'],pf.r.x.s.pwp$coef['E.r2.DoB'],coef(pf.r.x.s.gm)['E.r2.DoB'],
+             pf.r.x.x.wb$coef['E.r2.DoB'],pf.r.x.x.pwe$coef['E.r2.DoB'],pf.r.x.x.pwp$coef['E.r2.DoB'],coef(pf.r.x.x.gm)['E.r2.DoB'])
+ind = 5
+sev.u.E=c(sqrt(diag(pf.u.o.s.wb$varH))[ind],sqrt(diag(pf.u.o.s.pwe$varH))[ind],sqrt(diag(pf.u.o.s.pwp$varH))[ind],pf.u.o.s.gm[ind+3,'SE'],
+          sqrt(diag(pf.u.o.x.wb$varH))[ind-1],sqrt(diag(pf.u.o.x.pwe$varH))[ind-1],sqrt(diag(pf.u.o.x.pwp$varH))[ind-1],pf.u.o.x.gm[ind+2,'SE'],
+          sqrt(diag(pf.u.x.s.wb$varH))[ind-1],sqrt(diag(pf.u.x.s.pwe$varH))[ind-1],sqrt(diag(pf.u.x.s.pwp$varH))[ind-1],pf.u.x.s.gm[ind+2,'SE'],
+          sqrt(diag(pf.u.x.x.wb$varH))[ind-2],sqrt(diag(pf.u.x.x.pwe$varH))[ind-2],sqrt(diag(pf.u.x.x.pwp$varH))[ind-2],pf.u.x.s.gm[ind+1,'SE'])
+sev.r.E=c(sqrt(diag(pf.r.o.s.wb$varH))[ind],
+          sqrt(diag(pf.r.o.s.pwe$varH))[ind],sqrt(diag(pf.r.o.s.pwp$varH))[ind],pf.r.o.s.gm[ind+3,'SE'],
+          sqrt(diag(pf.r.o.x.wb$varH))[ind-1],sqrt(diag(pf.r.o.x.pwe$varH))[ind-1],sqrt(diag(pf.r.o.x.pwp$varH))[ind-1],pf.r.o.x.gm[ind+2,'SE'],
+          sqrt(diag(pf.r.x.s.wb$varH))[ind-1],sqrt(diag(pf.r.x.s.pwe$varH))[ind-1],sqrt(diag(pf.r.x.s.pwp$varH))[ind-1],pf.r.x.s.gm[ind+2,'SE'],
+          sqrt(diag(pf.r.x.x.wb$varH))[ind-2],sqrt(diag(pf.r.x.x.pwe$varH))[ind-2],sqrt(diag(pf.r.x.x.pwp$varH))[ind-2],pf.r.x.x.gm[ind+1,'SE'])
+
+mavg.u.E = modavgCustom(LLv.u,Kv.u,mnv.u,estv.u.E,sev.u.E,second.ord=F)
+exp(mavg.u.E$Mod.avg.est)
+exp(mavg.u.E$Lower.CL)
+exp(mavg.u.E$Upper.CL)
+
+mavg.r.E = modavgCustom(LLv.r,Kv.r,mnv.r,estv.r.E,sev.r.E,second.ord=F)
+exp(mavg.r.E$Mod.avg.est)
+exp(mavg.r.E$Lower.CL)
+exp(mavg.r.E$Upper.CL)
+
+
+### Conscientiuousness
+estv.u.C = c(pf.u.o.s.wb$coef['Con_CZ'],pf.u.o.s.pwe$coef['Con_CZ'],pf.u.o.s.pwp$coef['Con_CZ'],coef(pf.u.o.s.gm)['Con_CZ'],
+             pf.u.o.x.wb$coef['Con_CZ'],pf.u.o.x.pwe$coef['Con_CZ'],pf.u.o.x.pwp$coef['Con_CZ'],coef(pf.u.o.x.gm)['Con_CZ'],
+             pf.u.x.s.wb$coef['Con_CZ'],pf.u.x.s.pwe$coef['Con_CZ'],pf.u.x.s.pwp$coef['Con_CZ'],coef(pf.u.x.s.gm)['Con_CZ'],
+             pf.u.x.x.wb$coef['Con_CZ'],pf.u.x.x.pwe$coef['Con_CZ'],pf.u.x.x.pwp$coef['Con_CZ'],coef(pf.u.x.x.gm)['Con_CZ'])
+estv.r.C = c(pf.r.o.s.wb$coef['Con_CZ'],
+             pf.r.o.s.pwe$coef['Con_CZ'],pf.r.o.s.pwp$coef['Con_CZ'],coef(pf.r.o.s.gm)['Con_CZ'],
+             pf.r.o.x.wb$coef['Con_CZ'],pf.r.o.x.pwe$coef['Con_CZ'],pf.r.o.x.pwp$coef['Con_CZ'],coef(pf.r.o.x.gm)['Con_CZ'],
+             pf.r.x.s.wb$coef['Con_CZ'],pf.r.x.s.pwe$coef['Con_CZ'],pf.r.x.s.pwp$coef['Con_CZ'],coef(pf.r.x.s.gm)['Con_CZ'],
+             pf.r.x.x.wb$coef['Con_CZ'],pf.r.x.x.pwe$coef['Con_CZ'],pf.r.x.x.pwp$coef['Con_CZ'],coef(pf.r.x.x.gm)['Con_CZ'])
+ind = 6
+sev.u.C=c(sqrt(diag(pf.u.o.s.wb$varH))[ind],sqrt(diag(pf.u.o.s.pwe$varH))[ind],sqrt(diag(pf.u.o.s.pwp$varH))[ind],pf.u.o.s.gm[ind+3,'SE'],
+          sqrt(diag(pf.u.o.x.wb$varH))[ind-1],sqrt(diag(pf.u.o.x.pwe$varH))[ind-1],sqrt(diag(pf.u.o.x.pwp$varH))[ind-1],pf.u.o.x.gm[ind+2,'SE'],
+          sqrt(diag(pf.u.x.s.wb$varH))[ind-1],sqrt(diag(pf.u.x.s.pwe$varH))[ind-1],sqrt(diag(pf.u.x.s.pwp$varH))[ind-1],pf.u.x.s.gm[ind+2,'SE'],
+          sqrt(diag(pf.u.x.x.wb$varH))[ind-2],sqrt(diag(pf.u.x.x.pwe$varH))[ind-2],sqrt(diag(pf.u.x.x.pwp$varH))[ind-2],pf.u.x.s.gm[ind+1,'SE'])
+sev.r.C=c(sqrt(diag(pf.r.o.s.wb$varH))[ind],
+          sqrt(diag(pf.r.o.s.pwe$varH))[ind],sqrt(diag(pf.r.o.s.pwp$varH))[ind],pf.r.o.s.gm[ind+3,'SE'],
+          sqrt(diag(pf.r.o.x.wb$varH))[ind-1],sqrt(diag(pf.r.o.x.pwe$varH))[ind-1],sqrt(diag(pf.r.o.x.pwp$varH))[ind-1],pf.r.o.x.gm[ind+2,'SE'],
+          sqrt(diag(pf.r.x.s.wb$varH))[ind-1],sqrt(diag(pf.r.x.s.pwe$varH))[ind-1],sqrt(diag(pf.r.x.s.pwp$varH))[ind-1],pf.r.x.s.gm[ind+2,'SE'],
+          sqrt(diag(pf.r.x.x.wb$varH))[ind-2],sqrt(diag(pf.r.x.x.pwe$varH))[ind-2],sqrt(diag(pf.r.x.x.pwp$varH))[ind-2],pf.r.x.x.gm[ind+1,'SE'])
+
+mavg.u.C = modavgCustom(LLv.u,Kv.u,mnv.u,estv.u.C,sev.u.C,second.ord=F)
+exp(mavg.u.C$Mod.avg.est)
+exp(mavg.u.C$Lower.CL)
+exp(mavg.u.C$Upper.CL)
+
+mavg.r.C = modavgCustom(LLv.r,Kv.r,mnv.r,estv.r.C,sev.r.C,second.ord=F)
+exp(mavg.r.C$Mod.avg.est)
+exp(mavg.r.C$Lower.CL)
+exp(mavg.r.C$Upper.CL)
+
+
+### Neuroticism
+estv.u.N = c(pf.u.o.s.wb$coef['Neu_CZ'],pf.u.o.s.pwe$coef['Neu_CZ'],pf.u.o.s.pwp$coef['Neu_CZ'],coef(pf.u.o.s.gm)['Neu_CZ'],
+             pf.u.o.x.wb$coef['Neu_CZ'],pf.u.o.x.pwe$coef['Neu_CZ'],pf.u.o.x.pwp$coef['Neu_CZ'],coef(pf.u.o.x.gm)['Neu_CZ'],
+             pf.u.x.s.wb$coef['Neu_CZ'],pf.u.x.s.pwe$coef['Neu_CZ'],pf.u.x.s.pwp$coef['Neu_CZ'],coef(pf.u.x.s.gm)['Neu_CZ'],
+             pf.u.x.x.wb$coef['Neu_CZ'],pf.u.x.x.pwe$coef['Neu_CZ'],pf.u.x.x.pwp$coef['Neu_CZ'],coef(pf.u.x.x.gm)['Neu_CZ'])
+estv.r.N = c(pf.r.o.s.wb$coef['N.r1.DoB'],
+             pf.r.o.s.pwe$coef['N.r1.DoB'],pf.r.o.s.pwp$coef['N.r1.DoB'],coef(pf.r.o.s.gm)['N.r1.DoB'],
+             pf.r.o.x.wb$coef['N.r1.DoB'],pf.r.o.x.pwe$coef['N.r1.DoB'],pf.r.o.x.pwp$coef['N.r1.DoB'],coef(pf.r.o.x.gm)['N.r1.DoB'],
+             pf.r.x.s.wb$coef['N.r1.DoB'],pf.r.x.s.pwe$coef['N.r1.DoB'],pf.r.x.s.pwp$coef['N.r1.DoB'],coef(pf.r.x.s.gm)['N.r1.DoB'],
+             pf.r.x.x.wb$coef['N.r1.DoB'],pf.r.x.x.pwe$coef['N.r1.DoB'],pf.r.x.x.pwp$coef['N.r1.DoB'],coef(pf.r.x.x.gm)['N.r1.DoB'])
+ind = 7
+sev.u.N=c(sqrt(diag(pf.u.o.s.wb$varH))[ind],sqrt(diag(pf.u.o.s.pwe$varH))[ind],sqrt(diag(pf.u.o.s.pwp$varH))[ind],pf.u.o.s.gm[ind+3,'SE'],
+          sqrt(diag(pf.u.o.x.wb$varH))[ind-1],sqrt(diag(pf.u.o.x.pwe$varH))[ind-1],sqrt(diag(pf.u.o.x.pwp$varH))[ind-1],pf.u.o.x.gm[ind+2,'SE'],
+          sqrt(diag(pf.u.x.s.wb$varH))[ind-1],sqrt(diag(pf.u.x.s.pwe$varH))[ind-1],sqrt(diag(pf.u.x.s.pwp$varH))[ind-1],pf.u.x.s.gm[ind+2,'SE'],
+          sqrt(diag(pf.u.x.x.wb$varH))[ind-2],sqrt(diag(pf.u.x.x.pwe$varH))[ind-2],sqrt(diag(pf.u.x.x.pwp$varH))[ind-2],pf.u.x.s.gm[ind+1,'SE'])
+sev.r.N=c(sqrt(diag(pf.r.o.s.wb$varH))[ind],
+          sqrt(diag(pf.r.o.s.pwe$varH))[ind],sqrt(diag(pf.r.o.s.pwp$varH))[ind],pf.r.o.s.gm[ind+3,'SE'],
+          sqrt(diag(pf.r.o.x.wb$varH))[ind-1],sqrt(diag(pf.r.o.x.pwe$varH))[ind-1],sqrt(diag(pf.r.o.x.pwp$varH))[ind-1],pf.r.o.x.gm[ind+2,'SE'],
+          sqrt(diag(pf.r.x.s.wb$varH))[ind-1],sqrt(diag(pf.r.x.s.pwe$varH))[ind-1],sqrt(diag(pf.r.x.s.pwp$varH))[ind-1],pf.r.x.s.gm[ind+2,'SE'],
+          sqrt(diag(pf.r.x.x.wb$varH))[ind-2],sqrt(diag(pf.r.x.x.pwe$varH))[ind-2],sqrt(diag(pf.r.x.x.pwp$varH))[ind-2],pf.r.x.x.gm[ind+1,'SE'])
+
+mavg.u.N = modavgCustom(LLv.u,Kv.u,mnv.u,estv.u.N,sev.u.N,second.ord=F)
+exp(mavg.u.N$Mod.avg.est)
+exp(mavg.u.N$Lower.CL)
+exp(mavg.u.N$Upper.CL)
+
+mavg.r.N = modavgCustom(LLv.r,Kv.r,mnv.r,estv.r.N,sev.r.N,second.ord=F)
+exp(mavg.r.N$Mod.avg.est)
+exp(mavg.r.N$Lower.CL)
+exp(mavg.r.N$Upper.CL)
 
 
 ### Openness  
@@ -549,40 +732,28 @@ sev.r.O=c(sqrt(diag(pf.r.o.s.wb$varH))[ind],
       # sqrt(diag(pf.u.x.s.wb.int$varH))[ind-1],sqrt(diag(pf.u.x.s.pwe.int$varH))[ind-1],sqrt(diag(pf.u.x.s.pwp.int$varH))[ind-1],pf.u.x.s.gm.int[ind+2,'SE'],
       # sqrt(diag(pf.r.o.s.wb.int$varH))[ind],sqrt(diag(pf.r.o.s.pwe.int$varH))[ind],sqrt(diag(pf.r.o.s.pwp.int$varH))[ind],pf.r.o.s.gm.int[ind+3,'SE'],
       # sqrt(diag(pf.r.x.s.wb.int$varH))[ind-1],sqrt(diag(pf.r.x.s.pwe.int$varH))[ind-1],sqrt(diag(pf.r.x.s.pwp.int$varH))[ind-1],pf.r.x.s.gm.int[ind+2,'SE'])
-modavgCustom(LLv.u,Kv.u,mnv.u,estv.u.O,sev.u.O,second.ord=F)
-modavgCustom(LLv.r,Kv.r,mnv.r,estv.r.O,sev.r.O,second.ord=F)
+
+mavg.u.O = modavgCustom(LLv.u,Kv.u,mnv.u,estv.u.O,sev.u.O,second.ord=F)
+exp(mavg.u.O$Mod.avg.est)
+exp(mavg.u.O$Lower.CL)
+exp(mavg.u.O$Upper.CL)
+
+mavg.r.O = modavgCustom(LLv.r,Kv.r,mnv.r,estv.r.O,sev.r.O,second.ord=F)
+exp(mavg.r.O$Mod.avg.est)
+exp(mavg.r.O$Lower.CL)
+exp(mavg.r.O$Upper.CL)
 
 
-### Extraversion
-estv.u.E = c(pf.u.o.s.wb$coef['Ext_CZ'],pf.u.o.s.pwe$coef['Ext_CZ'],pf.u.o.s.pwp$coef['Ext_CZ'],coef(pf.u.o.s.gm)['Ext_CZ'],
-         pf.u.o.x.wb$coef['Ext_CZ'],pf.u.o.x.pwe$coef['Ext_CZ'],pf.u.o.x.pwp$coef['Ext_CZ'],coef(pf.u.o.x.gm)['Ext_CZ'],
-         pf.u.x.s.wb$coef['Ext_CZ'],pf.u.x.s.pwe$coef['Ext_CZ'],pf.u.x.s.pwp$coef['Ext_CZ'],coef(pf.u.x.s.gm)['Ext_CZ'],
-         pf.u.x.x.wb$coef['Ext_CZ'],pf.u.x.x.pwe$coef['Ext_CZ'],pf.u.x.x.pwp$coef['Ext_CZ'],coef(pf.u.x.x.gm)['Ext_CZ'])
-estv.r.E = c(pf.r.o.s.wb$coef['E.r2.DoB'],
-         pf.r.o.s.pwe$coef['E.r2.DoB'],pf.r.o.s.pwp$coef['E.r2.DoB'],coef(pf.r.o.s.gm)['E.r2.DoB'],
-         pf.r.o.x.wb$coef['E.r2.DoB'],pf.r.o.x.pwe$coef['E.r2.DoB'],pf.r.o.x.pwp$coef['E.r2.DoB'],coef(pf.r.o.x.gm)['E.r2.DoB'],
-         pf.r.x.s.wb$coef['E.r2.DoB'],pf.r.x.s.pwe$coef['E.r2.DoB'],pf.r.x.s.pwp$coef['E.r2.DoB'],coef(pf.r.x.s.gm)['E.r2.DoB'],
-         pf.r.x.x.wb$coef['E.r2.DoB'],pf.r.x.x.pwe$coef['E.r2.DoB'],pf.r.x.x.pwp$coef['E.r2.DoB'],coef(pf.r.x.x.gm)['E.r2.DoB'])
-         # ,pf.u.o.s.wb.int$coef['Ext_CZ'],pf.u.o.s.pwe.int$coef['Ext_CZ'],pf.u.o.s.pwp.int$coef['Ext_CZ'],coef(pf.u.o.s.gm.int)['Ext_CZ'],
-         # pf.u.x.s.wb.int$coef['Ext_CZ'],pf.u.x.s.pwe.int$coef['Ext_CZ'],pf.u.x.s.pwp.int$coef['Ext_CZ'],coef(pf.u.x.s.gm.int)['Ext_CZ'],
-         # pf.r.o.s.wb.int$coef['E.r2.DoB'],pf.r.o.s.pwe.int$coef['E.r2.DoB'],pf.r.o.s.pwp.int$coef['E.r2.DoB'],coef(pf.r.o.s.gm.int)['E.r2.DoB'],
-         # pf.r.x.s.wb.int$coef['E.r2.DoB'],pf.r.x.s.pwe.int$coef['E.r2.DoB'],pf.r.x.s.pwp.int$coef['E.r2.DoB'],coef(pf.r.x.s.gm.int)['E.r2.DoB'])
-ind = 5
-sev.u.E=c(sqrt(diag(pf.u.o.s.wb$varH))[ind],sqrt(diag(pf.u.o.s.pwe$varH))[ind],sqrt(diag(pf.u.o.s.pwp$varH))[ind],pf.u.o.s.gm[ind+3,'SE'],
-      sqrt(diag(pf.u.o.x.wb$varH))[ind-1],sqrt(diag(pf.u.o.x.pwe$varH))[ind-1],sqrt(diag(pf.u.o.x.pwp$varH))[ind-1],pf.u.o.x.gm[ind+2,'SE'],
-      sqrt(diag(pf.u.x.s.wb$varH))[ind-1],sqrt(diag(pf.u.x.s.pwe$varH))[ind-1],sqrt(diag(pf.u.x.s.pwp$varH))[ind-1],pf.u.x.s.gm[ind+2,'SE'],
-      sqrt(diag(pf.u.x.x.wb$varH))[ind-2],sqrt(diag(pf.u.x.x.pwe$varH))[ind-2],sqrt(diag(pf.u.x.x.pwp$varH))[ind-2],pf.u.x.s.gm[ind+1,'SE'])
-sev.r.E=c(sqrt(diag(pf.r.o.s.wb$varH))[ind],
-      sqrt(diag(pf.r.o.s.pwe$varH))[ind],sqrt(diag(pf.r.o.s.pwp$varH))[ind],pf.r.o.s.gm[ind+3,'SE'],
-      sqrt(diag(pf.r.o.x.wb$varH))[ind-1],sqrt(diag(pf.r.o.x.pwe$varH))[ind-1],sqrt(diag(pf.r.o.x.pwp$varH))[ind-1],pf.r.o.x.gm[ind+2,'SE'],
-      sqrt(diag(pf.r.x.s.wb$varH))[ind-1],sqrt(diag(pf.r.x.s.pwe$varH))[ind-1],sqrt(diag(pf.r.x.s.pwp$varH))[ind-1],pf.r.x.s.gm[ind+2,'SE'],
-      sqrt(diag(pf.r.x.x.wb$varH))[ind-2],sqrt(diag(pf.r.x.x.pwe$varH))[ind-2],sqrt(diag(pf.r.x.x.pwp$varH))[ind-2],pf.r.x.x.gm[ind+1,'SE'])
-      # sqrt(diag(pf.u.o.s.wb.int$varH))[ind],sqrt(diag(pf.u.o.s.pwe.int$varH))[ind],sqrt(diag(pf.u.o.s.pwp.int$varH))[ind],pf.u.o.s.gm.int[ind+3,'SE'],
-      # sqrt(diag(pf.u.x.s.wb.int$varH))[ind-1],sqrt(diag(pf.u.x.s.pwe.int$varH))[ind-1],sqrt(diag(pf.u.x.s.pwp.int$varH))[ind-1],pf.u.x.s.gm.int[ind+2,'SE'],
-      # sqrt(diag(pf.r.o.s.wb.int$varH))[ind],sqrt(diag(pf.r.o.s.pwe.int$varH))[ind],sqrt(diag(pf.r.o.s.pwp.int$varH))[ind],pf.r.o.s.gm.int[ind+3,'SE'],
-      # sqrt(diag(pf.r.x.s.wb.int$varH))[ind-1],sqrt(diag(pf.r.x.s.pwe.int$varH))[ind-1],sqrt(diag(pf.r.x.s.pwp.int$varH))[ind-1],pf.r.x.s.gm.int[ind+2,'SE'])
-modavgCustom(LLv.u,Kv.u,mnv.u,estv.u.E,sev.u.E,second.ord=F)
-modavgCustom(LLv.r,Kv.r,mnv.r,estv.r.E,sev.r.E,second.ord=F)
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -771,123 +942,123 @@ modavgCustom(LLv,Kv,mnv,estv,sev,second.ord=F,nobs=538)
 ### not run
 
 ## Agr
-pf.u.o.s.A.pw = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) + 
-                               as.factor(sex) + as.factor(origin) +  
-                               Agr_CZ,
-                             data = datX, hazard =  'Piecewise-equi' , nb.int = 9
-)
-pf.u.x.x.A.pw = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) + 
-                               Agr_CZ,
-                             data = datX, hazard =  'Piecewise-equi' , nb.int = 9
-)
-pf.u.x.s.A.pw = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) + 
-                               as.factor(sex) +  
-                               Agr_CZ,
-                             data = datX, hazard =  'Piecewise-equi' , nb.int = 9
-)
-pf.u.o.x.A.pw = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) + 
-                               as.factor(origin) +  
-                               Agr_CZ,
-                             data = datX, hazard =  'Piecewise-equi' , nb.int = 9
-)
-
-
-
-
-
-
-### Splines
-pf.u.o.s.6.sp = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) + 
-                               as.factor(sex) + as.factor(origin) +  
-                                Agr_CZ + Dom_CZ + Ext_CZ + Con_CZ + Neu_CZ + Opn_CZ,
-                             RandDist = 'Gamma'
-                             ,data = datX, hazard =  'Splines' 
-                             , n.knots = 4, kappa = 1
-)
-pf.u.o.x.6.sp = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) + 
-                               + as.factor(origin) +  
-                                Agr_CZ + Dom_CZ + Ext_CZ + Con_CZ + Neu_CZ + Opn_CZ,
-                             RandDist = 'Gamma'
-                             ,data = datX, hazard =  'Splines' 
-                             , n.knots = 4, kappa = 1
-)
-pf.u.x.s.6.sp = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) + 
-                               as.factor(sex) + 
-                                Agr_CZ + Dom_CZ + Ext_CZ + Con_CZ + Neu_CZ + Opn_CZ,
-                             RandDist = 'Gamma'
-                             ,data = datX, hazard =  'Splines' 
-                             , n.knots = 4, kappa = 1
-)
-pf.u.x.x.6.sp = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) + 
-                                Agr_CZ + Dom_CZ + Ext_CZ + Con_CZ + Neu_CZ + Opn_CZ,
-                             RandDist = 'Gamma'
-                             ,data = datX, hazard =  'Splines' 
-                             , n.knots = 4, kappa = 1
-)
-pf.r.o.s.6.sp = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) + 
-                               as.factor(sex) + as.factor(origin) +  
-                               Agr_CZ + D.r2.DoB + E.r2.DoB + Con_CZ + N.r1.DoB + O.r2.DoB,
-                             RandDist = 'Gamma'
-                             ,data = datX, hazard =  'Splines' 
-                             , n.knots = 4, kappa = 1
-)
-pf.r.o.x.6.sp = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) + 
-                               + as.factor(origin) +  
-                               Agr_CZ + D.r2.DoB + E.r2.DoB + Con_CZ + N.r1.DoB + O.r2.DoB,
-                             RandDist = 'Gamma'
-                             ,data = datX, hazard =  'Splines' 
-                             , n.knots = 4, kappa = 1
-)
-pf.r.x.s.6.sp = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) + 
-                               as.factor(sex) + 
-                               Agr_CZ + D.r2.DoB + E.r2.DoB + Con_CZ + N.r1.DoB + O.r2.DoB,
-                             RandDist = 'Gamma'
-                             ,data = datX, hazard =  'Splines' 
-                             , n.knots = 4, kappa = 1
-)
-pf.r.x.x.6.sp = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) + 
-                               Agr_CZ + D.r2.DoB + E.r2.DoB + Con_CZ + N.r1.DoB + O.r2.DoB,
-                             RandDist = 'Gamma'
-                             ,data = datX, hazard =  'Splines' 
-                             , n.knots = 4, kappa = 1
-)
-
-
-
-
-
-print(pf.u.x.s.A.sp)
-pf.u.x.x.A.sp$logLikPenal
-pf.u.x.x.A.sp$LCV
-
-
-
-
-
-
-
-
-pf.u.x.x.A.sp = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) + 
-                               Agr_CZ ,
-                             RandDist = 'Gamma'
-                             ,data = datX, hazard =  'Splines' 
-                             , n.knots = 4, kappa = 1
-)
-pf.u.o.s.A.sp = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) + 
-                               as.factor(sex) + as.factor(origin) + Agr_CZ ,
-                             RandDist = 'Gamma'
-                             ,data = datX, hazard =  'Splines' 
-                             , n.knots = 4, kappa = 1
-)
-pf.u.o.x.A.sp = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) + 
-                               as.factor(origin) + Agr_CZ ,
-                             RandDist = 'Gamma'
-                             ,data = datX, hazard =  'Splines' 
-                             , n.knots = 4, kappa = 1
-)
-pf.u.x.s.A.sp = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) + 
-                               as.factor(sex) + Agr_CZ ,
-                             RandDist = 'Gamma'
-                             ,data = datX, hazard =  'Splines' 
-                             , n.knots = 4, kappa = 1
-)
+# pf.u.o.s.A.pw = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) + 
+#                                as.factor(sex) + as.factor(origin) +  
+#                                Agr_CZ,
+#                              data = datX, hazard =  'Piecewise-equi' , nb.int = 9
+# )
+# pf.u.x.x.A.pw = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) + 
+#                                Agr_CZ,
+#                              data = datX, hazard =  'Piecewise-equi' , nb.int = 9
+# )
+# pf.u.x.s.A.pw = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) + 
+#                                as.factor(sex) +  
+#                                Agr_CZ,
+#                              data = datX, hazard =  'Piecewise-equi' , nb.int = 9
+# )
+# pf.u.o.x.A.pw = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) + 
+#                                as.factor(origin) +  
+#                                Agr_CZ,
+#                              data = datX, hazard =  'Piecewise-equi' , nb.int = 9
+# )
+# 
+# 
+# 
+# 
+# 
+# 
+# ### Splines
+# pf.u.o.s.6.sp = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) + 
+#                                as.factor(sex) + as.factor(origin) +  
+#                                 Agr_CZ + Dom_CZ + Ext_CZ + Con_CZ + Neu_CZ + Opn_CZ,
+#                              RandDist = 'Gamma'
+#                              ,data = datX, hazard =  'Splines' 
+#                              , n.knots = 4, kappa = 1
+# )
+# pf.u.o.x.6.sp = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) + 
+#                                + as.factor(origin) +  
+#                                 Agr_CZ + Dom_CZ + Ext_CZ + Con_CZ + Neu_CZ + Opn_CZ,
+#                              RandDist = 'Gamma'
+#                              ,data = datX, hazard =  'Splines' 
+#                              , n.knots = 4, kappa = 1
+# )
+# pf.u.x.s.6.sp = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) + 
+#                                as.factor(sex) + 
+#                                 Agr_CZ + Dom_CZ + Ext_CZ + Con_CZ + Neu_CZ + Opn_CZ,
+#                              RandDist = 'Gamma'
+#                              ,data = datX, hazard =  'Splines' 
+#                              , n.knots = 4, kappa = 1
+# )
+# pf.u.x.x.6.sp = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) + 
+#                                 Agr_CZ + Dom_CZ + Ext_CZ + Con_CZ + Neu_CZ + Opn_CZ,
+#                              RandDist = 'Gamma'
+#                              ,data = datX, hazard =  'Splines' 
+#                              , n.knots = 4, kappa = 1
+# )
+# pf.r.o.s.6.sp = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) + 
+#                                as.factor(sex) + as.factor(origin) +  
+#                                Agr_CZ + D.r2.DoB + E.r2.DoB + Con_CZ + N.r1.DoB + O.r2.DoB,
+#                              RandDist = 'Gamma'
+#                              ,data = datX, hazard =  'Splines' 
+#                              , n.knots = 4, kappa = 1
+# )
+# pf.r.o.x.6.sp = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) + 
+#                                + as.factor(origin) +  
+#                                Agr_CZ + D.r2.DoB + E.r2.DoB + Con_CZ + N.r1.DoB + O.r2.DoB,
+#                              RandDist = 'Gamma'
+#                              ,data = datX, hazard =  'Splines' 
+#                              , n.knots = 4, kappa = 1
+# )
+# pf.r.x.s.6.sp = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) + 
+#                                as.factor(sex) + 
+#                                Agr_CZ + D.r2.DoB + E.r2.DoB + Con_CZ + N.r1.DoB + O.r2.DoB,
+#                              RandDist = 'Gamma'
+#                              ,data = datX, hazard =  'Splines' 
+#                              , n.knots = 4, kappa = 1
+# )
+# pf.r.x.x.6.sp = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) + 
+#                                Agr_CZ + D.r2.DoB + E.r2.DoB + Con_CZ + N.r1.DoB + O.r2.DoB,
+#                              RandDist = 'Gamma'
+#                              ,data = datX, hazard =  'Splines' 
+#                              , n.knots = 4, kappa = 1
+# )
+# 
+# 
+# 
+# 
+# 
+# print(pf.u.x.s.A.sp)
+# pf.u.x.x.A.sp$logLikPenal
+# pf.u.x.x.A.sp$LCV
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# pf.u.x.x.A.sp = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) + 
+#                                Agr_CZ ,
+#                              RandDist = 'Gamma'
+#                              ,data = datX, hazard =  'Splines' 
+#                              , n.knots = 4, kappa = 1
+# )
+# pf.u.o.s.A.sp = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) + 
+#                                as.factor(sex) + as.factor(origin) + Agr_CZ ,
+#                              RandDist = 'Gamma'
+#                              ,data = datX, hazard =  'Splines' 
+#                              , n.knots = 4, kappa = 1
+# )
+# pf.u.o.x.A.sp = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) + 
+#                                as.factor(origin) + Agr_CZ ,
+#                              RandDist = 'Gamma'
+#                              ,data = datX, hazard =  'Splines' 
+#                              , n.knots = 4, kappa = 1
+# )
+# pf.u.x.s.A.sp = frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) + 
+#                                as.factor(sex) + Agr_CZ ,
+#                              RandDist = 'Gamma'
+#                              ,data = datX, hazard =  'Splines' 
+#                              , n.knots = 4, kappa = 1
+# )

@@ -141,12 +141,13 @@ head(all3[all3$sample=='YNPRC',])
 
 netformC.1 = as.matrix(as.data.frame(lapply(all3[complete.cases(all3)&(all3$sample=='YNPRC'),], as.numeric)))
 netformC.2 = as.matrix(as.data.frame(lapply(all3[complete.cases(all3$AL)&(all3$sample=='YNPRC'),], as.numeric)))
-# fucking Tara. Fix her eventually...###
-netformC.2 = netformC.2[-149,]
+
+
+### Need to reconcile the two constructions of 'smeandat'
+# perference to the SEM one
 
 smeandat$AL = rowMeans(cbind(smeandat$sys,smeandat$dias,smeandat$chol,smeandat$trig,smeandat$BMI),na.rm=T)
 netformC.3 = as.matrix(as.data.frame(lapply(smeandat[complete.cases(smeandat$AL),],as.numeric)))
-netformC.3 = netformC.3[-149,]
 
 
 
@@ -157,6 +158,16 @@ cvnet.C.AL = cv.glmnet(netformC.3[,c(2:4,23:65)], netformC.3[,c(66)],family='gau
 plot(cvnet.C.AL)
 
 coef(net.C.AL,s=cvnet.C.AL$lambda.min)
+
+
+
+netformC.3.m = netformC.3[netformC.3[,2]==1,]
+netformC.3.f = netformC.3[netformC.3[,2]==2,]
+
+net.C.AL.m = glmnet(netformC.3.m[,c(3:4,23:65)], netformC.3.m[,c(66)],
+                  family='gaussian',standardize=T,
+                  nlambda=1000, alpha = alif)
+cvnet.C.AL.m = cv.glmnet(netformC.3.m[,c(3:4,23:65)], netformC.3[,c(66)],family='gaussian',nfolds=100,alpha=alif)
 
 
 

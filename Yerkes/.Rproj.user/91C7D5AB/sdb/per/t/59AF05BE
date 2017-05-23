@@ -1,0 +1,29 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1495367948786.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "59AF05BE",
+    "lastKnownWriteTime" : 7308604914264011873,
+    "last_content_update" : 1495367948786,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "A4C62B80",
+        "caption" : "smeandat",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=smeandat&cache_key=A4C62B80",
+        "displayedObservations" : 175,
+        "environment" : "",
+        "object" : "smeandat",
+        "preview" : 0,
+        "totalObservations" : 175,
+        "variables" : 65
+    },
+    "relative_order" : 10,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}

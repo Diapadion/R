@@ -1,0 +1,29 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1495807030622.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "A16A9B18",
+    "lastKnownWriteTime" : 7308604914264011873,
+    "last_content_update" : 1495807030622,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "E6A0EB59",
+        "caption" : "Pers",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=Pers&cache_key=E6A0EB59",
+        "displayedObservations" : 235,
+        "environment" : "",
+        "object" : "Pers",
+        "preview" : 0,
+        "totalObservations" : 235,
+        "variables" : 58
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}

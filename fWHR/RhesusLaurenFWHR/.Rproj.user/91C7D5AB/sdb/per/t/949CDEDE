@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "### Rhesus macaque face analysis\n\nlibrary(lme4)\nlibrary(car)\nlibrary(ggplot2)\n#library(aod)\n\n\n\nmSexbyLoc = glm(Sex ~ Facility.x, family=binomial(link=\"logit\"), na.action=na.pass, data=fWHR)\nsummary(mSexbyLoc)\n# ZX has more females\n\nsummary(lm(agenum ~ Facility.x, data=fWHR))\n# ZX is older\n\n# (ZX is Davis)\n\n\n### Optionals\n\n# rm this heinously old male, GT684998\nfWHR$fWHR[fWHR$Rhesus=='GT684998'] = NA\n\n\n\n# ===================================================================\n# = Hypothesis testing: Is fWHR sexually dimorphic? Are there age differences?\n# ===================================================================\n\nplot(fWHR ~ agenum, data=fWHR)\nplot(fWHR ~ Dominance.status, data=fWHR)\n\nplot(fWHR ~ agenum, data=fWHR[fWHR$Sex=='M',])\nplot(fWHR ~ Dominance.status, data=fWHR[fWHR$Sex=='M',])\n\nplot(fWHR ~ agenum, data=fWHR[fWHR$Sex=='F',])\nplot(fWHR ~ Dominance.status, data=fWHR[fWHR$Sex=='F',])\n\n\n### 1. Test age effects\nm1 <- lmer(fWHR ~ s(agenum) + s(I(agenum^2)) + s(I(agenum^3)) + (1|Rhesus) #+ (1|Facility.x)\n             , data=fWHR)\n\nsummary(m1)\nAnova(m1)\n# Looks like we probably should include all 3.\n\n\n\n### Test sex, age x sex effects\nm2 <- lmer(fWHR ~ s(I(agenum^3)) + s(I(agenum^2)) + s(agenum) * Sex + (1|Rhesus) #+ (1|Facility.x)\n           , data=fWHR)\n\nsummary(m2)\nAnova(m2)\n# Sex yes, age x sex, no.\n\n\n\n### Test David score inclusiong\nm3 <- lmer(fWHR ~ s(I(agenum^3)) + s(I(agenum^2)) + s(agenum) + Sex + Dominance.status\n           + (1|Rhesus) + (1|Facility.x), data=fWHR)\nsummary(m3)\nAnova(m3)\n# David scores don't appear to be implicated.\n# Split by sex?\n# Let's leave it out for now\n\n\n\n### Testing HPQ - 6 dimensions\nm4 <- lmer(fWHR ~ s(I(agenum^3)) + s(I(agenum^2)) + s(agenum) + Sex \n           + Confidence + Openness + Dominance + Friendliness + Activity + Anxiety\n           + (1|Rhesus), data=fWHR[fWHR$Facility.x=='ZX6012',])\nsummary(m4)\nAnova(m4)\n### ... Activity? Most of the other chi-sq values have been blasted away\n\n\n\n### Testing short form personality\nm5 <- lmer(fWHR ~ #s(I(agenum^3)) + s(I(agenum^2)) + \n             s(agenum) + Sex \n           + Short.con + Short.opn + Short.dom + Short.anx\n           + (1|Rhesus) #+ (1|Facility.x)\n           , data=fWHR)\nsummary(m5)\nAnova(m5)\n\n\n\n\n### All item modelling\nm6 <- lmer(fWHR ~ s(agenum) + s(I(agenum^3)) + s(I(agenum^2)) + Sex \n           + Fearful + Dominant + Cautious + Curious + Innovative + Bullying \n           + Submissive + Cool + Quitting + Erratic + Anxious + Socially.withdrawn\n           + (1|Rhesus) + (1|Facility.x)\n           , data=fWHR)\nsummary(m6)\n\n\n",
+    "created" : 1495806944991.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3049921985",
+    "id" : "949CDEDE",
+    "lastKnownWriteTime" : 1495814369,
+    "last_content_update" : 1495814369857,
+    "path" : "C:/Users/s1229179/GitHub/R/fWHR/RhesusLaurenFWHR/rhesusModels.R",
+    "project_path" : "rhesusModels.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

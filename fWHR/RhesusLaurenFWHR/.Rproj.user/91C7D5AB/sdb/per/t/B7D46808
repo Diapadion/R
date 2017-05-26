@@ -1,0 +1,29 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1495807121128.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "B7D46808",
+    "lastKnownWriteTime" : 7308604914264011873,
+    "last_content_update" : 1495807121128,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "482CB570",
+        "caption" : "persage",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=persage&cache_key=482CB570",
+        "displayedObservations" : "109",
+        "environment" : "",
+        "object" : "persage",
+        "preview" : "0",
+        "totalObservations" : "109",
+        "variables" : "83"
+    },
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}

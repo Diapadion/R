@@ -24,6 +24,15 @@ fWHR$fWHR[fWHR$Rhesus=='GT684998'] = NA
 fWHR$LFFH[fWHR$Rhesus=='GT684998'] = NA
 
 
+# ===================================================================
+# = untested correlations
+# ===================================================================
+
+library(arm)
+cor(fWHR[,c(16:17,32:34,93:102)],use='pairwise.complete.obs')
+corrplot(fWHR[,c(16:17,32:34,93:102)])
+
+
 
 # ===================================================================
 # = Hypothesis testing: Is fWHR sexually dimorphic? Are there age differences?

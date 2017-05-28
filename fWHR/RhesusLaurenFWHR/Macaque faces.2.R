@@ -65,6 +65,8 @@ geninfo$agenum=as.numeric(geninfo$agenum)
 geninfo$agenum=geninfo$agenum/365
 
 geninfo$Age = s(geninfo$age) # DMA
+geninfo$Age2 = s(geninfo$agenum^2)
+geninfo$Age3 = s(geninfo$agenum^3)
 
 setdiff(geninfo$Rhesus, Persagg$Group.1)
 
@@ -100,7 +102,12 @@ faces[,c(2:15)] <- as.numeric(unlist(faces[,c(2:15)]))
 
 rownames(faces) <- NULL
 
+
+
+### fWHR
+
 faces$fWHR = NA
+
 
 for (i in seq_len(dim(faces)[1])){
   points <- matrix(c(c(faces$C.x[i], faces$D.x[i], faces$E.x[i], faces$F.x[i], faces$G.x[i]), 
@@ -108,7 +115,7 @@ for (i in seq_len(dim(faces)[1])){
                    ,nrow = 5, ncol = 2)
   
   
-  faces$fWHR[i] =   fWHR(points, i)
+  faces$fWHR[i] = fWHR(points, i)
   
 }
 
@@ -120,9 +127,54 @@ faces = faces[c(-210, -209, -106, -81),]
 sum(levels(faces$Rhesus)!=0)
 
 
+
+### LFFH
+
+# a: top of the forehead
+# b: bottom of the chin
+# c,d: tops of the eyes, it doesn't matter which one is which
+# i: index from for loop
+
+LFFH <- function(a,b,c,d){   # these arguments are coordinates
+  
+  # colnames(faces)
+  # i = 70
+  # a = faces[i,2:3]
+  # b = faces[i,4:5]
+  # c = faces[i,6:7]
+  # d = faces[i,8:9]
+  
+  # Finding the intersection point of two lines:
+  k.1 <- ((c[2]-a[2])/(c[1]-a[1]))
+  k.2 <- ((b[2]-d[2])/(b[1]-d[1]))  
+  # Reshaping the two functions you get a final form for y:
+  y <- (((-k.1/k.2)*d[2]+k.1*d[1]-k.1*c[1]+d[2])/(1-k.1/k.2))
+  # Can now calculate the x-value:
+  x <- ((y-d[2])+d[1]*k.2)/k.2
+  
+  # From LeFevre et al. 2012,
+  # LF/FH = c-b/a-b
+  
+  LFFH = dist(mapply(c,c(x,y),b)) / dist(mapply(c,a,b))
+    
+  return(LFFH)
+  
+}
+
+
+for (i in seq_len(dim(faces)[1])){
+  faces$LFFH[i] = LFFH(c(faces$A.x[i],faces$A.y[i]),
+                       c(faces$B.x[i],faces$B.y[i]),
+                       c(faces$C.x[i],faces$C.y[i]),
+                       c(faces$D.x[i],faces$D.y[i]))
+  }
+
+
+
 ## Merging:
 
 fWHR = merge(faces, persage, by.x="Rhesus", by.y="Rhesus", all =T)
+
 
 
 # ### Scaling:  # ??? Seemingly not necessary... except maybe for Dominance.status

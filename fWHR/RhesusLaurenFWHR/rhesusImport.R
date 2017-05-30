@@ -1,18 +1,22 @@
 Pers=read.csv("all personality ratings.csv")
 
-source('~/Dropbox/PhD/R/R stats steps/ICC/icc3.R', chdir = TRUE)
+### DMA - ICC code unnecessary for now
+#
+# source('~/Dropbox/PhD/R/R stats steps/ICC/icc3.R', chdir = TRUE)
+# 
+# #Items 'depressed' is called 'socially withdrawn' in this study
+# 
+# #ICC of shortened questionnaire items including Davis and newly rated animals
+# #For other items can refer to table in my Davis manuscript showing Affectionate, Stable, Solitary, and Prrotective to be unreliable
+# num_observations <- as.data.frame(table(Pers$Animal))
+# av <- mean(num_observations$Freq)
+# names(num_observations)[1] <- "Animal"
+# x <- merge(Pers,num_observations,by="Animal")
+# items <- names(x[5:16])
+# items
+# icc3.reliability(x[x$Freq!=1,], items, "Animal", "Rater")
 
-#Items 'depressed' is called 'socially withdrawn' in this study
 
-#ICC of shortened questionnaire items including Davis and newly rated animals
-#For other items can refer to table in my Davis manuscript showing Affectionate, Stable, Solitary, and Prrotective to be unreliable
-num_observations <- as.data.frame(table(Pers$Animal))
-av <- mean(num_observations$Freq)
-names(num_observations)[1] <- "Animal"
-x <- merge(Pers,num_observations,by="Animal")
-items <- names(x[5:16])
-items
-icc3.reliability(x[x$Freq!=1,], items, "Animal", "Rater")
 
 #Removing three unreliable items (stable, solitary, and protective)
 Persdata=x[,c(1:13,14:24,25:44,45:58)]
@@ -119,10 +123,23 @@ for (i in seq_len(dim(faces)[1])){
   
 }
 
-faces$Rhesus[c(210, 209, 106, 81)] #81? 106 is key
-table(faces$Rhesus)
+# redo = faces$Rhesus[c(210, 209, 106, 81)] #81? 106 is key
+# fWHR[redo,]
+# #[1] FW226838 FW226838 - CA
+# # XO265798 - OR
+# # DW494999 - OR
+# table(faces$Rhesus)
+# 
+# faces[c(210, 209, 106, 81),]
+# #Estrella6887
+# #Estrella6888
+# #Ramsay05178 - OR1
+# #26596 - OR2
+
 # Temporary:
 faces = faces[c(-210, -209, -106, -81),]
+
+
 
 sum(levels(faces$Rhesus)!=0)
 
@@ -177,7 +194,8 @@ fWHR = merge(faces, persage, by.x="Rhesus", by.y="Rhesus", all =T)
 
 
 
-# ### Scaling:  # ??? Seemingly not necessary... except maybe for Dominance.status
+# ### Scaling:  # ??? Seemingly unnecessary... except maybe for Dominance.status
+# # grapple with this at a later stage
 # 
 # s <- function(x) {scale(x)}
 # 

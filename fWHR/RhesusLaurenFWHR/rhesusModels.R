@@ -29,7 +29,7 @@ fWHR$LFFH[fWHR$Rhesus=='GT684998'] <- NA
 # = untested correlations
 # ===================================================================
 
-cor(fWHR[,c(16:17,25,32:34,93:102)],use='pairwise.complete.obs')
+cor(fWHR[,c(16:17,25,32:34,93:102)],use='pairwise.complete.obs', method='spearman')
 corrplot(fWHR[,c(16:17,25,32:34,93:102)])
 
 

@@ -1,6 +1,7 @@
 # depends import.R
 
 library(psych)
+library(xtable)
 
 
 ### Summarizing data
@@ -99,7 +100,12 @@ fa.1x <- fa(sel.nbm[complete.cases(sel.nbm),c(3:31)], nfactors = 10, fm = 'ml'
 pa.10 <- principal(sel.nbm[sampl.pca,c(4:35)], nfactors = 10, rotate='varimax'
 ) # S, B, C, T, G ...
 # this one is interesting: D does load at 0.45, but it has a -0.5 higher loading elsewhere
-print(loadings(pa.10), cutoff = 0.3, sort =T)
+#print(loadings(pa.10), cutoff = 0.3, sort =T)
+xpca <- print(loadings(pa.10), cutoff = 0.0, sort =T)
+str(xpca)
+class(xpca)
+xpca = xtable(unclass(xpca))
+print.xtable(xpca, type="html", file="pca10.html")
 
 
 pa.9 <- principal(sel.nbm[sampl.pca,c(4:35)], nfactors = 9, rotate='varimax'
@@ -115,8 +121,12 @@ pa.6 <- principal(sel.nbm[sampl.pca,c(4:35)], nfactors = 6, rotate='varimax'
 ) # S, D, B, C, T; ALP, Phos, Eos?
 
 pa.5 <- principal(sel.nbm[sampl.pca,c(4:35)], nfactors = 5, rotate='varimax',
-                  scores = T, missing = T, impute = 'median'
+                  scores = T, missing = T#, impute = 'median'
 ) # S, D, B, G, C, T; ALP, Phos, Lymph, WBC?, Eos?
+xpca <- print(loadings(pa.5), cutoff = 0.0, sort =T)
+xpca = xtable(unclass(xpca))
+print.xtable(xpca, type="html", file="pca5.html")
+
 
 pa.4 <- principal(sel.nbm[sampl.pca,c(4:35)], nfactors = 4, rotate='varimax'
 ) # S, D, B, C; ... 
@@ -124,7 +134,7 @@ pa.4 <- principal(sel.nbm[sampl.pca,c(4:35)], nfactors = 4, rotate='varimax'
 
 print(loadings(pa.5), cutoff = 0.3, sort =T)
 
-fa.sort(pa.5)
+fa.sort(pa.7)
 
 fa.sort(pa.10)
 fa.sort(efa.10)

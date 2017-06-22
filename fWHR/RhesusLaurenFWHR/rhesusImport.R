@@ -205,3 +205,29 @@ fWHR = merge(faces, persage, by.x="Rhesus", by.y="Rhesus", all =T)
 
 
 
+library(mixtools)
+
+mixture = normalmixEM(persage$Dominance.status[!is.na(persage$Dominance.status)])
+summary(mixture)
+
+index.lower <- which.min(mixture$mu)  # Index of component with lower mean
+
+find.cutoff <- function(proba=0.5, i=index.lower, model, x) {
+  ## Cutoff such that Pr[drawn from bad component] == proba
+  f <- function(x) {
+    proba - (model$lambda[i]*dnorm(x, model$mu[i], model$sigma[i]) /
+               (model$lambda[1]*dnorm(x, model$mu[1], model$sigma[1]) + model$lambda[2]*dnorm(x, model$mu[2], model$sigma[2])))
+  }
+  return(uniroot(f=f, lower=as.numeric(quantile(x,0.05)), upper=as.numeric(quantile(x,0.95))))  # Careful with division by zero if changing lower and upper
+}
+
+cutoffs <- c(find.cutoff(proba=0.5, model=mixture, x = persage$Dominance.status[!is.na(persage$Dominance.status)])
+             , find.cutoff(proba=0.75, model=mixture, x = persage$Dominance.status[!is.na(persage$Dominance.status)]))  # Around c(1.8, 1.5)
+
+hist(persage$Dominance.status[!is.na(persage$Dominance.status)], breaks=20)
+abline(v=cutoffs, col=c("red", "blue"), lty=2)
+abline(v= 6 #cutoffs[1]
+       , col="red", lty=2)
+
+
+

@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "### Mortality\n\nlibrary(SAScii)\n\n\n\n### Humans\n\nnh.mort = read.SAScii(fn = 'Z:/NHANES III/mortality/NHANES_III_MORT_2011_PUBLIC.dat',\n                      sas_ri='Z:/NHANES III/mortality/SAS-Read-in-Program-All-Surveys.sas')\n\nh.mort = merge(sel.nbm[sampl.cfa,], nh.mort, by.x = 'subject', by.y = 'SEQN')\n\nh.mort$AL = lavPredict(final.modAL)[[1]]\n\nh.mort = h.mort[!is.na(h.mort$AL),]\nh.mort = h.mort[h.mort$ELIGSTAT == 1,]\n\n# months from exam\n\n\n\n### Chimps\n\n\n\n\n\n\n\n\n\n### Getting individual AL values\n\nlavPredict(final.modAL)[2]\n\n\n\n\n\n\n### Independent survival analyses\n",
+    "created" : 1498140439283.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3717015772",
+    "id" : "718E7C7B",
+    "lastKnownWriteTime" : 1498147587,
+    "last_content_update" : 1498147587104,
+    "path" : "C:/Users/s1229179/GitHub/R/Yerkes/NHANES/mortality.R",
+    "project_path" : "mortality.R",
+    "properties" : {
+        "tempName" : "Untitled2"
+    },
+    "relative_order" : 10,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

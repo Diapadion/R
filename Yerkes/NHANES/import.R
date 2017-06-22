@@ -184,7 +184,7 @@ c.bm$species = as.factor('chimp')
 sel.nbm$species = as.factor('human')
 
 
-### Set a seed and split the data into explorations and conformation batches
+### Set a seed and split the data into exploration and conformation batches
 
 set.seed(12345)
 sampl.nbm <- sample(29314)  
@@ -244,7 +244,3 @@ describe(all.bm)
 
 
 
-
-
-
-    

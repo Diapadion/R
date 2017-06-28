@@ -231,3 +231,8 @@ abline(v= 6 #cutoffs[1]
 
 
 
+# Add back into dataframe
+
+fWHR$Dominance.bin = fWHR$Dominance.status > cutoffs[1]
+
+

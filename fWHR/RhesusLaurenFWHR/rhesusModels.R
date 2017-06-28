@@ -40,12 +40,15 @@ corrplot(fWHR[,c(16:17,25,32:34,93:102)])
 
 plot(fWHR ~ agenum, data=fWHR)
 plot(fWHR ~ Dominance.status, data=fWHR)
+plot(fWHR ~ Dominance.bin, data=fWHR)
 
 plot(fWHR ~ agenum, data=fWHR[fWHR$Sex=='M',])
 plot(fWHR ~ Dominance.status, data=fWHR[fWHR$Sex=='M',])
+plot(fWHR ~ Dominance.bin, data=fWHR[fWHR$Sex=='M',])
 
 plot(fWHR ~ agenum, data=fWHR[fWHR$Sex=='F',])
 plot(fWHR ~ Dominance.status, data=fWHR[fWHR$Sex=='F',])
+plot(fWHR ~ Dominance.bin, data=fWHR[fWHR$Sex=='F',])
 
 
 ### 1. Test age effects
@@ -100,6 +103,13 @@ Anova(m3)
 # David scores don't appear to be implicated.
 # Split by sex?
 # Let's leave it out for now
+
+## Alternative binary coding
+m3.alt <- lmer(fWHR ~ Age + Age2 + Age3 + Sex + Dominance.bin
+           + (1|Facility.x/Rhesus)
+           , data=fWHR)
+summary(m3.alt)
+Anova(m3.alt)
 
 
 
@@ -244,6 +254,13 @@ m3.LF <- lmer(LFFH ~  Age + Age2 + Age3 + Sex + Dominance.status
 summary(m3.LF)
 Anova(m3.LF)
 # David scores again don't appear to be implicated.
+
+## Alternative binary coding
+m3.LF.alt <- lmer(LFFH ~  Age + Age2 + Age3 + Sex + Dominance.bin
+              + (1|Facility.x/Rhesus)
+              , data=fWHR)
+summary(m3.LF.alt)
+Anova(m3.LF.alt)
 
 
 

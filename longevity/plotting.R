@@ -164,7 +164,8 @@ pdx$Personality <- as.factor(pdx$Personality)
 levels(pdx$Personality) <- c('Agreeableness','Conscientiousness','Dominance','Extraversion','Neuroticism','Openness')
 
 p <- ggplot(pdx, aes(age_pr, Measurement, colour = factor(Personality))) + geom_point() + 
-  theme_bw() + theme(legend.position="none") + labs(x='Age at Personality Rating')
+  theme_bw() + theme(legend.position="none") + 
+  labs(x='Age at Personality Rating', y='Personality Dimension Value')
 
 p + facet_wrap(~ Personality, nrow = 2)
 

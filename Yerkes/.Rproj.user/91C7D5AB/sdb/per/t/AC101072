@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "#---------------------------------------------------------------------------\n# factor_to_numeric_icpsr.R\n# 2012/12/06\n#\n# Convert R factor variable back to numeric in an ICPSR-produced R data\n# frame. This works because the original numeric codes were prepended by\n# ICSPR to the factor levels in the process of converting the original\n# numeric categorical variable to factor during R data frame generation.\n#\n# REQUIRES add.value.labels function from prettyR package\n#    http://cran.r-project.org/web/packages/prettyR/index.html\n#\n#\n# Substitute the actual variable and data frame names for da99999.0001$MYVAR\n# placeholders in syntax below.\n#\n#    data frame = da99999.0001\n#    variable   = MYVAR\n#\n#\n# Line-by-line comments:\n#\n# (1) Load prettyR package\n#\n# (2) Create object (lbls) containing the factor levels for the specified\n#     variable.  Sort will be numeric as original codes (zero-padded, if\n#     necessary) were preserved in the factor levels.\n#\n# (3) Strip original codes from lbls, leaving only the value labels, e.g.,\n#       \"(01) STRONGLY DISAGREE\" becomes \"STRONGLY DISAGREE\"\n#\n# (4) Strip labels from data, leaving only the original codes, e.g.,\n#       \"(01) STRONGLY DISAGREE\" becomes \"1\"\n#\n#     Then, coerce variable to numeric\n#\n# (5) Add value labels, making this a named numeric vector\n#---------------------------------------------------------------------------\n\nlibrary(prettyR)\n# lbls <- sort(levels(da99999.0001$MYVAR))\n# lbls <- (sub(\"^\\\\([0-9]+\\\\) +(.+$)\", \"\\\\1\", lbls))\n# da99999.0001$MYVAR <- as.numeric(sub(\"^\\\\(0*([0-9]+)\\\\).+$\", \"\\\\1\", da99999.0001$MYVAR))\n# da99999.0001$MYVAR <- add.value.labels(da99999.0001$MYVAR, lbls)\n\n\ncolumns = sapply(da25281.0001, is.factor)\n\nfor (i in 1:length(columns)){\n  if (columns[i]){\n    lbls <- sort(levels(da25281.0001[i]))\n    lbls <- (sub(\"^\\\\([0-9]+\\\\) +(.+$)\", \"\\\\1\", lbls))\n    da25281.0001[i] <- as.numeric(sub(\"^\\\\(0*([0-9]+)\\\\).+$\", \"\\\\1\", da25281.0001[i]))\n    da25281.0001[i] <- add.value.labels(da25281.0001[i], lbls)\n    \n  }\n  \n}\n\n\n\n",
+    "created" : 1499418607967.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "307317915",
+    "id" : "AC101072",
+    "lastKnownWriteTime" : 1499425709,
+    "last_content_update" : 1499425708819,
+    "path" : "Z:/MIDUS II (cognitive project)/factor_to_numeric_icpsr.R",
+    "project_path" : null,
+    "properties" : {
+    },
+    "relative_order" : 12,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

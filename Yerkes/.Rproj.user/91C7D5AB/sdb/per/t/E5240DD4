@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "### MIDUS II data\n\nsetwd(\"C:/Users/s1229179/GitHub/R/Yerkes/Drew version/\")\n#midusIn <- read.table(\"midus-Data.csv\")\n# right now, the manual load of the .rda file is working best for the biomarkers\n# tho I've no idea why\nlibrary(Hmisc)\nlibrary(SAScii)\nmidusP1 <- read.SAScii('04652-0001-Data.txt','04652-0001-Setup.sas')\n#midusP1 <- read.table(\"midus-p1.tsv\")\n\nmidusBio <- da29282.0001[da29282.0001$B4ZBLOOD=='(3) COMPLETE',] # complete cases only\nmidusBio <- midusBio[midusBio$SAMPLMAJ!='(13) MILWAUKEE',] # don't have access to Milwaukee data\n\nmidusP1byBio <- midusP1[midusP1$M2ID %in% midusBio$M2ID,]\nmidusP1byBio <- midusP1byBio[match(midusBio$M2ID,midusP1byBio$M2ID),]\n\n# let's put together what we need from the two\nmidus_c <- cbind(midusP1byBio,midusBio)\n\nwrite.csv(midus_c, file='comboMIDUSpersBio.csv',sep=',')\nmidusP1$B1SOPEN[midusP1$B1SOPEN==8]<-NA\nmidusP1$B1SAGREE[midusP1$B1SAGREE==8]<-NA\nmidusP1$B1SCONS2[midusP1$B1SCONS2==8]<-NA\nmidusP1$B1SNEURO[midusP1$B1SNEURO==8]<-NA\nmidusP1$B1SEXTRA[midusP1$B1SEXTRA==8]<-NA\nmidusP1$B1SAGENC[midusP1$B1SAGENC==8]<-NA\nwrite.csv(midusP1,file='midusP1cc.csv', sep=',')\n\nrm(midusP1,midusBio,midusP1byBio)\n\n\n\n### MIDJA\n\nmidja <- read.SAScii('30822-0001-Data.txt','30822-0001-Setup.sas')\nmidjaBio <- read.SAScii('34969-0001-Data.txt','34969-0001-Setup.sas')\n\n#midjaBio <- midjaBio[midjaBio$BLooD ...?\n\nmidjaByBio <- midja[midja$MIDJA_IDS %in% midjaBio$MIDJA_IDS,]\nmidjaByBio <- midjaByBio[match(midjaBio$MIDJA_IDS,midjaByBio$MIDJA_IDS),]\n\nmidja_c <- cbind(midjaByBio,midjaBio)\n\nwrite.csv(midja_c, file='comboMIDJApersBio.csv',sep=',')\nmidja$J1SAGENC[midja$J1SAGENC==8]<-NA\nmidja$J1SEXTRA[midja$J1SEXTRA==8]<-NA\nmidja$J1SCONS2[midja$J1SCONS2==8]<-NA\nmidja$J1SOPEN[midja$J1SOPEN==8]<-NA\nmidja$J1SAGREE[midja$J1SAGREE==8]<-NA\nmidja$J1SNEURO[midja$J1SNEURO==8]<-NA\nwrite.csv(midja, file='midja_cc.csv')\n\nrm(midja,midjaBio,midjaByBio)\n\n\n### avoid these\nmidusP1 <- read.csv('midusP1cc.csv')\nmidja <- read.csv('midja_cc.csv')\n\n\n\nmidus_c <- read.csv('comboMIDUSpersBio.csv')\n\nmidja_c <- read.csv('comboMIDJApersBio.csv')\n\n\n### Redesignating personality\n\n# aligning MIDI items for better discriminability\n# as informed by the HPQ and Weiss 2009\n\n## This is probably not necessary.\n\n# Outgoing - E\n# Lively - E\n# Active - E\n# Talkative - E\n\n# Friendly - E?\n\n# \n\n\n\n\n\n",
+    "created" : 1499356354505.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "559673498",
+    "id" : "E5240DD4",
+    "lastKnownWriteTime" : 1495284889,
+    "last_content_update" : 1495284889,
+    "path" : "C:/Users/s1229179/GitHub/R/Yerkes/Drew version/midusImport.R",
+    "project_path" : "Drew version/midusImport.R",
+    "properties" : {
+    },
+    "relative_order" : 11,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

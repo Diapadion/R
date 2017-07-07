@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "library(psych)\n\ngetwd()\nsetwd(\"Drew version/\")\nmidus <- read.csv('midusP1cc.csv')\n\nload('Z:/MIDUS II (cognitive project)/DS0001/25281-0001-Data.rda')\n\nmidus.cog = merge(midus,da25281.0001, by='M2ID')\n\n\n\n# fixing some dimensions\n\ntable(midus$B1SE11U)\n\nmidus$B1SMPQAG[midus$B1SMPQAG==98] = NA\nmidus$B1SE11U[midus$B1SE11U==8] = NA\n\n\n# x = corr.test(data.frame(Dom=midus$B1SAGENC), \n#           midus[,sapply(midus, is.numeric)],\n#           #data.frame(Agr=midus$B1SAGREE,YoB=midus$B1PBYEAR), \n#           use='pairwise.complete.obs', method = 'spearman', adjust = 'none')\n\ngetOption(\"max.print\")\noptions(max.print=100000)\noptions(scipen=999)\noptions(digits=3)\n\n#print(x$ci, digits = 2)\n\nvars=c('B1SAGENC','B1SEXTRA','B1SAGREE','B1SCONS2','B1SOPEN','B1SNEURO',\n'B1PA1','B1PA2','B1PA5',\n'B1PA9','B1PA10A','B1PA11','B1PA25A','B1PA25BS','B1PA25BD','B1SBMI',\n'B1PA26','B1PA30A',\n'B1PB1','B1PB3C','B1PB4M','B1PTSEI','B1PB20','B1PC2',\n'B1PF4','B1PF5','B1PF6','B1PF9','B1PF10','B1PF11',    # Ethnicity Qs\n'B1SE11S','B1SE11T','B1SE11U', # Assault, Prison\n\n'B1PDEPAF','B1PDEPAF','B1PANHED','B1PANXIE','B1PPANIC','B1SSATIS2','B1SHLOCS','B1SHLOCO','B1SAMPLI',\n'B1SNEGAF','B1SNEGPA','B1SPOSAF','B1SPOSPA','B1SINTAG','B1SPWBA1','B1SPWBE1','B1SPWBG1','B1SPWBR1',\n'B1SPWBU1','B1SPWBS1','B1SPWBA2','B1SPWBE2','B1SPWBG2','B1SPWBR2','B1SPWBU2','B1SMASTE','B1SCONST',\n'B1SCTRL','B1SESTEE','B1SINTER','B1SINDEP',\n'B1SMPQWB','B1SMPQSP','B1SMPQAC','B1SMPQSC','B1SMPQSR','B1SMPQAG','B1SMPQAL','B1SMPQCN','B1SMPQTR',\n'B1SMPQHA','B1SOPTIM','B1SPESSI','B1SPERSI','B1SREAPP','B1SCHANG','B1SDIREC','B1STODAY','B1SINSGH','B1SFORSG',\n'B1SSUFFI','B1SPOSWF','B1SNEGWF','B1SPOSFW','B1SNEGFW','B1SJCSD','B1SJCDA','B1SJCDS','B1SJCCS','B1SJCSS',\n'B1SJOBDI','B1SPIWOR','B1SGENER','B1SSWBMS','B1SSWBSI','B1SSWBAO','B1SSWBSC','B1SSWBSA','B1SSYMP',\n'B1SHOMET','B1SPIHOM','B1SKINPO','B1SKINNE','B1SFDSPO','B1SFDSNE','B1SFDSOL','B1SPIFAM',\n'B1SMARRS','B1SSPDIS','B1SSPEMP','B1SSPCRI','B1SSPSOL','B1SSPDEC','B1SSPIRI',\n'B1SRELSU','B1SSPRTE',\n'B1SLFEDI','B1SDAYDI',\n#'A1SEMA'...\n'B1PCHM1N',\n'B1SCHRON',\n'B1SRXMED',\n'B1SBADL2','B1SIADL','B1SDYSPN','B1SWSTHI','B1SBMI','B1SUSEMD','B1SUSEMH','B1SALCOH',\n'B1SG8A','B1SG8B','B1SG8C','B1SRINC1',#'B1SG9AX','B1SG9BX','B1SG9CX','B1SSINC1',\n'B1SEARN1','B1SPNSN1','B1SSEC1','B1STINC1',\n# require cognitive project:\n'B3TEMZ3','B3TEFZ3'\n)\nvars[!vars %in% names(midus.cog)]\n\n\nx = corr.test(midus.cog[,vars], method='spearman',adjust='none')\ncbind(x$r[,c(1:2,5)],x$p[,c(1:2,5)])\n\n\n\nhead(midus[,c('B1SAGENC','B1SEXTRA')])\nhead(midus[,vars])\n\n\n\n\nlibrary(corpcor)\n\npart = cor2pcor(x$r)\ncbind(rownames(x$r),part[,c(1,2,5)])\n\n\nlibrary(ppcor)\n\nppart = pcor(midus.cog[complete.cases(midus.cog[,vars]),vars], method = 'spearman')\n\ncbind(rownames(x$r),round(cbind(ppart$estimate[,c(1:4,5)],ppart$p.value[,c(1:4,5)]),3))\n\n\nlibrary(qgraph)\n\nqgraph(x$r,graph = 'pcor', minimum = 'sig', threshold = 'fdr', alpha=0.05, bonf=T,sampleSize=max(x$n), layout='spring')\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDom  <-\n  ( dom - depd - fear + decs - tim - caut +\n      intll + pers + buly + stngy +32)/10\n# - subm \n# + indp \n\n  Ext  <-\n  (- sol - lazy + actv + play + soc - depr + frdy + affc + imit +24)/9\n\n  Con  <-\n  (- impl - defn - reckl - errc - irri + pred - aggr - jeals - dsor +64)/9\n\n  Agr  <-\n  ( symp + help + sens + prot + gntl )/5\n\n  Neu  <-\n  (- stbl + exct - unem +16)/3\n\n  Opn  <-\n  ( inqs + invt )/2\n  ",
+    "created" : 1460725576549.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3928816028",
+    "id" : "30647834",
+    "lastKnownWriteTime" : 1499425708,
+    "last_content_update" : 1499425708757,
+    "path" : "C:/Users/s1229179/GitHub/R/Yerkes/AgencyExpl.R",
+    "project_path" : "AgencyExpl.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

@@ -1,20 +1,20 @@
 {
     "collab_server" : "",
-    "contents" : "### Mortality\n\nlibrary(SAScii)\n\n\n\n### Humans\n\nnh.mort = read.SAScii(fn = 'Z:/NHANES III/mortality/NHANES_III_MORT_2011_PUBLIC.dat',\n                      sas_ri='Z:/NHANES III/mortality/SAS-Read-in-Program-All-Surveys.sas')\n\nh.mort = merge(sel.nbm[sampl.cfa,], nh.mort, by.x = 'subject', by.y = 'SEQN')\n\nh.mort$AL = lavPredict(final.modAL)[[1]]\n\nh.mort = h.mort[!is.na(h.mort$AL),]\nh.mort = h.mort[h.mort$ELIGSTAT == 1,]\n\n# months from exam\n\n\n\n### Chimps\n\n\n\n\n\n\n\n\n\n### Getting individual AL values\n\nlavPredict(final.modAL)[2]\n\n\n\n\n\n\n### Independent survival analyses\n",
+    "contents" : "### Mortality\n\nlibrary(SAScii)\nlibrary(dplyr)\ns = function(x){scale(x)}\n\n\n### Humans\n\nnh.mort = read.SAScii(fn = 'Z:/NHANES III/mortality/NHANES_III_MORT_2011_PUBLIC.dat',\n                      sas_ri='Z:/NHANES III/mortality/SAS-Read-in-Program-All-Surveys.sas')\n\nh.mort = merge(sel.nbm[sampl.cfa,], nh.mort, by.x = 'subject', by.y = 'SEQN')\n\nh.mort$lvAL = lavPredict(final.modAL)[[1]]\nh.mort$sumAL = rowMeans(cbind(s(h.mort$BPs),s(h.mort$BPd),s(h.mort$cholesterol),s(h.mort$triglycerides),\n                              s(h.mort$phosphate),s(h.mort$BMI)), na.rm = T)\n\nh.mort = h.mort[!is.na(h.mort$lvAL),]\nh.mort = h.mort[h.mort$ELIGSTAT == 1,]\n\n# months from exam\n\nh.mort$lastAge = h.mort$PERMTH_EXM/12 + h.mort$age\n\nh.mort$status = as.factor(h.mort$MORTSTAT)\ntable(h.mort$status)\n\nlevels(h.mort$status)[levels(h.mort$status)==\"1\"] <- TRUE\nlevels(h.mort$status)[levels(h.mort$status)==\"0\"] <- FALSE\nh.mort$status = as.logical(h.mort$status)\n\n\n### Chimps\n\nc.mort = read.csv('../mortality/BMnPersChimpMortality.csv')\n\nc.mort = c.mort[-c(247:264),]\nc.mort = c.mort[!(c.mort$chimp==''),]\nc.mort = c.mort[,c(1,3:5)]\n\n# intersect(c.mort$chimp,c.bm.m$subject)\n# setdiff(c.mort$chimp,c.bm.m$subject)\n\nc.mort = merge(c.mort,c.bm.m, by.x='chimp',by.y='subject')\n\nc.mort$DoB = as.Date(c.mort$DoB, format=\"%m/%d/%Y\")\nc.mort$lastDate = as.Date(c.mort$lastDate, format=\"%d/%m/%Y\")\n\nc.mort$lastAge = 1.5*(as.numeric(c.mort$lastDate) - as.numeric(c.mort$DoB))/365\n  \n  \n### Getting individual AL values\n\nc.mort$sumAL = rowMeans(cbind(s(c.mort$BPs),s(c.mort$BPd),s(c.mort$cholesterol),s(c.mort$triglycerides),\n                              s(c.mort$phosphate),s(c.mort$BMI)), na.rm = T)\nc.mort$lvAL = matrix(lavPredict(final.modAL)[[2]])\ncor(c.mort$lvAL,c.mort$sumAL)\n\n\n\n### Formatting status var\n\ntable(c.mort$status)\n\nc.mort$status[c.mort$status=='LTF'] = 'Alive'\nc.mort$status = droplevels(c.mort$status)\n\nlevels(c.mort$status)[levels(c.mort$status)==\"Death\"] <- TRUE\nlevels(c.mort$status)[levels(c.mort$status)==\"Alive\"] <- FALSE\nc.mort$status = as.logical(c.mort$status)\n\n\n\n### Independent survival analyses\n\nlibrary(survival)\n\ny.c = Surv(c.mort$age,c.mort$lastAge,c.mort$status, type='counting')\n\nView(y.c)\n# Storer and Duncan, what the hell?\n\n\ncox1.c = coxph(y.c ~ sumAL + sex , data = c.mort)\n\nsummary(m1.c)\n\n\ncoxN.c = coxph(y.c ~ BPs , data = c.mort)\nsummary(coxN.c)\n\n\n\n\n\ny.h = Surv(h.mort$age,h.mort$lastAge,h.mort$status, type='counting')\n\ncox1.h = coxph(y.h ~ sumAL + sex , data = h.mort)\n\nsummary(m1.h)\n\n\n\n\n### Only associating with age at death\n\n\nm.AgeAtD.c = lm(lastAge ~ sumAL + age + sex, \n                data = c.mort[c.mort$status,])\nsummary(m.AgeAtD.c)\n\n\n\n\nm.AgeAtD.h = lm(lastAge ~ sumAL + age + sex, \n                data = h.mort[h.mort$status,])\nsummary(m.AgeAtD.h)\n\nm.AgeAtD.h.N = lm(lastAge ~ , \n                data = h.mort[h.mort$status,])\nsummary(m.AgeAtD.h.N)\n\n\n\n\n\n### Trees?\n\nlibrary(LTRCtrees)\n\nRR.c <- LTRCART(Surv(age,lastAge,status) ~ sex + age + sumAL\n                  , data = c.mort[-c(51,161)], \n                control = rpart.control(minsplot = 10, cp = 0.0001, xval = 100)\n)\n\nCI.c <- LTRCIT(Surv(age,lastAge,status) ~ sex + age + sumAL\n                , data = c.mort[c(-51,-161)])\n\nCI.c <- LTRCIT(Surv(age_pr, age, stat.log) ~ as.factor(sex) + \n                 as.factor(origin) +  \n                 Dom_CZ + Ext_CZ + Con_CZ +\n                 Agr_CZ + Neu_CZ + Opn_CZ,\n               Data = datX)\n",
     "created" : 1498140439283.000,
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "3717015772",
+    "hash" : "3303313588",
     "id" : "718E7C7B",
-    "lastKnownWriteTime" : 1498147587,
-    "last_content_update" : 1498147587104,
+    "lastKnownWriteTime" : 1499441399,
+    "last_content_update" : 1499441399661,
     "path" : "C:/Users/s1229179/GitHub/R/Yerkes/NHANES/mortality.R",
     "project_path" : "mortality.R",
     "properties" : {
         "tempName" : "Untitled2"
     },
-    "relative_order" : 10,
+    "relative_order" : 4,
     "source_on_save" : false,
     "source_window" : "",
     "type" : "r_source"

@@ -50,6 +50,11 @@ plot(fWHR ~ agenum, data=fWHR[fWHR$Sex=='F',])
 plot(fWHR ~ Dominance.status, data=fWHR[fWHR$Sex=='F',])
 plot(fWHR ~ Dominance.bin, data=fWHR[fWHR$Sex=='F',])
 
+plot(Short.dom ~ Sex , data=fWHR)
+plot(Short.dom ~ Sex , data=fWHR[fWHR$agenum >= 5.5,])
+plot(Short.dom ~ Sex , data=fWHR[fWHR$agenum < 5.5,])
+
+
 
 ### 1. Test age effects
 m1 <- lmer(fWHR ~ Age + Age2 + Age3 + (1|Facility.x/Rhesus)
@@ -72,17 +77,22 @@ m1.a2 <- lmer(fWHR ~ Age + Age2 + (1|Facility.x/Rhesus)
               , data=fWHR)
 summary(m1.a2)
 
-m1.a3 <- lmer(fWHR ~ Age + Age2 + Age3 + (1|Facility.x/Rhesus)
-              , data=fWHR)
-summary(m1.a3)
 
-anova(m0,m1.a1,m1.a2,m1.a3)
+anova(m0,m1.a1,m1.a2,m1)
 # The greatest predictive value *is* from including all 3 of the,
 # but it doesn't look like age is very important to rhesus monkeys.
 
+## Added splits into the young and old monkeys
+m1.o <- lmer(fWHR ~ Age + Age2 + Age3 + (1|Facility.x/Rhesus)
+           , data=fWHR[fWHR$agenum >= 5.5,])
+summary(m1.o)
+
+m1.y <- lmer(fWHR ~ Age + Age2 + Age3 + (1|Facility.x/Rhesus)
+             , data=fWHR[fWHR$agenum < 5.5,])
+summary(m1.y)
 
 
-#For now, just to mirror the capuchin results for a reference point, am including up to Age^3
+
 
 ### Test sex, age x sex effects
 m2 <- lmer(fWHR ~ Sex * Age + Age2 + Age3 + (1|Facility.x/Rhesus)
@@ -91,6 +101,15 @@ m2 <- lmer(fWHR ~ Sex * Age + Age2 + Age3 + (1|Facility.x/Rhesus)
 summary(m2)
 Anova(m2)
 # Sex yes, age x sex, no.
+
+## Young vs. Old
+m2.o <- lmer(fWHR ~Sex * Age + Age2 + Age3 + (1|Facility.x/Rhesus)
+             , data=fWHR[fWHR$agenum >= 5.5,])
+summary(m2.o)
+
+m2.y <- lmer(fWHR ~ Sex * Age + Age2 + Age3 + (1|Facility.x/Rhesus)
+             , data=fWHR[fWHR$agenum < 5.5,])
+summary(m2.y)
 
 
 
@@ -110,6 +129,16 @@ m3.alt <- lmer(fWHR ~ Age + Age2 + Age3 + Sex + Dominance.bin
            , data=fWHR)
 summary(m3.alt)
 Anova(m3.alt)
+# No added value.
+
+## Young vs. Old
+m3.o <- lmer(fWHR ~Sex + Age + Age2 + Age3 + Dominance.status + (1|Facility.x/Rhesus)
+             , data=fWHR[fWHR$agenum >= 5.5,])
+summary(m3.o)
+
+m3.y <- lmer(fWHR ~ Sex + Age + Age2 + Age3 + Dominance.status + (1|Facility.x/Rhesus)
+             , data=fWHR[fWHR$agenum < 5.5,])
+summary(m3.y)
 
 
 
@@ -124,7 +153,21 @@ Anova(m4)
 m0.ZX <- lmer(fWHR ~ 1 + (1|Rhesus), data=fWHR[fWHR$Facility.x=='ZX6012',])
 
 anova(m4,m0.ZX)
-### ... Activity? Most of the other chi-sq values have been blasted away
+## ... Activity? Most of the other chi-sq values have been blasted away
+
+## Young vs. Old
+m4.y <- lmer(fWHR ~ Age + Age2 + Age3 + 
+             Sex 
+           + Confidence + Openness + Dominance + Friendliness + Activity + Anxiety
+           + (1|Rhesus), data=fWHR[(fWHR$Facility.x=='ZX6012')&(fWHR$agenum < 5.5),])
+summary(m4.y)
+Anova(m4.y)
+m4.o <- lmer(fWHR ~ Age + Age2 + Age3 + 
+               Sex 
+             + Confidence + Openness + Dominance + Friendliness + Activity + Anxiety
+             + (1|Rhesus), data=fWHR[(fWHR$Facility.x=='ZX6012')&(fWHR$agenum >= 5.5),])
+summary(m4.o)
+Anova(m4.o)
 
 
 
@@ -136,6 +179,27 @@ m5 <- lmer(fWHR ~ Age + Age2 + Age3 +
            , data=fWHR)
 summary(m5)
 Anova(m5)
+
+## Young vs. Old
+m5.y <- lmer(fWHR ~ Age + Age2 + Age3 + 
+             Sex 
+           + Short.con + Short.opn + Short.dom + Short.anx
+           + (1|Facility.x/Rhesus)
+           , data=fWHR[(fWHR$agenum < 5.5),])
+summary(m5.y)
+Anova(m5.y)
+m5.o <- lmer(fWHR ~ Age + Age2 + Age3 + 
+               Sex 
+             + Short.con + Short.opn + Short.dom + Short.anx
+             + (1|Facility.x/Rhesus)
+             , data=fWHR[(fWHR$agenum >= 5.5),])
+summary(m5.o)
+Anova(m5.o)
+
+
+
+
+
 
 
 
@@ -215,10 +279,18 @@ plot(LFFH ~ Dominance.status, data=fWHR[fWHR$Sex=='F',])
 ### 1. Test age effects
 m1.LF <- lmer(LFFH ~  Age + Age2 + Age3 + (1|Facility.x/Rhesus)
            , data=fWHR)
-
 summary(m1.LF)
 Anova(m1.LF)
 # Again, looks like we probably should include all 3, but effect is driven by that old guy.
+
+## Young vs. Old
+m1.LF.o <- lmer(LFFH ~  Age + Age2 + Age3 + (1|Facility.x/Rhesus)
+              , data=fWHR[fWHR$agenum >= 5.5,])
+m1.LF.y <- lmer(LFFH ~  Age + Age2 + Age3 + (1|Facility.x/Rhesus)
+                , data=fWHR[fWHR$agenum < 5.5,])
+summary(m1.LF.o)
+summary(m1.LF.y)
+
 
 m0.LF <- lmer(LFFH ~ 1 + (1|Facility.x/Rhesus)
            , data=fWHR)
@@ -241,14 +313,25 @@ anova(m0.LF,m1.a1.LF,m1.a2.LF,m1.LF)
 m2.LF <- lmer(LFFH ~  Sex * Age + Age2 + Age3 + (1|Facility.x/Rhesus)
            , data=fWHR)
 
-summary(m2)
-Anova(m2)
-# Sex yes, age x sex, no.
+summary(m2.LF)
+Anova(m2.LF)
+# Neither sex nor interactions.
+
+## Young vs. Old
+m2.LF.o <- lmer(LFFH ~  Sex * Age + Age2 + Age3 + (1|Facility.x/Rhesus)
+              , data=fWHR[fWHR$agenum >= 5.5,])
+m2.LF.y <- lmer(LFFH ~  Sex * Age + Age2 + Age3 + (1|Facility.x/Rhesus)
+              , data=fWHR[fWHR$agenum < 5.5,])
+summary(m2.LF.o)
+summary(m2.LF.y)
+Anova(m2.LF.o)
+Anova(m2.LF.y)
+# No difference in split samples.
 
 
 
-### Test David score inclusiong
-m3.LF <- lmer(LFFH ~  Age + Age2 + Age3 + Sex + Dominance.status
+### Test David score inclusion
+m3.LF <- lmer(LFFH ~  Age + Age2 + Age3 + Dominance.status
               + (1|Facility.x/Rhesus)
            , data=fWHR)
 summary(m3.LF)
@@ -256,33 +339,70 @@ Anova(m3.LF)
 # David scores again don't appear to be implicated.
 
 ## Alternative binary coding
-m3.LF.alt <- lmer(LFFH ~  Age + Age2 + Age3 + Sex + Dominance.bin
+m3.LF.alt <- lmer(LFFH ~  Age + Age2 + Age3 + Dominance.bin
               + (1|Facility.x/Rhesus)
               , data=fWHR)
 summary(m3.LF.alt)
 Anova(m3.LF.alt)
 
+## Young vs. Old 
+m3.LF.o <- lmer(LFFH ~  Age + Age2 + Age3 + Dominance.status
+               + (1|Facility.x/Rhesus)
+               , data=fWHR[fWHR$agenum >= 5.5,])
+m3.LF.y <- lmer(LFFH ~  Age + Age2 + Age3 + Dominance.status
+              + (1|Facility.x/Rhesus)
+              , data=fWHR[fWHR$agenum < 5.5,])
+summary(m3.LF.o)
+summary(m3.LF.y)
+Anova(m3.LF.o)
+Anova(m3.LF.y)
+
 
 
 ### Testing HPQ - 6 dimensions
-m4.LF <- lmer(LFFH ~  Age + Age2 + Age3 + Sex 
+m4.LF <- lmer(LFFH ~  Age + Age2 + Age3
            + Confidence + Openness + Dominance + Friendliness + Activity + Anxiety
            + (1|Rhesus), data=fWHR[fWHR$Facility.x=='ZX6012',])
 summary(m4.LF)
 Anova(m4.LF)
-### Nothing.
+## Nothing.
+
+m4.LF.o <- lmer(LFFH ~  Age + Age2 + Age3
+              + Confidence + Openness + Dominance + Friendliness + Activity + Anxiety
+              + (1|Rhesus), data=fWHR[(fWHR$Facility.x=='ZX6012')&(fWHR$agenum >= 5.5),])
+m4.LF.y <- lmer(LFFH ~  Age + Age2 + Age3
+                + Confidence + Openness + Dominance + Friendliness + Activity + Anxiety
+                + (1|Rhesus), data=fWHR[(fWHR$Facility.x=='ZX6012')&(fWHR$agenum < 5.5),])
+summary(m4.LF.o)
+summary(m4.LF.y)
+Anova(m4.LF.o)
+Anova(m4.LF.y)
 
 
 
 ### Testing short form personality
 m5.LF <- lmer(LFFH ~  Age + Age2 + Age3 +
-           + Sex 
            + Short.con + Short.opn + Short.dom + Short.anx
            + (1|Facility.x/Rhesus)
            , data=fWHR)
 summary(m5.LF)
 Anova(m5.LF)
-### Nothing clear, but maybe Dominance.
+## Nothing clear, but maybe Dominance.
+
+m5.LF.o <- lmer(LFFH ~  Age + Age2 + Age3 +
+                + Short.con + Short.opn + Short.dom + Short.anx
+              + (1|Facility.x/Rhesus)
+              , data=fWHR[fWHR$agenum >= 5.5,])
+m5.LF.y <- lmer(LFFH ~  Age + Age2 + Age3 +
+                  + Short.con + Short.opn + Short.dom + Short.anx
+                + (1|Facility.x/Rhesus)
+                , data=fWHR[fWHR$agenum < 5.5,])
+summary(m5.LF.o)
+summary(m5.LF.y)
+Anova(m5.LF.o)
+Anova(m5.LF.y)
+
+
 
 
 

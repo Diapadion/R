@@ -136,8 +136,7 @@ for (i in seq_len(dim(faces)[1])){
 # #Ramsay05178 - OR1
 # #26596 - OR2
 
-# Temporary:
-faces = faces[c(-210, -209, -106, -81),]
+## Done.
 
 
 

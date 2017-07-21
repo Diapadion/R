@@ -8,21 +8,21 @@ library(arm)
 
 
 
-mSexbyLoc = glm(Sex ~ Facility.x, family=binomial(link="logit"), na.action=na.pass, data=fWHR)
+mSexbyLoc = glm(Sex ~ Facility.x, family=binomial(link="logit"), na.action=na.pass, data=persage)
 summary(mSexbyLoc)
 # ZX has more females
 
-summary(lm(agenum ~ Facility.x, data=fWHR))
+stripchart(agenum ~ Facility.x, data=persage, method='jitter', jitter=0.3)
+summary(lm(agenum ~ Facility.x, data=persage))
 # ZX is older
-
 # (ZX is Davis)
 
 
 ### Optionals
 
 # rm this heinously old male, GT684998, to see if he is biasing results
-fWHR$fWHR[fWHR$Rhesus=='GT684998'] <- NA
-fWHR$LFFH[fWHR$Rhesus=='GT684998'] <- NA
+# fWHR$fWHR[fWHR$Rhesus=='GT684998'] <- NA
+# fWHR$LFFH[fWHR$Rhesus=='GT684998'] <- NA
 
 
 # ===================================================================
@@ -40,15 +40,15 @@ corrplot(fWHR[,c(16:17,25,32:34,93:102)])
 
 plot(fWHR ~ agenum, data=fWHR)
 plot(fWHR ~ Dominance.status, data=fWHR)
-plot(fWHR ~ Dominance.bin, data=fWHR)
+#plot(fWHR ~ Dominance.bin, data=fWHR)
 
 plot(fWHR ~ agenum, data=fWHR[fWHR$Sex=='M',])
 plot(fWHR ~ Dominance.status, data=fWHR[fWHR$Sex=='M',])
-plot(fWHR ~ Dominance.bin, data=fWHR[fWHR$Sex=='M',])
+#plot(fWHR ~ Dominance.bin, data=fWHR[fWHR$Sex=='M',])
 
 plot(fWHR ~ agenum, data=fWHR[fWHR$Sex=='F',])
 plot(fWHR ~ Dominance.status, data=fWHR[fWHR$Sex=='F',])
-plot(fWHR ~ Dominance.bin, data=fWHR[fWHR$Sex=='F',])
+#plot(fWHR ~ Dominance.bin, data=fWHR[fWHR$Sex=='F',])
 
 plot(Short.dom ~ Sex , data=fWHR)
 plot(Short.dom ~ Sex , data=fWHR[fWHR$agenum >= 5.5,])
@@ -124,11 +124,11 @@ Anova(m3)
 # Let's leave it out for now
 
 ## Alternative binary coding
-m3.alt <- lmer(fWHR ~ Age + Age2 + Age3 + Sex + Dominance.bin
-           + (1|Facility.x/Rhesus)
-           , data=fWHR)
-summary(m3.alt)
-Anova(m3.alt)
+# m3.alt <- lmer(fWHR ~ Age + Age2 + Age3 + Sex + Dominance.bin
+#            + (1|Facility.x/Rhesus)
+#            , data=fWHR)
+# summary(m3.alt)
+# Anova(m3.alt)
 # No added value.
 
 ## Young vs. Old
@@ -188,13 +188,17 @@ m5.y <- lmer(fWHR ~ Age + Age2 + Age3 +
            , data=fWHR[(fWHR$agenum < 5.5),])
 summary(m5.y)
 Anova(m5.y)
+confint(m5.y, method='boot')
+
 m5.o <- lmer(fWHR ~ Age + Age2 + Age3 + 
                Sex 
              + Short.con + Short.opn + Short.dom + Short.anx
-             + (1|Facility.x/Rhesus)
-             , data=fWHR[(fWHR$agenum >= 5.5),])
+             + (1|Rhesus)
+             #+ (1|Facility.xRhesus)
+             , data=fWHR[(fWHR$Facility.x=='ZX6012')&(fWHR$agenum >= 5.5),])
 summary(m5.o)
 Anova(m5.o)
+confint(m5.o)
 
 
 
@@ -205,22 +209,22 @@ Anova(m5.o)
 
 ### All item modelling - prototype
 
-fWHRmat = as.matrix(as.data.frame(lapply(fWHR
-  #aggregate(fWHR,by=list(fWHR$Rhesus),FUN=mean,na.action=na.omit)
-                                         , as.numeric)))
-#fWHRmat=fWHRmat[,-1]
-fWHRmat = cbind(1,fWHRmat)
-
-alp = 0.5
-
-# indices need to be fixed
-m6 <- glmnet(fWHRmat[!is.na(fWHRmat[,17]),c(33:35,40:51)],fWHRmat[!is.na(fWHRmat[,17]),17],
-             family='gaussian',standardize=T,nlambda=1000,alpha=alp
-             )
-cv.m6 = cv.glmnet(fWHRmat[!is.na(fWHRmat[,17]),c(33:35,40:51)],fWHRmat[!is.na(fWHRmat[,17]),17],
-                  family='gaussian',nfolds=100,alpha=alp)
-plot(cv.m6)
-coef(m6,s=cv.m6$lambda.min)
+# fWHRmat = as.matrix(as.data.frame(lapply(fWHR
+#   #aggregate(fWHR,by=list(fWHR$Rhesus),FUN=mean,na.action=na.omit)
+#                                          , as.numeric)))
+# #fWHRmat=fWHRmat[,-1]
+# fWHRmat = cbind(1,fWHRmat)
+# 
+# alp = 0.5
+# 
+# # indices need to be fixed
+# m6 <- glmnet(fWHRmat[!is.na(fWHRmat[,17]),c(33:35,40:51)],fWHRmat[!is.na(fWHRmat[,17]),17],
+#              family='gaussian',standardize=T,nlambda=1000,alpha=alp
+#              )
+# cv.m6 = cv.glmnet(fWHRmat[!is.na(fWHRmat[,17]),c(33:35,40:51)],fWHRmat[!is.na(fWHRmat[,17]),17],
+#                   family='gaussian',nfolds=100,alpha=alp)
+# plot(cv.m6)
+# coef(m6,s=cv.m6$lambda.min)
 
 
 # m6 <- lmer(fWHR ~ Sex 
@@ -339,11 +343,11 @@ Anova(m3.LF)
 # David scores again don't appear to be implicated.
 
 ## Alternative binary coding
-m3.LF.alt <- lmer(LFFH ~  Age + Age2 + Age3 + Dominance.bin
-              + (1|Facility.x/Rhesus)
-              , data=fWHR)
-summary(m3.LF.alt)
-Anova(m3.LF.alt)
+# m3.LF.alt <- lmer(LFFH ~  Age + Age2 + Age3 + Dominance.bin
+#               + (1|Facility.x/Rhesus)
+#               , data=fWHR)
+# summary(m3.LF.alt)
+# Anova(m3.LF.alt)
 
 ## Young vs. Old 
 m3.LF.o <- lmer(LFFH ~  Age + Age2 + Age3 + Dominance.status
@@ -409,25 +413,25 @@ Anova(m5.LF.y)
 
 ### All item modelling - again, not ready
 
-alp = 0.1
-
-m6.LF <- glmnet(fWHRmat[!is.na(fWHRmat[,18]),c(25,33:35,40:51)],fWHRmat[!is.na(fWHRmat[,18]),18],
-             family='gaussian',standardize=T,nlambda=1000,alpha=alp
-)
-cv.m6lf = cv.glmnet(fWHRmat[!is.na(fWHRmat[,18]),c(25,33:35,40:51)],fWHRmat[!is.na(fWHRmat[,18]),18],
-                  family='gaussian',nfolds=100,alpha=alp)
-plot(cv.m6lf)
-coef(m6.LF,s=cv.m6lf$lambda.min)
-
-
-
-
-m6.LF <- lmer(LFFH ~ Age + Age2 + Age3 + Sex 
-           + Fearful + Dominant + Cautious + Curious + Innovative + Bullying 
-           + Submissive + Cool + Quitting + Erratic + Anxious + Socially.withdrawn
-           + (1|Facility.x/Rhesus)
-           , data=fWHR)
-summary(m6.LF)
+# alp = 0.1
+# 
+# m6.LF <- glmnet(fWHRmat[!is.na(fWHRmat[,18]),c(25,33:35,40:51)],fWHRmat[!is.na(fWHRmat[,18]),18],
+#              family='gaussian',standardize=T,nlambda=1000,alpha=alp
+# )
+# cv.m6lf = cv.glmnet(fWHRmat[!is.na(fWHRmat[,18]),c(25,33:35,40:51)],fWHRmat[!is.na(fWHRmat[,18]),18],
+#                   family='gaussian',nfolds=100,alpha=alp)
+# plot(cv.m6lf)
+# coef(m6.LF,s=cv.m6lf$lambda.min)
+# 
+# 
+# 
+# 
+# m6.LF <- lmer(LFFH ~ Age + Age2 + Age3 + Sex 
+#            + Fearful + Dominant + Cautious + Curious + Innovative + Bullying 
+#            + Submissive + Cool + Quitting + Erratic + Anxious + Socially.withdrawn
+#            + (1|Facility.x/Rhesus)
+#            , data=fWHR)
+# summary(m6.LF)
 
 
 

@@ -8,10 +8,10 @@ Pers=read.csv("all personality ratings.csv")
 # 
 # #ICC of shortened questionnaire items including Davis and newly rated animals
 # #For other items can refer to table in my Davis manuscript showing Affectionate, Stable, Solitary, and Prrotective to be unreliable
-# num_observations <- as.data.frame(table(Pers$Animal))
-# av <- mean(num_observations$Freq)
-# names(num_observations)[1] <- "Animal"
-# x <- merge(Pers,num_observations,by="Animal")
+num_observations <- as.data.frame(table(Pers$Animal))
+av <- mean(num_observations$Freq)
+names(num_observations)[1] <- "Animal"
+x <- merge(Pers,num_observations,by="Animal")
 # items <- names(x[5:16])
 # items
 # icc3.reliability(x[x$Freq!=1,], items, "Animal", "Rater")
@@ -201,6 +201,12 @@ fWHR = merge(faces, persage, by.x="Rhesus", by.y="Rhesus", all =T)
 # #colnames(dfall)
 # 
 # dfall[,c(24,29,89:98)] = s(dfall[,c(24,29,89:98)])
+
+      
+
+hist(persage$Dominance.status)
+hist(persage$Dominance.status[persage$agenum < 5.5])
+hist(persage$Dominance.status[(persage$agenum >= 5.5)&(persage$Facility.x=='ZX6012')], breaks=3)
 
 
 

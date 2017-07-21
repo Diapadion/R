@@ -1,0 +1,29 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1500632570146.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "C5922E7",
+    "lastKnownWriteTime" : 32651513914720368,
+    "last_content_update" : 1500632570146,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "1A7C59E9",
+        "caption" : "m1exp",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=m1exp&cache_key=1A7C59E9",
+        "displayedObservations" : "3554",
+        "environment" : "",
+        "object" : "m1exp",
+        "preview" : "0",
+        "totalObservations" : "3554",
+        "variables" : "145"
+    },
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}

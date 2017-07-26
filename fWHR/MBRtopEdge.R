@@ -1,5 +1,11 @@
 library(alphahull)                                  # Exposes ashape()
 
+
+
+s <- function(x) { scale(x) }
+
+
+
 MBR <- function(points) {
   # Analyze the convex hull edges                       
   a <- ashape(points, alpha=1000)                 # One way to get a convex hull...

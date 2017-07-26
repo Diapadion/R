@@ -50,9 +50,24 @@ plot(fWHR ~ agenum, data=fWHR[fWHR$Sex=='F',])
 plot(fWHR ~ Dominance.status, data=fWHR[fWHR$Sex=='F',])
 #plot(fWHR ~ Dominance.bin, data=fWHR[fWHR$Sex=='F',])
 
+plot(fWHR ~ agenum, data=fWHR[fWHR$agenum >= 5.5,])
+
+
 plot(Short.dom ~ Sex , data=fWHR)
 plot(Short.dom ~ Sex , data=fWHR[fWHR$agenum >= 5.5,])
 plot(Short.dom ~ Sex , data=fWHR[fWHR$agenum < 5.5,])
+
+plot(Short.con ~ Sex , data=fWHR)
+plot(Short.con ~ Sex , data=fWHR[fWHR$agenum >= 5.5,])
+plot(Short.con ~ Sex , data=fWHR[fWHR$agenum < 5.5,])
+
+plot(Dominance ~ Sex , data=fWHR)
+plot(Dominance ~ Sex , data=fWHR[fWHR$agenum >= 5.5,])
+plot(Dominance ~ Sex , data=fWHR[fWHR$agenum < 5.5,])
+
+plot(Confidence ~ Sex , data=fWHR)
+plot(Confidence ~ Sex , data=fWHR[fWHR$agenum >= 5.5,])
+plot(Confidence ~ Sex , data=fWHR[fWHR$agenum < 5.5,])
 
 
 
@@ -103,7 +118,7 @@ Anova(m2)
 # Sex yes, age x sex, no.
 
 ## Young vs. Old
-m2.o <- lmer(fWHR ~Sex * Age + Age2 + Age3 + (1|Facility.x/Rhesus)
+m2.o <- lmer(fWHR ~ Sex * Age + Age2 + Age3 + (1|Facility.x/Rhesus)
              , data=fWHR[fWHR$agenum >= 5.5,])
 summary(m2.o)
 
@@ -114,11 +129,20 @@ summary(m2.y)
 
 
 ### Test David score inclusiong
-m3 <- lmer(fWHR ~ Age + Age2 + Age3 + Sex + Dominance.status
+m3 <- lmer(fWHR ~ Age + Age2 + Age3 + 
+             Sex + Dominance.status
            + (1|Facility.x/Rhesus)
            , data=fWHR)
 summary(m3)
 Anova(m3)
+
+m3.x <- lmer(fWHR ~ Age + Age2 + Age3 + 
+               Sex * Dominance.status
+           + (1|Facility.x/Rhesus)
+           , data=fWHR)
+summary(m3.x)
+anova(m3,m3.x)
+
 # David scores don't appear to be implicated.
 # Split by sex?
 # Let's leave it out for now
@@ -132,11 +156,17 @@ Anova(m3)
 # No added value.
 
 ## Young vs. Old
-m3.o <- lmer(fWHR ~Sex + Age + Age2 + Age3 + Dominance.status + (1|Facility.x/Rhesus)
+m3.o <- lmer(fWHR ~ Age + Age2 + Age3 +
+              Sex + Dominance.status + (1|Facility.x/Rhesus)
              , data=fWHR[fWHR$agenum >= 5.5,])
 summary(m3.o)
+m3.o.x <- lmer(fWHR ~ Age + Age2 + Age3 + 
+                 Sex * Dominance.status + (1|Facility.x/Rhesus)
+             , data=fWHR[fWHR$agenum >= 5.5,])
+summary(m3.o.x)
+anova(m3.o,m3.o.x)
 
-m3.y <- lmer(fWHR ~ Sex + Age + Age2 + Age3 + Dominance.status + (1|Facility.x/Rhesus)
+m3.y <- lmer(fWHR ~ Age + Age2 + Age3 + Sex * Dominance.status + (1|Facility.x/Rhesus)
              , data=fWHR[fWHR$agenum < 5.5,])
 summary(m3.y)
 

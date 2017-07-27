@@ -40,6 +40,7 @@ corrplot(fWHR[,c(16:17,25,32:34,93:102)])
 
 plot(fWHR ~ agenum, data=fWHR)
 plot(fWHR ~ Dominance.status, data=fWHR)
+plot(fWHR ~ Sex, data=fWHR)
 #plot(fWHR ~ Dominance.bin, data=fWHR)
 
 plot(fWHR ~ agenum, data=fWHR[fWHR$Sex=='M',])
@@ -68,6 +69,9 @@ plot(Dominance ~ Sex , data=fWHR[fWHR$agenum < 5.5,])
 plot(Confidence ~ Sex , data=fWHR)
 plot(Confidence ~ Sex , data=fWHR[fWHR$agenum >= 5.5,])
 plot(Confidence ~ Sex , data=fWHR[fWHR$agenum < 5.5,])
+
+mean(fWHR$fWHR[fWHR$agenum>=5.5 & fWHR$Sex=='M'])
+mean(fWHR$fWHR[fWHR$agenum>=5.5 & fWHR$Sex=='F'], na.rm=T)
 
 
 
@@ -363,9 +367,10 @@ Anova(m2.LF)
 # Neither sex nor interactions.
 
 ## Young vs. Old
-m2.LF.o <- lmer(LFFH ~  Sex * Age + Age2 + Age3 + (1|Facility.x/Rhesus)
+m2.LF.o <- lmer(LFFH ~ Sex * Age + Age2 + Age3 
+                  + (1|Facility.x/Rhesus)
                 , data=fWHR[fWHR$agenum >= 5.5,])
-m2.LF.y <- lmer(LFFH ~  Sex * Age + Age2 + Age3 + (1|Facility.x/Rhesus)
+m2.LF.y <- lmer(LFFH ~ Sex * Age + Age2 + Age3 + (1|Facility.x/Rhesus)
                 , data=fWHR[fWHR$agenum < 5.5,])
 summary(m2.LF.o)
 summary(m2.LF.y)

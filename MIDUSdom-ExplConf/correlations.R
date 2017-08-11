@@ -9,7 +9,8 @@ options(digits=3)
 
 
 cord = corr.test(m1exp, method='spearman',adjust='none')
-cbind(cord$r[,c(1:2,5)],cord$p[,c(1:2,5)])
+cbind(cord$r[,c(1:2)],cord$p[,c(1:2)])
+#cbind(cord$r[,c(1:2,5)],cord$p[,c(1:2,5)])
 
 
 ### Filter all variables correlated > p = 0.05 with Agn
@@ -30,8 +31,12 @@ cbind(con.cord$r[,c(1:2,5)],con.cord$p[,c(1:2,5)])
 
 
 
+### DO NOT RUN
 
-
+# con.cord.temp = corr.test(m1con, method='spearman',adjust='none')
+# cbind(con.cord.temp$r[,c(1:2)],con.cord.temp$p[,c(1:2)])
+# 
+#  
 # x.male = corr.test(m1exp[m1exp$Sex==1,newnames], method='spearman',adjust='none')
 # x.fema = corr.test(m1exp[m1exp$Sex==2,newnames], method='spearman',adjust='none')
 # 

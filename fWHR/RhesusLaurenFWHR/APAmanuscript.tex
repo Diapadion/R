@@ -1,0 +1,327 @@
+\documentclass[english,man]{apa6}
+
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+    \usepackage{xltxtra,xunicode}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
+  \newcommand{\euro}{€}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{\usepackage{microtype}}{}
+
+% Table formatting
+\usepackage{longtable, booktabs}
+\usepackage{lscape}
+% \usepackage[counterclockwise]{rotating}   % Landscape page setup for large tables
+\usepackage{multirow}		% Table styling
+\usepackage{tabularx}		% Control Column width
+\usepackage[flushleft]{threeparttable}	% Allows for three part tables with a specified notes section
+\usepackage{threeparttablex}            % Lets threeparttable work with longtable
+
+% Create new environments so endfloat can handle them
+% \newenvironment{ltable}
+%   {\begin{landscape}\begin{center}\begin{threeparttable}}
+%   {\end{threeparttable}\end{center}\end{landscape}}
+
+\newenvironment{lltable}
+  {\begin{landscape}\begin{center}\begin{ThreePartTable}}
+  {\end{ThreePartTable}\end{center}\end{landscape}}
+
+  \usepackage{ifthen} % Only add declarations when endfloat package is loaded
+  \ifthenelse{\equal{\string man}{\string man}}{%
+   \DeclareDelayedFloatFlavor{ThreePartTable}{table} % Make endfloat play with longtable
+   % \DeclareDelayedFloatFlavor{ltable}{table} % Make endfloat play with lscape
+   \DeclareDelayedFloatFlavor{lltable}{table} % Make endfloat play with lscape & longtable
+  }{}%
+
+
+
+% The following enables adjusting longtable caption width to table width
+% Solution found at http://golatex.de/longtable-mit-caption-so-breit-wie-die-tabelle-t15767.html
+\makeatletter
+\newcommand\LastLTentrywidth{1em}
+\newlength\longtablewidth
+\setlength{\longtablewidth}{1in}
+\newcommand\getlongtablewidth{%
+ \begingroup
+  \ifcsname LT@\roman{LT@tables}\endcsname
+  \global\longtablewidth=0pt
+  \renewcommand\LT@entry[2]{\global\advance\longtablewidth by ##2\relax\gdef\LastLTentrywidth{##2}}%
+  \@nameuse{LT@\roman{LT@tables}}%
+  \fi
+\endgroup}
+
+
+\ifxetex
+  \usepackage[setpagesize=false, % page size defined by xetex
+              unicode=false, % unicode breaks when used with xetex
+              xetex]{hyperref}
+\else
+  \usepackage[unicode=true]{hyperref}
+\fi
+\hypersetup{breaklinks=true,
+            pdfauthor={},
+            pdftitle={fWHR in macaques},
+            colorlinks=true,
+            citecolor=blue,
+            urlcolor=blue,
+            linkcolor=black,
+            pdfborder={0 0 0}}
+\urlstyle{same}  % don't use monospace font for urls
+
+\setlength{\parindent}{0pt}
+%\setlength{\parskip}{0pt plus 0pt minus 0pt}
+
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+
+\ifxetex
+  \usepackage{polyglossia}
+  \setmainlanguage{}
+\else
+  \usepackage[english]{babel}
+\fi
+
+% Manuscript styling
+\captionsetup{font=singlespacing,justification=justified}
+\usepackage{csquotes}
+\usepackage{upgreek}
+
+ % Line numbering
+  \usepackage{lineno}
+  \linenumbers
+
+
+\usepackage{tikz} % Variable definition to generate author note
+
+% fix for \tightlist problem in pandoc 1.14
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+% Essential manuscript parts
+  \title{fWHR in macaques}
+
+  \shorttitle{fWHR in macaques}
+
+
+  \author{Drew M Altschul\textsuperscript{1}, Lauren Robinson\textsuperscript{1,2}, \& Vanessa Wilson\textsuperscript{1,2}}
+
+  \def\affdep{{"", "", ""}}%
+  \def\affcity{{"", "", ""}}%
+
+  \affiliation{
+    \vspace{0.5cm}
+          \textsuperscript{1} The University of Edinburgh\\
+          \textsuperscript{2} fuckin Disney World  }
+
+  \authornote{
+    \newcounter{author}
+    Add complete departmental affiliations for each author here. Each new
+    line herein must be indented, like this line.
+    
+    Enter author note here.
+
+                      Correspondence concerning this article should be addressed to Drew M Altschul, Postal address. E-mail: \href{mailto:my@email.com}{\nolinkurl{my@email.com}}
+                                    }
+
+
+  \abstract{Enter abstract here. Each new line herein must be indented, like this
+line.}
+  \keywords{facial width height ratio \\
+
+    \indent Word count: X
+  }
+
+
+
+
+
+\usepackage{amsthm}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+\newtheorem{corollary}{Corollary}
+\newtheorem{proposition}{Proposition}
+\theoremstyle{definition}
+\newtheorem{example}{Example}
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+\begin{document}
+
+\maketitle
+
+\setcounter{secnumdepth}{0}
+
+
+
+\section{Introduction}\label{introduction}
+
+In many primate species, the face is used not only as a means of
+emotional expression (Calcutt, Rubin, Pokorny \& de Waal, 2017; Parr \&
+Waller, 2006; Waller \& Micheletta, 2013) but as a way to communicate
+other socially relevant information such as fertility (Rigaill et al.,
+2015; Setchell et al. 2006; Dubuc et al., 2009), or health and mate
+fitness (Thornhill \& Gangestad, 2006; Kramer \& Ward, 2010; Henderson
+et al., 2016; Valentine et al., 2014; Little et al., 2012). Facial
+colouration for example has been linked to social status in male
+mandrills (Mandrillus sphinx) and drills (Mandrillus leucophaeus), with
+stronger facial colouration found in higher ranking males (Setchell et
+al. 2008; Marty et al. 2009 ). In rhesus macaques, facial colouration in
+males is not linked to dominance status, but is thought to be an
+indicator of mate quality (Waitt et al. 2003; Dubuc et al. 2014). It is
+possible however that other facial characteristics are linked to rank or
+assertive traits in this species. For example, Borgi \& Majolo (2016)
+found links between a measure of face width, the facial Width-to-Height
+Ratio (fWHR) and dominance style. Across 11 macaque species, fWHR is
+higher in both sexes in macaque species with despotic female dominance
+styles, such as in rhesus macaques, compared to more socially tolerant
+species such as Tonkean macaques. Rhesus macaques are amongst the most
+despotic of macaque species, with a strict female dominance hierarchy
+and high levels of intra-group aggression (Thierry, 2000). Borgi and
+Majolo's findings suggest that face width could be a signal of dominance
+that reduces the need for conflict amongst species for whom escalated
+conflict could have serious consequences.
+
+Previous work in humans supports links to dominant behaviour. In human
+males, aggressiveness and fighting ability have consistently been
+associated with a higher fWHR (Haselhuhn, Ormiston \& Wong, 2015; Anderl
+et al., 2016; Trebicky et al. 2015; Zilioli et al. 2015; Goetz et al.
+2013). Wider male faces are also perceived as being more aggressive
+(Alarajih \& Ward; Lefevre \& Lewis 2013; Mileva et al. 2014; Stirrat \&
+Perrett, 2010), suggesting that face width is a social cue to aggressive
+and assertive behaviour. Similar findings in brown capuchins reveal that
+this relationship is not unique to humans (Lefevre et al. 2014; Wilson
+et al., 2014). For adults of both sexes, fWHR is related to ratings of
+Assertiveness, and furthermore is higher amongst alpha individuals
+(Lefevre et al. 2014). Whether the face is a social cue of assertiveness
+is still under debate (Wilson et al. under review). Furthermore, it has
+been suggested, both in humans (Goetz et al. 2013; Welker, Goetz \&
+Carre, 2015) and capuchins (Carré, 2014) that the relationship between
+face width and dominant/aggressive behaviour is driven by low social
+status, that is, the relationship between fWHR and aggressive behaviour
+is only significant amongst low-status individuals. It is possible that,
+given that high social status usually comes with conspecifics' social
+knowledge of that status, there is no need for high ranking individuals
+to physically advertise assertiveness. Contrastingly, for a low status
+individual, advertising assertive behaviour via a social cue could be
+beneficial to obtaining resources.
+
+Whilst the current literature on facial morphology provides some very
+intriguing insights into the social role of physical features, our
+interpretations of this data are limited by the choice of study species,
+which are primarily human. In the current study, we propose to expand
+this research to a wider taxa. Given the links between fWHR and social
+tolerance across the Macaca genus (Borgi \& Majolo, 2016), it would be
+interesting to explore in more detail whether this ratio is linked
+specifically to dominance behaviour in a despotic macaque species. In
+the following study we decided to explore the relationship of fWHR in
+rhesus macaques to two different measures of dominance, (1) hierarchical
+dominance measured using David's scores and (2) personality ratings of
+dominance, which assess overall tendencies towards assertive and
+aggressive behaviour, rather than social standing. As fWHR correlates
+positively with despotism (Borgi \& Majolo, 2016), we predict that (1)
+higher fWHRs should be found amongst individuals with higher social
+status, similar to findings in capuchins (Lefevre et al., 2014); (2)
+fWHR should also be positively related to ratings of dominance; and (3)
+if the relationship between fWHR and dominance is driven by low social
+status, then we should find a significant relationship amongst
+individuals with low social status, but not high social status, as
+measured by David's scores.
+
+In addition to examining the fWHR, we will explore a second metric, the
+facial Lower-Height-Full-Height ratio (fLHFH). Whilst not well studied,
+this metric has previously been used as part of a masculinity index in
+human males (Penton-voak et al., 2001). fLHFH has also been associated
+with higher ratings of Neuroticism and lower ratings of Attentiveness in
+brown capuchins, traits that are both strongly related to vigilance
+behaviour (Wilson et al 2014; Morton et al., 2013). In capuchins, Wilson
+et al. (2014) proposed that these traits may be conceived of as one form
+of social status, prosocial competence, as defined by Lilienfeld et al.
+(2012), suggesting that facial height may also play a role in social
+cues. Moreover, a recent study suggests that upper face height is an
+important component to consider when assessing face width: decreases in
+upper face height relative to bizygomatic width led to increased
+perceptions of aggressiveness compared with faces with the same width
+but increased upper face height (Costa, Lio, Gomez \& Sirigu, 2017).
+Thus proportional face height may also be considered as an important
+component in understanding facial dominance. To shed more light on the
+role of face height in social behaviour, we additionally aimed to
+examine the relationship between (1) fLHFH and ratings on six
+personality components , labelled Confidence, Openness, Dominance,
+Friendliness, Activity and Anxiety, and (2) fLHFH and David's scores.
+Based on previous findings in brown capuchins (Wilson et al., 2014) we
+predict that (4) ratings of lower Confidence or higher Anxiety were most
+likely to be associated with higher fLHFH ratios, and (5) we would not
+find a relationship between face height and David's scores.
+
+\_\_I would like to look at this, but we can't with the following
+\url{data:__} Given the links between face width and assertive
+behaviour, and the link to intraspecific despotism , it would be useful
+to explore to what extent social tolerance of different species varies
+with variation in fWHRs. If fWHR is dependent on social status, one
+would expect to find larger differences in this ratio between alpha and
+non-alpha individuals in despotic species over socially tolerant species
+.
+
+\section{Methods}\label{methods}
+
+We report how we determined our sample size, all data exclusions (if
+any), all manipulations, and all measures in the study.
+
+\subsection{Participants}\label{participants}
+
+\subsection{Material}\label{material}
+
+\subsection{Procedure}\label{procedure}
+
+\subsection{Data analysis}\label{data-analysis}
+
+We used R (3.4.0, R Core Team, 2017) and the R-packages \emph{devtools}
+(1.13.3, Wickham \& Chang, 2017), and \emph{papaja} (0.1.0.9492, Aust \&
+Barth, 2017) for all our analyses.
+
+\section{Results}\label{results}
+
+apa\_print(m1)
+
+\section{Discussion}\label{discussion}
+
+\newpage
+
+\section{References}\label{references}
+
+\setlength{\parindent}{-0.5in} \setlength{\leftskip}{0.5in}
+
+\hypertarget{refs}{}
+\hypertarget{ref-R-papaja}{}
+Aust, F., \& Barth, M. (2017). \emph{papaja: Create APA manuscripts with
+R Markdown}. Retrieved from \url{https://github.com/crsh/papaja}
+
+\hypertarget{ref-R-base}{}
+R Core Team. (2017). \emph{R: A language and environment for statistical
+computing}. Vienna, Austria: R Foundation for Statistical Computing.
+Retrieved from \url{https://www.R-project.org/}
+
+\hypertarget{ref-R-devtools}{}
+Wickham, H., \& Chang, W. (2017). \emph{Devtools: Tools to make
+developing r packages easier}. Retrieved from
+\url{https://CRAN.R-project.org/package=devtools}
+
+
+
+
+
+
+\end{document}

@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "\n## some of these are probably not needed\nlibrary(lme4)\nlibrary(sjPlot)\nlibrary(effects)\nlibrary(pbkrtest)\nlibrary(xtable)\nlibrary(fifer)\nlibrary(piecewiseSEM)\nlibrary(xtable)\n\n#m <- lmer(....) #model\nm = m1\n\ncoefs <- data.frame(coef(summary(m)))\ndf.KR <- get_ddf_Lb(m, fixef(m))\nconf_int <- confint(m)\nconf_int <- conf_int[-(1:3), ]\ncoefs$ci <- paste0(\"[\", round(conf_int[ , 1], 2), \"; \",\n                   round(conf_int[ , 2], 2), \"]\") \ncoefs$p.KR <- 2 * (1 - pt(abs(coefs$t.value), df.KR))\n#coefs$par <- c(\"...\", \"...\", ...) # specify the \"Paramater\" column of the table\n#coefs$par = rownames(coefs)\ncoefs$par <- c(\"(Intercept)\", \"Age\", \"Age^2\", \"Age^3\")\n\nm_tab <- cbind(coefs$par, round(coefs$Estimate, 2), coefs$ci,\n               round(coefs$t.value, 2), round(coefs$p.KR, 3))\nm_tab[ , 5] <- gsub(\"^0$\", \"\", m_tab[ , 5])\nm_tab <- as.data.frame(m_tab) \nm_tab[[1]] <- gsub(\"^2\", \"$^{2}$\", m_tab[[1]], fixed = T)\nm_tab[[1]] <- gsub(\"X\", \"$\\\\times$\", m_tab[[1]], fixed = T)\n#for (i in 2:4) m_tab[[i]] <- gsub(\"-\", \"$-$\", m_tab[[i]], fixed = T)\nm_tab[[5]] <- gsub(\"0.\", \".\", m_tab[[5]], fixed = T)\nm_tab\n\ncat(\"% TODO IMPORTANT!!! replace alignment with lr@{ }lrc\\r\\r\")\nprint(xtable(m_tab, caption = \"Overview of the linear mixed-effects model ...\",\n             label = \"results_tab\"\n      , align = \"llrlrc\"),\n      sanitize.text.function = identity,\n      caption.placement = \"top\",\n      include.colnames = FALSE,\n      include.rownames = FALSE,\n      hline.after = NULL,\n      add.to.row = list(\n        pos = as.list(c(-1, nrow(m_tab))),\n        command=c(\"\\\\toprule \\n Parameter & \\\\multicolumn{2}{c}{Beta [95\\\\% CI]} & $t$-value & $p$-value$^{\\\\dagger}$ \\\\\\\\ \\n \\\\midrule\\n\", \"\\\\bottomrule \\\\multicolumn{5}{l}{\\\\footnotesize $Note$. Unless stated otherwise, all $p$-values < .001.} \\n \\\\\\\\  \\\\multicolumn{5}{l}{\\\\footnotesize $^{\\\\dagger} p$-values based on  Kenward-Roger approximate degrees of freedom.}\\n\")\n                  ), type = \"html\", file = \"outputTrans2excel.html\")\n\n\n\nprint(xtable(m1),type = \"html\", file = \"outputTrans2excel.html\")\n\n      print.xtable(xmancova, type=\"html\", file=\"mancova.html\")",
+    "created" : 1502456755017.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "718565555",
+    "id" : "F8534AB",
+    "lastKnownWriteTime" : 1502465031,
+    "last_content_update" : 1502465031137,
+    "path" : "C:/Users/s1229179/GitHub/R/fWHR/RhesusLaurenFWHR/lmer_table.R",
+    "project_path" : "lmer_table.R",
+    "properties" : {
+    },
+    "relative_order" : 13,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

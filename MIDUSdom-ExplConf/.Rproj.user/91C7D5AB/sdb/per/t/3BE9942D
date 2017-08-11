@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "library(survival)\nlibrary(LTRCtrees)\nlibrary(rpart)\nlibrary(eha)\n\n\n\n#mXmort = \nload('z:/MIDUS III/ICPSR_36346 (mortality)/DS0002/36346-0002-Data.rda')\n\n# plot(m1exp$Agn, m1exp$Age) # uninterepretable and not relevant based on corr.s\n\n\nm1exp.t = merge(m1exp, da36346.0002, by = 'M2ID', all.x = T)\n\n\nm1exp.t$DECEASED = !is.na(m1exp.t$DECEASED)\n\nm1exp.t$DOD_Y[!m1exp.t$DECEASED] = 2015\nm1exp.t$DOD_M[!m1exp.t$DECEASED] = 10\n\nm1exp.t$end = (m1exp.t$DOD_Y + (m1exp.t$DOD_M-1)/12 - m1exp.t$`Birth year`)\n\nm1exp.surv = Surv(m1exp.t$Age, m1exp.t$end, m1exp.t$DECEASED, type='counting')\n\n\n\n\n### Models\n\nm1 <- aftreg(m1exp.surv ~ Sex, \n       data = m1exp, dist='gompertz', param = 'lifeAcc'\n       )\nsummary(m1)\nkm.by.sex <- survfit(m1exp.surv ~ Sex, data = m1exp, conf.type = \"log-log\")\nsurvplot(km.by.sex)\n\n\n\nm2 <- aftreg(m1exp.surv ~ Con + Opn + Ext + Neu + Agr,\n            data = m1exp, dist='gompertz', param = 'lifeAcc'\n)\nsummary(m2)\n\n\n\nm3 <- aftreg(m1exp.surv ~ Agn,\n             data = m1exp, dist='weibull', param = 'lifeAcc'\n)\nsummary(m3)\n\nm3 <- aftreg(m1exp.surv ~ Agn + Con + Opn + Ext + Neu + Agr,\n             data = m1exp, dist='gompertz', param = 'lifeAcc'\n)\nsummary(m3)\n\n\nAgn.sd = sd(m1exp.t$Agn, na.rm=T)\nAgn.m = mean(m1exp.t$Agn, na.rm=T)\nm1exp.t$Agn_cut = 2\nm1exp.t$Agn_cut[m1exp.t$Agn < Agn.m - Agn.sd/3] = 1\nm1exp.t$Agn_cut[m1exp.t$Agn > Agn.m + Agn.sd/3] = 3\ntable(m1exp.t$Agn_cut)\n\n\nsurvplot(npsurv(m1exp.surv ~ m1exp.t$Agn_cut))\n\n\n\n\n\nm1 <- coxph(m1exp.surv ~ Sex,\n            data = m1exp)\nsummary(m1)\n\n\n\nm2 <- coxph(m1exp.surv ~ Con,\n            data = m1exp)\nsummary(m2)\n\nm2 <- coxph(m1exp.surv ~ Con + Opn + Ext + Neu + Agr,\n            data = m1exp)\nsummary(m2)\n\n\n\nm3 <- coxph(m1exp.surv ~ Agn,\n            data = m1exp)\nsummary(m3)\n\nm3 <- coxph(m1exp.surv ~ Agn + Con + Opn + Ext + Neu + Agr,\n            data = m1exp)\nsummary(m3)\n\n\n\n\n\n\n### Trees\n\nRRT1 = LTRCART(Surv(Age, end, DECEASED) ~ Sex + Agn + Con + Opn + Ext + Neu + Agr\n               ,data = m1exp.t)\nsummary(RRT1)\nplot(RRT1)\ntext(RRT1, use.n=T)\n\n\n\nCIT1 = LTRCIT(Surv(Age, end, DECEASED) ~ Agn + Con + Opn + Ext + Neu + Agr\n               ,data = m1exp.t)\nsummary(CIT1)\n",
+    "created" : 1501772800298.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2310442937",
+    "id" : "3BE9942D",
+    "lastKnownWriteTime" : 1501777871,
+    "last_content_update" : 1501777871191,
+    "path" : "C:/Users/s1229179/GitHub/R/MIDUSdom-ExplConf/survival.R",
+    "project_path" : "survival.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 6,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

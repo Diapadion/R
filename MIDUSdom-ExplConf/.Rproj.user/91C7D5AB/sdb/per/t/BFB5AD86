@@ -12,15 +12,15 @@
     "path" : null,
     "project_path" : null,
     "properties" : {
-        "cacheKey" : "4D7EC21D",
+        "cacheKey" : "12E67648",
         "caption" : "midus1",
-        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=midus1&cache_key=4D7EC21D",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=midus1&cache_key=12E67648",
         "displayedObservations" : "7108",
         "environment" : "",
         "object" : "midus1",
         "preview" : "0",
         "totalObservations" : "7108",
-        "variables" : "2121"
+        "variables" : "2099"
     },
     "relative_order" : 2,
     "source_on_save" : false,

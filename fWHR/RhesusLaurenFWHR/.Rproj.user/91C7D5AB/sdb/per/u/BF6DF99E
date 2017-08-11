@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "library(papaja)\nlibrary(apastats)\nlibrary(lme4)\nlibrary(sjPlot) # table functions\nlibrary(sjmisc) # sample data\nlibrary(sjlabelled)\n#library(stargazer)\nlibrary(apaStyle)\nlibrary(pander)\nlibrary(broom)\nlibrary(texreg)\nlibrary(memisc)\nlibrary(papeR)\n\n\n\nprint(xtable(prettify(summary(m1))),type = \"html\", file = \"outputTrans2excel.html\", include.rownames=F)\n\n\ncoef(summary(m1))\n\n\nprint(xtable(htmlreg(m1, file = \"outputTrans2excel.html\",ci.force=T, single.row =T))\n\n\npander(glance(m1))\npander(tidy(m1))\n\nm1stats <- papaja::apa_print(m1)\nm1stats$table %>% pander()\n\n\n\napa.regression(fit1)\n\n\nas.data.frame(fit1)\n\n\n\nstargazer(m1, type = 'html')\nwrite(stargazer(m1, type = 'html'), file='tableOut.html')\n\n# devtools::install_github(\"hadley/dplyr\")\nsjt.lmer(m1,m2, file=\"outputTrans2excel.html\")\n\n\n\n\n\n\n# load sample data\ndata(efc)\n# prepare grouping variables\nefc$grp = as.factor(efc$e15relat)\nlevels(x = efc$grp) <- get_labels(efc$e15relat)\nefc$care.level <- rec(efc$n4pstu, \"0=0;1=1;2=2;3:4=4\", as.fac = TRUE)\nlevels(x = efc$care.level) <- c(\"none\", \"I\", \"II\", \"III\")\n\n# data frame for fitted model\nmydf <- data.frame(neg_c_7 = efc$neg_c_7,\n                   sex = to_factor(efc$c161sex),\n                   c12hour = efc$c12hour,\n                   barthel = efc$barthtot,\n                   education = to_factor(efc$c172code),\n                   grp = efc$grp,\n                   carelevel = efc$care.level)\n\n# fit sample models\nfit1 <- lmer(neg_c_7 ~ c161sex + c12hour + barthtot + (1 | grp), data = efc)\n\nsjt.lmer(fit1)\n\n\n\n\n\n\n\n\n\n\n\n\ndescribe.glm(m1)\n\nlmer.fixef(m1)\n\n\n\n\n\napa_print(m1)\n\n\n\n\n\n\n\nprint()\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n# library(devtools)\n# devtools::install_github(\"crsh/papaja\")\n# devtools::install_github('ralfer/apa_format_and_misc',subdir='apastats')\n",
+    "created" : 1502359565647.000,
+    "dirty" : true,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "4219013335",
+    "id" : "BF6DF99E",
+    "lastKnownWriteTime" : 2531904937321833075,
+    "last_content_update" : 1502465424649,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 11,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

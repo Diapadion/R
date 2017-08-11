@@ -16,6 +16,7 @@ midus1 = midus1.bak
 
 
 vars=c(
+  'M2ID',
   # Personality
   'A1SAGENC','A1SEXTRA','A1SAGREE','A1SCONS','A1SOPEN','A1SNEURO',
   # Demographics
@@ -312,7 +313,8 @@ midus1$A1SQ7[midus1$A1SQ7%in%c(3,8)] <- 2
 
 
 #setnames(midus1, c('A1SAGENC','A1SEXTRA'),c('Agency','Extraversion'))
-newnames = c('Agn','Ext','Agr','Con','Opn','Neu',
+newnames = c('M2ID',
+  'Agn','Ext','Agr','Con','Opn','Neu',
   'Birth year','Sex','Total siblings',
   'Lived with bio parents','Father\'s education','Father\'s work',
   'Mother\'s education','Mother\'s work',

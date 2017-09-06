@@ -491,7 +491,7 @@ CI.a <- LTRCIT(Surv(age_pr, age, stat.log) ~ as.factor(sex) +
                   as.factor(origin) +  
                   Dom_CZ + Ext_CZ + Con_CZ +
                   Agr_CZ + Neu_CZ + Opn_CZ,
-                Data = datX)
+                data = datX)
 plot(CI.a)
 rpart.plot(RR.a)
 
@@ -513,12 +513,12 @@ CI.a.samp <- LTRCIT(Surv(age_pr, age, stat.log) ~ as.factor(sex) +
 plot(CI.a.samp)
 
 
-
-  (as.factor(datX$sex),
-   as.factor(datX$sample=='Japan'),as.factor(datX$sample=='Yerkes'),
-   as.factor(datX$sample=='Edinburgh'),
-   as.factor(datX$origin), 
-   datX$Dom_CZ, datX$Ext_CZ, datX$Con_CZ,
-   datX$Agr_CZ, datX$Neu_CZ, datX$Opn_CZ))
+# ?
+  # (as.factor(datX$sex),
+  #  as.factor(datX$sample=='Japan'),as.factor(datX$sample=='Yerkes'),
+  #  as.factor(datX$sample=='Edinburgh'),
+  #  as.factor(datX$origin), 
+  #  datX$Dom_CZ, datX$Ext_CZ, datX$Con_CZ,
+  #  datX$Agr_CZ, datX$Neu_CZ, datX$Opn_CZ))
 
 

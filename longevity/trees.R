@@ -21,9 +21,12 @@ cit.1 = LTRCIT(Surv(age_pr, age, status) ~
                data=datX)
 
 cit.1.x = LTRCIT(Surv(age_pr, age, status) ~ 
-                   # as.factor(sex) + as.factor(origin) +  
+                   as.factor(sex) + as.factor(origin) +  
                    Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ,
-                 data=datX)
+                 data=datX, 
+                 Control = ctree_control(mincriterion = 0.90, minprob=0.001, mtry=100)
+                 )
+plot(cit.1.x)
 
 
 cit.2 = LTRCIT(Surv(age_pr, age, status) ~ 
@@ -38,18 +41,44 @@ cit.2.x = LTRCIT(Surv(age_pr, age, status) ~
 
 
 
+
+
 #plot(irisct, gp = gpar(fontsize = 20)) 
-plot(cit.1, gp = gpar(fontfamily='serif',fontsize = 15),
+plot(cit.1, gp = gpar(fontfamily='sans',fontsize = 15),
      inner_panel=node_inner,
      ip_args=list(
        abbreviate = F, 
-       id = FALSE),
+       id = FALSE)
      # edge_panel=node_surv,
      # ep_args = list(
      #   id = F)
      )
 
 print(cit.1.x)
+
+plot(cit.1, gp = gpar(fontfamily='sans',fontsize = 15),
+     inner_panel=node_inner,
+     ip_args=list(
+       abbreviate = F, 
+       id = FALSE)
+     # edge_panel=node_surv,
+     # ep_args = list(
+     #   id = F)
+)
+
+
+RR.a.party = as.party(RR.a)
+RR.a.party$fitted[["(response)"]]<- Surv(datX$age_pr, datX$age, datX$stat.log)
+
+plot(RR.a.party,gp = gpar(fontfamily='sans',fontsize = 15),
+     inner_panel=node_inner,
+     ip_args=list(
+       abbreviate = F, 
+       id = FALSE)
+     # edge_panel=node_surv,
+     # ep_args = list(
+     #   id = F)
+)
 
 
 ### Random forest
@@ -89,7 +118,7 @@ importance(cif.1)
 
 #cit.1.pred = predict(cit.1, newdata=datX, type = 'prob')
 
-rrt.1 = LTRCART(Surv(age_pr, age, status) ~
+rrt.1 = LTRCART(Surv(age_pr, age, stat.log) ~
                   as.factor(sex) + as.factor(origin) +
                   Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ,
                 data=datX)
@@ -102,7 +131,7 @@ text(rrt.1)
 # cv.rrt.1 = validate(rrt.1, data=datX)
 
 
-http://luisdva.github.io/Plotting-conditional-inference-trees-in-R/
+#http://luisdva.github.io/Plotting-conditional-inference-trees-in-R/
 
 
   
@@ -168,11 +197,13 @@ mean(c(ART.bin.x1,ART.bin.x2,ART.cont.x1,ART.cont.x2))
 
 
 
-### Nice plots
+### Nice plots - for publication
 
 plot (cit.1,inner_panel=innerWeights,
 #      terminal_panel=node_barplot2,
       tp_args = list(ylines = c(2, 4)))
+
+plot(RR.a, inner_panel=innerWeights)
 
 
 
@@ -313,3 +344,4 @@ innerWeights <- function(node){
   mainlab <- paste(mainlab, sum(node$weights),")" , sep = "")
   grid.text(mainlab,gp = gpar(col='black'))
 }
+

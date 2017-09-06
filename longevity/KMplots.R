@@ -150,7 +150,7 @@ library(rms)
 
 npsf.1 = npsurv(y.wild ~ Sample, data=wch)
 
-par(family = 'serif', cex.lab = 1.25, cex.axis = 1.1)
+par(family = 'sans', cex.lab = 1.25, cex.axis = 1.1)
 survplot(npsf.1, xlab = 'Age')
 
 

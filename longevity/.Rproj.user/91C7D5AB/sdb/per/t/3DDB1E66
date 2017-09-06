@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "# Wild chimp data\n\nlibrary(lubridate)\n\nwch <- read.csv(file = 'WildChimp_biography.csv')\n\n#colnames(wch)\n#table(wch$departtype)\n#head(as.integer(as.character(wch$departdate)))\n\nwch$birthdate = as.Date(wch$birthdate,format='%Y-%m-%d')\nwch$departdate = as.Date(wch$departdate,format='%Y-%m-%d')\n\nwch$age = difftime(wch$departdate,wch$birthdate, units = 'weeks')/52.25\n\nwch = wch[wch$age!=0,]\nwch$departtype = (wch$departtype=='D')\nwch$sample = 'Wild'\ncolnames(wch)[18] = 'status'\nwch = wch[wch$status==TRUE,]\n\nwch = rbind(datX[,c('age','status','sample')],wch[,c('age','status','sample')])\nwch$sample[wch$sample!= 'Wild'] = 'Captive'\ncolnames(wch)[3] = 'Sample'\n\ny.wild <- Surv(as.numeric(wch$age),wch$status)\n\n                        ",
+    "created" : 1503482098629.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "897230088",
+    "id" : "3DDB1E66",
+    "lastKnownWriteTime" : 1503486171,
+    "last_content_update" : 1503486171739,
+    "path" : "C:/Users/s1229179/GitHub/R/longevity/wildImport.R",
+    "project_path" : "wildImport.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 8,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

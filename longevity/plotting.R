@@ -85,10 +85,12 @@ pwr.p + labs(x = 'Hazard ratio')
 
 pdx = gather(datX, Personality, Measurement, Dom:Opn)
 
+
+
 ### beans of their personalities
 
 vpers<-data.frame(Sample=character(),Dimension=character(),Score=numeric(), Sex=factor)
-vpers<-pdx[,c(98,99,2)]
+vpers<-pdx[,c(96,97,2)]
 colnames(vpers) = c('Dimension','Score','Sex')
 
 
@@ -102,43 +104,48 @@ svg(filename="PersCCACE.svg",
 # par(mfrow=c(2,3),
 #     oma = c(5,4,0,0) + 0.3,
 #     mar = c(0,0,1,1) + 0.5)
-beanpersD <- with(data=vpers, beanplot(Score ~ Sex * Dimension, side = 'both',  cutmax = 7, cutmin = 1, #bw = 0.3,
-                                                                      overallline = "median", beanlines = 'median', what = c(0,1,1,0), boxwex=0.9,
-                                                                      col = list('salmon3','salmon1','gold3','gold1','green4','green2',
-                                                                        "cadetblue3", "cadetblue1", "royalblue3", "royalblue1","slateblue","slateblue1"),
-                                                                      main='Personality Distributions', show.names=TRUE)
-)
-
-beanpersA <- with(data=vpers[vpers$Dimension=='Agreeableness',], beanplot(Score, side = 'both', bw = 0.3, cutmax = 4, cutmin = 1,
-                                                                          overallline = "median", beanlines = 'median', what = c(0,1,1,0), boxwex=0.9,
-                                                                          col = list("cadetblue3", "cadetblue1", "royalblue3", "royalblue1","slateblue","slateblue1"),
-                                                                          main='Agreeableness' , show.names=FALSE 
-)
-)
-beanpersN <- with(data=vpers[vpers$Dimension=='Neuroticism',], beanplot(Score ~ Sex * Sample, side = 'both', bw = 0.3, cutmax = 4, cutmin = 1,
-                                                                        overallline = "median", beanlines = 'median', what = c(0,1,1,0), boxwex=0.9,
-                                                                        col = list("cadetblue3", "cadetblue1", "royalblue3", "royalblue1","slateblue","slateblue1"),
-                                                                        main='Neuroticism' , show.names=FALSE)
-)
-beanpersO <- with(data=vpers[vpers$Dimension=='Openness',], beanplot(Score ~ Sex * Sample, side = 'both', bw = 0.3, cutmax = 4, cutmin = 1,
-                                                                     overallline = "median", beanlines = 'median', what = c(0,1,1,0), boxwex=0.9,
-                                                                     col = list("cadetblue3", "cadetblue1", "royalblue3", "royalblue1","slateblue","slateblue1"),
-                                                                     main='Openness' 
-))
-
-beanpersC <- with(data=vpers[vpers$Dimension=='Conscientiousness',], beanplot(Score ~ Sex * Sample, side = 'both', bw = 0.3, cutmax = 4, cutmin = 1,
-                                                                              overallline = "median", beanlines = 'median', what = c(0,1,1,0), boxwex=0.9,
-                                                                              col = list("cadetblue3", "cadetblue1", "royalblue3", "royalblue1","slateblue","slateblue1")
-                                                                              , main='Conscientiousness'
-)
-)
-
-beanpersE <- with(data=vpers[vpers$Dimension=='Extraversion',], 
-                  beanplot(Score ~ Sex * Sample, side = 'both', bw = 0.3, cutmax = 4, cutmin = 1,
+beanpersD <- with(data=vpers, 
+                  beanplot(Score ~ Sex * Dimension, side = 'both',  cutmax = 7, cutmin = 1, #bw = 0.3,
                            overallline = "median", beanlines = 'median', what = c(0,1,1,0), boxwex=0.9,
-                           col = list("cadetblue3", "cadetblue1", "royalblue3", "royalblue1","slateblue","slateblue1")
-                           , main='Extraversion' #, yaxt=''
-                  ))
+                           col = list('salmon3','salmon1','gold3','gold1','green4','green2',
+                                      "cadetblue3", "cadetblue1", "royalblue3", "royalblue1","slateblue","slateblue1"),
+                           main='Personality Distributions', show.names=TRUE)
+)
+# 
+# beanpersA <- with(data=vpers[vpers$Dimension=='Agreeableness',], 
+#                   beanplot(Score ~ Sex * Dimension, side = 'both', bw = 0.3, cutmax = 4, cutmin = 1,
+#                            overallline = "median", beanlines = 'median', what = c(0,1,1,0), boxwex=0.9,
+#                            col = list("cadetblue3", "cadetblue1", "royalblue3", "royalblue1","slateblue","slateblue1"),
+#                            main='Agreeableness' , show.names=FALSE 
+#                   )
+# )
+# beanpersN <- with(data=vpers[vpers$Dimension=='Neuroticism',], 
+#                   beanplot(Score ~ Sex * Sample, side = 'both', bw = 0.3, cutmax = 4, cutmin = 1,
+#                            overallline = "median", beanlines = 'median', what = c(0,1,1,0), boxwex=0.9,
+#                            col = list("cadetblue3", "cadetblue1", "royalblue3", "royalblue1","slateblue","slateblue1"),
+#                            main='Neuroticism' , show.names=FALSE)
+# )
+# beanpersO <- with(data=vpers[vpers$Dimension=='Openness',], 
+#                   beanplot(Score ~ Sex * Sample, side = 'both', bw = 0.3, cutmax = 4, cutmin = 1,
+#                            overallline = "median", beanlines = 'median', what = c(0,1,1,0), boxwex=0.9,
+#                            col = list("cadetblue3", "cadetblue1", "royalblue3", "royalblue1","slateblue","slateblue1"),
+#                            main='Openness' 
+#                   ))
+# 
+# beanpersC <- with(data=vpers[vpers$Dimension=='Conscientiousness',], 
+#                   beanplot(Score ~ Sex * Sample, side = 'both', bw = 0.3, cutmax = 4, cutmin = 1,
+#                            overallline = "median", beanlines = 'median', what = c(0,1,1,0), boxwex=0.9,
+#                            col = list("cadetblue3", "cadetblue1", "royalblue3", "royalblue1","slateblue","slateblue1")
+#                            , main='Conscientiousness'
+#                   )
+# )
+# 
+# beanpersE <- with(data=vpers[vpers$Dimension=='Extraversion',], 
+#                   beanplot(Score ~ Sex * Sample, side = 'both', bw = 0.3, cutmax = 4, cutmin = 1,
+#                            overallline = "median", beanlines = 'median', what = c(0,1,1,0), boxwex=0.9,
+#                            col = list("cadetblue3", "cadetblue1", "royalblue3", "royalblue1","slateblue","slateblue1")
+#                            , main='Extraversion' #, yaxt=''
+#                   ))
 dev.off()
 
 

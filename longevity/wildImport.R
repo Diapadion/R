@@ -25,3 +25,4 @@ colnames(wch)[3] = 'Sample'
 
 y.wild <- Surv(as.numeric(wch$age),wch$status)
 
+                        

@@ -4,14 +4,16 @@ library(data.table)
 
 
 
-setwd("Z:/MIDUS I/DS0001/")
+#setwd("M:/MIDUS I/DS0001/")
 
 
 # midus1 <- read.SAScii('02760-0001-Data.txt','02760-0001-Setup.sas')
-# 
+# # 
 # midus1.bak = midus1
 
+load("midus1.Rda")
 midus1 = midus1.bak
+
 
 
 
@@ -58,8 +60,11 @@ vars=c(
   # Ethnicity stuff
   'A1SS3','A1SS4','A1SS5','A1SS8','A1SS9','A1SS10','A1SS11','A1SS12',
   # Sex
-  'A1SQ1','A1SQ6','A1SQ8','A1SQ5','A1SQ7'
-
+  'A1SQ1','A1SQ6','A1SQ8','A1SQ5','A1SQ7',
+  # Personality items
+  'A1SF4A','A1SF4B','A1SF4C','A1SF4D','A1SF4E','A1SF4F','A1SF4G','A1SF4H','A1SF4I','A1SF4J',
+  'A1SF4K','A1SF4L','A1SF4M','A1SF4N','A1SF4O','A1SF4P','A1SF4Q','A1SF4R','A1SF4S','A1SF4T',
+  'A1SF4U','A1SF4V','A1SF4W','A1SF4X','A1SF4Y','A1SF4Z','A1SF4AA','A1SF4BB','A1SF4CC','A1SF4DD'
 )
 # add religion?
 vars[!vars %in% names(midus1)]
@@ -299,6 +304,36 @@ midus1$A1SQ8[midus1$A1SQ8==8] <- NA
 midus1$A1SQ5[midus1$A1SQ5==98] <- NA
 midus1$A1SQ7[midus1$A1SQ7%in%c(3,8)] <- 2
 
+midus1$A1SF4A[midus1$A1SF4A==8] <- NA
+midus1$A1SF4B[midus1$A1SF4B==8] <- NA
+midus1$A1SF4C[midus1$A1SF4C==8] <- NA
+midus1$A1SF4D[midus1$A1SF4D==8] <- NA
+midus1$A1SF4E[midus1$A1SF4E==8] <- NA
+midus1$A1SF4F[midus1$A1SF4F==8] <- NA
+midus1$A1SF4G[midus1$A1SF4G==8] <- NA
+midus1$A1SF4H[midus1$A1SF4H==8] <- NA
+midus1$A1SF4I[midus1$A1SF4I==8] <- NA
+midus1$A1SF4J[midus1$A1SF4J==8] <- NA
+midus1$A1SF4K[midus1$A1SF4K==8] <- NA
+midus1$A1SF4L[midus1$A1SF4L==8] <- NA
+midus1$A1SF4M[midus1$A1SF4M==8] <- NA
+midus1$A1SF4N[midus1$A1SF4N==8] <- NA
+midus1$A1SF4O[midus1$A1SF4O==8] <- NA
+midus1$A1SF4P[midus1$A1SF4P==8] <- NA
+midus1$A1SF4Q[midus1$A1SF4Q==8] <- NA
+midus1$A1SF4R[midus1$A1SF4R==8] <- NA
+midus1$A1SF4S[midus1$A1SF4S==8] <- NA
+midus1$A1SF4T[midus1$A1SF4T==8] <- NA
+midus1$A1SF4U[midus1$A1SF4U==8] <- NA
+midus1$A1SF4V[midus1$A1SF4V==8] <- NA
+midus1$A1SF4W[midus1$A1SF4W==8] <- NA
+midus1$A1SF4X[midus1$A1SF4X==8] <- NA
+midus1$A1SF4Y[midus1$A1SF4Y==8] <- NA
+midus1$A1SF4Z[midus1$A1SF4Z==8] <- NA
+midus1$A1SF4AA[midus1$A1SF4AA==8] <- NA
+midus1$A1SF4BB[midus1$A1SF4BB==8] <- NA
+midus1$A1SF4CC[midus1$A1SF4CC==8] <- NA
+midus1$A1SF4DD[midus1$A1SF4DD==8] <- NA
 
 
 
@@ -357,7 +392,11 @@ newnames = c('M2ID',
   'Identify with ethnicity','Prefer own ethnicity','Should marry own ethnic',
   'Identify with race','Prefer own race','Should marry own race',
   'US citizen','Identify as American',
-  'Sexual aspects','# sex partners','How much sex','Thought into sex','Heterosexual?'
+  'Sexual aspects','# sex partners','How much sex','Thought into sex','Heterosexual?',
+  'Outgoing','Helpful','Moody','Organized','Selfconfident','Friendly','Warm','Worrying',
+  'Responsible','Forceful','Lively','Caring','Nervous','Creative','Assertive','Hardworking',
+  'Imaginative','Softhearted','Calm','Outspoken','Intelligent','Curious','Active','Careless',
+  'Broadminded','Sympathetic','Talkative','Sophisticated','Adventurous','Dominant'
 )
 
 

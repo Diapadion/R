@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "library(psych)\n\ngetOption(\"max.print\")\noptions(max.print=100000)\noptions(scipen=999)\noptions(digits=3)\n\n\n\n\ncord = corr.test(m1exp, method='spearman',adjust='none')\ncbind(cord$r[,c(2:3)],cord$p[,c(2:3)])\n#cbind(cord$r[,c(1:2,5)],cord$p[,c(1:2,5)])\n\n\n### Filter all variables correlated > p = 0.05 with Agn\n\nfilt.ind = cord$p[,'Agn']<0.051\nm1exp.filt = m1exp[,..filt.ind]\nm1con.filt = m1con[,..filt.ind]\n\n\n\n#table(cord$p[,'Agn']<0.05)\n\n\ncon.cord = corr.test(m1con.filt, method='spearman',adjust='none')\ncbind(con.cord$r[,c(1:2,5)],con.cord$p[,c(1:2,5)])\n\n\n\n\n\n### DO NOT RUN\n\n# con.cord.temp = corr.test(m1con, method='spearman',adjust='none')\n# cbind(con.cord.temp$r[,c(1:2)],con.cord.temp$p[,c(1:2)])\n# \n#  \n# x.male = corr.test(m1exp[m1exp$Sex==1,newnames], method='spearman',adjust='none')\n# x.fema = corr.test(m1exp[m1exp$Sex==2,newnames], method='spearman',adjust='none')\n# \n# cbind(x.male$r[,c(1:2,5)],x.male$p[,c(1:2,5)])\n# cbind(x.fema$r[,c(1:2,5)],x.fema$p[,c(1:2,5)])\n  \n  \n#'   'A1PA25BS','A1PA25BD','A1SBMI',\n#' 'A1PA26','A1PA30A',\n#' 'A1PA1','A1PB3C','A1PB4M','A1PTSEI','A1PB20','A1PC2',\n#' 'A1PF4','A1PF5','A1PF6','A1PF9','A1PF10','A1PF11',    # Ethnicity Qs\n#' 'A1SE11S','A1SE11T','A1SE11U', # Assault, Prison\n#' \n#' 'A1PDEPAF','A1PDEPAF','A1PANHED','A1PANXIE','A1PPANIC','A1SSATIS2','A1SHLOCS','A1SHLOCO','A1SAMPLI',\n#' 'A1SNEGAF','A1SNEGPA','A1SPOSAF','A1SPOSPA','A1SINTAG','A1SPWBA1','A1SPWBE1','A1SPWBG1','A1SPWBR1',\n#' 'A1SPWBU1','A1SPWBS1','A1SPWBA2','A1SPWBE2','A1SPWBG2','A1SPWBR2','A1SPWBU2','A1SMASTE','A1SCONST',\n#' 'A1SCTRL','A1SESTEE','A1SINTER','A1SINDEP',\n#' 'A1SMPQWB','A1SMPQSP','A1SMPQAC','A1SMPQSC','A1SMPQSR','A1SMPQAG','A1SMPQAL','A1SMPQCN','A1SMPQTR',\n#' 'A1SMPQHA','A1SOPTIM','A1SPESSI','A1SPERSI','A1SREAPP','A1SCHANG','A1SDIREC','A1STODAY','A1SINSGH','A1SFORSG',\n#' 'A1SSUFFI','A1SPOSWF','A1SNEGWF','A1SPOSFW','A1SNEGFW','A1SJCSD','A1SJCDA','A1SJCDS','A1SJCCS','A1SJCSS',\n#' 'A1SJOBDI','A1SPIWOR','A1SGENER','A1SSWBMS','A1SSWBSI','A1SSWBAO','A1SSWBSC','A1SSWBSA','A1SSYMP',\n#' 'A1SHOMET','A1SPIHOM','A1SKINPO','A1SKINNE','A1SFDSPO','A1SFDSNE','A1SFDSOL','A1SPIFAM',\n#' 'A1SMARRS','A1SSPDIS','A1SSPEMP','A1SSPCRI','A1SSPSOL','A1SSPDEC','A1SSPIRI',\n#' 'A1SRELSU','A1SSPRTE',\n#' 'A1SLFEDI','A1SDAYDI',\n#' #'A1SEMA'...\n#' 'A1PCHM1N',\n#' 'A1SCHRON',\n#' 'A1SRXMED',\n#' 'A1SBADL2','A1SIADL','A1SDYSPN','A1SWSTHI','A1SBMI','A1SUSEMD','A1SUSEMH','A1SALCOH',\n#' 'A1SG8A','A1SG8B','A1SG8C','A1SRINC1',#'A1SG9AX','A1SG9BX','A1SG9CX','A1SSINC1',\n#' 'A1SEARN1','A1SPNSN1','A1SSEC1','A1STINC1',\n#' \n#' )",
+    "created" : 1506521726556.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3150930690",
+    "id" : "A30E285A",
+    "lastKnownWriteTime" : 1506528430,
+    "last_content_update" : 1506528431444,
+    "path" : "~/GitHub/R/MIDUSdom-ExplConf/correlations.R",
+    "project_path" : "correlations.R",
+    "properties" : {
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

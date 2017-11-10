@@ -3,9 +3,9 @@
 library(lme4)
 library(car)
 library(ggplot2)
-library(glmnet)
 library(arm)
-
+#library(glmnet)
+library(probemod)
 
 
 mSexbyLoc = glm(Sex ~ Facility.x, family=binomial(link="logit"), na.action=na.pass, data=persage)
@@ -16,6 +16,8 @@ stripchart(agenum ~ Facility.x, data=persage, method='jitter', jitter=0.3)
 summary(lm(agenum ~ Facility.x, data=persage))
 # ZX is older
 # (ZX is Davis)
+
+stripchart(fWHR ~ Facility.x, data=fWHR, method='jitter', jitter=0.3)
 
 
 ### Optionals
@@ -29,8 +31,9 @@ summary(lm(agenum ~ Facility.x, data=persage))
 # = untested correlations
 # ===================================================================
 
-cor(fWHR[,c(16:17,25,32:34,93:102)],use='pairwise.complete.obs', method='spearman')
+cormat = cor(fWHR[,c(16:17,25,32:34,93:102)],use='pairwise.complete.obs', method='spearman')
 corrplot(fWHR[,c(16:17,25,32:34,93:102)])
+write.csv(cormat, file='correlatMatrix.csv')
 
 
 
@@ -102,9 +105,18 @@ anova(m0,m1.a1,m1.a2,m1)
 # but it doesn't look like age is very important to rhesus monkeys.
 
 ## Added splits into the young and old monkeys
-m1.o <- lmer(fWHR ~ Age + Age2 + Age3 + (1|Facility.x/Rhesus)
-             , data=fWHR[fWHR$agenum >= 5.5,])
-summary(m1.o)
+
+# m0.o <- lmer(fWHR ~ 1 + (1|Facility.x/Rhesus)
+#              , data=fWHR[fWHR$agenum >= 5.5,])
+# m1.a1.o <- lmer(fWHR ~ Age + (1|Facility.x/Rhesus)
+#              , data=fWHR[fWHR$agenum >= 5.5,])
+# m1.a2.o <- lmer(fWHR ~ Age + Age2 + (1|Facility.x/Rhesus)
+#                 , data=fWHR[fWHR$agenum >= 5.5,])
+# m1.a3.o <- lmer(fWHR ~ Age + Age2 + Age3 + (1|Facility.x/Rhesus)
+#                 , data=fWHR[fWHR$agenum >= 5.5,])
+# anova(m0.o,m1.a1.o,m1.a2.o,m1.a3.o)
+
+
 
 m1.y <- lmer(fWHR ~ Age + Age2 + Age3 + (1|Facility.x/Rhesus)
              , data=fWHR[fWHR$agenum < 5.5,])
@@ -119,6 +131,7 @@ m2 <- lmer(fWHR ~ Sex * Age + Age2 + Age3 + (1|Facility.x/Rhesus)
 
 summary(m2)
 Anova(m2)
+confint(m2)
 # Sex yes, age x sex, no.
 
 ## Young vs. Old
@@ -173,7 +186,7 @@ anova(m3.o,m3.o.x)
 m3.y <- lmer(fWHR ~ Age + Age2 + Age3 + Sex * Dominance.status + (1|Facility.x/Rhesus)
              , data=fWHR[fWHR$agenum < 5.5,])
 summary(m3.y)
-
+confint(m3.y)
 
 
 ### Testing HPQ - 6 dimensions
@@ -182,7 +195,7 @@ m4 <- lmer(fWHR ~ Age + Age2 + Age3 +
            + Confidence + Openness + Dominance + Friendliness + Activity + Anxiety
            + (1|Rhesus), data=fWHR[fWHR$Facility.x=='ZX6012',])
 summary(m4)
-Anova(m4)
+confint(m4)
 
 m0.ZX <- lmer(fWHR ~ 1 + (1|Rhesus), data=fWHR[fWHR$Facility.x=='ZX6012',])
 
@@ -196,12 +209,13 @@ m4.y <- lmer(fWHR ~ Age + Age2 + Age3 +
              + (1|Rhesus), data=fWHR[(fWHR$Facility.x=='ZX6012')&(fWHR$agenum < 5.5),])
 summary(m4.y)
 Anova(m4.y)
+confint(m4.y)
 m4.o <- lmer(fWHR ~ Age + Age2 + Age3 + 
                Sex 
              + Confidence + Openness + Dominance + Friendliness + Activity + Anxiety
              + (1|Rhesus), data=fWHR[(fWHR$Facility.x=='ZX6012')&(fWHR$agenum >= 5.5),])
 summary(m4.o)
-Anova(m4.o)
+confint(m4.o, method='boot')
 
 
 ## Quadratic account?
@@ -223,7 +237,7 @@ m5 <- lmer(fWHR ~ Age + Age2 + Age3 +
            + (1|Facility.x/Rhesus)
            , data=fWHR)
 summary(m5)
-Anova(m5)
+confint(m5)
 
 ## Young vs. Old
 m5.y <- lmer(fWHR ~ Age + Age2 + Age3 + 
@@ -233,7 +247,7 @@ m5.y <- lmer(fWHR ~ Age + Age2 + Age3 +
              , data=fWHR[(fWHR$agenum < 5.5),])
 summary(m5.y)
 Anova(m5.y)
-confint(m5.y, method='boot')
+confint(m5.y, method='profile')
 
 m5.o <- lmer(fWHR ~ Age + Age2 + Age3 + 
                Sex 
@@ -308,7 +322,48 @@ confint(m5.o)
 
 
 
+### *** Testing fWHR ~ Dom + Conf, low end of rank impact
 
+
+#library(rockchalk)
+library(probemod)
+library(plyr)
+
+fWHR.avg = aggregate(fWHR, by=list(fWHR$Rhesus), FUN=mean)
+fWHR.avg$Sex = ddply(fWHR,.(Rhesus,Sex),mean)$Sex
+
+
+           
+
+lm4.y <- lm(fWHR ~ Age + Age2 + Age3 + 
+              Sex 
+            + Confidence + Openness + Dominance + Friendliness + Activity + Anxiety
+            , data=fWHR.avg[(fWHR.avg$agenum < 5.5),],
+            na.action=na.omit)
+summary(lm4.y)
+
+jn4.y = jn(lm4.y, 'fWHR', 'Dominance', 'Dominance.status')
+
+
+
+
+
+m4.y.low <- lmer(fWHR ~ Age + Age2 + Age3 + 
+               Sex 
+             + Confidence + Openness + Dominance + Friendliness + Activity + Anxiety
+             + (1|Rhesus), data=fWHR[(fWHR$Facility.x=='ZX6012')&(fWHR$agenum < 5.5),])
+summary(m4.y)
+Anova(m4.y)
+confint(m4.y)
+
+m4.o.low <- lmer(fWHR ~ Age + Age2 + Age3 + 
+               Sex 
+             + Confidence
+             + (1|Rhesus), data=fWHR[(fWHR$Facility.x=='ZX6012')&(fWHR$agenum >= 5.5)&(!fWHR$Dominance.bin),])
+summary(m4.o)
+confint(m4.o, method='boot')
+
+### ***
 
 
 
@@ -329,7 +384,7 @@ plot(LFFH ~ Dominance.status, data=fWHR[fWHR$Sex=='F',])
 m1.LF <- lmer(LFFH ~  Age + Age2 + Age3 + (1|Facility.x/Rhesus)
               , data=fWHR)
 summary(m1.LF)
-Anova(m1.LF)
+confint(m1.LF)
 # Again, looks like we probably should include all 3, but effect is driven by that old guy.
 
 ## Young vs. Old
@@ -339,6 +394,8 @@ m1.LF.y <- lmer(LFFH ~  Age + Age2 + Age3 + (1|Facility.x/Rhesus)
                 , data=fWHR[fWHR$agenum < 5.5,])
 summary(m1.LF.o)
 summary(m1.LF.y)
+confint(m1.LF.o, method='boot')
+confint(m1.LF.y, method='boot')
 
 
 m0.LF <- lmer(LFFH ~ 1 + (1|Facility.x/Rhesus)
@@ -363,7 +420,7 @@ m2.LF <- lmer(LFFH ~  Sex * Age + Age2 + Age3 + (1|Facility.x/Rhesus)
               , data=fWHR)
 
 summary(m2.LF)
-Anova(m2.LF)
+confint(m2.LF)
 # Neither sex nor interactions.
 
 ## Young vs. Old
@@ -374,8 +431,8 @@ m2.LF.y <- lmer(LFFH ~ Sex * Age + Age2 + Age3 + (1|Facility.x/Rhesus)
                 , data=fWHR[fWHR$agenum < 5.5,])
 summary(m2.LF.o)
 summary(m2.LF.y)
-Anova(m2.LF.o)
-Anova(m2.LF.y)
+confint(m2.LF.o, method='Wald')
+confint(m2.LF.y)
 # No difference in split samples.
 
 
@@ -414,7 +471,7 @@ m4.LF <- lmer(LFFH ~  Age + Age2 + Age3
               + Confidence + Openness + Dominance + Friendliness + Activity + Anxiety
               + (1|Rhesus), data=fWHR[fWHR$Facility.x=='ZX6012',])
 summary(m4.LF)
-Anova(m4.LF)
+confint(m4.LF)
 ## Nothing.
 
 m4.LF.o <- lmer(LFFH ~  Age + Age2 + Age3
@@ -425,8 +482,8 @@ m4.LF.y <- lmer(LFFH ~  Age + Age2 + Age3
                 + (1|Rhesus), data=fWHR[(fWHR$Facility.x=='ZX6012')&(fWHR$agenum < 5.5),])
 summary(m4.LF.o)
 summary(m4.LF.y)
-Anova(m4.LF.o)
-Anova(m4.LF.y)
+confint(m4.LF.o, method='boot')
+confint(m4.LF.y, method='profile')
 
 
 
@@ -436,7 +493,7 @@ m5.LF <- lmer(LFFH ~  Age + Age2 + Age3 +
               + (1|Facility.x/Rhesus)
               , data=fWHR)
 summary(m5.LF)
-Anova(m5.LF)
+confint(m5.LF)
 ## Nothing clear, but maybe Dominance.
 
 m5.LF.o <- lmer(LFFH ~  Age + Age2 + Age3 +
@@ -449,8 +506,8 @@ m5.LF.y <- lmer(LFFH ~  Age + Age2 + Age3 +
                 , data=fWHR[fWHR$agenum < 5.5,])
 summary(m5.LF.o)
 summary(m5.LF.y)
-Anova(m5.LF.o)
-Anova(m5.LF.y)
+confint(m5.LF.o)
+confint(m5.LF.y)
 
 
 
@@ -492,3 +549,32 @@ Anova(m5.LF.y)
 # )
 # summary(m7.LF)
 # plot(m7.LF)
+
+
+
+
+### Afterthoughts ###
+
+
+m.af.1 = lmer(fWHR ~ Age + Age2 + Age3 + 
+                  Sex 
+                + Dominance.status * Short.anx
+                + (1|Facility.x/Rhesus), data=fWHR)
+
+m.af.1 = lmer(fWHR ~ Age + Age2 + Age3 + 
+                Sex 
+              + Dominance.status * Anxiety
+              + (1|Rhesus), data=fWHR)
+
+
+m.af.1.o = lmer(fWHR ~ Age + Age2 + Age3 + 
+                  Sex 
+                + Dominance.status * Short.anx
+                + (1|Facility.x/Rhesus), data=fWHR[(fWHR$agenum >= 5.5),])
+
+
+m.af.1.y = lmer(fWHR ~ Age + Age2 + Age3 + 
+                       Sex 
+                     + Dominance.status * Short.anx
+                     + (1|Facility.x/Rhesus), data=fWHR[(fWHR$agenum < 5.5),])
+summary(m.af.1.y)

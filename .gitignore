@@ -4,3 +4,7 @@
 *.RData
 *.RData
 *.RData
+*.dat
+*.por
+*.zip
+*.Rda

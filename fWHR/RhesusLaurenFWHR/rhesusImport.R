@@ -121,7 +121,7 @@ for (i in seq_len(dim(faces)[1])){
                    ,nrow = 5, ncol = 2)
   
   
-  faces$fWHR[i] = fWHR(points, i)
+  faces$fWHR[i] = calcfWHR(points, i)
   
 }
 
@@ -153,7 +153,7 @@ sum(levels(faces$Rhesus)!=0)
 # c,d: tops of the eyes, it doesn't matter which one is which
 # i: index from for loop
 
-LFFH <- function(a,b,c,d){   # these arguments are coordinates
+calcLFFH <- function(a,b,c,d){   # these arguments are coordinates
   
   # colnames(faces)
   # i = 70
@@ -181,7 +181,7 @@ LFFH <- function(a,b,c,d){   # these arguments are coordinates
 
 
 for (i in seq_len(dim(faces)[1])){
-  faces$LFFH[i] = LFFH(c(faces$A.x[i],faces$A.y[i]),
+  faces$LFFH[i] = calcLFFH(c(faces$A.x[i],faces$A.y[i]),
                        c(faces$B.x[i],faces$B.y[i]),
                        c(faces$C.x[i],faces$C.y[i]),
                        c(faces$D.x[i],faces$D.y[i]))
@@ -206,6 +206,10 @@ fWHR = merge(faces, persage, by.x="Rhesus", by.y="Rhesus", all =T)
 
       
 
+
+table(persage$agenum > 5.5)
+
+
 hist(persage$Dominance.status)
 hist(persage$Dominance.status[persage$agenum < 5.5])
 hist(persage$Dominance.status[(persage$agenum >= 5.5)&(persage$Facility.x=='ZX6012')], breaks=3)
@@ -216,6 +220,7 @@ library(mixtools)
 
 mixture = normalmixEM(persage$Dominance.status[!is.na(persage$Dominance.status)])
 summary(mixture)
+plot(mixture)
 
 index.lower <- which.min(mixture$mu)  # Index of component with lower mean
 

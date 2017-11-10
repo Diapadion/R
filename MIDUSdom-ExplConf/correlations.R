@@ -9,7 +9,7 @@ options(digits=3)
 
 
 cord = corr.test(m1exp, method='spearman',adjust='none')
-cbind(cord$r[,c(1:2)],cord$p[,c(1:2)])
+cbind(cord$r[,c(2:3)],cord$p[,c(2:3)])
 #cbind(cord$r[,c(1:2,5)],cord$p[,c(1:2,5)])
 
 

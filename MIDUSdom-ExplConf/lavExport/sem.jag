@@ -1,0 +1,171 @@
+model {
+  for(i in 1:N) {
+    Selfconfident[i] ~ dnorm(mu[i,1], 1/theta[1,1,g[i]])
+    Forceful[i] ~ dnorm(mu[i,2], 1/theta[2,2,g[i]])
+    Assertive[i] ~ dnorm(mu[i,3], 1/theta[3,3,g[i]])
+    Outspoken[i] ~ dnorm(mu[i,4], 1/theta[4,4,g[i]])
+    Dominant[i] ~ dnorm(mu[i,5], 1/theta[5,5,g[i]])
+    Warm[i] ~ dnorm(mu[i,6], 1/theta[6,6,g[i]])
+    Outgoing[i] ~ dnorm(mu[i,7], 1/theta[7,7,g[i]])
+    Friendly[i] ~ dnorm(mu[i,8], 1/theta[8,8,g[i]])
+    Lively[i] ~ dnorm(mu[i,9], 1/theta[9,9,g[i]])
+    Active[i] ~ dnorm(mu[i,10], 1/theta[10,10,g[i]])
+    Talkative[i] ~ dnorm(mu[i,11], 1/theta[11,11,g[i]])
+    Creative[i] ~ dnorm(mu[i,12], 1/theta[12,12,g[i]])
+    Imaginative[i] ~ dnorm(mu[i,13], 1/theta[13,13,g[i]])
+    Intelligent[i] ~ dnorm(mu[i,14], 1/theta[14,14,g[i]])
+    Curious[i] ~ dnorm(mu[i,15], 1/theta[15,15,g[i]])
+    Broadminded[i] ~ dnorm(mu[i,16], 1/theta[16,16,g[i]])
+    Sophisticated[i] ~ dnorm(mu[i,17], 1/theta[17,17,g[i]])
+    Adventurous[i] ~ dnorm(mu[i,18], 1/theta[18,18,g[i]])
+
+    # lvs
+    eta[i,1:2] ~ dmnorm(mu_eta[i,1:2], ibpsi[1:2,1:2,g[i]])
+  }
+
+  # mu definitions
+  for(i in 1:N) {
+    mu[i,1] <- nu[1,1,g[i]] + lambda[1,1,g[i]]*eta[i,1]
+    mu[i,2] <- nu[2,1,g[i]] + lambda[2,1,g[i]]*eta[i,1]
+    mu[i,3] <- nu[3,1,g[i]] + lambda[3,1,g[i]]*eta[i,1]
+    mu[i,4] <- nu[4,1,g[i]] + lambda[4,1,g[i]]*eta[i,1]
+    mu[i,5] <- nu[5,1,g[i]] + lambda[5,1,g[i]]*eta[i,1]
+    mu[i,6] <- nu[6,1,g[i]] + lambda[6,1,g[i]]*eta[i,1]
+    mu[i,7] <- nu[7,1,g[i]] + lambda[7,1,g[i]]*eta[i,1]
+    mu[i,8] <- nu[8,1,g[i]] + lambda[8,1,g[i]]*eta[i,1]
+    mu[i,9] <- nu[9,1,g[i]] + lambda[9,1,g[i]]*eta[i,1]
+    mu[i,10] <- nu[10,1,g[i]] + lambda[10,1,g[i]]*eta[i,1] + lambda[10,2,g[i]]*eta[i,2]
+    mu[i,11] <- nu[11,1,g[i]] + lambda[11,1,g[i]]*eta[i,1]
+    mu[i,12] <- nu[12,1,g[i]] + lambda[12,2,g[i]]*eta[i,2]
+    mu[i,13] <- nu[13,1,g[i]] + lambda[13,2,g[i]]*eta[i,2]
+    mu[i,14] <- nu[14,1,g[i]] + lambda[14,2,g[i]]*eta[i,2]
+    mu[i,15] <- nu[15,1,g[i]] + lambda[15,2,g[i]]*eta[i,2]
+    mu[i,16] <- nu[16,1,g[i]] + lambda[16,2,g[i]]*eta[i,2]
+    mu[i,17] <- nu[17,1,g[i]] + lambda[17,2,g[i]]*eta[i,2]
+    mu[i,18] <- nu[18,1,g[i]] + lambda[18,2,g[i]]*eta[i,2]
+
+    mu_eta[i,1] <- alpha[1,1,g[i]]
+    mu_eta[i,2] <- alpha[2,1,g[i]]
+  }
+
+  # Assignments from parameter vector & equality constraints
+  lambda[1,1,1] <- 1
+  lambda[2,1,1] <- parvec[1]
+  lambda[3,1,1] <- parvec[2]
+  lambda[4,1,1] <- parvec[3]
+  lambda[5,1,1] <- parvec[4]
+  lambda[6,1,1] <- parvec[5]
+  lambda[7,1,1] <- parvec[6]
+  lambda[8,1,1] <- parvec[7]
+  lambda[9,1,1] <- parvec[8]
+  lambda[10,1,1] <- parvec[9]
+  lambda[11,1,1] <- parvec[10]
+  lambda[12,2,1] <- 1
+  lambda[13,2,1] <- parvec[11]
+  lambda[14,2,1] <- parvec[12]
+  lambda[15,2,1] <- parvec[13]
+  lambda[16,2,1] <- parvec[14]
+  lambda[17,2,1] <- parvec[15]
+  lambda[18,2,1] <- parvec[16]
+  lambda[10,2,1] <- parvec[17]
+  theta[1,1,1] <- pow(parvec[18],-1)
+  theta[2,2,1] <- pow(parvec[19],-1)
+  theta[3,3,1] <- pow(parvec[20],-1)
+  theta[4,4,1] <- pow(parvec[21],-1)
+  theta[5,5,1] <- pow(parvec[22],-1)
+  theta[6,6,1] <- pow(parvec[23],-1)
+  theta[7,7,1] <- pow(parvec[24],-1)
+  theta[8,8,1] <- pow(parvec[25],-1)
+  theta[9,9,1] <- pow(parvec[26],-1)
+  theta[10,10,1] <- pow(parvec[27],-1)
+  theta[11,11,1] <- pow(parvec[28],-1)
+  theta[12,12,1] <- pow(parvec[29],-1)
+  theta[13,13,1] <- pow(parvec[30],-1)
+  theta[14,14,1] <- pow(parvec[31],-1)
+  theta[15,15,1] <- pow(parvec[32],-1)
+  theta[16,16,1] <- pow(parvec[33],-1)
+  theta[17,17,1] <- pow(parvec[34],-1)
+  theta[18,18,1] <- pow(parvec[35],-1)
+  nu[1,1,1] <- parvec[36]
+  nu[2,1,1] <- parvec[37]
+  nu[3,1,1] <- parvec[38]
+  nu[4,1,1] <- parvec[39]
+  nu[5,1,1] <- parvec[40]
+  nu[6,1,1] <- parvec[41]
+  nu[7,1,1] <- parvec[42]
+  nu[8,1,1] <- parvec[43]
+  nu[9,1,1] <- parvec[44]
+  nu[10,1,1] <- parvec[45]
+  nu[11,1,1] <- parvec[46]
+  nu[12,1,1] <- parvec[47]
+  nu[13,1,1] <- parvec[48]
+  nu[14,1,1] <- parvec[49]
+  nu[15,1,1] <- parvec[50]
+  nu[16,1,1] <- parvec[51]
+  nu[17,1,1] <- parvec[52]
+  nu[18,1,1] <- parvec[53]
+  alpha[1,1,1] <- 0
+  alpha[2,1,1] <- 0
+  psi[1,1,1] <- bpsi[1,1,1]
+  psi[2,2,1] <- bpsi[2,2,1]
+  psi[1,2,1] <- bpsi[1,2,1]
+  # Priors
+  parvec[1] ~ dnorm(0,1e-2)
+  parvec[2] ~ dnorm(0,1e-2)
+  parvec[3] ~ dnorm(0,1e-2)
+  parvec[4] ~ dnorm(0,1e-2)
+  parvec[5] ~ dnorm(0,1e-2)
+  parvec[6] ~ dnorm(0,1e-2)
+  parvec[7] ~ dnorm(0,1e-2)
+  parvec[8] ~ dnorm(0,1e-2)
+  parvec[9] ~ dnorm(0,1e-2)
+  parvec[10] ~ dnorm(0,1e-2)
+  parvec[11] ~ dnorm(0,1e-2)
+  parvec[12] ~ dnorm(0,1e-2)
+  parvec[13] ~ dnorm(0,1e-2)
+  parvec[14] ~ dnorm(0,1e-2)
+  parvec[15] ~ dnorm(0,1e-2)
+  parvec[16] ~ dnorm(0,1e-2)
+  parvec[17] ~ dnorm(0,1e-2)
+  parvec[18] ~ dgamma(1,.5)
+  parvec[19] ~ dgamma(1,.5)
+  parvec[20] ~ dgamma(1,.5)
+  parvec[21] ~ dgamma(1,.5)
+  parvec[22] ~ dgamma(1,.5)
+  parvec[23] ~ dgamma(1,.5)
+  parvec[24] ~ dgamma(1,.5)
+  parvec[25] ~ dgamma(1,.5)
+  parvec[26] ~ dgamma(1,.5)
+  parvec[27] ~ dgamma(1,.5)
+  parvec[28] ~ dgamma(1,.5)
+  parvec[29] ~ dgamma(1,.5)
+  parvec[30] ~ dgamma(1,.5)
+  parvec[31] ~ dgamma(1,.5)
+  parvec[32] ~ dgamma(1,.5)
+  parvec[33] ~ dgamma(1,.5)
+  parvec[34] ~ dgamma(1,.5)
+  parvec[35] ~ dgamma(1,.5)
+  parvec[36] ~ dnorm(0,1e-3)
+  parvec[37] ~ dnorm(0,1e-3)
+  parvec[38] ~ dnorm(0,1e-3)
+  parvec[39] ~ dnorm(0,1e-3)
+  parvec[40] ~ dnorm(0,1e-3)
+  parvec[41] ~ dnorm(0,1e-3)
+  parvec[42] ~ dnorm(0,1e-3)
+  parvec[43] ~ dnorm(0,1e-3)
+  parvec[44] ~ dnorm(0,1e-3)
+  parvec[45] ~ dnorm(0,1e-3)
+  parvec[46] ~ dnorm(0,1e-3)
+  parvec[47] ~ dnorm(0,1e-3)
+  parvec[48] ~ dnorm(0,1e-3)
+  parvec[49] ~ dnorm(0,1e-3)
+  parvec[50] ~ dnorm(0,1e-3)
+  parvec[51] ~ dnorm(0,1e-3)
+  parvec[52] ~ dnorm(0,1e-3)
+  parvec[53] ~ dnorm(0,1e-3)
+  for(k in 1:1) {
+    ibpsi[1:2,1:2,k] ~ dwish(iden,3)
+    bpsi[1:2,1:2,k] <- inverse(ibpsi[1:2,1:2,k])
+  }
+
+}

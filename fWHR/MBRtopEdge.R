@@ -45,7 +45,7 @@ points <- matrix(rnorm(5*2), ncol=2)                 # Random (normally distribu
 #mbr <- MBR(points)
 
 
-fWHR <- function(points, i){
+calcfWHR <- function(points, i){
   
   
   

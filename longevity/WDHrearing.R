@@ -3,6 +3,7 @@
 library(survival)
 library(psych)
 library(rms)
+library(parfm)
 
 
 
@@ -65,27 +66,22 @@ survplot(npsurv(yR ~ sex + rearing, data = rear), abbrev.label = T)
 # Where the curves differ (particular re: sex), they aren't parallel, so a Cox model is not appropriate.
 
 
+
 # Right censored survival object
+rear$stat.log = as.numeric(rear$stat.log)
+#table(rear$status)
+rear$stat.log[rear$stat.log==3] = 1
+rear$stat.log[rear$stat.log==2] = 0
+
 yR = Surv(rear$age, rear$stat.log)
-attr(yR, 'type') <- 'right'
+#attr(yR, 'type') <- 'right'
 
 # Model 1: Just rearing characteristics
 m.r.1 = survreg(yR ~ rearing, 
                 data = rear, dist='weibull')
 summary(m.r.1)
-#                         Value Std. Error       z        p
-# (Intercept)            3.1924     0.0535  59.686 0.00e+00
-# rearingNursery-reared  0.1208     0.0673   1.794 7.27e-02
-# rearingWild-caught    -0.0312     0.1699  -0.184 8.54e-01
-# Log(scale)            -0.8784     0.0747 -11.766 5.82e-32
-# 
-# Scale= 0.415 
-# 
-# Weibull distribution
-# Loglik(model)= -372.5   Loglik(intercept only)= -374.2
-# Chisq= 3.5 on 2 degrees of freedom, p= 0.17 
-# Number of Newton-Raphson Iterations: 5 
-# n= 194 
+confint(m.r.1)
+
 
 
 
@@ -93,34 +89,39 @@ summary(m.r.1)
 m.r.2 = survreg(yR ~ sex + rearing, 
                 data = rear, dist='weibull')
 summary(m.r.2)
-#                         Value Std. Error       z        p
-# (Intercept)            3.2751     0.0541  60.548 0.00e+00
-# sex1                  -0.2355     0.0636  -3.706 2.11e-04 *
-# rearingNursery-reared  0.1584     0.0641   2.471 1.35e-02 *
-# rearingWild-caught     0.0254     0.1527   0.166 8.68e-01
-# Log(scale)            -0.9531     0.0762 -12.506 6.92e-36
-# 
-# Scale= 0.386 
-# 
-# Weibull distribution
-# Loglik(model)= -366.3   Loglik(intercept only)= -374.2
-# Chisq= 15.81 on 3 degrees of freedom, p= 0.0012 
-# Number of Newton-Raphson Iterations: 5 
+confint(m.r.2)
+
 
 anova(m.r.1,m.r.2)
 # Model 2 is a better fit.
 
-# Without sex, Nursery-reared is treding toward being significant, but with the addition
-# of sex, which vastly improves the model fit, Nursery-reared is a significant, protective
-# variable.
-
 
 
 # Hazard ratios
-HazRat = exp(coef(m.r.2) * -1 * 1/m.r.2$scale)
-# (Intercept)                  sex1 rearingNursery-reared    rearingWild-caught 
-# 0.0002045394          1.8420221556          0.6631340629          0.9362011385 
+HazRat1 = exp(coef(m.r.1) * -1 * 1/m.r.1$scale)
+
+HazRat2 = exp(coef(m.r.2) * -1 * 1/m.r.2$scale)
+
+
 
 # Relative to females, males (1) are ~ 1.84x more likely to die.
 # Relative to Mother-reared individual, Nursery-reared individuals are ~ 66% less likely to die.
 
+
+
+
+
+###### Parametric FM
+
+pf.r.1 = parfm(yR ~ rearing + sex,
+                      data = rear, dist = 'gompertz'
+)
+
+
+mf.r.1 = flexsurvreg(yR ~ rearing, 
+                data = rear, dist='gompertz')
+print(mf.r.1)
+
+mf.r.2 = flexsurvreg(yR ~ rearing + sex, 
+                     data = rear, dist='gompertz')
+print(mf.r.2)

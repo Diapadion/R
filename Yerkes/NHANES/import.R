@@ -2,11 +2,11 @@
 library(SAScii)
 library(psych)
 
-nhanes.bm <- read.SAScii('Z:/NHANES III/DS0010/02231-0010-Data.txt',
-                         'Z:/NHANES III/DS0010/02231-0010-Setup.sas')
+nhanes.bm <- read.SAScii('M:/NHANES III/DS0010/02231-0010-Data.txt',
+                         'M:/NHANES III/DS0010/02231-0010-Setup.sas')
 
-nhanes.ex <- read.SAScii('Z:/NHANES III/exam/DS0002/02231-0002-Data.txt',
-                         'Z:/NHANES III/exam/DS0002/02231-0002-Setup.sas')
+nhanes.ex <- read.SAScii('M:/NHANES III/exam/DS0002/02231-0002-Data.txt',
+                         'M:/NHANES III/exam/DS0002/02231-0002-Setup.sas')
 
 sort( sapply(ls(),function(x){object.size(get(x))}))
 
@@ -124,7 +124,8 @@ sel.nbm$MOPDIF[sel.nbm$MOPDIF == 88] = NA
 
 sel.nbm$EOP[sel.nbm$EOP == 88] = NA
 
-sel.nbm$BOP[sel.nbm$BOP == 88] = NA
+# Removed - see above, not in chimps
+#sel.nbm$BOP[sel.nbm$BOP == 88] = NA
 
 sel.nbm$SGP[sel.nbm$SGP == 888] = NA
 
@@ -232,7 +233,7 @@ all.bm = rbind(all.bm,
                c.bm.m.s)
                  #complete.cases(sel.nbm),])
 
-max(complete.cases)
+#max(complete.cases)
 
 # Non-independent scaling for everything else
 

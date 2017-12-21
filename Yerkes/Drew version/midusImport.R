@@ -1,14 +1,16 @@
 ### MIDUS II data
 
-setwd("C:/Users/s1229179/GitHub/R/Yerkes/Drew version/")
+setwd("M:/GitHub/R/Yerkes/Drew version/")
 #midusIn <- read.table("midus-Data.csv")
 # right now, the manual load of the .rda file is working best for the biomarkers
 # tho I've no idea why
 library(Hmisc)
 library(SAScii)
+
 midusP1 <- read.SAScii('04652-0001-Data.txt','04652-0001-Setup.sas')
 #midusP1 <- read.table("midus-p1.tsv")
 
+# load .rda first
 midusBio <- da29282.0001[da29282.0001$B4ZBLOOD=='(3) COMPLETE',] # complete cases only
 midusBio <- midusBio[midusBio$SAMPLMAJ!='(13) MILWAUKEE',] # don't have access to Milwaukee data
 
@@ -84,5 +86,31 @@ midja_c <- read.csv('comboMIDJApersBio.csv')
 
 
 
+library(psych)
+library(xtable)
 
+
+
+mid.out = xtable(describe(midja_c[
+  ,c('J1SQ1', 'J2CAGE',
+  'J1SAGENC','J1SEXTRA','J1SOPEN','J1SCONS2','J1SAGREE','J1SNEURO',
+  'J2CBMI','J2BCHOL','J2BSCREA','J2CTRIG',
+  'J2CBPS23','J2CBPD23')
+])
+)
+print(mid.out, type='html', file='out.html')
+
+
+
+mid.out = xtable(describe(midus_c[
+  ,c('B1PRSEX', 'B4ZAGE',
+     'B1SAGENC','B1SEXTRA','B1SOPEN','B1SCONS2','B1SAGREE','B1SNEURO',
+     'B4PBMI','B4BCHOL','B4BSCREA','B4BTRIGL',
+     'B4P1GS23','B4P1GD23')
+  ])
+)
+print(mid.out, type='html', file='out.html')
+
+
+describe(as.factor(midja_c[,'J1SQ1']))
 

@@ -276,9 +276,8 @@ confint(m5.y, method='profile')
 m5.o <- lmer(fWHR ~ Age + Age2 + Age3 + 
                Sex 
              + Short.con + Short.opn + Short.dom + Short.anx
-             + (1|Rhesus)
-             #+ (1|Facility.xRhesus)
-             , data=fWHR[(fWHR$Facility.x=='ZX6012')&(fWHR$agenum >= 5.5),])
+             + (1|Facility.x/Rhesus)
+             , data=fWHR[(fWHR$agenum >= 5.5),])
 summary(m5.o)
 Anova(m5.o)
 confint(m5.o)

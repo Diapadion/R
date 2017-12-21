@@ -12,9 +12,9 @@ library(piecewiseSEM)
 
 
 #m <- lmer(....) #model
-m = m5.y
-#range = c(1:2) 
-range = c(1:3)
+m = m4.LF.o
+range = c(1:2) 
+#range = c(1:3)
 
 coefs <- data.frame(coef(summary(m)))
 df.KR <- get_ddf_Lb(m, fixef(m))

@@ -75,7 +75,11 @@ p + facet_wrap(~ Personality, nrow = 2)
 
 ### Testing for correlations between time and personality
 
-pxt.cors = corr.test(as.matrix(Dataset[,c(73:78)]),as.matrix(as.numeric(Dataset$DoB)), 
+dim(as.matrix(Dataset[,c('Ext_CZ','Opn_CZ','Dom_CZ','Neu_CZ','Con_CZ','Agr_CZ')]))
+dim(data.frame(as.numeric(Dataset$DoB)))
+
+pxt.cors = corr.test(x=Dataset[,c('Ext_CZ','Opn_CZ','Dom_CZ','Neu_CZ','Con_CZ','Agr_CZ')],
+                     y=data.frame(as.numeric(Dataset$DoB)), 
                      method = "kendall", adjust='none'
                      , ci=TRUE)
 print(pxt.cors, short=F)

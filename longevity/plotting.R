@@ -1,4 +1,4 @@
-# Plots
+### Plots
 
 library(ggplot2)
 library(tidyr)
@@ -7,9 +7,9 @@ library(grid)
 library(powerSurvEpi)
 
 
-### Power curves
+### Power curves, including full power analyses
 
-n = 200
+n = 201
 pwr.df = data.frame(HR=1:n,Agreeableness=numeric(n),Conscientiousness=numeric(n), Dominance=numeric(n),
                     Extraversion=numeric(n), Neuroticism=numeric(n), Openness=numeric(n))
 j = 0
@@ -21,7 +21,7 @@ for (i in  seq(0.01,2, length.out = n)){
                  Dom_CZ + Ext_CZ + Con_CZ +
                  Agr_CZ + Neu_CZ + Opn_CZ,
                dat=datX, 
-               X1 = Agr_CZ
+               X1 = datX$Agr_CZ
                ,failureFlag = datX$status  ,
                n = 538, theta = i)
   pwr.df$Agreeableness[j] = mod$power
@@ -29,7 +29,7 @@ for (i in  seq(0.01,2, length.out = n)){
                        as.factor(origin) +  
                        Dom_CZ + Ext_CZ + Con_CZ +
                        Agr_CZ + Neu_CZ + Opn_CZ,
-                     dat=datX, X1 = Con_CZ
+                     dat=datX, X1 = datX$Con_CZ
                      ,failureFlag = datX$status ,
                      n = 538, theta = i)
   pwr.df$Conscientiousness[j] = mod$power
@@ -37,7 +37,7 @@ for (i in  seq(0.01,2, length.out = n)){
                        as.factor(origin) +  
                        Dom_CZ + Ext_CZ + Con_CZ +
                        Agr_CZ + Neu_CZ + Opn_CZ,
-                     dat=datX, X1 = Dom_CZ
+                     dat=datX, X1 = datX$Dom_CZ
                      ,failureFlag = datX$status ,
                      n = 538, theta = i)
   pwr.df$Dominance[j] = mod$power
@@ -45,7 +45,7 @@ for (i in  seq(0.01,2, length.out = n)){
                        as.factor(origin) +  
                        Dom_CZ + Ext_CZ + Con_CZ +
                        Agr_CZ + Neu_CZ + Opn_CZ,
-                     dat=datX, X1 = Ext_CZ
+                     dat=datX, X1 = datX$Ext_CZ
                      ,failureFlag = datX$status ,
                      n = 538, theta = i)
   pwr.df$Extraversion[j] = mod$power
@@ -53,7 +53,7 @@ for (i in  seq(0.01,2, length.out = n)){
                        as.factor(origin) +  
                        Dom_CZ + Ext_CZ + Con_CZ +
                        Agr_CZ + Neu_CZ + Opn_CZ,
-                     dat=datX, X1 = Neu_CZ
+                     dat=datX, X1 = datX$Neu_CZ
                      ,failureFlag = datX$status ,
                      n = 538, theta = i)
   pwr.df$Neuroticism[j] = mod$power
@@ -61,7 +61,7 @@ for (i in  seq(0.01,2, length.out = n)){
                        as.factor(origin) +  
                        Dom_CZ + Ext_CZ + Con_CZ +
                        Agr_CZ + Neu_CZ + Opn_CZ,
-                     dat=datX, X1 = Opn_CZ
+                     dat=datX, X1 = datX$Opn_CZ
                      ,failureFlag = datX$status ,
                      n = 538, theta = i)
   pwr.df$Openness[j] = mod$power
@@ -71,8 +71,8 @@ pdx = gather(pwr.df, Personality, Power, Agreeableness:Openness)
 
 dat.vline <- data.frame(
   Personality = c('Agreeableness','Conscientiousness','Dominance','Extraversion','Neuroticism','Openness'),
-  #xp = c(0.88, 0.80, 0.89, 0.80, 0.94, 0.98))
-  xp = rep_len(0.7,6))
+  xp = c(0.88, 0.80, 0.89, 0.80, 0.94, 0.98))
+  #xp = rep_len(0.7,6))
 
 pwr.p = ggplot(pdx, aes(x = HR, y= Power, color = Personality)) +
   geom_line(size = 2) + theme_bw() + facet_wrap(facets = 'Personality') + 

@@ -10,7 +10,7 @@ library(bbmle)
 
 
 
-### Spine testing
+### Spline testing
 
 fp.test.sp =  frailtyPenal(Surv(age_pr, age, status) ~ cluster(sample) + 
                              as.factor(sex) + as.factor(origin) +  

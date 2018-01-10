@@ -42,13 +42,13 @@ mp1 <- lmer(fHWR ~ Sex + Age
             ,data = chFP)
 
 summary(mp1)
-confint(mp1)
+confint(mp1, method='profile')
 
 
 
 mp2 <- lmer(fHWR ~ Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ +
               (1 | location) + (1 | ID)
-            ,data = chFP)
+            ,data = chFP[chFP$Sex==0,])
 
 summary(mp2)
 confint(mp2)

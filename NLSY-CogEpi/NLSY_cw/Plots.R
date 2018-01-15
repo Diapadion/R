@@ -1,8 +1,13 @@
 ### Plots demonstrating interaction
 
+library(survival)
 library(Hmisc)
 library(rms)
 library(effects)
+library(ggplot2)
+library(RGraphics)
+library(gridExtra)
+library(survminer)
 
 
 
@@ -25,23 +30,58 @@ table(ht.df$IQtert, ht.df$SAMPLE_SEX)
 
 ### Kaplan-Meier plots
 
-npsf.1 = npsurv(y ~ IQtert, data=ht.df)
+npsf.1 = npsurv(y ~ IQquart, data=ht.df)
 
 par(mfrow=c(1,1))
-survplot(npsf.1, xlab = 'Age')
+survplot(npsf.1, xlab = 'Age', ylim=c(0.6,1),xlim=c(15,59), label.curves=F)
 
 
 npsf.m = npsurv(y[ht.df$SAMPLE_SEX=='MALE',] ~ IQtert, data=ht.df[ht.df$SAMPLE_SEX=='MALE',])
 npsf.f = npsurv(y[ht.df$SAMPLE_SEX=='FEMALE',] ~ IQtert, data=ht.df[ht.df$SAMPLE_SEX=='FEMALE',])
 
 par(mfrow=c(1,2))
-survplot(npsf.m, xlab = 'Age',ylim=c(0.5,1),xlim=c(15,59), label.curves=F)
-survplot(npsf.f, xlab = 'Age',ylim=c(0.5,1),xlim=c(15,59), label.curves=F)
+
+survplot(npsf.m, xlab = 'Age',ylim=c(0.6,1),xlim=c(15,59), label.curves=F,col='cornflowerblue'
+         
+         )
+
+survplot(npsf.f, xlab = 'Age',ylim=c(0.6,1),xlim=c(15,59), label.curves=F,col = 'coral2',
+           add=TRUE)
+
+
+# Create new categorical variable combining sex and tertiles
+
+ht.df$sex_tert = interaction(ht.df$SAMPLE_SEX,ht.df$IQtert)
+
+levels(ht.df$sex_tert) <- c('M-Low','F-Low','M-Mid','F-Mid','M-High','F-High')
+
+npsf.2 = npsurv(y ~ sex_tert, data=ht.df)
+survplot(npsf.2, xlab='Age',ylab='Probability of developing hypertension',ylim=c(0.6,1),xlim=c(15,59),
+         label.curves=F, col=c('skyblue3','coral2','skyblue3','coral2','skyblue3','coral2')
+         , col.fill=c('skyblue','coral','skyblue','coral','skyblue','coral')
+         , lty = c(1,1,2,2,3,3)
+)
 
 
 
+## ggplot attempt
+
+ggfit = survfit(y ~ sex_tert, data=ht.df)
+
+ggsurvplot(ggfit, conf.int=T,censor=F
+           , linetype = c(1,1,2,2,3,3)
+           #, color = c(1,2,1,2,1,2)
+           , palette = c('dodgerblue','violetred1','dodgerblue','violetred1','dodgerblue','violetred1')
+           , legend = c(0.2, 0.2) #'none'
+           ) + 
+  coord_cartesian(xlim=c(15,58),ylim=c(0.6,1.0))+
+  xlab('Age')+ylab('Proportion that remains normotensive')+
+  scale_x_continuous(limits = c(15,58), breaks=seq(15,57,6))
+
+  #theme(axis.title.y='Risk of developing hypertension', axis.title.x='Age')
 
 
+seq(15,57,6)
 
 
 int.eff = allEffects(mod = t.lm2)

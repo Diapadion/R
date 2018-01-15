@@ -22,10 +22,10 @@ chFP = chFP[!is.na(chFP$fHWR),]
 #levels(chFP$ID) <- tolower(levels(chFP$ID))
 
 
+### TODO this?
+### Aggregate face measurements first
 
-### Aggregate face measurements first?
-
-chFP <- aggregate(cbind(fHWR,Sex)~ID+location, chFP, mean) # need Yerkes/Bastrop ages, then Age can go back into LS
+#chFP <- aggregate(cbind(fHWR,Sex)~ID+location, chFP, mean) # need Yerkes/Bastrop ages, then Age can go back into LS
 # not strictly necessay with MLM, but averaging is better for consistency
 
 #chFP <- aggregate(chFP, by = list(chFP$ID), FUN = mean)
@@ -193,3 +193,24 @@ chFP <- merge(chFP,cPers, by.x= "ID", "chimp")
 # remove Yerkes
 chFP <- chFP[chFP$location!='Yerkes',]
 
+
+
+### Merge face with subspecies data
+
+subsp = read.csv(file = "SPLambeth_species-DOB_JapanEdi.csv", header=T)
+
+#chFPbak = chFP # 289 lines, 307 lines with Yerkes
+#chFP = chFPbak
+
+chFP <- merge(chFP,subsp[,c(1,2)], by.x='ID', by.y='Name')
+
+
+
+### Renaming
+
+colnames(chFP)[colnames(chFP) == 'fHWR'] <- 'fWHR'
+
+
+
+
+write.csv(chFP, 'chimpFacesPersDemos.csv')

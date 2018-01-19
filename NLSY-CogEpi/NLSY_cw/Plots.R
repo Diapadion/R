@@ -94,6 +94,12 @@ plot(int.eff)
 
 
 
+### Hypertension and medication plots
+
+boxplot(AFQT89 ~ BP.meds.2012 * SAMPLE_SEX, data=ht.df)
+
+
+
 #######
 
 

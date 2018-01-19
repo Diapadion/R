@@ -90,7 +90,7 @@ ht.df$DOB = as.Date(paste3(paste0('19',as.numeric(levels(ht.df$DOB_year))[ht.df$
 
 ht.df$HTdiagDate = ht.df$HTage50t
 ht.df$HTage50t = as.numeric(ht.df$HTage50t)
-ht.df$HTage50t = ht.df$HTage50t/365
+ht.df$HTage50t = ht.df$HTage50t/365.25
 
 
 
@@ -99,6 +99,70 @@ ht.df$HTage50t = ht.df$HTage50t/365
 indxs = which(as.numeric(ht.df$DOB) == as.numeric(ht.df$HTdiagDate))
 
 ht.df = ht.df[-indxs,]
+
+
+
+### Currently provisional - HT medication status and Dr visits ###
+
+HTmed = read.csv('HTmed.csv')
+
+colnames(HTmed)[c(6:21)] = 
+  c('M.BPmeasured.2008','M.BPmeds.2008','F.BPmeasured.2008','F.BPmeds.2008',
+    'M.BPmeasured.2010','M.BPmeds.2010','F.BPmeasured.2010','F.BPmeds.2010',
+    'M.BPmeasured.2012','M.BPmeds.2012','F.BPmeasured.2012','F.BPmeds.2012',
+    'M.BPmeasured.2014','M.BPmeds.2014','F.BPmeasured.2014','F.BPmeds.2014'
+    )
+
+# Measurements taken
+HTmed$BP.measured.2008 = numeric(length=dim(HTmed)[1])
+HTmed$BP.measured.2008[HTmed$R0214800==1] = HTmed$M.BPmeasured.2008[HTmed$R0214800==1]
+HTmed$BP.measured.2008[HTmed$R0214800==2] = HTmed$F.BPmeasured.2008[HTmed$R0214800==2]
+HTmed$BP.measured.2008[HTmed$BP.measured.2008<0] = NA
+
+HTmed$BP.measured.2010 = numeric(length=dim(HTmed)[1])
+HTmed$BP.measured.2010[HTmed$R0214800==1] = HTmed$M.BPmeasured.2010[HTmed$R0214800==1]
+HTmed$BP.measured.2010[HTmed$R0214800==2] = HTmed$F.BPmeasured.2010[HTmed$R0214800==2]
+HTmed$BP.measured.2010[HTmed$BP.measured.2010<0] = NA
+
+HTmed$BP.measured.2012 = numeric(length=dim(HTmed)[1])
+HTmed$BP.measured.2012[HTmed$R0214800==1] = HTmed$M.BPmeasured.2012[HTmed$R0214800==1]
+HTmed$BP.measured.2012[HTmed$R0214800==2] = HTmed$F.BPmeasured.2012[HTmed$R0214800==2]
+HTmed$BP.measured.2012[HTmed$BP.measured.2012<0] = NA
+
+HTmed$BP.measured.2014 = numeric(length=dim(HTmed)[1])
+HTmed$BP.measured.2014[HTmed$R0214800==1] = HTmed$M.BPmeasured.2014[HTmed$R0214800==1]
+HTmed$BP.measured.2014[HTmed$R0214800==2] = HTmed$F.BPmeasured.2014[HTmed$R0214800==2]
+HTmed$BP.measured.2014[HTmed$BP.measured.2014<0] = NA
+
+# Taking medication
+HTmed$BP.meds.2008 = numeric(length=dim(HTmed)[1])
+HTmed$BP.meds.2008[HTmed$R0214800==1] = HTmed$M.BPmeds.2008[HTmed$R0214800==1]
+HTmed$BP.meds.2008[HTmed$R0214800==2] = HTmed$F.BPmeds.2008[HTmed$R0214800==2]
+HTmed$BP.meds.2008[HTmed$BP.meds.2008<0] = NA
+
+HTmed$BP.meds.2010 = numeric(length=dim(HTmed)[1])
+HTmed$BP.meds.2010[HTmed$R0214800==1] = HTmed$M.BPmeds.2010[HTmed$R0214800==1]
+HTmed$BP.meds.2010[HTmed$R0214800==2] = HTmed$F.BPmeds.2010[HTmed$R0214800==2]
+HTmed$BP.meds.2010[HTmed$BP.meds.2010<0] = NA
+
+HTmed$BP.meds.2012 = numeric(length=dim(HTmed)[1])
+HTmed$BP.meds.2012[HTmed$R0214800==1] = HTmed$M.BPmeds.2012[HTmed$R0214800==1]
+HTmed$BP.meds.2012[HTmed$R0214800==2] = HTmed$F.BPmeds.2012[HTmed$R0214800==2]
+HTmed$BP.meds.2012[HTmed$BP.meds.2012<0] = NA
+
+HTmed$BP.meds.2014 = numeric(length=dim(HTmed)[1])
+HTmed$BP.meds.2014[HTmed$R0214800==1] = HTmed$M.BPmeds.2014[HTmed$R0214800==1]
+HTmed$BP.meds.2014[HTmed$R0214800==2] = HTmed$F.BPmeds.2014[HTmed$R0214800==2]
+HTmed$BP.meds.2014[HTmed$BP.meds.2014<0] = NA
+
+
+### Merge into ht.df
+
+ht.df = merge(ht.df, HTmed[c(
+  'BP.measured.2008','BP.measured.2010','BP.measured.2012','BP.measured.2014',
+  'BP.meds.2008','BP.meds.2010','BP.meds.2012','BP.meds.2014','R0000100'
+  )], 
+              by.x='CASEID_1979', by.y='R0000100')
 
 
 

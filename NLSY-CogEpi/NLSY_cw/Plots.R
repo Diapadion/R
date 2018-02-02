@@ -64,7 +64,7 @@ survplot(npsf.2, xlab='Age',ylab='Probability of developing hypertension',ylim=c
 
 
 
-## ggplot attempt
+### ggplot attempt - this is the pub plot
 
 ggfit = survfit(y ~ sex_tert, data=ht.df)
 
@@ -79,6 +79,121 @@ ggsurvplot(ggfit, conf.int=T,censor=F
   scale_x_continuous(limits = c(15,58), breaks=seq(15,57,6))
 
   #theme(axis.title.y='Risk of developing hypertension', axis.title.x='Age')
+
+
+# Try with only values with income var - why won't it work?
+ggfit = survfit(y[complete.cases(ht.df$SES_Income_USE)] ~ sex_tert, data=ht.df[complete.cases(ht.df$SES_Income_USE),])
+
+ggsurvplot(ggfit, conf.int=T,censor=F
+           , linetype = c(1,1,2,2,3,3)
+           #, color = c(1,2,1,2,1,2)
+           , palette = c('dodgerblue','violetred1','dodgerblue','violetred1','dodgerblue','violetred1')
+           , legend = c(0.2, 0.2) #'none'
+) + 
+  coord_cartesian(xlim=c(15,58),ylim=c(0.6,1.0))+
+  xlab('Age')+ylab('Proportion that remains normotensive')+
+  scale_x_continuous(limits = c(15,58), breaks=seq(15,57,6))
+
+
+
+
+### Attempt to residualize Income on IQ
+
+IQinc.lm <- lm(AFQT89 ~ SES_Income_USE, data = ht.df, na.action=na.exclude)
+ht.df$IQresids = residuals(IQinc.lm)
+ht.df$IQtertRs <- with(ht.df,cut(IQresids, 
+                               breaks=quantile(IQresids, probs=seq(0,1, by=1/3), na.rm=TRUE), 
+                               include.lowest=TRUE))
+ht.df$sex_tertRs = interaction(ht.df$SAMPLE_SEX,ht.df$IQtertRs)
+levels(ht.df$sex_tertRs) <- c('M-Low','F-Low','M-Mid','F-Mid','M-High','F-High')
+
+ggfit2 = survfit(y ~ sex_tertRs, data=ht.df)
+
+ggsurvplot(ggfit2, conf.int=T,censor=F
+           , linetype = c(1,1,2,2,3,3)
+           #, color = c(1,2,1,2,1,2)
+           , palette = c('dodgerblue','violetred1','dodgerblue','violetred1','dodgerblue','violetred1')
+           , legend = c(0.2, 0.2) #'none'
+) + 
+  coord_cartesian(xlim=c(15,58),ylim=c(0.5,1.0))+
+  xlab('Age')+ylab('Proportion that remains normotensive')+
+  scale_x_continuous(limits = c(15,58), breaks=seq(15,57,6))
+
+
+
+ggfit3 = survfit(Surv(recordTime,hasHT) ~ IQtertRs, data=ht.df)
+
+ggsurvplot(ggfit3, conf.int=T,censor=F
+           , linetype = c(1,1,2,2,3,3)
+           #, color = c(1,2,1,2,1,2)
+           , palette = c('dodgerblue','violetred1','dodgerblue','violetred1','dodgerblue','violetred1')
+           , legend = c(0.2, 0.2) #'none'
+) +
+  coord_cartesian(xlim=c(15,58),ylim=c(0.5,1.0))+
+  xlab('Age')+ylab('Proportion that remains normotensive')+
+  scale_x_continuous(limits = c(15,58), breaks=seq(15,57,6))
+  
+
+
+ggfit4 = survfit(Surv(recordTime,hasHT) ~ IQtertRs, data=ht.df[ht.df$SAMPLE_SEX=='MALE',])
+
+ggsurvplot(ggfit4, conf.int=T,censor=F
+           , linetype = c(1,1,2,2,3,3)
+           #, color = c(1,2,1,2,1,2)
+           , palette = c('dodgerblue','violetred1','dodgerblue','violetred1','dodgerblue','violetred1')
+           , legend = c(0.2, 0.2) #'none'
+) + 
+  coord_cartesian(xlim=c(15,58),ylim=c(0.5,1.0))+
+  xlab('Age')+ylab('Proportion that remains normotensive')+
+  scale_x_continuous(limits = c(15,58), breaks=seq(15,57,6))
+
+
+
+
+
+IQinc.lm <- lm(AFQT89 ~ indiv_income, data = ht.df, na.action=na.exclude)
+ht.df$IQresids = residuals(IQinc.lm)
+ht.df$IQtertRs <- with(ht.df,cut(IQresids, 
+                                 breaks=quantile(IQresids, probs=seq(0,1, by=1/3), na.rm=TRUE), 
+                                 include.lowest=TRUE))
+ht.df$sex_tertRs = interaction(ht.df$SAMPLE_SEX,ht.df$IQtertRs)
+levels(ht.df$sex_tertRs) <- c('M-Low','F-Low','M-Mid','F-Mid','M-High','F-High')
+ggfit2 = survfit(y ~ sex_tertRs, data=ht.df)
+
+ggsurvplot(ggfit2, conf.int=T,censor=F
+           , linetype = c(1,1,2,2,3,3)
+           #, color = c(1,2,1,2,1,2)
+           , palette = c('dodgerblue','violetred1','dodgerblue','violetred1','dodgerblue','violetred1')
+           , legend = c(0.2, 0.2) #'none'
+) + 
+  coord_cartesian(xlim=c(15,58),ylim=c(0.5,1.0))+
+  xlab('Age')+ylab('Proportion that remains normotensive')+
+  scale_x_continuous(limits = c(15,58), breaks=seq(15,57,6))
+
+
+
+
+cph.adj = coxph(y ~ sex_tert + SES_Income_USE,
+              data = ht.df)
+summary(cph.adj)
+
+hist(ht.df$SES_Income_USE)
+hist(ht.df$indiv_income)
+sum(table(ht.df$indiv_income))
+
+
+mysurv <- survfit(cph.adj, 
+                  newdata=data.frame(sex_tert=ht.df$sex_tert,
+                                     SES_Income_USE=-1
+                                     ))
+plot(mysurv)
+
+
+
+
+  
+
+
 
 
 seq(15,57,6)

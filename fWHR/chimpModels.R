@@ -177,7 +177,12 @@ summary(mp4.f)
 summary(mp4.m)
 
 confint(mp4.f, method='profile')
+confint(mp4.f, method='boot')
+
 confint(mp4.m, method='profile')
+confint(mp4.m, method='boot')
+
+
 
 # VERUS
 # The + assoc /w D in females is not very strong, it actually appears to be greater and - in males;

@@ -2,14 +2,34 @@ library(survival)
 library(eha)
 library(survminer)
 library(rms)
+library(ggplot2)
+
 
 
 
 ### getting the survival analyses setup
 
 
-y = Surv(as.numeric(ht.df$HTdiagDate-ht.df$DOB)/365.25, ht.df$hasHT)
+ht.df$recordTime = as.numeric(ht.df$HTdiagDate-ht.df$DOB)/365.25
+y = Surv(ht.df$recordTime, ht.df$hasHT)
 
+
+
+# cor(ht.df$AFQT89, as.numeric(ht.df$age_1979), use='pairwise.complete.obs', method='spearman')
+
+ggplot(ht.df,aes(y=AFQT89,x=age_1979)) + stat_binhex()
+ggplot(ht.df,aes(y=Child_SES,x=age_1979)) + stat_binhex()
+ggplot(ht.df,aes(y=Adult_SES,x=age_1979)) + stat_binhex()
+ggplot(ht.df,aes(y=SES_Income_USE,x=age_1979)) + stat_binhex()
+
+ggplot(ht.df,aes(y=AFQT89,x=SES_Income_USE)) + stat_binhex()
+ggplot(ht.df,aes(y=AFQT89,x=indiv_income)) + stat_binhex()
+
+ggplot(ht.df,aes(y=AFQT89,x=bmi_85)) + stat_binhex()
+ggplot(ht.df,aes(y=AFQT89,x=bmi_06)) + stat_binhex()
+
+summary(lm(bmi_85 ~ SAMPLE_SEX*AFQT89, data=ht.df))
+summary(lm(bmi_06 ~ SAMPLE_SEX*AFQT89, data=ht.df))
 
 
 
@@ -28,8 +48,9 @@ y = Surv(as.numeric(ht.df$HTdiagDate-ht.df$DOB)/365.25, ht.df$hasHT)
 # Are assumptions valid...?
 # Useful: http://www.sthda.com/english/wiki/cox-model-assumptions
 
-cph.0 = coxph(y ~ SAMPLE_SEX + AFQT89,
+cph.0 = coxph(y ~ SAMPLE_SEX + AFQT89 + age_1979,
               data = ht.df)
+summary(cph.0)
 
 test.ph.0 = cox.zph(cph.0)
 ggcoxzph(test.ph.0)
@@ -40,28 +61,28 @@ survplot(test.fit.0, loglog=T)
 
 
 
-cph.1 = coxph(y ~ SAMPLE_SEX * AFQT89,
+cph.1 = coxph(y ~ SAMPLE_SEX * AFQT89 + age_1979,
               data = ht.df)
 
 summary(cph.1)
 
 
 
-cph.2 = coxph(y ~ SAMPLE_SEX * AFQT89 + Child_SES,
+cph.2 = coxph(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES,
               data = ht.df)
 
 summary(cph.2)
 
 
 
-cph.3 = coxph(y ~ SAMPLE_SEX * AFQT89 + Child_SES + Adult_SES,
+cph.3 = coxph(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES + Adult_SES,
               data = ht.df)
 
 summary(cph.3)
 
 
 
-cph.4 = coxph(y ~ SAMPLE_SEX * AFQT89 + Child_SES + 
+cph.4 = coxph(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES + 
                 SES_Income_USE
                 #SES_Education_USE
                 #SES_OccStatus_USE
@@ -86,60 +107,406 @@ summary(cph.7)
 #attr(y,'type') <- 'right'
 
 
-aft.0 = survreg(y ~ SAMPLE_SEX + AFQT89,
-                data = ht.df)
-summary(aft.0)
+# aft.0.ll = survreg(y ~ SAMPLE_SEX + AFQT89 + age_1979,
+#                 data = ht.df, dist='loglogistic')
+# confint(aft.0.ll)
 
 
-aft.0 = aftreg(y ~ SAMPLE_SEX + AFQT89,
+aft.0.ll = aftreg(y ~ SAMPLE_SEX + AFQT89 + age_1979,
+               data = ht.df, #dist='gompertz')
+               dist = 'loglogistic')
+summary(aft.0.ll)
+
+aft.0.g = aftreg(y ~ SAMPLE_SEX + AFQT89 + age_1979,
+                  data = ht.df, dist='gompertz')
+
+aft.0.w = aftreg(y ~ SAMPLE_SEX + AFQT89 + age_1979,
+                 data = ht.df, dist='weibull')
+
+aft.0.ev = aftreg(y ~ SAMPLE_SEX + AFQT89 + age_1979,
+                 data = ht.df, dist='ev')
+
+aft.0.ln = aftreg(y ~ SAMPLE_SEX + AFQT89 + age_1979,
+                 data = ht.df, dist='lognormal')
+
+extractAIC(aft.0.ll)
+extractAIC(aft.0.g)
+extractAIC(aft.0.w)
+extractAIC(aft.0.ev)
+extractAIC(aft.0.ln)
+
+print(aft.0.ll)
+
+
+aft.1.ll = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979,
+                 data = ht.df, dist='loglogistic') #'gompertz')
+
+aft.1.g = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979,
                data = ht.df, dist='gompertz')
-summary(aft.0)
+
+aft.1.w = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979,
+                 data = ht.df, dist='weibull')
+
+aft.1.ev = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979,
+                 data = ht.df, dist='ev')
+
+aft.1.ln = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979,
+                 data = ht.df, dist='lognormal')
+
+extractAIC(aft.1.ll)
+extractAIC(aft.1.g)
+extractAIC(aft.1.w)
+extractAIC(aft.1.ev)
+extractAIC(aft.1.ln)
+
+# Loglogistic is always better
+
+summary(aft.1.ll)
 
 
-aft.1 = aftreg(y ~ SAMPLE_SEX * AFQT89,
-                 data = ht.df, dist='gompertz')
-summary(aft.1)
 
-
-aft.2 = aftreg(y ~ SAMPLE_SEX * AFQT89 + Child_SES,
-               data = ht.df, dist='gompertz')
+aft.2 = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES,
+               data = ht.df, dist='loglogistic') 
+               #dist = 'gompertz')
 summary(aft.2)
 
 
-aft.3 = aftreg(y ~ SAMPLE_SEX * AFQT89 + Child_SES + Adult_SES, 
-               data = ht.df, dist='gompertz')
+aft.3 = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES + Adult_SES, 
+               data = ht.df, dist='loglogistic')
+               #dist='gompertz')
 summary(aft.3)
+
+extractAIC(aft.3)
 
 
 
 ### Testing sensitivity for Adult_SES components
 
-aft.4 = aftreg(y ~ SAMPLE_SEX * AFQT89 + Child_SES +
+aft.4 = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES +
                  + SES_Income_USE
-               ,data = ht.df, dist='gompertz')
+               ,data = ht.df, dist='loglogistic')
+               #dist='gompertz')
 summary(aft.4)
+extractAIC(aft.4)
 
-aft.4.i = aftreg(y ~ SAMPLE_SEX * AFQT89 + Child_SES +
+
+aft.4.i = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES +
                  + SES_Income_USE * SAMPLE_SEX
-               ,data = ht.df, dist='gompertz')
+               ,data = ht.df, dist='loglogistic')
+               #dist='gompertz')
 summary(aft.4.i)
+confint(aft.4.i)
+
+extractAIC(aft.4.i)
 
 
-aft.5 = aftreg(y ~ SAMPLE_SEX * AFQT89 + Child_SES +
-               + SES_Education_USE*SAMPLE_SEX
-               ,data = ht.df, dist='gompertz')
+aft.5 = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES +
+               + SES_Education_USE#*SAMPLE_SEX
+               ,data = ht.df, dist='loglogistic')
+               #dist='gompertz')
 summary(aft.5)
 
 
-aft.6 = aftreg(y ~ SAMPLE_SEX * AFQT89 + Child_SES +
+aft.6 = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES +
                  + SES_OccStatus_USE#*SAMPLE_SEX
-               ,data = ht.df, dist='gompertz')
+               ,data = ht.df, dist='loglogistic')
+               #dist='gompertz')
 summary(aft.6)
+
+
+aft.7 = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES +
+                 + SES_Income_USE + indiv_income
+               ,data = ht.df, dist='loglogistic')
+summary(aft.7)
+
+# Poor fit, no need for
+# aft.7.0 = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES +
+#                  + indiv_income
+#                ,data = ht.df, dist='loglogistic')
+# summary(aft.7.0)
+
+aft.7.i = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES +
+                 + SES_Income_USE*SAMPLE_SEX + indiv_income
+               ,data = ht.df, dist='loglogistic')
+summary(aft.7.i)
+
+
+
+extractAIC(aft.7)
+extractAIC(aft.4)
+extractAIC(aft.4.i)
+#extractAIC(aft.7.0)
+extractAIC(aft.7.i)
 
 
 
 ### Testing sensitivity of lifestyle factors
 
+aft.8 = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES +
+                 + indiv_income + SES_Income_USE*SAMPLE_SEX 
+                 + bmi_85
+               ,data = ht.df, dist='loglogistic')
+summary(aft.8)
+
+aft.9 = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES +
+                 + indiv_income + SES_Income_USE*SAMPLE_SEX
+                 + bmi_85 + bmi_06 #bmi_diff
+               ,data = ht.df, dist='loglogistic')
+summary(aft.9)
+
+aft.9.alt = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES +
+                 + indiv_income + SES_Income_USE*SAMPLE_SEX
+               + bmi_85 + bmi_diff
+               ,data = ht.df, dist='loglogistic')
+summary(aft.9.alt)
+
+
+
+extractAIC(aft.8)
+extractAIC(aft.9)
+extractAIC(aft.9.alt)
+
+
+
+
+aft.10 = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES +
+                  + indiv_income + SES_Income_USE*SAMPLE_SEX
+                  + bmi_85 + bmi_06*SAMPLE_SEX
+               ,data = ht.df, dist='loglogistic')
+summary(aft.10)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### Old - not used ###
+
+aft.8 = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES +
+                 + SES_Income_USE*SAMPLE_SEX + indiv_income +
+                 Drinks_avgDay
+               ,data = ht.df, dist='loglogistic')
+extractAIC(aft.8)
+extractAIC(aft.7.i)
+summary(aft.8)
+
+
+
+aft.9 = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES +
+                 + SES_Income_USE*SAMPLE_SEX + indiv_income +
+                 Smoked_atLeast100 #+ Smoked_everDaily
+               ,data = ht.df, dist='loglogistic')
+summary(aft.9)
+
+
+
+aft.10 = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES +
+                 + SES_Income_USE*SAMPLE_SEX + indiv_income +
+                 H_activity
+               ,data = ht.df, dist='loglogistic')
+
+summary(aft.10)
+
+
+
+aft.11 = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES +
+                  + SES_Income_USE*SAMPLE_SEX + indiv_income +
+                  H_activity + Drinks_avgDay
+                ,data = ht.df, dist='loglogistic')
+
+summary(aft.11)
+
+
+aft.12 = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES +
+                  + SES_Income_USE*SAMPLE_SEX + indiv_income +
+                  bmi
+                ,data = ht.df, dist='loglogistic')
+
+summary(aft.12)
+
+
+aft.13 = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES +
+                  + SES_Income_USE * SAMPLE_SEX 
+                + indiv_income +
+                  bmi + #Read_nutrition #+ Read_ingredients
+                  Sugary_drink
+                ,data = ht.df, dist='loglogistic')
+
+summary(aft.13)
+
+### end unused segment ###
+
+
+
+### Coefficient and CI values for publication
+
+# Accleration factor is exponentiated coefficient
+
+# Base model (1)
+exp(coefficients(aft.0.ll)[1])
+exp(confint(aft.0.ll)[1,1])
+exp(confint(aft.0.ll)[1,2])
+
+exp(coefficients(aft.0.ll)[2])
+exp(confint(aft.0.ll)[2,1])
+exp(confint(aft.0.ll)[2,2])
+
+exp(coefficients(aft.0.ll)[3])
+exp(confint(aft.0.ll)[3,1])
+exp(confint(aft.0.ll)[3,2])
+
+
+# First interaction model (2)
+exp(coefficients(aft.1.ll)[1])
+exp(confint(aft.1.ll)[1,1])
+exp(confint(aft.1.ll)[1,2])
+
+exp(coefficients(aft.1.ll)[2])
+exp(confint(aft.1.ll)[2,1])
+exp(confint(aft.1.ll)[2,2])
+
+exp(coefficients(aft.1.ll)[3])
+exp(confint(aft.1.ll)[3,1])
+exp(confint(aft.1.ll)[3,2])
+
+exp(coefficients(aft.1.ll)[4])
+exp(confint(aft.1.ll)[4,1])
+exp(confint(aft.1.ll)[4,2])
+
+
+# Adding childhood SES (3)
+exp(coefficients(aft.2)[1])
+exp(confint(aft.2)[1,1])
+exp(confint(aft.2)[1,2])
+
+exp(coefficients(aft.2)[2])
+exp(confint(aft.2)[2,1])
+exp(confint(aft.2)[2,2])
+
+exp(coefficients(aft.2)[3])
+exp(confint(aft.2)[3,1])
+exp(confint(aft.2)[3,2])
+
+exp(coefficients(aft.2)[4])
+exp(confint(aft.2)[4,1])
+exp(confint(aft.2)[4,2])
+
+exp(coefficients(aft.2)[5])
+exp(confint(aft.2)[5,1])
+exp(confint(aft.2)[5,2])
+
+
+# Adding adult SES (4)
+exp(coefficients(aft.3)[1])
+exp(confint(aft.3)[1,1])
+exp(confint(aft.3)[1,2])
+
+exp(coefficients(aft.3)[2])
+exp(confint(aft.3)[2,1])
+exp(confint(aft.3)[2,2])
+
+exp(coefficients(aft.3)[3])
+exp(confint(aft.3)[3,1])
+exp(confint(aft.3)[3,2])
+
+exp(coefficients(aft.3)[4])
+exp(confint(aft.3)[4,1])
+exp(confint(aft.3)[4,2])
+
+exp(coefficients(aft.3)[5])
+exp(confint(aft.3)[5,1])
+exp(confint(aft.3)[5,2])
+
+exp(coefficients(aft.3)[6])
+exp(confint(aft.3)[6,1])
+exp(confint(aft.3)[6,2])
+
+
+# Just income component (5)
+exp(coefficients(aft.4)[1])
+exp(confint(aft.4)[1,1])
+exp(confint(aft.4)[1,2])
+
+exp(coefficients(aft.4)[2])
+exp(confint(aft.4)[2,1])
+exp(confint(aft.4)[2,2])
+
+exp(coefficients(aft.4)[3])
+exp(confint(aft.4)[3,1])
+exp(confint(aft.4)[3,2])
+
+exp(coefficients(aft.4)[4])
+exp(confint(aft.4)[4,1])
+exp(confint(aft.4)[4,2])
+
+exp(coefficients(aft.4)[5])
+exp(confint(aft.4)[5,1])
+exp(confint(aft.4)[5,2])
+
+exp(coefficients(aft.4)[6])
+exp(confint(aft.4)[6,1])
+exp(confint(aft.4)[6,2])
+
+
+# Just education component (6)
+exp(coefficients(aft.5)[1])
+exp(confint(aft.5)[1,1])
+exp(confint(aft.5)[1,2])
+
+exp(coefficients(aft.5)[2])
+exp(confint(aft.5)[2,1])
+exp(confint(aft.5)[2,2])
+
+exp(coefficients(aft.5)[3])
+exp(confint(aft.5)[3,1])
+exp(confint(aft.5)[3,2])
+
+exp(coefficients(aft.5)[4])
+exp(confint(aft.5)[4,1])
+exp(confint(aft.5)[4,2])
+
+exp(coefficients(aft.5)[5])
+exp(confint(aft.5)[5,1])
+exp(confint(aft.5)[5,2])
+
+exp(coefficients(aft.5)[6])
+exp(confint(aft.5)[6,1])
+exp(confint(aft.5)[6,2])
+
+
+# Just education component (7)
+exp(coefficients(aft.6)[1])
+exp(confint(aft.6)[1,1])
+exp(confint(aft.6)[1,2])
+
+exp(coefficients(aft.6)[2])
+exp(confint(aft.6)[2,1])
+exp(confint(aft.6)[2,2])
+
+exp(coefficients(aft.6)[3])
+exp(confint(aft.6)[3,1])
+exp(confint(aft.6)[3,2])
+
+exp(coefficients(aft.6)[4])
+exp(confint(aft.6)[4,1])
+exp(confint(aft.6)[4,2])
+
+exp(coefficients(aft.6)[5])
+exp(confint(aft.6)[5,1])
+exp(confint(aft.6)[5,2])
+
+exp(coefficients(aft.6)[6])
+exp(confint(aft.6)[6,1])
+exp(confint(aft.6)[6,2])
 
 
 ### I'm not sure what is happening below means anything...

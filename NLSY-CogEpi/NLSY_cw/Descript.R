@@ -35,6 +35,12 @@ aggregate(SES_Income_USE ~ SAMPLE_SEX, data=ht.df, FUN=sd)
 sum(ht.df$SAMPLE_SEX=='MALE'&!is.na(ht.df$SES_Income_USE))
 sum(ht.df$SAMPLE_SEX=='FEMALE'&!is.na(ht.df$SES_Income_USE))
 
+# # Individual Income
+aggregate(indiv_income ~ SAMPLE_SEX, data=ht.df, FUN=mean)
+aggregate(indiv_income ~ SAMPLE_SEX, data=ht.df, FUN=sd)
+sum(ht.df$SAMPLE_SEX=='MALE'&!is.na(ht.df$indiv_income))
+sum(ht.df$SAMPLE_SEX=='FEMALE'&!is.na(ht.df$indiv_income))
+
 # Education
 aggregate(SES_Education_USE ~ SAMPLE_SEX, data=ht.df, FUN=mean)
 aggregate(SES_Education_USE ~ SAMPLE_SEX, data=ht.df, FUN=sd)
@@ -79,3 +85,21 @@ aggregate()
 
 
 table(ht.df$SAMPLE_SEX, ht.df$hasHT)
+
+
+
+table(ht.df$indiv_income[ht.df$SAMPLE_SEX=='FEMALE'])
+table(ht.df$indiv_income[ht.df$SAMPLE_SEX=='MALE'])
+
+
+
+
+### Some pub correlations
+
+cor(ht.df$Child_SES, ht.df$AFQT89, use='complete.obs')
+
+cor(ht.df$Adult_SES, ht.df$AFQT89, use='complete.obs')
+
+cor(ht.df$indiv_income, ht.df$AFQT89, use='complete.obs')
+cor(ht.df$SES_Income_USE, ht.df$AFQT89, use='complete.obs')
+

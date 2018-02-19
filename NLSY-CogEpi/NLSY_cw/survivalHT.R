@@ -187,18 +187,7 @@ aft.4 = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES +
                ,data = ht.df, dist='loglogistic')
                #dist='gompertz')
 summary(aft.4)
-extractAIC(aft.4)
-
-
-aft.4.i = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES +
-                 + SES_Income_USE * SAMPLE_SEX
-               ,data = ht.df, dist='loglogistic')
-               #dist='gompertz')
-summary(aft.4.i)
-confint(aft.4.i)
-
-extractAIC(aft.4.i)
-
+  extractAIC(aft.4)
 
 aft.5 = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES +
                + SES_Education_USE#*SAMPLE_SEX
@@ -214,10 +203,22 @@ aft.6 = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES +
 summary(aft.6)
 
 
-aft.7 = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES +
-                 + SES_Income_USE + indiv_income
+ht.df$incIQint = ht.df$SES_Income_USE * (as.numeric(ht.df$SAMPLE_SEX)-1)
+aft.4.i = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES + Adult_SES
+                   + incIQint
+                 ,data = ht.df, dist='loglogistic')
+summary(aft.4.i)
+confint(aft.4.i)
+
+extractAIC(aft.4.i)
+
+
+aft.7 = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES + Adult_SES
+                 + incIQint + indiv_income
                ,data = ht.df, dist='loglogistic')
 summary(aft.7)
+extractAIC(aft.7)
+
 
 # Poor fit, no need for
 # aft.7.0 = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES +
@@ -225,56 +226,52 @@ summary(aft.7)
 #                ,data = ht.df, dist='loglogistic')
 # summary(aft.7.0)
 
-aft.7.i = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES +
-                 + SES_Income_USE*SAMPLE_SEX + indiv_income
+aft.7.i = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES + Adult_SES
+                 + incIQint + indiv_income*SAMPLE_SEX
                ,data = ht.df, dist='loglogistic')
 summary(aft.7.i)
-
-
-
-extractAIC(aft.7)
-extractAIC(aft.4)
-extractAIC(aft.4.i)
-#extractAIC(aft.7.0)
 extractAIC(aft.7.i)
+
+
 
 
 
 ### Testing sensitivity of lifestyle factors
 
-aft.8 = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES +
-                 + indiv_income + SES_Income_USE*SAMPLE_SEX 
+aft.8 = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES + Adult_SES
+               + incIQint + indiv_income
                  + bmi_85
                ,data = ht.df, dist='loglogistic')
 summary(aft.8)
+extractAIC(aft.8)
 
-aft.9 = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES +
-                 + indiv_income + SES_Income_USE*SAMPLE_SEX
+aft.9 = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES + Adult_SES
+               + incIQint + indiv_income
                  + bmi_85 + bmi_06 #bmi_diff
                ,data = ht.df, dist='loglogistic')
 summary(aft.9)
+extractAIC(aft.9)
 
-aft.9.alt = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES +
-                 + indiv_income + SES_Income_USE*SAMPLE_SEX
-               + bmi_85 + bmi_diff
+
+
+aft.9.alt = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES + Adult_SES
+                   + incIQint + indiv_income
+               + bmi_06
                ,data = ht.df, dist='loglogistic')
 summary(aft.9.alt)
-
-
-
-extractAIC(aft.8)
-extractAIC(aft.9)
 extractAIC(aft.9.alt)
 
 
 
 
-aft.10 = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES +
-                  + indiv_income + SES_Income_USE*SAMPLE_SEX
+
+
+aft.10 = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES + Adult_SES
+                + incIQint + indiv_income
                   + bmi_85 + bmi_06*SAMPLE_SEX
                ,data = ht.df, dist='loglogistic')
 summary(aft.10)
-
+extractAIC(aft.10)
 
 
 
@@ -347,166 +344,7 @@ summary(aft.13)
 
 
 
-### Coefficient and CI values for publication
 
-# Accleration factor is exponentiated coefficient
-
-# Base model (1)
-exp(coefficients(aft.0.ll)[1])
-exp(confint(aft.0.ll)[1,1])
-exp(confint(aft.0.ll)[1,2])
-
-exp(coefficients(aft.0.ll)[2])
-exp(confint(aft.0.ll)[2,1])
-exp(confint(aft.0.ll)[2,2])
-
-exp(coefficients(aft.0.ll)[3])
-exp(confint(aft.0.ll)[3,1])
-exp(confint(aft.0.ll)[3,2])
-
-
-# First interaction model (2)
-exp(coefficients(aft.1.ll)[1])
-exp(confint(aft.1.ll)[1,1])
-exp(confint(aft.1.ll)[1,2])
-
-exp(coefficients(aft.1.ll)[2])
-exp(confint(aft.1.ll)[2,1])
-exp(confint(aft.1.ll)[2,2])
-
-exp(coefficients(aft.1.ll)[3])
-exp(confint(aft.1.ll)[3,1])
-exp(confint(aft.1.ll)[3,2])
-
-exp(coefficients(aft.1.ll)[4])
-exp(confint(aft.1.ll)[4,1])
-exp(confint(aft.1.ll)[4,2])
-
-
-# Adding childhood SES (3)
-exp(coefficients(aft.2)[1])
-exp(confint(aft.2)[1,1])
-exp(confint(aft.2)[1,2])
-
-exp(coefficients(aft.2)[2])
-exp(confint(aft.2)[2,1])
-exp(confint(aft.2)[2,2])
-
-exp(coefficients(aft.2)[3])
-exp(confint(aft.2)[3,1])
-exp(confint(aft.2)[3,2])
-
-exp(coefficients(aft.2)[4])
-exp(confint(aft.2)[4,1])
-exp(confint(aft.2)[4,2])
-
-exp(coefficients(aft.2)[5])
-exp(confint(aft.2)[5,1])
-exp(confint(aft.2)[5,2])
-
-
-# Adding adult SES (4)
-exp(coefficients(aft.3)[1])
-exp(confint(aft.3)[1,1])
-exp(confint(aft.3)[1,2])
-
-exp(coefficients(aft.3)[2])
-exp(confint(aft.3)[2,1])
-exp(confint(aft.3)[2,2])
-
-exp(coefficients(aft.3)[3])
-exp(confint(aft.3)[3,1])
-exp(confint(aft.3)[3,2])
-
-exp(coefficients(aft.3)[4])
-exp(confint(aft.3)[4,1])
-exp(confint(aft.3)[4,2])
-
-exp(coefficients(aft.3)[5])
-exp(confint(aft.3)[5,1])
-exp(confint(aft.3)[5,2])
-
-exp(coefficients(aft.3)[6])
-exp(confint(aft.3)[6,1])
-exp(confint(aft.3)[6,2])
-
-
-# Just income component (5)
-exp(coefficients(aft.4)[1])
-exp(confint(aft.4)[1,1])
-exp(confint(aft.4)[1,2])
-
-exp(coefficients(aft.4)[2])
-exp(confint(aft.4)[2,1])
-exp(confint(aft.4)[2,2])
-
-exp(coefficients(aft.4)[3])
-exp(confint(aft.4)[3,1])
-exp(confint(aft.4)[3,2])
-
-exp(coefficients(aft.4)[4])
-exp(confint(aft.4)[4,1])
-exp(confint(aft.4)[4,2])
-
-exp(coefficients(aft.4)[5])
-exp(confint(aft.4)[5,1])
-exp(confint(aft.4)[5,2])
-
-exp(coefficients(aft.4)[6])
-exp(confint(aft.4)[6,1])
-exp(confint(aft.4)[6,2])
-
-
-# Just education component (6)
-exp(coefficients(aft.5)[1])
-exp(confint(aft.5)[1,1])
-exp(confint(aft.5)[1,2])
-
-exp(coefficients(aft.5)[2])
-exp(confint(aft.5)[2,1])
-exp(confint(aft.5)[2,2])
-
-exp(coefficients(aft.5)[3])
-exp(confint(aft.5)[3,1])
-exp(confint(aft.5)[3,2])
-
-exp(coefficients(aft.5)[4])
-exp(confint(aft.5)[4,1])
-exp(confint(aft.5)[4,2])
-
-exp(coefficients(aft.5)[5])
-exp(confint(aft.5)[5,1])
-exp(confint(aft.5)[5,2])
-
-exp(coefficients(aft.5)[6])
-exp(confint(aft.5)[6,1])
-exp(confint(aft.5)[6,2])
-
-
-# Just education component (7)
-exp(coefficients(aft.6)[1])
-exp(confint(aft.6)[1,1])
-exp(confint(aft.6)[1,2])
-
-exp(coefficients(aft.6)[2])
-exp(confint(aft.6)[2,1])
-exp(confint(aft.6)[2,2])
-
-exp(coefficients(aft.6)[3])
-exp(confint(aft.6)[3,1])
-exp(confint(aft.6)[3,2])
-
-exp(coefficients(aft.6)[4])
-exp(confint(aft.6)[4,1])
-exp(confint(aft.6)[4,2])
-
-exp(coefficients(aft.6)[5])
-exp(confint(aft.6)[5,1])
-exp(confint(aft.6)[5,2])
-
-exp(coefficients(aft.6)[6])
-exp(confint(aft.6)[6,1])
-exp(confint(aft.6)[6,2])
 
 
 ### I'm not sure what is happening below means anything...

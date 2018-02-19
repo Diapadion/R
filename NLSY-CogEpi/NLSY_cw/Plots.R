@@ -192,6 +192,34 @@ plot(mysurv)
 
 
   
+### IQ and BMI plots
+
+BMIQ <- ggplot(ht.df, aes(AFQT89, bmi_85))
+BMIQ + geom_density_2d() + facet_wrap(~ SAMPLE_SEX)
+
+BMIQ <- ggplot(ht.df, aes(AFQT89, bmi_06))
+BMIQ + geom_density_2d() + facet_grid(~ SAMPLE_SEX)
+
+BMIQ <- ggplot(ht.df, aes(AFQT89, bmi_12))
+BMIQ + geom_density_2d() + facet_grid(~ SAMPLE_SEX)
+
+
+### IQ and income plots
+
+IQinc <- ggplot(ht.df,  aes(SES_Income_USE, AFQT89))
+IQinc + geom_density_2d() + facet_wrap(~ SAMPLE_SEX)
+
+IQincind <- ggplot(ht.df, aes(indiv_income, AFQT89))
+IQincind + geom_density_2d() + facet_wrap(~ SAMPLE_SEX)
+
+
+
+### Sex and individual income
+
+hist(ht.df$indiv_income[ht.df$SAMPLE_SEX=='MALE'])
+hist(ht.df$indiv_income[ht.df$SAMPLE_SEX=='FEMALE'])
+
+
 
 
 

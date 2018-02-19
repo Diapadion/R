@@ -214,6 +214,11 @@ ht.df$bmi_diff = scale(ht.df$bmi_diff)
 ### Individual income cleaning and transformation
 
 ht.df$indiv_income[ht.df$indiv_income<0] = NA
+
+## some stats before we scale this
+aggregate(indiv_income ~ SAMPLE_SEX, data=ht.df, FUN=mean)
+
+
 ht.df$indiv_income = scale(sqrt(ht.df$indiv_income))
 
 

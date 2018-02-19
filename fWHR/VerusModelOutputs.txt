@@ -1,0 +1,136 @@
+> summary(mp4.f)
+Linear mixed model fit by REML ['lmerMod']
+Formula: fWHR ~ Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ +  
+    (1 | location) + (1 | ID)
+   Data: chFP[indx & (chFP$Subspecies == "verus" & chFP$Sex == 0), ]
+
+REML criterion at convergence: 20
+
+Scaled residuals: 
+     Min       1Q   Median       3Q      Max 
+-2.00089 -0.68484 -0.09907  0.53187  2.17883 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ ID       (Intercept) 0.00810  0.0900  
+ location (Intercept) 0.03065  0.1751  
+ Residual             0.04532  0.2129  
+Number of obs: 62, groups:  ID, 33; location, 3
+
+Fixed effects:
+            Estimate Std. Error t value
+(Intercept)  1.79097    0.11377  15.742
+Dom_CZ       0.08948    0.05613   1.594
+Ext_CZ       0.01563    0.08032   0.195
+Con_CZ      -0.05850    0.07427  -0.788
+Agr_CZ       0.03367    0.07383   0.456
+Neu_CZ      -0.04260    0.06305  -0.676
+Opn_CZ      -0.01790    0.04802  -0.373
+
+Correlation of Fixed Effects:
+       (Intr) Dom_CZ Ext_CZ Con_CZ Agr_CZ Neu_CZ
+Dom_CZ  0.121                                   
+Ext_CZ -0.023 -0.233                            
+Con_CZ -0.064  0.255  0.407                     
+Agr_CZ  0.030  0.017 -0.719 -0.549              
+Neu_CZ -0.035  0.557  0.299  0.772 -0.414       
+Opn_CZ -0.030 -0.310 -0.507 -0.293  0.559 -0.337
+
+> summary(mp4.m)
+Linear mixed model fit by REML ['lmerMod']
+Formula: fWHR ~ Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ +  
+    (1 | location) + (1 | ID)
+   Data: chFP[indx & (chFP$Subspecies == "verus" & chFP$Sex == 1), ]
+
+REML criterion at convergence: 15.3
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-1.9559 -0.4859 -0.1273  0.4431  2.0046 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ ID       (Intercept) 0.04012  0.2003  
+ location (Intercept) 0.06737  0.2596  
+ Residual             0.03182  0.1784  
+Number of obs: 64, groups:  ID, 31; location, 3
+
+Fixed effects:
+             Estimate Std. Error t value
+(Intercept)  1.702727   0.167183  10.185
+Dom_CZ      -0.178094   0.085765  -2.077
+Ext_CZ      -0.126829   0.173708  -0.730
+Con_CZ      -0.019051   0.128197  -0.149
+Agr_CZ       0.005685   0.103283   0.055
+Neu_CZ      -0.156396   0.076557  -2.043
+Opn_CZ       0.134222   0.124913   1.075
+
+Correlation of Fixed Effects:
+       (Intr) Dom_CZ Ext_CZ Con_CZ Agr_CZ Neu_CZ
+Dom_CZ -0.016                                   
+Ext_CZ -0.197 -0.422                            
+Con_CZ  0.160 -0.055 -0.328                     
+Agr_CZ -0.043  0.410 -0.323 -0.463              
+Neu_CZ  0.139  0.348 -0.312  0.413  0.236       
+Opn_CZ  0.154  0.092 -0.739  0.453 -0.115  0.189
+
+> confint(mp4.f, method='profile')
+Computing profile confidence intervals ...
+                   2.5 %     97.5 %
+.sig01       0.000000000 0.14967947
+.sig02       0.000000000 0.34803668
+.sigma       0.178192125 0.26753845
+(Intercept)  1.794784365 1.92791216
+Dom_CZ       0.008175365 0.20610892
+Ext_CZ      -0.132427898 0.12272582
+Con_CZ      -0.149162855 0.07493944
+Agr_CZ      -0.065399890 0.19159976
+Neu_CZ      -0.123850172 0.06949121
+Opn_CZ      -0.098712612 0.07316400
+
+> confint(mp4.f, method='boot')
+Computing bootstrap confidence intervals ...
+                  2.5 %     97.5 %
+.sig01       0.00000000 0.19957670
+.sig02       0.00000000 0.41816438
+.sigma       0.15337873 0.25059351
+(Intercept)  1.56493077 2.02791526
+Dom_CZ      -0.02675018 0.20898983
+Ext_CZ      -0.13943638 0.17443647
+Con_CZ      -0.20920028 0.09263904
+Agr_CZ      -0.10753617 0.15934317
+Neu_CZ      -0.16501487 0.09074058
+Opn_CZ      -0.12717573 0.08023240
+
+> confint(mp4.m, method='profile')
+Computing profile confidence intervals ...
+                  2.5 %      97.5 %
+.sig01       0.07779975  0.25612958
+.sig02       0.06246343  0.62575035
+.sigma       0.14322512  0.22881822
+(Intercept)  1.33656500  2.03737732
+Dom_CZ      -0.33445053 -0.01900332
+Ext_CZ      -0.45372506  0.18310760
+Con_CZ      -0.24671679  0.21099174
+Agr_CZ      -0.18221122  0.19102970
+Neu_CZ      -0.29580105 -0.01959169
+Opn_CZ      -0.08888618  0.35837230
+
+Warning messages:
+1: In if (parm == "theta_") { :
+  the condition has length > 1 and only the first element will be used
+2: In if (parm == "beta_") { :
+  the condition has length > 1 and only the first element will be used
+> confint(mp4.m, method='boot')
+Computing bootstrap confidence intervals ...
+                  2.5 %       97.5 %
+.sig01       0.08754387  0.310016603
+.sig02       0.00000000  0.575745487
+.sigma       0.13125298  0.213415999
+(Intercept)  1.33706849  2.060388257
+Dom_CZ      -0.35833675 -0.009751236
+Ext_CZ      -0.49170164  0.244261568
+Con_CZ      -0.27087390  0.268141358
+Agr_CZ      -0.19893970  0.207041931
+Neu_CZ      -0.31345167 -0.008873923
+Opn_CZ      -0.13176777  0.402260338

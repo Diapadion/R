@@ -4,6 +4,11 @@ library(lme4)
 library(car)
 library(corrplot)
 library(plyr)
+library(numDeriv)
+library(RCurl)
+library(optimx)
+
+
 
 s <- function(x) {scale(x)}
 
@@ -32,6 +37,8 @@ corrplot(cor(chFP[chFP$Sex==1,c(8,12,13,14,15,16,17),],use="pairwise.complete.ob
 ## Collapse subspecies random effects
 levels(chFP$Subspecies)
 chFP$Subspecies[chFP$Subspecies=='hybrid'] = 'unknown'
+table(chFP$Subspecies)
+table(chFP$Sex[chFP$Subspecies=='verus'])
 
 #chFP$Subspecies[chFP$Subspecies=='unknown'] = NA # DO NOT RUN
 
@@ -166,7 +173,17 @@ confint(mp3.v, method='profile')
 mp4.f = lmer(fWHR ~ Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ +
                (1 | location) + (1 | ID)
              ,data = chFP[indx&(chFP$Subspecies=='verus'&chFP$Sex==0),]
+             ,control=lmerControl(optimizer="Nelder_Mead")
              )
+# Covergence checks
+tt <- getME(mp4.f,"theta")
+ll <- getME(mp4.f,"lower")
+min(tt[ll==0]) # not terrible, but not ideal either
+
+derivs1 <- mp4.f@optinfo$derivs
+sc_grad1 <- with(derivs1,solve(Hessian,gradient))
+max(abs(sc_grad1)) # Fine
+max(pmin(abs(sc_grad1),abs(derivs1$gradient))) # The same - fine.
 
 mp4.m = lmer(fWHR ~ Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ +
                (1 | location) + (1 | ID)
@@ -177,10 +194,55 @@ summary(mp4.f)
 summary(mp4.m)
 
 confint(mp4.f, method='profile')
-confint(mp4.f, method='boot')
+# 2.5 %     97.5 %
+#   .sig01       0.00000000 0.14967947
+# .sig02       0.00000000 0.34803668
+# .sigma       0.17818178 0.26753845
+# (Intercept)  1.61955158 1.91370410
+# Dom_CZ       0.00817667 0.20753487
+# Ext_CZ      -0.13630212 0.12185953
+# Con_CZ      -0.14912258 0.07709833
+# Agr_CZ      -0.06656844 0.19159615
+# Neu_CZ      -0.12393911 0.07226640
+# Opn_CZ      -0.09946781 0.07316191
+#confint(mp4.f, method='boot')
 
 confint(mp4.m, method='profile')
-confint(mp4.m, method='boot')
+# 2.5 %      97.5 %
+#   .sig01       0.07779975  0.25612958
+# .sig02       0.06246343  0.62575035
+# .sigma       0.14322512  0.22881822
+# (Intercept)  1.33656500  2.03737732
+# Dom_CZ      -0.33445053 -0.01900332
+# Ext_CZ      -0.45372506  0.18310760
+# Con_CZ      -0.24671679  0.21099174
+# Agr_CZ      -0.18221122  0.19102970
+# Neu_CZ      -0.29580105 -0.01959169
+# Opn_CZ      -0.08888618  0.35837230
+#confint(mp4.m, method='boot')
+
+
+
+# Trying different optimizers for females model
+
+afurl <- "https://raw.githubusercontent.com/lme4/lme4/master/inst/utils/allFit.R"
+eval(parse(text=getURL(afurl)))
+
+aa <- allFit(mp4.f)
+is.OK <- sapply(aa,is,"merMod")
+aa.OK <- aa[is.OK]
+lapply(aa.OK,function(x) x@optinfo$conv$lme4$messages)
+(lliks <- sort(sapply(aa.OK,logLik)))
+# Any of these seem like they would work in theory
+
+mp4.f.2 <- update(mp4.f,start=ss,control=lmerControl(optimizer="Nelder_Mead"#,
+                                           #optCtrl=list(maxiter=2e5)
+                                           ))
+summary(mp4.f)
+confint(mp4.f.2, method='profile')
+confint(mp4.f.2, method='boot')
+# Nelder-Mead seems to work the best
+# Has been reincorporated above.
 
 
 

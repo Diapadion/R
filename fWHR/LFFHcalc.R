@@ -18,8 +18,17 @@ lffh <- separate(data = lffh, col = G, into = c("G.x", "G.y"), sep = "\\,")
 
 colnames(lffh)
 
-lffh[,15:24] <- data.frame(lapply(lffh[,c('B.x','B.y','G.x','G.y')], 
-                                  function(x) euc.dist(B.x, B.y, G.x, G.y)))
+# lffh[,15:24] <- data.frame(lapply(lffh[,c('B.x','B.y','G.x','G.y')], 
+#                                   function(x) euc.dist(B.x, B.y, G.x, G.y)))
+
+
+lffh$A.x = as.numeric(lffh$A.x)
+lffh$A.y = as.numeric(lffh$A.y)
+lffh$B.x = as.numeric(lffh$B.x)
+lffh$B.y = as.numeric(lffh$B.y)
+lffh$G.x = as.numeric(lffh$G.x)
+lffh$G.y = as.numeric(lffh$G.y)
+
 
 
 i = 0

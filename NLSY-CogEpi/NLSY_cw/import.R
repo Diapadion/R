@@ -174,7 +174,7 @@ ht.df$height_12[ht.df$height_12<32] = NA
 ht.df$height_12[ht.df$inches_12>12] = ht.df$inches_12[ht.df$inches_12>12]
 
 ht.df$bmi_12 = ht.df$weight_12/(ht.df$height_12^2) * 703
-ht.df$bmi_12 = scale(ht.df$bmi_12)
+#ht.df$bmi_12 = scale(ht.df$bmi_12)
 
 
 ## BMI - 1985
@@ -205,9 +205,9 @@ ht.df$bmi_06 = ht.df$weight_06/(ht.df$height_06^2) * 703
 ht.df$bmi_diff = ht.df$bmi_06 - ht.df$bmi_85
 
 
-ht.df$bmi_06 = scale(ht.df$bmi_06)
-ht.df$bmi_85 = scale(ht.df$bmi_85)
-ht.df$bmi_diff = scale(ht.df$bmi_diff)
+# ht.df$bmi_06 = scaleht.df$bmi_06)
+# ht.df$bmi_85 = scale(ht.df$bmi_85)
+# ht.df$bmi_diff = scale(ht.df$bmi_diff)
 
 
 

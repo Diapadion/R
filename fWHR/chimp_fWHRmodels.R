@@ -1,4 +1,4 @@
-### Models of Chimpanzee facial characteristics, age, sex, and personality
+### Models of Chimpanzee LF/FH, age, sex, and personality
 
 library(lme4)
 library(car)
@@ -19,18 +19,18 @@ s <- function(x) {scale(x)}
 chFP = read.csv('chimpFacesPersDemos.csv')
 chFP = chFP[,-1]
 
-chFP = chFP[!is.na(chFP$lffh),]
+chFP = chFP[!is.na(chFP$fWHR),]
 
 
 
 ### zero-order correlation peek
 
 colnames(chFP)
-corrplot(cor(chFP[,c(8,13,14,15,16,17,18),],use="pairwise.complete.obs")
-  ,  method = 'number')
+corrplot(cor(chFP[,c(8,12,13,14,15,16,17),],use="pairwise.complete.obs")
+         ,  method = 'number')
 
-corrplot(cor(chFP[chFP$Sex==0,c(8,13,14,15,16,17,18),],use="pairwise.complete.obs"),  method = 'number')
-corrplot(cor(chFP[chFP$Sex==1,c(8,13,14,15,16,17,18),],use="pairwise.complete.obs"),  method = 'number')
+corrplot(cor(chFP[chFP$Sex==0,c(8,12,13,14,15,16,17),],use="pairwise.complete.obs"),  method = 'number')
+corrplot(cor(chFP[chFP$Sex==1,c(8,12,13,14,15,16,17),],use="pairwise.complete.obs"),  method = 'number')
 # These are useful for interpretation later - note pattern of correlations among D, N, & C
 
 
@@ -49,11 +49,11 @@ table(chFP$Sex[chFP$Subspecies=='verus'])
 
 ## Base: just subspecies random effects
 
-m0.lf <- lmer(lffh ~ 1 +
+m0 <- lmer(fWHR ~ 1 +
              (1 | location) + (1 | Subspecies) + (1 | ID:Subspecies)
            ,data=chFP
            #,data = chFP[chFP$Age>7,]
-           )
+)
 summary(m0)
 confint(m0,method='profile')
 
@@ -62,20 +62,20 @@ ranef(m0)
 
 
 # basic age,sex index:
-adults = (chFP$Sex==0 & chFP$Age>7) | (chFP$Sex==1 & chFP$Age>9) | (chFP$ID == 'Gage')
-adults[is.na(adults)] = TRUE
+indx = (chFP$Sex==0 & chFP$Age>7) | (chFP$Sex==1 & chFP$Age>9) | (chFP$ID == 'Gage')
+indx[is.na(indx)] = TRUE
 
 
 
 ## Age and Age squared, cubed
 
-m1.lf <- lmer(fWHR ~ s(Age) + s(I(Age^2)) + s(I(Age^3)) +
+m1 <- lmer(fWHR ~ s(Age) + s(I(Age^2)) + s(I(Age^3)) +
              (1 | location) + (1 | Subspecies) + (1 | ID:Subspecies)
            #,data = chFP
-           ,data = chFP[adults,]
-           )
-summary(m1.lf)
-confint(m1.lf, method='profile')
+           ,data = chFP[indx,]
+)
+summary(m1)
+confint(m1, method='profile')
 
 # No age effects. Could it be due to oversampling of older individuals? Does it matter?
 
@@ -84,13 +84,13 @@ confint(m1.lf, method='profile')
 
 
 
-m2.lf <- lmer(lffh ~ Age + Sex +
+m2 <- lmer(fWHR ~ Age*Sex +
              (1 | location) + (1 | Subspecies) + (1 | ID:Subspecies)
            #,data = chFP
-           ,data = chFP[adults,]
-           )
-summary(m2.lf)
-confint(m2.lf, method='profile')
+           ,data = chFP[indx,]
+)
+summary(m2)
+confint(m2, method='profile')
 
 # Again, nothing. Yet more difficult to keep including these.
 
@@ -98,13 +98,13 @@ confint(m2.lf, method='profile')
 
 ### Personality
 
-mp1.lf <- lmer(lffh ~ Age:Sex + Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ +
+mp1 <- lmer(fWHR ~ Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ +
               (1 | location) + (1 | Subspecies) + (1 | ID:Subspecies)
             #,data = chFP
-            ,data = chFP[adults,]
-            )
-summary(mp1.lf)
-confint(mp1.lf, method='profile')
+            ,data = chFP[indx,]
+)
+summary(mp1)
+confint(mp1, method='profile')
 
 # Nothing across the whole sample,
 # but given what we know about T and sex diffs ala LeFevre et al. 2013, EaHB...
@@ -113,21 +113,21 @@ confint(mp1.lf, method='profile')
 
 ## Split by sex
 
-mp2.f.lf <- lmer(lffh ~ Age + Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ +
+mp2.f <- lmer(fWHR ~ Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ +
                 (1 | location) + (1 | Subspecies) + (1 | ID:Subspecies)
-            #,data = chFP[chFP$Sex==0,]
-            ,data = chFP[adults&chFP$Sex==0,]
-            )
+              #,data = chFP[chFP$Sex==0,]
+              ,data = chFP[indx&chFP$Sex==0,]
+)
 
-mp2.m.lf <- lmer(lffh ~ Age + Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ +
+mp2.m <- lmer(fWHR ~ Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ +
                 (1 | location) + (1 | ID:Subspecies) + (1 | Subspecies)
               #,data = chFP[chFP$Sex==1,]
-              ,data = chFP[adults&chFP$Sex==1,]
-            )
+              ,data = chFP[indx&chFP$Sex==1,]
+)
 
 
-summary(mp2.f.lf)
-summary(mp2.m.lf)
+summary(mp2.f)
+summary(mp2.m)
 
 confint(mp2.f, method='profile')
 confint(mp2.m, method='profile')
@@ -142,18 +142,18 @@ confint(mp2.m, method='profile')
 count(chFP$Subspecies)
 
 
-mp3.t.lf = lmer(lffh ~ Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ +
+mp3.t = lmer(fWHR ~ Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ +
                (1 | location) + (1 | ID)
              #,data = chFP[chFP$Subspecies=='troglodytes',]
-             ,data = chFP[adults&chFP$Subspecies=='troglodytes',]
-             )
-        
+             ,data = chFP[indx&chFP$Subspecies=='troglodytes',]
+)
 
-mp3.v.lf = lmer(lffh ~ Age:Sex + Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ +
+
+mp3.v = lmer(fWHR ~ Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ +
                (1 | location) + (1 | ID)
              #,data = chFP[chFP$Subspecies=='verus',]
-             ,data = chFP[adults&chFP$Subspecies=='verus',]
-             )
+             ,data = chFP[indx&chFP$Subspecies=='verus',]
+)
 
 # # Worth doing for unknowns?
 # mp3.u = lmer(fWHR ~ Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ +
@@ -161,8 +161,8 @@ mp3.v.lf = lmer(lffh ~ Age:Sex + Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Op
 #              ,data = chFP[is.na(chFP$Subspecies),])
 # summary(mp3.u) # Nothing.
 
-summary(mp3.t.lf) # Nothing for troglodytes.
-summary(mp3.v.lf)
+summary(mp3.t) # Nothing for troglodytes.
+summary(mp3.v)
 
 confint(mp3.t, method='Wald')
 confint(mp3.v, method='profile')
@@ -173,11 +173,11 @@ confint(mp3.v, method='profile')
 
 ## Verus is the only subspecies with reasonable sample size
 
-mp4.f.lf = lmer(lffh ~ Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ +
+mp4.f = lmer(fWHR ~ Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ +
                (1 | location) + (1 | ID)
-             ,data = chFP[adults&(chFP$Subspecies=='verus'&chFP$Sex==0),]
+             ,data = chFP[indx&(chFP$Subspecies=='verus'&chFP$Sex==0),]
              ,control=lmerControl(optimizer="Nelder_Mead")
-             )
+)
 # Covergence checks
 tt <- getME(mp4.f,"theta")
 ll <- getME(mp4.f,"lower")
@@ -188,13 +188,13 @@ sc_grad1 <- with(derivs1,solve(Hessian,gradient))
 max(abs(sc_grad1)) # Fine
 max(pmin(abs(sc_grad1),abs(derivs1$gradient))) # The same - fine.
 
-mp4.m.lf = lmer(lffh ~ Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ +
+mp4.m = lmer(fWHR ~ Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ +
                (1 | location) + (1 | ID)
-             ,data = chFP[adults&(chFP$Subspecies=='verus'&chFP$Sex==1),]
-             )
+             ,data = chFP[indx&(chFP$Subspecies=='verus'&chFP$Sex==1),]
+)
 
-summary(mp4.f.lf)
-summary(mp4.m.lf)
+summary(mp4.f)
+summary(mp4.m)
 
 confint(mp4.f, method='profile')
 # 2.5 %     97.5 %
@@ -239,8 +239,8 @@ lapply(aa.OK,function(x) x@optinfo$conv$lme4$messages)
 # Any of these seem like they would work in theory
 
 mp4.f.2 <- update(mp4.f,start=ss,control=lmerControl(optimizer="Nelder_Mead"#,
-                                           #optCtrl=list(maxiter=2e5)
-                                           ))
+                                                     #optCtrl=list(maxiter=2e5)
+))
 summary(mp4.f)
 confint(mp4.f.2, method='profile')
 confint(mp4.f.2, method='boot')

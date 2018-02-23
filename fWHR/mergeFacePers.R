@@ -8,16 +8,16 @@ s <- function(x) {scale(x)}
 
 
 ### Import face data
-cPoints = read.csv(file = "ChimpfWHR.csv")
+cPoints = read.csv(file = 'ChimpfWHR-LFFH.csv') #"ChimpfWHR.csv")
 
 chFP <- cPoints[cPoints$fHWR!='N/A',]
-chFP = chFP[,c(1:12)]
+chFP = chFP[,c(1:12,23)]
 
 colnames(chFP)[8] <- 'Age'
 chFP$Sex = as.factor(chFP$Sex)
 chFP$fHWR = as.numeric(as.character(chFP$fHWR))
+chFP$lffh = as.numeric(as.character(chFP$lffh))
 
-chFP = chFP[!is.na(chFP$fHWR),]
 
 #levels(chFP$ID) <- tolower(levels(chFP$ID))
 

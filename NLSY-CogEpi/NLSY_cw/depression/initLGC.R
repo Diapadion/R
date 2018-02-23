@@ -34,27 +34,41 @@ dep$sextert = interaction(dep$SAMPLE_SEX,dep$IQtert)
 table(dep$IQtert, dep$CES.40)
 
 
+
+# Completers only
+dep.long = dep[complete.cases(dep[,c('AFQT89','CES_92','CES_94','CES.40','CES.50')]),]
+
+
 # Long format
 
 dep.long = rbindlist(list(
-  cbind(dep[,c('CASEID_1979','IQtert','sextert','CES_92')],0),
-  cbind(dep[,c('CASEID_1979','IQtert','sextert','CES_94')],2),
-  cbind(dep[,c('CASEID_1979','IQtert','sextert','CES.40')],10),
-  cbind(dep[,c('CASEID_1979','IQtert','sextert','CES.50')],20)
+  cbind(dep[,c('CASEID_1979','SAMPLE_SEX','IQtert','sextert','CES_92')],0),
+  cbind(dep[,c('CASEID_1979','SAMPLE_SEX','IQtert','sextert','CES_94')],2),
+  cbind(dep[,c('CASEID_1979','SAMPLE_SEX','IQtert','sextert','CES.40')],10),
+  cbind(dep[,c('CASEID_1979','SAMPLE_SEX','IQtert','sextert','CES.50')],20)
 ), use.names=FALSE
 
 )
-colnames(dep.long) <- c('id','IQ','sexIQ','CES','time') 
+colnames(dep.long) <- c('id','sex','IQ','sexIQ','CES','time') 
 
 
-ggplot(subset(dep.long, !is.na(CES)&!is.na(IQ)), aes(x=time, y=CES, color=IQ)) + 
+
+# Try discretizing the times
+
+dep.long$time = as.factor(dep.long$time)
+
+
+
+ggplot(subset(dep.long, !is.na(CES)&!is.na(IQ)), aes(x=time, y=CES, group=IQ, color=IQ)) + 
   stat_smooth(method='lm', se=TRUE)
   
-ggplot(subset(dep.long, !is.na(CES)&!is.na(IQ)), aes(x=time, y=CES, color=sexIQ)
-       , linetype = c(1,1,2,2,3,3)
-       , palette = c('dodgerblue','violetred1','dodgerblue','violetred1','dodgerblue','violetred1')
+ggplot(subset(dep.long, !is.na(CES)&!is.na(IQ)), aes(x=time, y=CES, group=sexIQ, color=sexIQ)
+       # , linetype = c(1,1,2,2,3,3)
+       # , palette = c('dodgerblue','violetred1','dodgerblue','violetred1','dodgerblue','violetred1')
        ) + 
-  stat_smooth(method='lm', se=TRUE)
+  stat_smooth(aes(linetype=IQ, color=sex), method='loess', se=TRUE)
+
+
 
   
 
@@ -88,11 +102,11 @@ summary(f1)
 m2 <- '
 d.i =~ 1*CES_92 + 1*CES_94 + 1*CES.40 + 1*CES.50
 d.s =~ 0*CES_92 + 2*CES_94 + 10*CES.40 + 20*CES.50
-#d.q =~ 0*CES_92 + 4*CES_94 + 100*CES.40 + 400*CES.50
+d.q =~ 0*CES_92 + 4*CES_94 + 100*CES.40 + 400*CES.50
 
 d.i ~ AFQT89 + SAMPLE_SEX + age_1979
 d.s ~ AFQT89 + SAMPLE_SEX + age_1979
-#d.q ~ AFQT89 + SAMPLE_SEX + age_1979
+d.q ~ AFQT89 + SAMPLE_SEX + age_1979
 
 '
 
@@ -120,11 +134,11 @@ dep$SexIQint = dep$AFQT89 * (as.numeric(dep$SAMPLE_SEX)-1)
 m3 <- '
 d.i =~ 1*CES_92 + 1*CES_94 + 1*CES.40 + 1*CES.50
 d.s =~ 0*CES_92 + 2*CES_94 + 10*CES.40 + 20*CES.50
-#d.q =~ 0*CES_92 + 4*CES_94 + 100*CES.40 + 400*CES.50
+d.q =~ 0*CES_92 + 4*CES_94 + 100*CES.40 + 400*CES.50
 
 d.i ~ AFQT89 + SAMPLE_SEX + age_1979 + SexIQint
 d.s ~ AFQT89 + SAMPLE_SEX + age_1979 + SexIQint
-#d.q ~ AFQT89 + SAMPLE_SEX + age_1979 + SexIQint
+d.q ~ AFQT89 + SAMPLE_SEX + age_1979 + SexIQint
 
 '
 
@@ -147,11 +161,11 @@ summary(f3)
 m4 <- '
 d.i =~ 1*CES_92 + 1*CES_94 + 1*CES.40 + 1*CES.50
 d.s =~ 0*CES_92 + 2*CES_94 + 10*CES.40 + 20*CES.50
-#d.q =~ 0*CES_92 + 4*CES_94 + 100*CES.40 + 400*CES.50
+d.q =~ 0*CES_92 + 4*CES_94 + 100*CES.40 + 400*CES.50
 
 d.i ~ AFQT89 + SAMPLE_SEX + age_1979 + SexIQint + Child_SES + Adult_SES
 d.s ~ AFQT89 + SAMPLE_SEX + age_1979 + SexIQint + Child_SES + Adult_SES
-#d.q ~ AFQT89 + SAMPLE_SEX + age_1979 + SexIQint
+d.q ~ AFQT89 + SAMPLE_SEX + age_1979 + SexIQint + Child_SES + Adult_SES
 
 '
 

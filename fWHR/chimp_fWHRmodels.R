@@ -74,8 +74,20 @@ table(chFP$Sex[!duplicated(chFP$ID)&chFP$Subspecies=='unknown'])
 
 
 # basic age,sex index:
-adults = (chFP$Sex==0 & chFP$Age>7) | (chFP$Sex==1 & chFP$Age>9) | (chFP$ID == 'Gage')
+adults = (chFP$Sex==0 & chFP$Age>7) | (chFP$Sex==1 & chFP$Age>9)
 adults[is.na(adults)] = TRUE
+
+count(adults)
+
+adults = adults & (as.character(chFP$ID) != 'Gage') # 75
+
+count(adults)
+
+adults = adults & (as.character(chFP$ID) != 'Lennon') # This is a good place to pull out Lennon (130, 131)
+
+count(adults)
+
+adults
 
 
 
@@ -192,6 +204,8 @@ mp3.v = lmer(fWHR ~ Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ +
 
 summary(mp3.t) # Nothing for troglodytes.
 summary(mp3.v)
+
+set.seed(1234567)
 
 confint(mp3.t, method='Wald')
 confint(mp3.v, method='profile')

@@ -13,25 +13,48 @@ library(optimx)
 s <- function(x) {scale(x)}
 
 
+set.seed(1234567)
+
+
 
 ### loading in composite sheet
 
 chFP = read.csv('chimpFacesPersDemos.csv')
 chFP = chFP[,-1]
 
+colnames(chFP)
+dim(chFP)
 chFP = chFP[!is.na(chFP$fWHR),]
+dim(chFP)
 
 
 
-### zero-order correlation peek
+### Descriptive Statistics
+
+levels(chFP$ID)
+table(droplevels(chFP$ID[chFP$location=='Edinburgh']))
+sum(table(droplevels(chFP$ID[chFP$location=='Bastrop'])))
+table(droplevels(chFP$ID[chFP$location=='Japan']))
+
+table(chFP$Sex[!duplicated(chFP$ID)]) # Number of males and females
+
+mean(chFP$Age[!duplicated(chFP$ID)], na.rm=TRUE) # Mean age
+sd(chFP$Age[!duplicated(chFP$ID)], na.rm=TRUE) # SD age
+min(chFP$Age[!duplicated(chFP$ID)], na.rm=TRUE) # Min age
+max(chFP$Age[!duplicated(chFP$ID)], na.rm=TRUE) # Max age
+
+mean(table(chFP$ID))
+sd(table(chFP$ID))
+
+
+### Zero-order correlation plots
 
 colnames(chFP)
-corrplot(cor(chFP[,c(8,12,13,14,15,16,17),],use="pairwise.complete.obs")
+corrplot(cor(chFP[,c(8,12,14,15,16,17,18,19),],use="pairwise.complete.obs")
          ,  method = 'number')
 
-corrplot(cor(chFP[chFP$Sex==0,c(8,12,13,14,15,16,17),],use="pairwise.complete.obs"),  method = 'number')
-corrplot(cor(chFP[chFP$Sex==1,c(8,12,13,14,15,16,17),],use="pairwise.complete.obs"),  method = 'number')
-# These are useful for interpretation later - note pattern of correlations among D, N, & C
+corrplot(cor(chFP[chFP$Sex==0,c(8,12,14,15,16,17,18,19),],use="pairwise.complete.obs"),  method = 'number')
+corrplot(cor(chFP[chFP$Sex==1,c(8,12,14,15,16,17,18,19),],use="pairwise.complete.obs"),  method = 'number')
 
 
 
@@ -40,10 +63,19 @@ corrplot(cor(chFP[chFP$Sex==1,c(8,12,13,14,15,16,17),],use="pairwise.complete.ob
 ## Collapse subspecies random effects
 levels(chFP$Subspecies)
 chFP$Subspecies[chFP$Subspecies=='hybrid'] = 'unknown'
-table(chFP$Subspecies)
-table(chFP$Sex[chFP$Subspecies=='verus'])
+table(chFP$Subspecies[!duplicated(chFP$ID)])
 
-#chFP$Subspecies[chFP$Subspecies=='unknown'] = NA # DO NOT RUN
+table(chFP$Sex[!duplicated(chFP$ID)&chFP$Subspecies=='verus'])
+table(chFP$Sex[!duplicated(chFP$ID)&chFP$Subspecies=='schweinfurthii'])
+table(chFP$Sex[!duplicated(chFP$ID)&chFP$Subspecies=='ellioti'])
+table(chFP$Sex[!duplicated(chFP$ID)&chFP$Subspecies=='troglodytes'])
+table(chFP$Sex[!duplicated(chFP$ID)&chFP$Subspecies=='unknown'])
+
+
+
+# basic age,sex index:
+adults = (chFP$Sex==0 & chFP$Age>7) | (chFP$Sex==1 & chFP$Age>9) | (chFP$ID == 'Gage')
+adults[is.na(adults)] = TRUE
 
 
 
@@ -51,19 +83,20 @@ table(chFP$Sex[chFP$Subspecies=='verus'])
 
 m0 <- lmer(fWHR ~ 1 +
              (1 | location) + (1 | Subspecies) + (1 | ID:Subspecies)
-           ,data=chFP
-           #,data = chFP[chFP$Age>7,]
+           ,data=chFP[adults,]
 )
 summary(m0)
 confint(m0,method='profile')
-
 ranef(m0)
 
-
-
-# basic age,sex index:
-indx = (chFP$Sex==0 & chFP$Age>7) | (chFP$Sex==1 & chFP$Age>9) | (chFP$ID == 'Gage')
-indx[is.na(indx)] = TRUE
+# Sensitivity of subspecies to individual
+m0.0 <- lmer(fWHR ~ 1 +
+             (1 | location) + (1 | Subspecies)
+           ,data=chFP[adults,]
+)
+summary(m0.0)
+confint(m0.0,method='profile')
+ranef(m0.0)
 
 
 
@@ -71,8 +104,7 @@ indx[is.na(indx)] = TRUE
 
 m1 <- lmer(fWHR ~ s(Age) + s(I(Age^2)) + s(I(Age^3)) +
              (1 | location) + (1 | Subspecies) + (1 | ID:Subspecies)
-           #,data = chFP
-           ,data = chFP[indx,]
+           ,data = chFP[adults,]
 )
 summary(m1)
 confint(m1, method='profile')
@@ -86,8 +118,7 @@ confint(m1, method='profile')
 
 m2 <- lmer(fWHR ~ Age*Sex +
              (1 | location) + (1 | Subspecies) + (1 | ID:Subspecies)
-           #,data = chFP
-           ,data = chFP[indx,]
+           ,data = chFP[adults,]
 )
 summary(m2)
 confint(m2, method='profile')
@@ -100,8 +131,7 @@ confint(m2, method='profile')
 
 mp1 <- lmer(fWHR ~ Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ +
               (1 | location) + (1 | Subspecies) + (1 | ID:Subspecies)
-            #,data = chFP
-            ,data = chFP[indx,]
+            ,data = chFP[adults,]
 )
 summary(mp1)
 confint(mp1, method='profile')
@@ -115,14 +145,12 @@ confint(mp1, method='profile')
 
 mp2.f <- lmer(fWHR ~ Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ +
                 (1 | location) + (1 | Subspecies) + (1 | ID:Subspecies)
-              #,data = chFP[chFP$Sex==0,]
-              ,data = chFP[indx&chFP$Sex==0,]
+              ,data = chFP[adults&chFP$Sex==0,]
 )
 
 mp2.m <- lmer(fWHR ~ Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ +
                 (1 | location) + (1 | ID:Subspecies) + (1 | Subspecies)
-              #,data = chFP[chFP$Sex==1,]
-              ,data = chFP[indx&chFP$Sex==1,]
+              ,data = chFP[adults&chFP$Sex==1,]
 )
 
 
@@ -132,27 +160,28 @@ summary(mp2.m)
 confint(mp2.f, method='profile')
 confint(mp2.m, method='profile')
 
-# Dominance associates in females
-# Neuroticism associates (negatively) in males
-
 
 
 ## Dividing by (major) subspecies
 
 count(chFP$Subspecies)
+table(chFP$Subspecies,chFP$Sex)
 
+set.seed(1234567)
 
 mp3.t = lmer(fWHR ~ Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ +
-               (1 | location) + (1 | ID)
-             #,data = chFP[chFP$Subspecies=='troglodytes',]
-             ,data = chFP[indx&chFP$Subspecies=='troglodytes',]
+               (1 | location) + 
+             (1 | ID)
+             ,data = chFP[adults&chFP$Subspecies=='troglodytes',]
+             #,data = chFP[adults&chFP$Subspecies=='troglodytes'&chFP$Sex==1,]
 )
+
 
 
 mp3.v = lmer(fWHR ~ Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ +
                (1 | location) + (1 | ID)
              #,data = chFP[chFP$Subspecies=='verus',]
-             ,data = chFP[indx&chFP$Subspecies=='verus',]
+             ,data = chFP[adults&chFP$Subspecies=='verus',]
 )
 
 # # Worth doing for unknowns?
@@ -173,20 +202,22 @@ confint(mp3.v, method='profile')
 
 ## Verus is the only subspecies with reasonable sample size
 
+set.seed(1234567)
+
 mp4.f = lmer(fWHR ~ Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ +
                (1 | location) + (1 | ID)
              ,data = chFP[indx&(chFP$Subspecies=='verus'&chFP$Sex==0),]
              ,control=lmerControl(optimizer="Nelder_Mead")
 )
 # Covergence checks
-tt <- getME(mp4.f,"theta")
-ll <- getME(mp4.f,"lower")
-min(tt[ll==0]) # not terrible, but not ideal either
-
-derivs1 <- mp4.f@optinfo$derivs
-sc_grad1 <- with(derivs1,solve(Hessian,gradient))
-max(abs(sc_grad1)) # Fine
-max(pmin(abs(sc_grad1),abs(derivs1$gradient))) # The same - fine.
+# tt <- getME(mp4.f,"theta")
+# ll <- getME(mp4.f,"lower")
+# min(tt[ll==0]) # not terrible, but not ideal either
+# 
+# derivs1 <- mp4.f@optinfo$derivs
+# sc_grad1 <- with(derivs1,solve(Hessian,gradient))
+# max(abs(sc_grad1)) # Fine
+# max(pmin(abs(sc_grad1),abs(derivs1$gradient))) # The same - fine.
 
 mp4.m = lmer(fWHR ~ Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ +
                (1 | location) + (1 | ID)
@@ -194,7 +225,6 @@ mp4.m = lmer(fWHR ~ Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ +
 )
 
 summary(mp4.f)
-summary(mp4.m)
 
 confint(mp4.f, method='profile')
 # 2.5 %     97.5 %
@@ -209,6 +239,9 @@ confint(mp4.f, method='profile')
 # Neu_CZ      -0.12393911 0.07226640
 # Opn_CZ      -0.09946781 0.07316191
 #confint(mp4.f, method='boot')
+
+
+summary(mp4.m)
 
 confint(mp4.m, method='profile')
 # 2.5 %      97.5 %

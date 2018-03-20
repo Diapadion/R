@@ -270,3 +270,77 @@ int.eff.diabBS = Effect(c('SAMPLE_SEX','AFQT89'), mod = t4.lm3, partial.residual
                       partial.residual=list(pch=".", col="#FF00FF80"))
 
 plot(int.eff.diabBS)
+
+
+### Ethnicity glance for C.Gale
+
+library(jtools)
+
+
+## Hypertension
+
+#...
+int.eth.HT = Effect(c('SAMPLE_ethnicity','AFQT89'), mod = lm.eth.1, partial.residuals=F)
+plot(int.eth.HT)
+
+lm.eth.1.a = glm(H50_DR_HighBP_HT ~ AFQT89 * SAMPLE_ethnicity + as.numeric(age_1979) + SAMPLE_SEX, data = ht.df, family=binomial)
+int.eth.HT = Effect(c('SAMPLE_ethnicity','AFQT89'), mod = lm.eth.1.a, partial.residuals=F)
+plot(int.eth.HT)
+
+lm.eth.1.b = glm(H50_DR_HighBP_HT ~ AFQT89 * SAMPLE_ethnicity + as.numeric(age_1979) + SAMPLE_SEX + Child_SES, data = ht.df, family=binomial)
+int.eth.HT = Effect(c('SAMPLE_ethnicity','AFQT89'), mod = lm.eth.1.b, partial.residuals=F)
+plot(int.eth.HT)
+
+lm.eth.1.c = glm(H50_DR_HighBP_HT ~ AFQT89 * SAMPLE_ethnicity + as.numeric(age_1979) + SAMPLE_SEX + Child_SES + Adult_SES, data = ht.df, family=binomial)
+int.eth.HT = Effect(c('SAMPLE_ethnicity','AFQT89'), mod = lm.eth.1.c, partial.residuals=F)
+plot(int.eth.HT)
+
+lm.eth.1.d = glm(H50_DR_HighBP_HT ~ AFQT89 * SAMPLE_ethnicity + as.numeric(age_1979) + AFQT89 * SAMPLE_SEX + Child_SES + Adult_SES, data = ht.df, family=binomial)
+int.eth.HT = Effect(c('SAMPLE_ethnicity','AFQT89'), mod = lm.eth.1.d, partial.residuals=F)
+plot(int.eth.HT)
+
+summary(lm.eth.1.d)
+
+interact_plot(lm.eth.1.a, pred = 'AFQT89', modx = 'SAMPLE_ethnicity')
+interact_plot(lm.eth.1.c, pred = 'AFQT89', modx = 'SAMPLE_ethnicity')
+
+
+
+## BMI
+
+lm.eth.85 = lm(bmi_85 ~ AFQT89 * SAMPLE_ethnicity + as.numeric(age_1979) + SAMPLE_SEX, data = ht.df)
+interact_plot(lm.eth.85, pred = 'AFQT89', modx = 'SAMPLE_ethnicity')
+
+lm.eth.85.b = lm(bmi_85 ~ AFQT89 * SAMPLE_ethnicity + as.numeric(age_1979) + SAMPLE_SEX + Child_SES, data = ht.df)
+interact_plot(lm.eth.85.b, pred = 'AFQT89', modx = 'SAMPLE_ethnicity')
+
+
+lm.eth.12 = lm(bmi_12 ~ AFQT89 * SAMPLE_ethnicity + as.numeric(age_1979) + SAMPLE_SEX, data = ht.df)
+interact_plot(lm.eth.12, pred = 'AFQT89', modx = 'SAMPLE_ethnicity')
+
+lm.eth.12.b = lm(bmi_12 ~ AFQT89 * SAMPLE_ethnicity + as.numeric(age_1979) + SAMPLE_SEX + Child_SES, data = ht.df)
+interact_plot(lm.eth.85.b, pred = 'AFQT89', modx = 'SAMPLE_ethnicity')
+
+lm.eth.12.c = lm(bmi_12 ~ AFQT89 * SAMPLE_ethnicity + as.numeric(age_1979) + SAMPLE_SEX + Child_SES + Adult_SES, data = ht.df)
+interact_plot(lm.eth.85.c, pred = 'AFQT89', modx = 'SAMPLE_ethnicity')
+
+
+
+
+## Physical Health
+
+lm.eth.2 = lm(H50_SF12_PhysicalHealth ~ AFQT89 * SAMPLE_ethnicity, data = ht.df)
+int.eth.PH = Effect(c('SAMPLE_ethnicity','AFQT89'), mod = lm.eth.2, partial.residuals=F)
+plot(int.eth.PH)
+
+
+
+lm.eth.3 = lm(H50_SF12_MentalHealth ~ AFQT89 * SAMPLE_ethnicity, data = ht.df)
+int.eth.MH = Effect(c('SAMPLE_ethnicity','AFQT89'), mod = lm.eth.3, partial.residuals=F)
+plot(int.eth.MH)
+
+
+interact_plot(lm.eth.3, pred = 'AFQT89', modx = 'SAMPLE_ethnicity')
+
+
+

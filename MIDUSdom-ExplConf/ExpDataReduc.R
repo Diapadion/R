@@ -27,8 +27,14 @@ EFA.Comp.Data(as.data.frame(ECdat[,AEOvars,with=FALSE]), F.Max=10, Graph=T, Spea
 
 
 
-m.2.fa = fa(m1exp[,AEOvars], 2)
-m.3.fa = fa(m1exp[,AEOvars], 3)
+m.2.fa = fa(m1exp[,AEOvars], 2, rotate = 'varimax')
+m.3.fa = fa(m1exp[,AEOvars], 3, rotate = 'varimax')
+
+m.2.fa.ob = fa(m1exp[,AEOvars], 2, rotate = 'oblimin')
+m.3.fa.ob = fa(m1exp[,AEOvars], 3, rotate = 'oblimin')
+
+
+
 
 
 
@@ -500,7 +506,7 @@ head(mi2[order(mi2$mi, decreasing=TRUE), ], 10)
 #######
 
 fact3 <- '
-A =~ Selfconfident + Forceful + Assertive + Outspoken + Dominant
+A =~ Dominant + Forceful + Assertive + Outspoken + Selfconfident
 E =~ Warm+Outgoing+Friendly+Lively+Active+Talkative
 O =~ Creative+Imaginative+Intelligent+Curious+Broadminded+
            Sophisticated+Adventurous+Active
@@ -509,7 +515,7 @@ O =~ Creative+Imaginative+Intelligent+Curious+Broadminded+
 
 mod3 <- cfa(fact3, data=m1exp[,..AEOvars])
 
-summary(mod3)
+#summary(mod3)
 fitMeasures(mod3, fit.measures = c('chisq','df','RMSEA','SRMR','CFI','TLI','AIC','BIC'))
 mi3 = modificationindices(mod3)
 head(mi3[order(mi3$mi, decreasing=TRUE), ], 10)
@@ -517,18 +523,18 @@ head(mi3[order(mi3$mi, decreasing=TRUE), ], 10)
 
 
 fact3.1 <- '
-A =~ Selfconfident + Forceful + Assertive + Outspoken + Dominant
-E =~ Warm+Outgoing+Friendly+Lively+Active+Talkative
+A =~ Dominant + Forceful + Assertive + Outspoken
+E =~ Warm+Outgoing+Friendly+Lively+Talkative #+ Active
 O =~ Creative+Imaginative+Intelligent+Curious+Broadminded+
-           Sophisticated+Adventurous+Active
+           Sophisticated+Adventurous
 
-Warm ~~ Friendly
+#Warm ~~ Friendly
 
 '
 
 mod3.1 <- cfa(fact3.1, data=m1exp[,..AEOvars])
 
-summary(mod3.1)
+#summary(mod3.1)
 fitMeasures(mod3.1, fit.measures = c('chisq','df','RMSEA','SRMR','CFI','TLI','AIC','BIC'))
 mi3.1 = modificationindices(mod3.1)
 head(mi3.1[order(mi3.1$mi, decreasing=TRUE), ], 10)
@@ -578,7 +584,7 @@ head(mi3.3[order(mi3.3$mi, decreasing=TRUE), ], 10)
 
 
 fact3.4 <- '
-A =~ Selfconfident + Forceful + Assertive + Outspoken + Dominant
+A =~ Forceful + Assertive + Outspoken + Dominant
 E =~ Warm+Outgoing+Friendly+Lively+Active+Talkative
 O =~ Creative+Imaginative+Intelligent+Curious+Broadminded+
            Sophisticated+Adventurous+Active
@@ -586,7 +592,7 @@ O =~ Creative+Imaginative+Intelligent+Curious+Broadminded+
 Warm ~~ Friendly
 Creative ~~ Imaginative
 Forceful ~~ Dominant
-Outspoken ~~ Talkative
+#Outspoken ~~ Talkative
 '
 
 

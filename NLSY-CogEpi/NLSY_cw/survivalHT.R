@@ -204,6 +204,7 @@ summary(aft.6)
 
 
 ht.df$incIQint = ht.df$SES_Income_USE * (as.numeric(ht.df$SAMPLE_SEX)-1)
+
 aft.4.i = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES + Adult_SES
                    + incIQint
                  ,data = ht.df, dist='loglogistic')

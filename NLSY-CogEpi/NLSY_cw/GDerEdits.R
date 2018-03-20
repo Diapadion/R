@@ -36,6 +36,27 @@ summary(aft.7.gd)
 
 
 
+ht.df$incSESint = ht.df$SES_Income_USE * ht.df$Adult_SES
+
+aft.gd.2 = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES + Adult_SES
+                  + incSESint + incIQint #+ indiv_income*SAMPLE_SEX
+                  ,data = ht.df, dist='loglogistic')
+extractAIC(aft.gd.2)
+summary(aft.gd.2)
+
+aft.gd.3 = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES + Adult_SES
+                  + incSESint + incIQint + indiv_income*SAMPLE_SEX
+                  ,data = ht.df, dist='loglogistic')
+extractAIC(aft.gd.3)
+summary(aft.gd.3)
+
+
+
+
+
+
+
+
 # Rethining family vs other income
 
 ht.df$other_income = ht.df$SES_Income_USE - ht.df$indiv_income

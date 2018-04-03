@@ -245,19 +245,32 @@ extractAIC(mp3.tree.2)
 mp3.tree.3 = lmer(fWHR ~ Sex * Dom_CZ + Sex * Ext_CZ + Sex * Con_CZ + 
                     Sex * Agr_CZ + Sex * Neu_CZ + Sex * Opn_CZ +
                     (1 | location) + (1 | ID),
-                  data = chFP[adults&(chFP$Subspecies=='verus'|chFP$Subspecies=='schweinfurthii'|chFP$Subspecies=='unknown'),]
+                  #data = chFP[adults&(chFP$Subspecies=='verus'|chFP$Subspecies=='schweinfurthii'|chFP$Subspecies=='unknown'),]
+                  data = chFP[adults&(chFP$Subspecies=='verus'|chFP$Subspecies=='schweinfurthii'),]
+                  data = chFP[adults&(chFP$Subspecies=='verus'),]
 )
 summary(mp3.tree.3)
 extractAIC(mp3.tree.3)
 
 
 
-mp3.tree = lmer(fWHR ~ Sex * Dom_CZ + Sex * Neu_CZ +
+mp3.tree = lmer(fWHR ~ Sex * Dom_CZ * Neu_CZ +
                     (1 | location) + (1 | ID),
-                  data = chFP[adults&(chFP$Subspecies=='verus'|chFP$Subspecies=='schweinfurthii'|chFP$Subspecies=='unknown'),]
+                  #data = chFP[adults&(chFP$Subspecies=='verus'|chFP$Subspecies=='schweinfurthii'|chFP$Subspecies=='unknown'),]
+                #data = chFP[adults&(chFP$Subspecies=='verus'|chFP$Subspecies=='schweinfurthii'),]
+                data = chFP[adults&(chFP$Subspecies=='verus'),]
 )
 summary(mp3.tree)
-confint(mp3.tree, method='boot')
+  confint(mp3.tree, method='boot')
+
+
+mp3.tree.all = lmer(fWHR ~ Sex * Dom_CZ * Neu_CZ +
+                  (1 | location) + (1 | ID),
+                data = chFP[adults,]
+)
+summary(mp3.tree.all)
+confint(mp3.tree.all, method='profile')
+
 
 
 

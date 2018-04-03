@@ -96,7 +96,7 @@ adults = adults & (as.character(chFP$ID) != 'Gage') # 75
 adults = adults & (as.character(chFP$ID) != 'Lennon') # This is a good place to pull out Lennon (130, 131)
 # count(adults)
 # View(chFP[adults,])
-chFP$Subspecies[!adults & !duplicated(chFP$ID)] # one of these is Lennon, whos is verus
+chFP$Subspecies[!adults & !duplicated(chFP$ID)] # one of these is Lennon, who is verus
 
 
 

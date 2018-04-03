@@ -5,6 +5,9 @@ library(ggplot2)
 
 
 
+## Round 1
+
+
 # Youth SES x sex
 
 aft.2.gd = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES * SAMPLE_SEX,
@@ -36,19 +39,30 @@ summary(aft.7.gd)
 
 
 
-ht.df$incSESint = ht.df$SES_Income_USE * ht.df$Adult_SES
+## Round 2
 
-aft.gd.2 = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES + Adult_SES
-                  + incSESint + incIQint #+ indiv_income*SAMPLE_SEX
-                  ,data = ht.df, dist='loglogistic')
-extractAIC(aft.gd.2)
-summary(aft.gd.2)
+## This is mostly for including Income as a variable alongside Adult SES and the interaction with sex.
 
-aft.gd.3 = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES + Adult_SES
-                  + incSESint + incIQint + indiv_income*SAMPLE_SEX
-                  ,data = ht.df, dist='loglogistic')
-extractAIC(aft.gd.3)
-summary(aft.gd.3)
+# ht.df$incSESint = ht.df$SES_Income_USE * ht.df$Adult_SES
+# 
+# aft.gd.2 = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES + Adult_SES
+#                   + incSESint + incIQint #+ indiv_income*SAMPLE_SEX
+#                   ,data = ht.df, dist='loglogistic')
+# extractAIC(aft.gd.2)
+# summary(aft.gd.2)
+# 
+# aft.gd.3 = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES + Adult_SES
+#                   + incSESint + incIQint + indiv_income*SAMPLE_SEX
+#                   ,data = ht.df, dist='loglogistic')
+# extractAIC(aft.gd.3)
+# summary(aft.gd.3)
+
+
+aft.gd.4 = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES + Adult_SES
+                  + SES_Income_USE*SAMPLE_SEX
+                  ,data = ht.df[A,], dist='loglogistic')
+extractAIC(aft.gd.4)
+summary(aft.gd.4)
 
 
 
@@ -78,7 +92,6 @@ ggplot(ht.df, aes(Adult_SES, indiv_income)) +
   xlab('Adult SES') +
   ylab('Individual Income') + 
   stat_smooth(method='gam', se=FALSE)
-
 
 
 

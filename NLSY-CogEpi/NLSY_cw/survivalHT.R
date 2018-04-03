@@ -72,6 +72,9 @@ cph.1 = coxph(y ~ SAMPLE_SEX * AFQT89 + age_1979,
 
 summary(cph.1)
 
+test.ph.1 = cox.zph(cph.1)
+ggcoxzph(test.ph.1)
+
 
 
 cph.2 = coxph(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES,
@@ -82,10 +85,12 @@ summary(cph.2)
 
 
 cph.3 = coxph(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES + Adult_SES,
-              data = ht.df)
+              data = ht.df[A,])
 
 summary(cph.3)
 
+test.ph.3 = cox.zph(cph.3)
+ggcoxzph(test.ph.3)
 
 
 cph.4 = coxph(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES + 

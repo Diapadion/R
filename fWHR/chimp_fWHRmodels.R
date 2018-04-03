@@ -46,11 +46,26 @@ max(chFP$Age[!duplicated(chFP$ID)], na.rm=TRUE) # Max age
 mean(table(chFP$ID)) # Mean number of useable images
 sd(table(chFP$ID))   # SD of number of useable images
 
+mean(table(droplevels(chFP$ID[chFP$location=='Edinburgh'])))
+sd(table(droplevels(chFP$ID[chFP$location=='Edinburgh'])))
+
+mean(table(droplevels(chFP$ID[chFP$location=='Japan'])))
+sd(table(droplevels(chFP$ID[chFP$location=='Japan'])))
+
+
+
+mean(chFP$fWHR[!duplicated(chFP$ID)], na.rm=TRUE) # Mean age
+sd(chFP$fWHR[!duplicated(chFP$ID)], na.rm=TRUE) # SD age
+chFP$fWHR[chFP$ID=='Lennon']
+(chFP$fWHR[chFP$ID=='Lennon'][1] - mean(chFP$fWHR[!duplicated(chFP$ID)]) ) / sd(chFP$fWHR[!duplicated(chFP$ID)])
+
+
+
 
 ### Zero-order correlation plots
 
 #colnames(chFP)
-corrplot(cor(chFP[,c(8,12,14,15,16,17,18,19),],use="pairwise.complete.obs")
+corrplot(cor(chFP[,c(8,9,12,14,15,16,17,18,19),],use="pairwise.complete.obs")
          ,  method = 'number')
 
 corrplot(cor(chFP[chFP$Sex==0,c(8,12,14,15,16,17,18,19),],use="pairwise.complete.obs"),  method = 'number')
@@ -81,6 +96,7 @@ adults = adults & (as.character(chFP$ID) != 'Gage') # 75
 adults = adults & (as.character(chFP$ID) != 'Lennon') # This is a good place to pull out Lennon (130, 131)
 # count(adults)
 # View(chFP[adults,])
+chFP$Subspecies[!adults & !duplicated(chFP$ID)] # one of these is Lennon, whos is verus
 
 
 

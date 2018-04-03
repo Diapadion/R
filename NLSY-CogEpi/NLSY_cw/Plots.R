@@ -333,14 +333,39 @@ lm.eth.2 = lm(H50_SF12_PhysicalHealth ~ AFQT89 * SAMPLE_ethnicity, data = ht.df)
 int.eth.PH = Effect(c('SAMPLE_ethnicity','AFQT89'), mod = lm.eth.2, partial.residuals=F)
 plot(int.eth.PH)
 
-
-
 lm.eth.3 = lm(H50_SF12_MentalHealth ~ AFQT89 * SAMPLE_ethnicity, data = ht.df)
 int.eth.MH = Effect(c('SAMPLE_ethnicity','AFQT89'), mod = lm.eth.3, partial.residuals=F)
 plot(int.eth.MH)
 
+lm.eth.4 = lm(as.numeric(H50_SF12_GeneralHealth) ~ AFQT89 * SAMPLE_ethnicity, data = ht.df)
+summary(lm.eth.4)
+
+
+
+
+interact_plot(lm.eth.2, pred = 'AFQT89', modx = 'SAMPLE_ethnicity')
 
 interact_plot(lm.eth.3, pred = 'AFQT89', modx = 'SAMPLE_ethnicity')
 
+interact_plot(lm.eth.4, pred = 'AFQT89', modx = 'SAMPLE_ethnicity')
 
+
+
+lm.eth.5 = lm(H50_CESD_7 ~ AFQT89 * SAMPLE_ethnicity, data = ht.df)
+interact_plot(lm.eth.5, pred = 'AFQT89', modx = 'SAMPLE_ethnicity')
+
+lm.eth.5.a = lm(H50_CESD_7 ~ AFQT89 * SAMPLE_ethnicity + as.numeric(age_1979) + SAMPLE_SEX, data = ht.df)
+interact_plot(lm.eth.5.a, pred = 'AFQT89', modx = 'SAMPLE_ethnicity')
+
+lm.eth.5.b = lm(H50_CESD_7 ~ AFQT89 * SAMPLE_ethnicity + as.numeric(age_1979) + SAMPLE_SEX +
+                  Child_SES, data = ht.df)
+interact_plot(lm.eth.5.b, pred = 'AFQT89', modx = 'SAMPLE_ethnicity')
+
+lm.eth.5.c = lm(H50_CESD_7 ~ AFQT89 * SAMPLE_ethnicity + as.numeric(age_1979) + SAMPLE_SEX +
+                  Child_SES + Adult_SES, data = ht.df)
+interact_plot(lm.eth.5.c, pred = 'AFQT89', modx = 'SAMPLE_ethnicity')
+
+
+
+##
 

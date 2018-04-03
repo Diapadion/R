@@ -31,7 +31,11 @@ dep$IQtert <- with(dep,cut(AFQT89,
 
 dep$sextert = interaction(dep$SAMPLE_SEX,dep$IQtert)
 
+dep$ethtert = interaction(dep$SAMPLE_ethnicity,dep$IQtert)
+
 table(dep$IQtert, dep$CES.40)
+table(dep$ethtert, dep$CES.40)
+
 
 
 
@@ -42,14 +46,14 @@ dep.long = dep[complete.cases(dep[,c('AFQT89','CES_92','CES_94','CES.40','CES.50
 # Long format
 
 dep.long = rbindlist(list(
-  cbind(dep[,c('CASEID_1979','SAMPLE_SEX','IQtert','sextert','CES_92')],0),
-  cbind(dep[,c('CASEID_1979','SAMPLE_SEX','IQtert','sextert','CES_94')],2),
-  cbind(dep[,c('CASEID_1979','SAMPLE_SEX','IQtert','sextert','CES.40')],10),
-  cbind(dep[,c('CASEID_1979','SAMPLE_SEX','IQtert','sextert','CES.50')],20)
+  cbind(dep[,c('CASEID_1979','SAMPLE_SEX','IQtert','sextert','ethtert','CES_92')],0),
+  cbind(dep[,c('CASEID_1979','SAMPLE_SEX','IQtert','sextert','ethtert','CES_94')],2),
+  cbind(dep[,c('CASEID_1979','SAMPLE_SEX','IQtert','sextert','ethtert','CES.40')],10),
+  cbind(dep[,c('CASEID_1979','SAMPLE_SEX','IQtert','sextert','ethtert','CES.50')],20)
 ), use.names=FALSE
 
 )
-colnames(dep.long) <- c('id','sex','IQ','sexIQ','CES','time') 
+colnames(dep.long) <- c('id','sex','IQ','sexIQ','ethIQ','CES','time') 
 
 
 
@@ -58,6 +62,7 @@ colnames(dep.long) <- c('id','sex','IQ','sexIQ','CES','time')
 dep.long$time = as.factor(dep.long$time)
 
 
+### Sex
 
 ggplot(subset(dep.long, !is.na(CES)&!is.na(IQ)), aes(x=time, y=CES, group=IQ, color=IQ)) + 
   stat_smooth(method='lm', se=TRUE)
@@ -69,6 +74,14 @@ ggplot(subset(dep.long, !is.na(CES)&!is.na(IQ)), aes(x=time, y=CES, group=sexIQ,
   stat_smooth(aes(linetype=IQ, color=sex), method='loess', se=TRUE)
 
 
+
+### Ethnicity
+
+ggplot(subset(dep.long, !is.na(CES)&!is.na(IQ)), aes(x=time, y=CES, group=ethIQ, color=ethIQ)
+       # , linetype = c(1,1,2,2,3,3)
+       # , palette = c('dodgerblue','violetred1','dodgerblue','violetred1','dodgerblue','violetred1')
+) + 
+  stat_smooth(aes(linetype=IQ, color=ethIQ), method='loess', se=TRUE)
 
   
 

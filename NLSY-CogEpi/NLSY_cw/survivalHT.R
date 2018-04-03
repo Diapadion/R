@@ -8,10 +8,16 @@ library(ggplot2)
 
 
 ### getting the survival analyses setup
+### GD and CG revised
 
+View(ht.df[(as.numeric(ht.df$HTdiagDate-as.Date("1970-01-01"))<0),])
 
-ht.df$recordTime = as.numeric(ht.df$HTdiagDate-ht.df$DOB)/365.25
-y = Surv(ht.df$recordTime, ht.df$hasHT)
+ht.df$recordTime = as.numeric(ht.df$HTdiagDate-as.Date("1970-01-01"))/365.25
+
+A = !is.na(ht.df$hasHT)
+
+y = Surv(ht.df$recordTime[A], ht.df$hasHT[A])
+
 
 
 
@@ -49,7 +55,7 @@ summary(lm(bmi_06 ~ SAMPLE_SEX*AFQT89, data=ht.df))
 # Useful: http://www.sthda.com/english/wiki/cox-model-assumptions
 
 cph.0 = coxph(y ~ SAMPLE_SEX + AFQT89 + age_1979,
-              data = ht.df)
+              data = ht.df[A,])
 summary(cph.0)
 
 test.ph.0 = cox.zph(cph.0)
@@ -62,7 +68,7 @@ survplot(test.fit.0, loglog=T)
 
 
 cph.1 = coxph(y ~ SAMPLE_SEX * AFQT89 + age_1979,
-              data = ht.df)
+              data = ht.df[A,])
 
 summary(cph.1)
 
@@ -113,21 +119,21 @@ summary(cph.7)
 
 
 aft.0.ll = aftreg(y ~ SAMPLE_SEX + AFQT89 + age_1979,
-               data = ht.df, #dist='gompertz')
+               data = ht.df[A,], #dist='gompertz')
                dist = 'loglogistic')
 summary(aft.0.ll)
 
 aft.0.g = aftreg(y ~ SAMPLE_SEX + AFQT89 + age_1979,
-                  data = ht.df, dist='gompertz')
+                  data = ht.df[A,], dist='gompertz')
 
 aft.0.w = aftreg(y ~ SAMPLE_SEX + AFQT89 + age_1979,
-                 data = ht.df, dist='weibull')
+                 data = ht.df[A,], dist='weibull')
 
 aft.0.ev = aftreg(y ~ SAMPLE_SEX + AFQT89 + age_1979,
-                 data = ht.df, dist='ev')
+                 data = ht.df[A,], dist='ev')
 
 aft.0.ln = aftreg(y ~ SAMPLE_SEX + AFQT89 + age_1979,
-                 data = ht.df, dist='lognormal')
+                 data = ht.df[A,], dist='lognormal')
 
 extractAIC(aft.0.ll)
 extractAIC(aft.0.g)
@@ -139,19 +145,19 @@ print(aft.0.ll)
 
 
 aft.1.ll = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979,
-                 data = ht.df, dist='loglogistic') #'gompertz')
+                 data = ht.df[A,], dist='loglogistic') #'gompertz')
 
 aft.1.g = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979,
-               data = ht.df, dist='gompertz')
+               data = ht.df[A,], dist='gompertz')
 
 aft.1.w = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979,
-                 data = ht.df, dist='weibull')
+                 data = ht.df[A,], dist='weibull')
 
 aft.1.ev = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979,
-                 data = ht.df, dist='ev')
+                 data = ht.df[A,], dist='ev')
 
 aft.1.ln = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979,
-                 data = ht.df, dist='lognormal')
+                 data = ht.df[A,], dist='lognormal')
 
 extractAIC(aft.1.ll)
 extractAIC(aft.1.g)
@@ -166,13 +172,13 @@ summary(aft.1.ll)
 
 
 aft.2 = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES,
-               data = ht.df, dist='loglogistic') 
+               data = ht.df[A,], dist='loglogistic') 
                #dist = 'gompertz')
 summary(aft.2)
 
 
 aft.3 = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES + Adult_SES, 
-               data = ht.df, dist='loglogistic')
+               data = ht.df[A,], dist='loglogistic')
                #dist='gompertz')
 summary(aft.3)
 
@@ -184,30 +190,30 @@ extractAIC(aft.3)
 
 aft.4 = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES +
                  + SES_Income_USE
-               ,data = ht.df, dist='loglogistic')
+               ,data = ht.df[A,], dist='loglogistic')
                #dist='gompertz')
 summary(aft.4)
-  extractAIC(aft.4)
+extractAIC(aft.4)
 
 aft.5 = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES +
                + SES_Education_USE#*SAMPLE_SEX
-               ,data = ht.df, dist='loglogistic')
+               ,data = ht.df[A,], dist='loglogistic')
                #dist='gompertz')
 summary(aft.5)
 
 
 aft.6 = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES +
                  + SES_OccStatus_USE#*SAMPLE_SEX
-               ,data = ht.df, dist='loglogistic')
+               ,data = ht.df[A,], dist='loglogistic')
                #dist='gompertz')
 summary(aft.6)
 
 
-ht.df$incIQint = ht.df$SES_Income_USE * (as.numeric(ht.df$SAMPLE_SEX)-1)
+#ht.df$incIQint = ht.df$SES_Income_USE * (as.numeric(ht.df$SAMPLE_SEX)-1)
 
 aft.4.i = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES + Adult_SES
-                   + incIQint
-                 ,data = ht.df, dist='loglogistic')
+                   + SES_Income_USE * SAMPLE_SEX
+                 ,data = ht.df[A,], dist='loglogistic')
 summary(aft.4.i)
 confint(aft.4.i)
 
@@ -215,8 +221,9 @@ extractAIC(aft.4.i)
 
 
 aft.7 = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES + Adult_SES
-                 + incIQint + indiv_income
-               ,data = ht.df, dist='loglogistic')
+                 #+ incIQint 
+               + SES_Income_USE * SAMPLE_SEX + indiv_income
+               ,data = ht.df[A,], dist='loglogistic')
 summary(aft.7)
 extractAIC(aft.7)
 
@@ -228,8 +235,10 @@ extractAIC(aft.7)
 # summary(aft.7.0)
 
 aft.7.i = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES + Adult_SES
-                 + incIQint + indiv_income*SAMPLE_SEX
-               ,data = ht.df, dist='loglogistic')
+                 + SES_Income_USE * SAMPLE_SEX 
+                 #+ incIQint 
+                 + indiv_income*SAMPLE_SEX
+               ,data = ht.df[A,], dist='loglogistic')
 summary(aft.7.i)
 extractAIC(aft.7.i)
 

@@ -33,6 +33,7 @@ sum((ht.df$H0004700==-1)|(ht.df$H0017301==-1)) # Non-participants or normotensiv
 
 
 ### Age 50 first
+### GD revisions - UNDERWAY
 
 ht.df$H0017300[ht.df$H0017300 == -4 | ht.df$H0017300 == -1] = NA
 ht.df$H0017301[ht.df$H0017301 == -4 | ht.df$H0017301 == -1] = NA
@@ -70,10 +71,17 @@ ht.df$HTage50t[is.na(ht.df$HTage50t)] = as.Date(pasteDate[is.na(ht.df$HTage50t)]
 
 ### Assign censoring values
 
-ht.df$hasHT = TRUE
-ht.df$hasHT[is.na(ht.df$HTage50t)] = FALSE
+### GD UNDERWAY
 
-ht.df$HTage50t[is.na(ht.df$HTage50t)] = as.Date('2015-07-01')
+ht.df$hasHT = NA
+ht.df$hasHT[(ht.df$H0004600==1 | ht.df$H0017200==1)] = TRUE
+ht.df$hasHT[(ht.df$H0004600==0 & ht.df$H0017200==0)] = FALSE
+
+table(ht.df$hasHT)
+
+##ht.df$hasHT[is.na(ht.df$HTage50t)] = FALSE
+
+##ht.df$HTage50t[is.na(ht.df$HTage50t)] = as.Date('2015-07-01')
 
 
 
@@ -133,7 +141,7 @@ ht.df$HTage50t = ht.df$HTage50t/365.25
 
 ### Remove 3 individuals who had HT from "birth"
 
-indxs = which(as.numeric(ht.df$DOB) == as.numeric(ht.df$HTdiagDate))
+indxs = which(as.numeric(as.Date("1970-01-01")) > as.numeric(ht.df$HTdiagDate))
 
 ht.df = ht.df[-indxs,]
 
@@ -148,7 +156,7 @@ colnames(ht.df)[c(76:78,97:101)] <- c('weight_12','feet_12','inches_12',
                                       'height_85','weight_85','weight_06','feet_06','inches_06')
 colnames(ht.df)[c(90:96)] <- c('Trying_to_lose','Read_nutrition','Read_ingredients',
                                'Fast_food','Snacked','Skipped_meal','Sugary_drink')
-# Keep an eye on the agove - numeric indices may need adjustment
+# Keep an eye on the above - numeric indices may need adjustment
 
 
 

@@ -195,6 +195,13 @@ fWHR = merge(faces, persage, by.x="Rhesus", by.y="Rhesus", all =T)
 
 
 
+### Writing CSVs for publication upload
+
+write.csv(faces[,c('Rhesus','fWHR','LFFH')], "faces.CSV")
+write.csv(persage[,c(1,8,9,10,15,77:86)], "personality-demographics.CSV")
+
+
+
 # ### Scaling:  # ??? Seemingly unnecessary... except maybe for Dominance.status
 # # grapple with this at a later stage
 # 

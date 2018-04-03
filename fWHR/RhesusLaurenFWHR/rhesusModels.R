@@ -16,6 +16,12 @@ library(probemod)
 table(persage$Sex[persage$Facility.x=='ZX6012'] )
 table(persage$Sex[persage$Facility.x=='UQ6934'] )
 
+mean(persage$agenum[persage$Facility.x=='ZX6012'] )
+mean(persage$agenum[persage$Facility.x=='UQ6934'] )
+sd(persage$agenum[persage$Facility.x=='ZX6012'] )
+sd(persage$agenum[persage$Facility.x=='UQ6934'] )
+
+
 stripchart(Age ~ Facility.x * Sex, data=persage, method='jitter', jitter=0.3)
 
 

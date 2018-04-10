@@ -1,8 +1,9 @@
 ### Coefficient and CI values for publication
 
-# Accleration factor is exponentiated coefficient
+## Accleration factor is exponentiated coefficient
+## Use second LogLik
 
-# Base model (1)
+## Base model (S1)
 exp(coefficients(aft.0.ll)[1])
 exp(confint(aft.0.ll)[1,1])
 exp(confint(aft.0.ll)[1,2])
@@ -19,7 +20,7 @@ extractAIC(aft.0.ll)
 aft.0.ll$loglik
 
 
-# First interaction model (2)
+## First interaction model (1)
 exp(coefficients(aft.1.ll)[1])
 exp(confint(aft.1.ll)[1,1])
 exp(confint(aft.1.ll)[1,2])
@@ -37,10 +38,10 @@ exp(confint(aft.1.ll)[4,1])
 exp(confint(aft.1.ll)[4,2])
 
 extractAIC(aft.1.ll)
-aft.1.ll$loglik
+aft.1.ll$loglik[2]
 
 
-# Adding childhood SES (3)
+## Adding childhood SES (2)
 exp(coefficients(aft.2)[1])
 exp(confint(aft.2)[1,1])
 exp(confint(aft.2)[1,2])
@@ -65,7 +66,7 @@ extractAIC(aft.2)
 aft.2$loglik
 
 
-# Adding adult SES (4)
+## Adding adult SES (3)
 exp(coefficients(aft.3)[1])
 exp(confint(aft.3)[1,1])
 exp(confint(aft.3)[1,2])
@@ -94,7 +95,7 @@ extractAIC(aft.3)
 aft.3$loglik
 
 
-# Just income component (5)
+## Just income component (4)
 exp(coefficients(aft.4)[1])
 exp(confint(aft.4)[1,1])
 exp(confint(aft.4)[1,2])
@@ -123,7 +124,7 @@ extractAIC(aft.4)
 aft.4$loglik
 
 
-# Just education component (6)
+## Just education component (5)
 exp(coefficients(aft.5)[1])
 exp(confint(aft.5)[1,1])
 exp(confint(aft.5)[1,2])
@@ -152,7 +153,8 @@ extractAIC(aft.5)
 aft.5$loglik
 
 
-# Just education component (7)
+
+## Just education component (6)
 exp(coefficients(aft.6)[1])
 exp(confint(aft.6)[1,1])
 exp(confint(aft.6)[1,2])
@@ -181,7 +183,42 @@ extractAIC(aft.6)
 aft.6$loglik
 
 
+
+## Adult SES + Income
+exp(coefficients(aft.gd.3)[1])
+exp(confint(aft.gd.3)[1,1])
+exp(confint(aft.gd.3)[1,2])
+
+exp(coefficients(aft.gd.3)[2])
+exp(confint(aft.gd.3)[2,1])
+exp(confint(aft.gd.3)[2,2])
+
+exp(coefficients(aft.gd.3)[3])
+exp(confint(aft.gd.3)[3,1])
+exp(confint(aft.gd.3)[3,2])
+
+exp(coefficients(aft.gd.3)[4])
+exp(confint(aft.gd.3)[4,1])
+exp(confint(aft.gd.3)[4,2])
+
+exp(coefficients(aft.gd.3)[5])
+exp(confint(aft.gd.3)[5,1])
+exp(confint(aft.gd.3)[5,2])
+
+exp(coefficients(aft.gd.3)[6])
+exp(confint(aft.gd.3)[6,1])
+exp(confint(aft.gd.3)[6,2])
+
+exp(coefficients(aft.gd.3)[7])
+exp(confint(aft.gd.3)[7,1])
+exp(confint(aft.gd.3)[7,2])
+
+extractAIC(aft.gd.3)
+aft.gd.3$loglik[2]
+
+
 ## Adult SES + Income interaction
+## aft.4.i is equivalent to aft.gd.4
 exp(coefficients(aft.4.i)[1])
 exp(confint(aft.4.i)[1,1])
 exp(confint(aft.4.i)[1,2])
@@ -210,11 +247,17 @@ exp(coefficients(aft.4.i)[7])
 exp(confint(aft.4.i)[7,1])
 exp(confint(aft.4.i)[7,2])
 
+exp(coefficients(aft.4.i)[8])
+exp(confint(aft.4.i)[8,1])
+exp(confint(aft.4.i)[8,2])
+
 extractAIC(aft.4.i)
-aft.4.i$loglik
+aft.4.i$loglik[2]
+
 
 
 ## adding Individual income
+## aft.4.i is equivalent to aft.gd.5
 exp(coefficients(aft.7)[1])
 exp(confint(aft.7)[1,1])
 exp(confint(aft.7)[1,2])
@@ -247,11 +290,17 @@ exp(coefficients(aft.7)[8])
 exp(confint(aft.7)[8,1])
 exp(confint(aft.7)[8,2])
 
+exp(coefficients(aft.7)[9])
+exp(confint(aft.7)[9,1])
+exp(confint(aft.7)[9,2])
+
 extractAIC(aft.7)
 aft.7$loglik
 
 
+
 ## adding Individual income * sex
+## follows on from GD revisions... (Table S?)
 exp(coefficients(aft.7.i)[1])
 exp(confint(aft.7.i)[1,1])
 exp(confint(aft.7.i)[1,2])
@@ -288,9 +337,21 @@ exp(coefficients(aft.7.i)[9])
 exp(confint(aft.7.i)[9,1])
 exp(confint(aft.7.i)[9,2])
 
+exp(coefficients(aft.7.i)[10])
+exp(confint(aft.7.i)[10,1])
+exp(confint(aft.7.i)[10,2])
+
+
 extractAIC(aft.7.i)
 aft.7.i$loglik
 
+
+
+
+
+
+
+###----------------------------------
 
 ## adding BMI '85
 exp(coefficients(aft.8)[1])

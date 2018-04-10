@@ -310,6 +310,19 @@ AICctab(fit.d0, fit.d1,fit.d2,fit.d3
 
 datX$D.r2.DoB <- fit.d2$residuals
 
+# Cut?
+# fit.d2.age <- lm(Dom_CZ ~ scale(age_pr) + I(scale(age_pr)^2), data=datX) # This one 
+# library(ggplot2)
+# ggplot(datX, aes(y=Dom, x=age_pr)) + geom_point(alpha = 0.5) +
+#   stat_smooth(method='lm', formula=y~poly(x,2))
+# 
+# ggplot(datX, aes(y=Dom_CZ, x=age_pr)) + geom_point(alpha = 0.5) +
+#   stat_smooth(method='lm', formula=y~1+x+I(x^2))
+# 
+# plot(datX$age_pr, datX$Dom_CZ)
+# lines(predict(fit.d2.age))
+
+
 
 ## Neuroticism
 

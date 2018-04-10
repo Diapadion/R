@@ -211,6 +211,9 @@ chFP <- merge(chFP,subsp[,c(1,2)], by.x='ID', by.y='Name')
 colnames(chFP)[colnames(chFP) == 'fHWR'] <- 'fWHR'
 
 
+chFP$instrument = 'HPQ'
+chFP$instrument[chFP$location == 'Bastrop'] = 'Bas'
+
 
 
 write.csv(chFP, 'chimpFacesPersDemos.csv')

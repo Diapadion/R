@@ -103,8 +103,9 @@ chFP$Subspecies[!adults & !duplicated(chFP$ID)] # one of these is Lennon, who is
 ## Base: just subspecies random effects
 
 set.seed(1234567)
-m0 <- lmer(fWHR ~ 1 +
-             (1 | location) + (1 | Subspecies) + (1 | ID:Subspecies)
+m0 <- lmer(fWHR ~ 1 + (1|instrument) +
+             #(1 | location) + 
+             (1 | Subspecies) + (1 | ID:Subspecies)
            ,data=chFP[adults,]
 )
 summary(m0)

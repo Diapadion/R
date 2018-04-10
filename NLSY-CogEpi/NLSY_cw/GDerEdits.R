@@ -58,12 +58,36 @@ summary(aft.7.gd)
 # summary(aft.gd.3)
 
 
+## new Model 7
+aft.gd.3 = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES + Adult_SES
+                  + SES_Income_USE
+                  ,data = ht.df[A,], dist='loglogistic')
+extractAIC(aft.gd.3)
+summary(aft.gd.3)
+
+
+## new Model 8
 aft.gd.4 = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES + Adult_SES
                   + SES_Income_USE*SAMPLE_SEX
                   ,data = ht.df[A,], dist='loglogistic')
 extractAIC(aft.gd.4)
 summary(aft.gd.4)
 
+
+## new Model 9
+aft.gd.5 = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES + Adult_SES
+                  + SES_Income_USE*SAMPLE_SEX + indiv_income
+                  ,data = ht.df[A,], dist='loglogistic')
+extractAIC(aft.gd.5)
+summary(aft.gd.5)
+
+
+## model S?
+aft.gd.6 = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES + Adult_SES
+                  + SES_Income_USE*SAMPLE_SEX + indiv_income*SAMPLE_SEX
+                  ,data = ht.df[A,], dist='loglogistic')
+extractAIC(aft.gd.6)
+summary(aft.gd.6)
 
 
 

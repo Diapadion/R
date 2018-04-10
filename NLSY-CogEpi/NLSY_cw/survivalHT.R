@@ -20,7 +20,6 @@ y = Surv(ht.df$recordTime[A], ht.df$hasHT[A])
 
 
 
-
 # cor(ht.df$AFQT89, as.numeric(ht.df$age_1979), use='pairwise.complete.obs', method='spearman')
 
 ggplot(ht.df,aes(y=AFQT89,x=age_1979)) + stat_binhex()
@@ -216,6 +215,8 @@ summary(aft.6)
 
 #ht.df$incIQint = ht.df$SES_Income_USE * (as.numeric(ht.df$SAMPLE_SEX)-1)
 
+
+## see GDerEdits for the formal version of this
 aft.4.i = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES + Adult_SES
                    + SES_Income_USE * SAMPLE_SEX
                  ,data = ht.df[A,], dist='loglogistic')
@@ -225,6 +226,7 @@ confint(aft.4.i)
 extractAIC(aft.4.i)
 
 
+## see GDerEdits for the formal version of this
 aft.7 = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES + Adult_SES
                  #+ incIQint 
                + SES_Income_USE * SAMPLE_SEX + indiv_income
@@ -239,6 +241,8 @@ extractAIC(aft.7)
 #                ,data = ht.df, dist='loglogistic')
 # summary(aft.7.0)
 
+
+## again, see GDerEdits for the formal version of this
 aft.7.i = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES + Adult_SES
                  + SES_Income_USE * SAMPLE_SEX 
                  #+ incIQint 
@@ -248,6 +252,9 @@ summary(aft.7.i)
 extractAIC(aft.7.i)
 
 
+
+
+##-------------------------------
 
 
 

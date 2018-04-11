@@ -44,10 +44,13 @@ xyplot(data=chAgr, fWHR ~ Dom | Sex)
 
 chAgr$verus = 'other'
 chAgr$verus[chAgr$Subspecies=='verus'] = 'verus'
+chAgr$verus[chAgr$Subspecies=='troglodytes'] = 'troglodytes'
+#chAgr$verus[chAgr$verus=='other'] = NA
 
 
-g <- ggplot(data=chAgr, aes(x=Dom, y=fWHR)) + geom_point() +
-  facet_grid(~ Sex) +
+g <- ggplot(data=subset(chAgr, !(chAgr$verus=='other')), 
+            aes(x=Dom, y=fWHR)) + geom_point() +
+  facet_grid(verus ~ Sex) +
   stat_smooth(method='gam')
 
 g

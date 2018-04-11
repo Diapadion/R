@@ -205,10 +205,11 @@ cit.p1 = REEMctree(fWHR ~ Sex + Age + I(Age^2) + I(Age^3) +
                    
 )
 plot(cit.p1$Tree)
+print(cit.p1$Tree)
 
 
 
-lffhdf = adults & (!is.na(chFP$lffh))
+Treelffhdf = adults & (!is.na(chFP$lffh))
 
 set.seed(1234567)
 treelf.p1 = REEMctree(lffh ~ Sex + Age + I(Age^2) + I(Age^3) + 
@@ -261,15 +262,24 @@ mp3.tree = lmer(fWHR ~ Sex * Dom_CZ * Neu_CZ +
                 data = chFP[adults&(chFP$Subspecies=='verus'),]
 )
 summary(mp3.tree)
-  confint(mp3.tree, method='boot')
+confint(mp3.tree, method='boot')
 
 
-mp3.tree.all = lmer(fWHR ~ Sex * Dom_CZ * Neu_CZ +
+mp3.tree.both = lmer(fWHR ~ Sex * Dom_CZ * Neu_CZ +
                   (1 | location) + (1 | ID),
                 data = chFP[adults,]
 )
-summary(mp3.tree.all)
-confint(mp3.tree.all, method='profile')
+summary(mp3.tree.both)
+set.seed(1234567)
+ci.mptree = confint(mp3.tree.all, method='boot')
+ci.mptree
+
+
+mp3.all = lmer(fWHR ~ Age + Sex + Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ +
+                       (1 | location) + (1 | ID),
+                     data = chFP[adults,]
+)
+summary(mp3.all)
 
 
 

@@ -262,6 +262,7 @@ mp3.tree = lmer(fWHR ~ Sex * Dom_CZ * Neu_CZ +
                 data = chFP[adults&(chFP$Subspecies=='verus'),]
 )
 summary(mp3.tree)
+set.seed(1234567)
 confint(mp3.tree, method='boot')
 
 

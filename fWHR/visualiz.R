@@ -47,11 +47,20 @@ chAgr$verus[chAgr$Subspecies=='verus'] = 'verus'
 chAgr$verus[chAgr$Subspecies=='troglodytes'] = 'troglodytes'
 #chAgr$verus[chAgr$verus=='other'] = NA
 
+chAgr$Sex = as.factor(chAgr$Sex)
+levels(chAgr$Sex) <- c('Female','Male')
+
+
 
 g <- ggplot(data=subset(chAgr, !(chAgr$verus=='other')), 
             aes(x=Dom, y=fWHR)) + geom_point() +
   facet_grid(verus ~ Sex) +
-  stat_smooth(method='gam')
+  stat_smooth(method='gam') +
+  theme_bw() + xlab('Dominance')
+
 
 g
+
+
+
 

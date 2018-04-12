@@ -60,6 +60,11 @@ chFP$fWHR[chFP$ID=='Lennon']
 (chFP$fWHR[chFP$ID=='Lennon'][1] - mean(chFP$fWHR[!duplicated(chFP$ID)]) ) / sd(chFP$fWHR[!duplicated(chFP$ID)])
 
 
+table(chFP$location[!duplicated(chFP$ID)])
+
+
+# t.test(chAgr$fWHR[chAgr$Sex=='Male'],chAgr$fWHR[chAgr$Sex=='Female'])
+
 
 
 ### Zero-order correlation plots

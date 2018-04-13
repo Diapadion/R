@@ -150,14 +150,20 @@ WAIC(mp2.sx)
 
 
 
+### Trees for publication ###
 
+
+library(party)
+library(rpart)
 library(REEMtree)
 
-set.seed(1234567)
+
+set.seed(12345678)
 tree.p1 = REEMtree(fWHR ~ Sex + Age + I(Age^2) + I(Age^3) + 
                      Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ + 
                      Subspecies,
-                   data=chFP[adults,],
+                   #data=chFP[adults,],
+                   data=chFP[chFP$ID!='Lennon',],
                    #random=~1|ID/Subspecies
                    random = list(location =~ 1, ID =~ 1)#, Subspecies =~ 1)
                    ,cv=TRUE, method='ML'
@@ -194,11 +200,12 @@ summary(gb.tree.vs.x)
 
 ### CI tree version
 
-set.seed(1234567)
+set.seed(12345678)
 cit.p1 = REEMctree(fWHR ~ Sex + Age + I(Age^2) + I(Age^3) + 
                      Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ + 
                      Subspecies,
-                   data=chFP[adults,],
+                   #data=chFP[adults,],
+                   data=chFP[chFP$ID!='Lennon',],
                    #random=~1|ID/Subspecies
                    random = list(location =~ 1, ID =~ 1)#, Subspecies =~ 1)
                    , method='REML'

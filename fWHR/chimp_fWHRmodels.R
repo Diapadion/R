@@ -111,7 +111,8 @@ set.seed(1234567)
 m0 <- lmer(fWHR ~ 1 + (1|instrument) +
              #(1 | location) + 
              (1 | Subspecies) + (1 | ID:Subspecies)
-           ,data=chFP[adults,]
+           #,data=chFP[adults,]
+           ,data=chFP[chFP$ID!='Lennon',]
 )
 summary(m0)
 confint(m0,method='profile')
@@ -120,7 +121,8 @@ ranef(m0)
 # Sensitivity of subspecies to individual
 m0.0 <- lmer(fWHR ~ 1 +
              (1 | location) + (1 | Subspecies)
-           ,data=chFP[adults,]
+           #,data=chFP[adults,]
+           ,data=chFP[chFP$ID!='Lennon',]
 )
 summary(m0.0)
 confint(m0.0,method='profile')

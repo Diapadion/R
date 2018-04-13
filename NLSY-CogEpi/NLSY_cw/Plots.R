@@ -277,6 +277,90 @@ plot(int.eff.diabBS)
 library(jtools)
 
 
+
+## Mental Health
+
+interact_plot(lm(H50_SF12_MentalHealth ~ AFQT89 * SAMPLE_ethnicity #+ as.numeric(age_1979) 
+                 + SAMPLE_SEX, data = ht.df),
+              pred = 'AFQT89', modx = 'SAMPLE_ethnicity', interval=T)
+interact_plot(lm(H50_SF12_MentalHealth ~ AFQT89 * SAMPLE_ethnicity + as.numeric(age_1979) + SAMPLE_SEX + Child_SES + Adult_SES, data = ht.df),
+              pred = 'AFQT89', modx = 'SAMPLE_ethnicity', interval=T)
+#summary(lm(H50_SF12_MentalHealth ~ AFQT89 * SAMPLE_ethnicity + as.numeric(age_1979) + SAMPLE_SEX + Child_SES + Adult_SES, data = ht.df))
+
+
+## Depression
+
+interact_plot(lm(H50_CESD_7 ~ AFQT89 * SAMPLE_ethnicity + as.numeric(age_1979) + SAMPLE_SEX, data = ht.df),
+              pred = 'AFQT89', modx = 'SAMPLE_ethnicity', interval=T)
+interact_plot(lm(H50_CESD_7 ~ AFQT89 * SAMPLE_ethnicity + as.numeric(age_1979) + SAMPLE_SEX + Child_SES + Adult_SES, data = ht.df),
+              pred = 'AFQT89', modx = 'SAMPLE_ethnicity', interval=T)
+#summary(lm(H50_CESD_7 ~ AFQT89 * SAMPLE_ethnicity + as.numeric(age_1979) + SAMPLE_SEX + Child_SES + Adult_SES, data = ht.df))
+
+
+## Sleep
+
+ht.df$Sleep_aggr = as.numeric(ht.df$H50_sleep_1) + as.numeric(ht.df$H50_sleep_2) + as.numeric(ht.df$H50_sleep_3) + as.numeric(ht.df$H50_sleep_4)
+
+interact_plot(lm(Sleep_aggr ~ AFQT89 * SAMPLE_ethnicity + as.numeric(age_1979) + SAMPLE_SEX, data = ht.df),
+              pred = 'AFQT89', modx = 'SAMPLE_ethnicity', interval=T)
+interact_plot(lm(Sleep_aggr ~ AFQT89 * SAMPLE_ethnicity + as.numeric(age_1979) + SAMPLE_SEX + Child_SES + Adult_SES, data = ht.df),
+              pred = 'AFQT89', modx = 'SAMPLE_ethnicity', interval=T)
+
+# Not much of anything for mental health.
+
+
+## Physical Health
+
+interact_plot(lm(H50_SF12_PhysicalHealth ~ AFQT89 * SAMPLE_ethnicity #+ as.numeric(age_1979) 
+                 + SAMPLE_SEX, data = ht.df),
+              pred = 'AFQT89', modx = 'SAMPLE_ethnicity', interval=T)
+interact_plot(lm(H50_SF12_PhysicalHealth ~ AFQT89 * SAMPLE_ethnicity + as.numeric(age_1979) + SAMPLE_SEX + Child_SES + Adult_SES, data = ht.df),
+              pred = 'AFQT89', modx = 'SAMPLE_ethnicity', interval=T)
+# summary(lm(H50_SF12_PhysicalHealth ~ AFQT89 * SAMPLE_ethnicity + as.numeric(age_1979) + SAMPLE_SEX + Child_SES + Adult_SES, data = ht.df))
+
+
+## Hypertension
+
+interact_plot(glm(H50_DR_HighBP_HT ~ AFQT89 * SAMPLE_ethnicity + as.numeric(age_1979) + SAMPLE_SEX, data = ht.df, family=binomial),
+              pred = 'AFQT89', modx = 'SAMPLE_ethnicity', interval=T)
+interact_plot(glm(H50_DR_HighBP_HT ~ AFQT89 * SAMPLE_ethnicity + as.numeric(age_1979) + SAMPLE_SEX + Child_SES + Adult_SES, data = ht.df, family=binomial)
+              , pred = 'AFQT89', modx = 'SAMPLE_ethnicity', interval=T)
+#summary(glm(H50_DR_HighBP_HT ~ AFQT89 * SAMPLE_ethnicity + as.numeric(age_1979) + SAMPLE_SEX + Child_SES + Adult_SES, data = ht.df, family=binomial))
+
+
+## Arthritis
+
+interact_plot(glm(H50_Arthritis ~ AFQT89 * SAMPLE_ethnicity + as.numeric(age_1979) + SAMPLE_SEX, data = ht.df, family=binomial),
+              pred = 'AFQT89', modx = 'SAMPLE_ethnicity', interval=T)
+interact_plot(glm(H50_Arthritis ~ AFQT89 * SAMPLE_ethnicity + as.numeric(age_1979) + SAMPLE_SEX + Child_SES + Adult_SES, data = ht.df, family=binomial)
+              , pred = 'AFQT89', modx = 'SAMPLE_ethnicity', interval=T)
+#summary(glm(H50_Arthritis ~ AFQT89 * SAMPLE_ethnicity + as.numeric(age_1979) + SAMPLE_SEX + Child_SES + Adult_SES, data = ht.df, family=binomial))
+
+
+## Stiffness/swelling
+
+interact_plot(glm(H50_PainStiff_joints ~ AFQT89 * SAMPLE_ethnicity + as.numeric(age_1979) + SAMPLE_SEX, data = ht.df, family=binomial),
+              pred = 'AFQT89', modx = 'SAMPLE_ethnicity', interval=T)
+interact_plot(glm(H50_PainStiff_joints ~ AFQT89 * SAMPLE_ethnicity + as.numeric(age_1979) + SAMPLE_SEX + Child_SES + Adult_SES, data = ht.df, family=binomial)
+              , pred = 'AFQT89', modx = 'SAMPLE_ethnicity', interval=T)
+#summary(glm(H50_PainStiff_joints ~ AFQT89 * SAMPLE_ethnicity + as.numeric(age_1979) + SAMPLE_SEX + Child_SES + Adult_SES, data = ht.df, family=binomial))
+
+
+
+## Diabetes
+
+interact_plot(glm(H50_DR_Diabetes_HighBS ~ AFQT89 * SAMPLE_ethnicity + as.numeric(age_1979) + SAMPLE_SEX, data = ht.df, family=binomial),
+              pred = 'AFQT89', modx = 'SAMPLE_ethnicity', interval=T)
+interact_plot(glm(H50_DR_Diabetes_HighBS ~ AFQT89 * SAMPLE_ethnicity + as.numeric(age_1979) + SAMPLE_SEX + Child_SES + Adult_SES, data = ht.df, family=binomial)
+              , pred = 'AFQT89', modx = 'SAMPLE_ethnicity', interval=T)
+#summary(glm(H50_DR_Diabetes_HighBS ~ AFQT89 * SAMPLE_ethnicity + as.numeric(age_1979) + SAMPLE_SEX + Child_SES + Adult_SES, data = ht.df, family=binomial))
+
+
+
+
+
+### Prototyping
+
 ## Hypertension
 
 #...
@@ -302,7 +386,7 @@ plot(int.eth.HT)
 summary(lm.eth.1.d)
 
 interact_plot(lm.eth.1.a, pred = 'AFQT89', modx = 'SAMPLE_ethnicity')
-interact_plot(lm.eth.1.c, pred = 'AFQT89', modx = 'SAMPLE_ethnicity')
+interact_plot(lm.eth.1.d, pred = 'AFQT89', modx = 'SAMPLE_ethnicity')
 
 
 

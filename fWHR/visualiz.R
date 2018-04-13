@@ -59,6 +59,15 @@ g <- ggplot(data=subset(chAgr, !(chAgr$verus=='other')),
   theme_bw() + xlab('Dominance')
 
 
+
+g <- ggplot(data=chAgr,
+            aes(x=Dom, y=fWHR)) + geom_point() +
+  facet_grid(verus ~ Sex) +
+  stat_smooth(method='gam') +
+  theme_bw() + xlab('Dominance')
+
+
+
 g
 
 

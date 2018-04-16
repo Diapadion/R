@@ -2,6 +2,7 @@
 
 Sys.getenv('PATH')
 
+
 system('g++ -v')
 
 system('where make')
@@ -153,9 +154,11 @@ WAIC(mp2.sx)
 ### Trees for publication ###
 
 
+library(caret)
 library(party)
 library(rpart)
 library(REEMtree)
+library(lme4)
 
 
 set.seed(12345678)
@@ -305,13 +308,6 @@ tree.p1 <- lmertree(fWHR ~ Sex + Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Op
 
 
 ### CV approach attempt ###
-
-library(caret)
-library(party)
-library(rpart)
-library(REEMtree)
-
-
 
 set.seed(1234567)
 testIndx = createDataPartition(chFP$ID[adults], p= 0.5, list=FALSE, times=1)

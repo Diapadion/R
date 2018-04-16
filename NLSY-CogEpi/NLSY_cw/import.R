@@ -2,14 +2,14 @@
 
 library(readstata13)
 
-#cw.df <- read.dta13(file = '0_NLSY_mainfile.dta')
+cw.df <- read.dta13(file = '0_NLSY_mainfile.dta')
 
 
 
 
 ht.df <- read.csv(file = "HT.csv")
 
-ht.df[indxs,]
+#ht.df[indxs,]
 
 
 

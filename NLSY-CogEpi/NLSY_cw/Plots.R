@@ -8,6 +8,7 @@ library(ggplot2)
 library(RGraphics)
 library(gridExtra)
 library(survminer)
+library(jtools)
 
 
 
@@ -272,11 +273,10 @@ int.eff.diabBS = Effect(c('SAMPLE_SEX','AFQT89'), mod = t4.lm3, partial.residual
 plot(int.eff.diabBS)
 
 
+
 ### Ethnicity glance for C.Gale
 
-library(jtools)
-
-
+levels(ht.df$SAMPLE_ethnicity)[3] <- 'OTHER'
 
 ## Mental Health
 
@@ -334,7 +334,7 @@ interact_plot(glm(H50_Arthritis ~ AFQT89 * SAMPLE_ethnicity + as.numeric(age_197
               pred = 'AFQT89', modx = 'SAMPLE_ethnicity', interval=T)
 interact_plot(glm(H50_Arthritis ~ AFQT89 * SAMPLE_ethnicity + as.numeric(age_1979) + SAMPLE_SEX + Child_SES + Adult_SES, data = ht.df, family=binomial)
               , pred = 'AFQT89', modx = 'SAMPLE_ethnicity', interval=T)
-#summary(glm(H50_Arthritis ~ AFQT89 * SAMPLE_ethnicity + as.numeric(age_1979) + SAMPLE_SEX + Child_SES + Adult_SES, data = ht.df, family=binomial))
+summary(glm(H50_Arthritis ~ AFQT89 * SAMPLE_ethnicity + as.numeric(age_1979) + SAMPLE_SEX + Child_SES + Adult_SES, data = ht.df, family=binomial))
 
 
 ## Stiffness/swelling
@@ -344,7 +344,6 @@ interact_plot(glm(H50_PainStiff_joints ~ AFQT89 * SAMPLE_ethnicity + as.numeric(
 interact_plot(glm(H50_PainStiff_joints ~ AFQT89 * SAMPLE_ethnicity + as.numeric(age_1979) + SAMPLE_SEX + Child_SES + Adult_SES, data = ht.df, family=binomial)
               , pred = 'AFQT89', modx = 'SAMPLE_ethnicity', interval=T)
 #summary(glm(H50_PainStiff_joints ~ AFQT89 * SAMPLE_ethnicity + as.numeric(age_1979) + SAMPLE_SEX + Child_SES + Adult_SES, data = ht.df, family=binomial))
-
 
 
 ## Diabetes

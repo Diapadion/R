@@ -95,12 +95,13 @@ table(chFP$Sex[!duplicated(chFP$ID)&chFP$Subspecies=='unknown'])
 
 
 # basic age,sex index:
-adults = (chFP$Sex==0 & chFP$Age>=7) | (chFP$Sex==1 & chFP$Age>=9)
+adults = (chFP$Sex==0 & chFP$Age>7) | (chFP$Sex==1 & chFP$Age>9)
 adults[is.na(adults)] = TRUE
 adults = adults & (as.character(chFP$ID) != 'Gage') # 75
 adults = adults & (as.character(chFP$ID) != 'Lennon') # This is a good place to pull out Lennon (130, 131)
-# count(adults)
-# View(chFP[adults,])
+count(adults)
+#View(chFP[adults,])
+chFP$ID[!adults]
 chFP$Subspecies[!adults & !duplicated(chFP$ID)] # one of these is Lennon, who is verus
 
 

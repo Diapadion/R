@@ -1,7 +1,7 @@
 ### Importing and processing Ruth Sonnweber's data
 
 
-setwd('Z:/chimp cognitive data/RS/training/')
+setwd('M:/chimp cognitive data/RS/training/')
 
 
 ## sample sheet to work with (for now)
@@ -144,7 +144,7 @@ RSdat = rbind(trainAA1, trainAA2, trainABp2, trainABp3, trainABp4,
 
 
 ## importing personality
-setwd('Z:/chimp cognitive data/RS/')
+setwd('M:/chimp cognitive data/RS/')
 aggPers = read.csv("aggregatedPers.csv", header=TRUE)
 
 # two groups:

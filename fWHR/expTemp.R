@@ -497,3 +497,11 @@ raneval <- ffRanefLMER.fnc(m0r1,
 # library(psych)
 # 
 # nfactors(wellbeing[,c(5:26)])
+
+
+
+
+
+### Random things ###
+
+

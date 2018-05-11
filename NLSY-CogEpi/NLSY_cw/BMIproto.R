@@ -24,6 +24,20 @@ bmi <- merge(bmi, ht.df,
 bmi$weight_96[bmi$weight_96<0] <- NA
 bmi$bmi_96 = bmi$weight_96/(bmi$height_85^2) * 703
 
+## trim implausible values
+bmi$bmi_96[bmi$bmi_96 > 70] = NA
+bmi$bmi_96[bmi$bmi_96 < 12] = NA
+
+
+hist(bmi$bmi_96)
+
+
+## Weirdly, BMI'06 and '12 need to be multiplied by 100?
+## keep an eye on this
+#bmi$bmi_12 = bmi$bmi_12*100
+#bmi$bmi_06 = bmi$bmi_06*100
+### Fixed - unclear why this was happening
+
 
 
 ###
@@ -44,11 +58,10 @@ cor(ht.df$AFQT89[ht.df$SAMPLE_SEX=='FEMALE'], ht.df$bmi_12[ht.df$SAMPLE_SEX=='FE
 ### Exploratory plots
 
 
-ht.df$IQtert <- with(ht.df,cut(AFQT89, 
+bmi$IQtert <- with(bmi,cut(AFQT89, 
                            breaks=quantile(AFQT89, probs=seq(0,1, by=1/3), na.rm=TRUE), 
                            include.lowest=TRUE))
-
-ht.df$sextert = interaction(ht.df$SAMPLE_SEX,ht.df$IQtert)
+bmi$sextert = interaction(bmi$SAMPLE_SEX,bmi$IQtert)
 
 #table(ht.df$IQtert, ht.df$bmi_85)
 
@@ -69,12 +82,12 @@ colnames(bmi.long) <- c('id','sex','IQ','sexIQ','BMI','time')
 
 # Try discretizing the times
 
-bmi.long$time = as.factor(bmi.long$time)
+#bmi.long$time = as.factor(bmi.long$time)
 
 
 
 ggplot(subset(bmi.long, !is.na(BMI)&!is.na(IQ)), aes(x=time, y=BMI, group=IQ, color=IQ)) + 
-  stat_smooth(method='lm', se=TRUE)
+  stat_smooth(method='gam', se=TRUE)
 
 
 # Allcomers
@@ -101,7 +114,7 @@ bmi.long = rbindlist(list(
 )
 colnames(bmi.long) <- c('id','sex','IQ','sexIQ','BMI','time') 
 
-bmi.long$time = as.factor(bmi.long$time)
+#bmi.long$time = as.factor(bmi.long$time)
 ggplot(subset(bmi.long, !is.na(BMI)&!is.na(IQ)), aes(x=time, y=BMI, group=sexIQ, color=sexIQ)
        # , linetype = c(1,1,2,2,3,3)
        # , palette = c('dodgerblue','violetred1','dodgerblue','violetred1','dodgerblue','violetred1')
@@ -109,18 +122,18 @@ ggplot(subset(bmi.long, !is.na(BMI)&!is.na(IQ)), aes(x=time, y=BMI, group=sexIQ,
   stat_smooth(aes(linetype=IQ, color=sex), method='loess', se=TRUE) +
   xlab('Average age')
 
-
+  
 
 BMIQ <- ggplot(bmi, aes(AFQT89, bmi_85))
 BMIQ + geom_hex() + facet_wrap(~ SAMPLE_SEX) +
   geom_smooth(aes(linetype=SAMPLE_SEX), method='gam', colour="black") +
-#  scale_y_continuous(limits = c(10, 70)) + 
+  scale_y_continuous(limits = c(10, 70)) + 
   theme_bw() + ylab('BMI in 1985')
 
 BMIQ <- ggplot(bmi, aes(AFQT89, bmi_96))
 BMIQ + geom_hex() + facet_wrap(~ SAMPLE_SEX) +
   geom_smooth(aes(linetype=SAMPLE_SEX), method='gam', colour="black") +
-#  scale_y_continuous(limits = c(10, 70)) + 
+  scale_y_continuous(limits = c(10, 70)) + 
   theme_bw() + ylab('BMI in 1996')
 
 BMIQ <- ggplot(bmi, aes(AFQT89, bmi_06))
@@ -167,8 +180,8 @@ library(semTools)
 
 
 bmi.int.1 <-'
-i =~ 1*bmi_85 + 1*bmi_06 + 1*bmi_12
-s =~ 0*bmi_85 + 2.1*bmi_06 + 2.7*bmi_12
+i =~ 1*bmi_85 + 1*bmi_96 + 1*bmi_06 + 1*bmi_12
+s =~ 0*bmi_85 + 1.1*bmi_96 + 2.1*bmi_06 + 2.7*bmi_12
 
 i ~ SAMPLE_SEX + AFQT89 + age_1979
 s ~ SAMPLE_SEX + AFQT89 + age_1979
@@ -176,20 +189,21 @@ s ~ SAMPLE_SEX + AFQT89 + age_1979
 '
 
 
-f1 = lavaan(bmi.int.1, data=ht.df, meanstructure = TRUE, int.ov.free = FALSE, 
+f1 = lavaan(bmi.int.1, data=bmi, meanstructure = TRUE, int.ov.free = FALSE, 
             int.lv.free = TRUE, auto.fix.first = TRUE, auto.fix.single = TRUE, 
             auto.var = TRUE, auto.cov.lv.x = TRUE, auto.th = TRUE, auto.delta = TRUE, 
             auto.cov.y = TRUE)
-  
-summary(f1)
+
 fitMeasures(f1, c("chisq", "df", "pvalue", "cfi", "tli", "srmr", "rmsea"))
+summary(f1)
 
 
-ht.df$lvIQsex = ht.df$AFQT89 * (as.numeric(ht.df$SAMPLE_SEX)-1)
+
+bmi$lvIQsex = bmi$AFQT89 * (as.numeric(bmi$SAMPLE_SEX)-1)
 
 bmi.int.2 <-'
-i =~ 1*bmi_85 + 1*bmi_06 + 1*bmi_12
-s =~ 0*bmi_85 + 2.1*bmi_06 + 2.7*bmi_12
+i =~ 1*bmi_85 + 1*bmi_96 + 1*bmi_06 + 1*bmi_12
+s =~ 0*bmi_85 + 1.1*bmi_96 + 2.1*bmi_06 + 2.7*bmi_12
 
 i ~ SAMPLE_SEX + AFQT89 + age_1979 + lvIQsex
 s ~ SAMPLE_SEX + AFQT89 + age_1979 + lvIQsex
@@ -197,16 +211,58 @@ s ~ SAMPLE_SEX + AFQT89 + age_1979 + lvIQsex
 '
 
 
-f2 = lavaan(bmi.int.2, data=ht.df, meanstructure = TRUE, int.ov.free = FALSE, 
+f2 = lavaan(bmi.int.2, data=bmi, meanstructure = TRUE, int.ov.free = FALSE, 
             int.lv.free = TRUE, auto.fix.first = TRUE, auto.fix.single = TRUE, 
             auto.var = TRUE, auto.cov.lv.x = TRUE, auto.th = TRUE, auto.delta = TRUE, 
             auto.cov.y = TRUE)
 
-summary(f2)
+
 fitMeasures(f2, c("chisq", "df", "pvalue", "cfi", "tli", "srmr", "rmsea"))
+summary(f2)
+
 
 
 bmi.int.3 <-'
+i =~ 1*bmi_85 + 1*bmi_96 + 1*bmi_06 + 1*bmi_12
+s =~ 0*bmi_85 + 1.1*bmi_96 + 2.1*bmi_06 + 2.7*bmi_12
+
+i ~ SAMPLE_SEX + AFQT89 + age_1979 + lvIQsex + Child_SES
+s ~ SAMPLE_SEX + AFQT89 + age_1979 + lvIQsex + Child_SES
+
+'
+
+f3 = lavaan(bmi.int.3, data=bmi, meanstructure = TRUE, int.ov.free = FALSE, 
+            int.lv.free = TRUE, auto.fix.first = TRUE, auto.fix.single = TRUE, 
+            auto.var = TRUE, auto.cov.lv.x = TRUE, auto.th = TRUE, auto.delta = TRUE, 
+            auto.cov.y = TRUE)
+
+fitMeasures(f3, c("chisq", "df", "pvalue", "cfi", "tli", "srmr", "rmsea"))
+summary(f3)
+
+
+
+bmi.int.4 <-'
+i =~ 1*bmi_85 + 1*bmi_96 + 1*bmi_06 + 1*bmi_12
+s =~ 0*bmi_85 + 1.1*bmi_96 + 2.1*bmi_06 + 2.7*bmi_12
+
+i ~ SAMPLE_SEX + AFQT89 + age_1979 + lvIQsex + Child_SES + Adult_SES
+s ~ SAMPLE_SEX + AFQT89 + age_1979 + lvIQsex + Child_SES + Adult_SES
+
+'
+
+f4 = lavaan(bmi.int.4, data=bmi, meanstructure = TRUE, int.ov.free = FALSE, 
+            int.lv.free = TRUE, auto.fix.first = TRUE, auto.fix.single = TRUE, 
+            auto.var = TRUE, auto.cov.lv.x = TRUE, auto.th = TRUE, auto.delta = TRUE, 
+            auto.cov.y = TRUE)
+
+fitMeasures(f4, c("chisq", "df", "pvalue", "cfi", "tli", "srmr", "rmsea"))
+summary(f4)
+
+
+
+
+
+bmi.int.X <-'
 i =~ 1*bmi_85 + 1*bmi_06 + 1*bmi_12
 s =~ 0*bmi_85 + 2.1*bmi_06 + 2.7*bmi_12
 

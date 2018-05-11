@@ -43,6 +43,11 @@ sd(chFP$Age[!duplicated(chFP$ID)], na.rm=TRUE) # SD age
 min(chFP$Age[!duplicated(chFP$ID)], na.rm=TRUE) # Min age
 max(chFP$Age[!duplicated(chFP$ID)], na.rm=TRUE) # Max age
 
+chFP$Age[!duplicated(chFP$ID[chFP$location=='Edinburgh'])]
+chFP$Age[!duplicated(chFP$ID=='Liberius')]
+mean(chFP$Age[!duplicated(chFP$ID[chFP$location=='Edinburgh'])], na.rm=TRUE) # Mean age
+sd(chFP$Age[!duplicated(chFP$ID[chFP$location=='Edinburgh'])], na.rm=TRUE) # Mean age
+
 mean(table(chFP$ID)) # Mean number of useable images
 sd(table(chFP$ID))   # SD of number of useable images
 
@@ -54,8 +59,8 @@ sd(table(droplevels(chFP$ID[chFP$location=='Japan'])))
 
 
 
-mean(chFP$fWHR[!duplicated(chFP$ID)], na.rm=TRUE) # Mean age
-sd(chFP$fWHR[!duplicated(chFP$ID)], na.rm=TRUE) # SD age
+mean(chFP$fWHR[!duplicated(chFP$ID)], na.rm=TRUE) # Mean fWHR
+sd(chFP$fWHR[!duplicated(chFP$ID)], na.rm=TRUE) # SD fWHR
 chFP$fWHR[chFP$ID=='Lennon']
 (chFP$fWHR[chFP$ID=='Lennon'][1] - mean(chFP$fWHR[!duplicated(chFP$ID)]) ) / sd(chFP$fWHR[!duplicated(chFP$ID)])
 

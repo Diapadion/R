@@ -103,3 +103,9 @@ cor(ht.df$Adult_SES, ht.df$AFQT89, use='complete.obs')
 cor(ht.df$indiv_income, ht.df$AFQT89, use='complete.obs')
 cor(ht.df$SES_Income_USE, ht.df$AFQT89, use='complete.obs')
 
+
+cor(ht.df$Adult_SES[ht.df$SAMPLE_SEX=='MALE'], ht.df$AFQT89[ht.df$SAMPLE_SEX=='MALE'], use='complete.obs')
+cor(ht.df$Adult_SES[ht.df$SAMPLE_SEX=='FEMALE'], ht.df$AFQT89[ht.df$SAMPLE_SEX=='FEMALE'], use='complete.obs')
+
+
+cor(as.numeric(ht.df$age_1979), ht.df$AFQT89, use='complete.obs')

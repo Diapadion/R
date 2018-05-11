@@ -184,12 +184,22 @@ ht.df$height_12[ht.df$inches_12>12] = ht.df$inches_12[ht.df$inches_12>12]
 ht.df$bmi_12 = ht.df$weight_12/(ht.df$height_12^2) * 703
 #ht.df$bmi_12 = scale(ht.df$bmi_12)
 
+## trim implausible values
+ht.df$bmi_12[ht.df$bmi_12 > 70] = NA
+ht.df$bmi_12[ht.df$bmi_12 < 12] = NA
+
+
 
 ## BMI - 1985
 ht.df$weight_85[ht.df$weight_85<0] = NA
 ht.df$height_85[ht.df$height_85<0] = NA
 
 ht.df$bmi_85 = ht.df$weight_85/(ht.df$height_85^2) * 703
+
+## trim implausible values
+ht.df$bmi_85[ht.df$bmi_85 > 70] = NA
+ht.df$bmi_85[ht.df$bmi_85 < 12] = NA
+
 
 
 ## BMI - 2006
@@ -206,6 +216,13 @@ ht.df$height_06[ht.df$height_06<32] = NA
 ht.df$height_06[ht.df$inches_06>12] = ht.df$inches_06[ht.df$inches_06>12]
 
 ht.df$bmi_06 = ht.df$weight_06/(ht.df$height_06^2) * 703
+
+#hist(ht.df$bmi_06)
+
+## trim implausible values
+ht.df$bmi_06[ht.df$bmi_06 > 70] = NA
+ht.df$bmi_06[ht.df$bmi_06 < 12] = NA
+
 
 
 ## BMI differences

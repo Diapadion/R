@@ -17,7 +17,9 @@ nfactors(bsbd[,2:11])
 bvss = VSS(bsbd[,2:11])
 plot(bvss$map)
 
-fa.parallel(bsbd[,2:11],sim=F, error.bars = T, se.bars = F)
+fa.parallel(bsbd[,2:11],sim=F, fa='fa'
+            #, error.bars = T, se.bars = F
+)
 
 
 ### construct validity

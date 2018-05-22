@@ -8,7 +8,7 @@ library(ggplot2)
 ## Round 1
 
 
-# Youth SES x sex
+## Youth SES x sex
 
 aft.2.gd = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES * SAMPLE_SEX,
                           data = ht.df, dist='loglogistic') 
@@ -17,8 +17,15 @@ summary(aft.2.gd)
 # No effect.
 
 
+## After Bridger and Daly, 2017
+aft.2.bd = aftreg(y ~ SAMPLE_SEX + AFQT89 + age_1979 + Child_SES * AFQT89,
+                  data = ht.df[A,], dist='loglogistic') 
+extractAIC(aft.2.bd)
+summary(aft.2.bd)
 
-# Adult SES x sex
+
+
+## Adult SES x sex
 
 aft.3.gd = aftreg(y ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES + Adult_SES * SAMPLE_SEX,
                   data = ht.df, dist='loglogistic') 

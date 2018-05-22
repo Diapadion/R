@@ -1,6 +1,11 @@
 ### Import
 
 library(readstata13)
+library(dplyr)
+library(magrittr)
+source("https://raw.githubusercontent.com/janhove/janhove.github.io/master/RCode/sortLvls.R")
+
+
 
 setwd('M:/NCDS/')
 
@@ -23,7 +28,7 @@ ncds9 <- read.dta13("ncds_2013_derived.dta", generate.factors = FALSE)
 
 table(ncds0123$dvht16)
 
-
+## Age 16
 ncds0123$dvwt16[ncds0123$dvwt16==-1] = NA
 ncds0123$dvht16[ncds0123$dvht16==-1] = NA
 ncds0123$bmi16 = ncds0123$dvwt16 / (ncds0123$dvht16^2)
@@ -91,31 +96,56 @@ names(ncds9)[names(ncds9) == 'NCDSID'] <- 'ncdsid'
 
 ### COVARIATES
 
-# Child SES sessionInfo
-# + parental education
-# + income
-# + occupational status
+### Early life: birth to age 7 (possibly 11) 
+
+## Child SES sessionInfo
+## + parental education
+## + income
+## + occupational status
+
+## Bridger & Daly, 2017
+## + F social class at birth
+table(ncds0123$n236)
+
+## + F social class, age 7
+table(ncds0123$n190)
+
+## + when F left education
+table(ncds0123$n194)
+table(ncds0123$n195)
+sum(ncds0123$n194=='No' & ncds0123$n195=='0', na.rm=TRUE)
+
+## + when M left education
+table(ncds0123$n537) # represents current age also, I believe
+## can't seem to get more detail
+
+## + housing tenure, age 7
+table(ncds0123$n200)
+
+## + persons per room, age 7
+table(ncds0123$n607)
+
 
 ## Social class = occupation
-table(ncds0123$n1171)
+#table(ncds0123$n1171)
 
-## Pay
-table(ncds0123$n2467)
-table(ncds0123$n2465)
-table(ncds0123$n2466)
+## Pay - not enough datapoints
+# table(ncds0123$n2467)
+# table(ncds0123$n2465)
+# table(ncds0123$n2466)
+# table(ncds0123$n2462)
 
-table(ncds0123$n2462)
 
-## School
-table(ncds0123$n194)
-table(ncds0123$n195) # *
+### Later life SES
+
+#...
 
 
 
 ### Merging them together
 
-ncds = merge(ncds0123[,c('ncdsid','n622','n914','n917','n920','n923','n926',
-                         'bmi16','n1171')], 
+ncds = merge(ncds0123[,c('ncdsid','n622','n914','n917','n920','n923','n926','bmi16',
+                         'n236','n190','n194','n195','n537','n200','n607')], 
              ncds4[,c('ncdsid','bmi23')], by="ncdsid", all=TRUE)
 
 ncds = merge(ncds,ncds5[,c('ncdsid','bmi33')], by="ncdsid", all=TRUE)
@@ -124,7 +154,6 @@ ncds = merge(ncds,ncds9[,c('ncdsid','bmi55')], by="ncdsid", all=TRUE)
 
 
 colnames(ncds)[2:7] <- c('sex','verbal','nonverbal','g','reading','maths')
-colnames(ncds)[9] <- c('FatherSocialStatus')
 
 ncds$g = as.numeric(ncds$g) - 2
 ncds$g[ncds$g==-1] = NA
@@ -136,8 +165,6 @@ ncds$sex = droplevels(ncds$sex)
 
 table(ncds$sex, useNA='ifany')
 
-
-table(as.numeric(ncds$FatherSocialStatus))
 
 
 ### Getting rid of biologically implausible values
@@ -153,6 +180,46 @@ ncds$bmi42[ncds$bmi42 < 12] = NA
 ## some are also out of range for age 55
 ncds$bmi55[ncds$bmi55 > 70] = NA
 ncds$bmi55[ncds$bmi55 < 12] = NA
+
+
+
+### Processing SES covars
+
+# table(ncds$n236)
+ncds$SoClass0 = sortLvls.fnc(ncds$n236, c(8,7,6,5,4,3,2,1))
+ncds$SoClass0[ncds$SoClass0=='Unemployed,sick'] = NA
+ncds$SoClass0[ncds$SoClass0=='NA,NMH'] = NA
+ncds$SoClass0 <- droplevels(ncds$SoClass0)
+ncds$SoClass0 <- as.ordered(ncds$SoClass0)
+# table(ncds$SoClass0)
+
+# table(ncds$n190)
+ncds$SoClass7 = sortLvls.fnc(ncds$n190, c(2,9,8,7,6,5,4,3,1))
+ncds$SoClass7[ncds$SoClass7=='NA, unclear'] = NA
+ncds$SoClass7 <- droplevels(ncds$SoClass7)
+ncds$SoClass7 <- as.ordered(ncds$SoClass7)
+# table(ncds$SoClass7)
+
+# table(ncds$n194)
+ncds$Fleave = sortLvls.fnc(ncds$n194, c(4,3,1,2))
+ncds$Fleave[ncds$Fleave=='NA'] = NA
+ncds$Fleave[ncds$Fleave=='Dont know'] = NA
+ncds$Fleave <- droplevels(ncds$Fleave)
+ncds$Fleave <- as.ordered(ncds$Fleave)
+# table(ncds$Fleave)
+
+# table(ncds$n537)
+ncds$Mleave = as.ordered(ncds$n537)
+ncds$Mleave[ncds$Mleave=='Did not stay-25+'] = 'No'
+
+
+
+ncds$Fleave = sortLvls.fnc(ncds$n194, c(4,3,1,2))
+ncds$Fleave[ncds$Fleave=='NA'] = NA
+ncds$Fleave[ncds$Fleave=='Dont know'] = NA
+ncds$Fleave <- droplevels(ncds$Fleave)
+ncds$Fleave <- as.ordered(ncds$Fleave)
+# table(ncds$Fleave)
 
 
 

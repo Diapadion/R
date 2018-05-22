@@ -10,7 +10,7 @@ options(digits=3)
 
 cord = corr.test(m1exp, method='spearman',adjust='none')
 cbind(cord$r[,c(2:3)],cord$p[,c(2:3)])
-#cbind(cord$r[,c(1:2,5)],cord$p[,c(1:2,5)])
+cbind(cord$r[,c(2:3,5)],cord$p[,c(2:3,5)])
 
 
 ### Filter all variables correlated > p = 0.05 with Agn

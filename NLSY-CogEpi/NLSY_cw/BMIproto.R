@@ -95,9 +95,9 @@ ggplot(subset(bmi.long, !is.na(BMI)&!is.na(IQ)), aes(x=time, y=BMI, group=sexIQ,
        # , linetype = c(1,1,2,2,3,3)
        # , palette = c('dodgerblue','violetred1','dodgerblue','violetred1','dodgerblue','violetred1')
 ) + 
+  stat_smooth(aes(linetype=IQ, color=sex), method='gam', formula = y~s(x, k=4), se=TRUE) +
   stat_smooth(aes(linetype=IQ, color=sex), method='loess', se=TRUE) +
   xlab('Average age')
-
 
 
 
@@ -119,7 +119,8 @@ ggplot(subset(bmi.long, !is.na(BMI)&!is.na(IQ)), aes(x=time, y=BMI, group=sexIQ,
        # , linetype = c(1,1,2,2,3,3)
        # , palette = c('dodgerblue','violetred1','dodgerblue','violetred1','dodgerblue','violetred1')
 ) + 
-  stat_smooth(aes(linetype=IQ, color=sex), method='loess', se=TRUE) +
+  stat_smooth(aes(linetype=IQ, color=sex), method='gam', formula = y~s(x, k=4), se=TRUE) +
+  #stat_smooth(aes(linetype=IQ, color=sex), method='loess', se=TRUE) +
   xlab('Average age')
 
   

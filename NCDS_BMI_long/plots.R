@@ -78,7 +78,7 @@ bmi.long = ncds[complete.cases(ncds[,c('g','bmi16','bmi55')]),]
 
 ## Long format
 bmi.long = rbindlist(list(
-  #cbind(bmi.long[,c('ncdsid','sex','gtert','sextert','bmi16')],16),
+  cbind(bmi.long[,c('ncdsid','sex','gtert','sextert','bmi16')],16),
   cbind(bmi.long[,c('ncdsid','sex','gtert','sextert','bmi23')],23),
   cbind(bmi.long[,c('ncdsid','sex','gtert','sextert','bmi33')],33),
   cbind(bmi.long[,c('ncdsid','sex','gtert','sextert','bmi42')],42),
@@ -87,13 +87,14 @@ bmi.long = rbindlist(list(
 )
 colnames(bmi.long) <- c('id','sex','IQ','sexIQ','BMI','age') 
 
-bmi.long$age = as.factor(bmi.long$age)
+#bmi.long$age = as.factor(bmi.long$age)
 
 ggplot(subset(bmi.long, !is.na(BMI)&!is.na(IQ)), aes(x=age, y=BMI, group=sexIQ, color=sexIQ)
        # , linetype = c(1,1,2,2,3,3)
        # , palette = c('dodgerblue','violetred1','dodgerblue','violetred1','dodgerblue','violetred1')
 ) + 
-  stat_smooth(aes(linetype=IQ, color=sex), method='loess', se=TRUE) +
+  stat_smooth(aes(linetype=IQ, color=sex), method='gam', formula = y~s(x, k=4), se=TRUE) +
+  #stat_smooth(aes(linetype=IQ, color=sex), method='loess', se=TRUE) +
   xlab('Average age')
 
 

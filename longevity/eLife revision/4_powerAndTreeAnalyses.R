@@ -9,7 +9,7 @@ library(LTRCtrees)
 library(rpart.plot)
 
 
-set.seed(1)
+set.seed(123)
 
 
 
@@ -68,25 +68,52 @@ mean(persPwr)
 
 
 ### Trees
-# RR = relative risk
-# CI = conditional inference
+## RR = relative risk
+## CI = conditional inference
 
-RR.a <- LTRCART(Surv(age_pr, age, stat.log) ~ as.factor(sex) + 
-                  as.factor(origin) +  
+set.seed(123)
+
+### Unadjusted
+
+RR.u <- LTRCART(Surv(age_pr, age, stat.log) ~ 
+                  sex + origin +  
                   Dom_CZ + Ext_CZ + Con_CZ +
-                  Agr_CZ + Neu_CZ + Opn_CZ, data = datX, 
-                control = rpart.control(minsplot = 10, cp = 0.0001, xval = 100)
+                  Agr_CZ + Neu_CZ + Opn_CZ, 
+                data = datX
+                #, control = rpart.control(minsplot = 10, cp = 0.0001, xval = 100)
                 )
-CI.a <- LTRCIT(Surv(age_pr, age, stat.log) ~ as.factor(sex) + 
-                  as.factor(origin) +  
-                  Dom_CZ + Ext_CZ + Con_CZ +
-                  Agr_CZ + Neu_CZ + Opn_CZ,
+rpart.plot(RR.u)
+
+CI.u <- LTRCIT(Surv(age_pr, age, stat.log) ~
+                 sex + origin +  
+                 Dom_CZ + Ext_CZ + Con_CZ +
+                 Agr_CZ + Neu_CZ + Opn_CZ, 
                 data = datX)
 
-# Figure 3:
-plot(CI.a)
 
-rpart.plot(RR.a)
+
+### Residualized
+
+RR.r <- LTRCART(Surv(age_pr, age, stat.log) ~ 
+                  sex + origin +  
+                  D.gr + E.gr + C.gr +
+                  A.gr + N.gr + O.gr,
+                data = datX
+                #, control = rpart.control(minsplot = 10, cp = 0.0001, xval = 100)
+)
+
+
+CI.r <- LTRCIT(Surv(age_pr, age, stat.log) ~
+                 sex + origin +  
+                 D.gr + E.gr + C.gr +
+                 A.gr + N.gr + O.gr, 
+               data = datX)
+
+# Figure 3:
+plot(CI.u)
+plot(CI.r)
+
+rpart.plot(RR.r)
 
 
 

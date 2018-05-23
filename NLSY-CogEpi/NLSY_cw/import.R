@@ -248,6 +248,13 @@ ht.df$indiv_income = scale(sqrt(ht.df$indiv_income))
 
 
 
+### SES vars for BMI
+
+## rescaling the childhood/youth var
+ht.df$Youth_SES = scale(ht.df$Child_SES) # for max consistency with NCDS
+
+
+
 ### Health behaviours
 
 ht.df$H_activity[ht.df$H_activity<0] = NA

@@ -123,6 +123,43 @@ ggplot(subset(bmi.long, !is.na(BMI)&!is.na(IQ)), aes(x=time, y=BMI, group=sexIQ,
   #stat_smooth(aes(linetype=IQ, color=sex), method='loess', se=TRUE) +
   xlab('Average age')
 
+
+
+### Completers with IQ corrected for youth SES
+
+bmi.long = bmi[complete.cases(bmi[,c('AFQT89','bmi_85','bmi_96','bmi_06','bmi_12')]),]
+
+bmi.long$gtert.ySES.r <- with(bmi.long, cut(ySES.r,
+                                            breaks=quantile(ySES.r, probs=seq(0,1, by=1/3), na.rm=TRUE), 
+                                            include.lowest=TRUE))
+
+bmi.long$sextert = interaction(bmi.long$SAMPLE_SEX,bmi.long$gtert.ySES.r)
+
+
+## Long format
+bmi.long = rbindlist(list(
+  cbind(bmi.long[,c('CASEID_1979','SAMPLE_SEX','gtert.ySES.r','sextert','bmi_85')],24),
+  cbind(bmi.long[,c('CASEID_1979','SAMPLE_SEX','gtert.ySES.r','sextert','bmi_96')],35),
+  cbind(bmi.long[,c('CASEID_1979','SAMPLE_SEX','gtert.ySES.r','sextert','bmi_06')],45),
+  cbind(bmi.long[,c('CASEID_1979','SAMPLE_SEX','gtert.ySES.r','sextert','bmi_12')],51)
+), use.names=FALSE
+)
+colnames(bmi.long) <- c('id','sex','IQ.res','sexIQ','BMI','time') 
+
+#bmi.long$age = as.factor(bmi.long$age)
+
+ggplot(subset(bmi.long, !is.na(BMI)&!is.na(IQ.res)), aes(x=time, y=BMI, group=sexIQ, color=sexIQ)
+       # , linetype = c(1,1,2,2,3,3)
+       # , palette = c('dodgerblue','violetred1','dodgerblue','violetred1','dodgerblue','violetred1')
+) + 
+  stat_smooth(aes(linetype=IQ.res, color=sex), method='gam', formula = y~s(x, k=4), se=TRUE) +
+  #stat_smooth(aes(linetype=IQ, color=sex), method='loess', se=TRUE) +
+  xlab('Average age')
+
+
+
+
+
   
 
 BMIQ <- ggplot(bmi, aes(AFQT89, bmi_85))

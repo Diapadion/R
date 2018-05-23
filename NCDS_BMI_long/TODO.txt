@@ -1,0 +1,6 @@
+### TODO
+
+# - Figure out the income variables in both samples
+# - Average them together as needed when we want to control for adult income, education, occupation (?)
+# - NLSY we ought to only use the data points where we have both weight and height
+

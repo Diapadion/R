@@ -209,10 +209,9 @@ ncds$Fleave <- as.ordered(ncds$Fleave)
 # table(ncds$Fleave)
 
 # table(ncds$n537)
-ncds$Mleave = as.ordered(ncds$n537)
-ncds$Mleave[ncds$Mleave=='Did not stay-25+'] = 'No'
-
-
+ncds$Mleave = ncds$n537
+levels(ncds$Mleave) = c(NA,'No','No','Yes','Yes','No','Yes',NA,NA)
+# table(ncds$Mleave)
 
 ncds$Fleave = sortLvls.fnc(ncds$n194, c(4,3,1,2))
 ncds$Fleave[ncds$Fleave=='NA'] = NA
@@ -220,6 +219,31 @@ ncds$Fleave[ncds$Fleave=='Dont know'] = NA
 ncds$Fleave <- droplevels(ncds$Fleave)
 ncds$Fleave <- as.ordered(ncds$Fleave)
 # table(ncds$Fleave)
+
+# table(ncds0123$n200)
+ncds$Housing = sortLvls.fnc(ncds$n200, c(6,4,5,3,1,2,7))
+levels(ncds$Housing)[5:7] <- c(NA,NA,NA)
+ncds$Housing = as.ordered(ncds$Housing)
+# table(ncds$Housing)
+
+# table(ncds$n607)
+ncds$PpRoom7 = ncds$n607
+levels(ncds$PpRoom7)[1] = NA
+ncds$PpRoom7 = sortLvls.fnc(ncds$PpRoom7, c(4,3,2,1))
+ncds$PpRoom7 = as.ordered(ncds$PpRoom7)
+# table(ncds$PpRoom7)
+
+
+
+### Making Youth SES
+
+ncds$Youth_SES = rowMeans(cbind(scale(as.numeric(ncds$SoClass0)),scale(as.numeric(ncds$SoClass7)), 
+                         scale(as.numeric(ncds$Fleave)),scale(as.numeric(ncds$Mleave)), 
+                         scale(as.numeric(ncds$PpRoom7)),scale(as.numeric(ncds$Housing)))
+                      , na.rm=TRUE)
+ncds$Youth_SES = scale(ncds$Youth_SES)
+hist(ncds$Youth_SES)
+
 
 
 

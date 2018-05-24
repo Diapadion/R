@@ -9,7 +9,8 @@ library(LTRCtrees)
 library(rpart.plot)
 
 
-set.seed(123)
+
+  set.seed(123)
 
 
 

@@ -9,3 +9,8 @@
 
 X. what added bits of stuff are needed?
 e.g. an analysis of the mother vs nursery reared chimps?
+
+
+- Change all the table numbers
+
+DONE: Table 1, females

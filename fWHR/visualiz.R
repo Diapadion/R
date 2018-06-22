@@ -52,6 +52,8 @@ levels(chAgr$Sex) <- c('Female','Male')
 
 
 
+### Publication Figure 2
+
 g <- ggplot(data=subset(chAgr, !(chAgr$verus=='other')), 
             aes(x=Dom, y=fWHR)) + geom_point() +
   facet_grid(verus ~ Sex) +
@@ -60,16 +62,26 @@ g <- ggplot(data=subset(chAgr, !(chAgr$verus=='other')),
 
 
 
-g <- ggplot(data=chAgr,
-            aes(x=Dom, y=fWHR)) + geom_point() +
-  facet_grid(verus ~ Sex) +
-  stat_smooth(method='gam') +
-  theme_bw() + xlab('Dominance')
-
+# g <- ggplot(data=chAgr,
+#             aes(x=Dom, y=fWHR)) + geom_point() +
+#   facet_grid(verus ~ Sex) +
+#   stat_smooth(method='gam') +
+#   theme_bw() + xlab('Dominance')
 
 
 g
 
+
+
+### Publication Figure S2
+
+g <- ggplot(data=subset(chAgr, !(chAgr$verus=='other')), 
+            aes(x=Neu, y=fWHR)) + geom_point() +
+  facet_grid(verus ~ Sex) +
+  stat_smooth(method='gam') +
+  theme_bw() + xlab('Neuroticism')
+
+g
 
 
 

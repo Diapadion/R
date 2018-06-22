@@ -125,8 +125,8 @@ sum(complete.cases(ht.df[,c('AFQT89','Adult_SES','Child_SES','hasHT','SAMPLE_SEX
 
 
 ht.df$age = 79 - as.numeric(levels(ht.df$DOB_year))[ht.df$DOB_year] ## Age assignment
-# should this adjust for month too?
-# see below for correct DOB calculation
+## should this adjust for month too?
+## see below for correct DOB calculation
 
 ht.df$DOB = as.Date(paste3(paste0('19',as.numeric(levels(ht.df$DOB_year))[ht.df$DOB_year]),
                            as.numeric(levels(ht.df$DOB_month))[ht.df$DOB_month],
@@ -255,121 +255,141 @@ ht.df$Youth_SES = scale(ht.df$Child_SES) # for max consistency with NCDS
 
 
 
+### getting the survival analyses setup
+### GD and CG revised
+
+#View(ht.df[(as.numeric(ht.df$HTdiagDate-as.Date("1970-01-01"))<0),])
+
+# ht.df$recordTime = as.numeric(ht.df$HTdiagDate-as.Date("1970-01-01"))/365.25
+ht.df$recordTime = as.numeric(ht.df$HTdiagDate-ht.df$DOB)/365.25
+
+hist(ht.df$recordTime)
+
+A = !is.na(ht.df$hasHT) ## includes Yes and No, just not missing individuals
+
+y = Surv(ht.df$recordTime[A], ht.df$hasHT[A])
+
+
+
+
+
+
+
 ### Health behaviours
 
-ht.df$H_activity[ht.df$H_activity<0] = NA
-ht.df$H_activity = scale(5 - ht.df$H_activity)
-
-ht.df$LM_activity[ht.df$LM_activity<0] = NA
-ht.df$LM_activity = scale(5 - ht.df$LM_activity)
-
-ht.df$Str_training[ht.df$Str_training<0] = NA
-ht.df$Str_training = scale(5 - ht.df$Str_training)
-
-ht.df$Smoked_atLeast100[ht.df$Smoked_atLeast100<0] = NA
-ht.df$Smoked_atLeast100 = as.factor(ht.df$Smoked_atLeast100)
-
-ht.df$Smoked_everDaily[ht.df$Smoked_everDaily<0] = NA
-ht.df$Smoked_everDaily = as.factor(ht.df$Smoked_everDaily)
-
-ht.df$Drinks_avgDay[ht.df$Drinks_avgDay == -4] = 0
-ht.df$Drinks_avgDay[ht.df$Drinks_avgDay < 0] = NA
-ht.df$Drinks_avgDay = scale(ht.df$Drinks_avgDay)
-# above is possibly not the best way to construct variable
-
-
-
-### Diet variables
-
-ht.df$Trying_to_lose[ht.df$Trying_to_lose<0] = NA
-ht.df$Trying_to_lose[ht.df$Trying_to_lose==1] = -1 # consider dummy coding these
-ht.df$Trying_to_lose[ht.df$Trying_to_lose==2] = 1
-ht.df$Trying_to_lose[ht.df$Trying_to_lose==3] = 0
-ht.df$Trying_to_lose[ht.df$Trying_to_lose==4] = 0
-
-ht.df$Read_nutrition[ht.df$Read_nutrition<1] = NA
-ht.df$Read_nutrition = scale(5 - ht.df$Read_nutrition)
-
-ht.df$Read_ingredients[ht.df$Read_ingredients<1] = NA
-ht.df$Read_ingredients = scale(5 - ht.df$Read_ingredients)
-
-ht.df$Fast_food[ht.df$Fast_foods<0] = NA
-ht.df$Fast_food = scale(ht.df$Fast_food)
-
-ht.df$Snacked[ht.df$Snacked<0] = NA
-ht.df$Snacked = scale(ht.df$Snacked)
-
-ht.df$Skipped_meal[ht.df$Skipped_meal<0] = NA
-ht.df$Skipped_meal = scale(ht.df$Skipped_meal)
-
-ht.df$Sugary_drink[ht.df$Sugary_drink<0] = NA
-ht.df$Sugary_drink = scale(ht.df$Sugary_drink)
-
-
-
-
-
-### Currently provisional - HT medication status and Dr visits ###
-
-HTmed = read.csv('HTmed.csv')
-
-colnames(HTmed)[c(6:21)] = 
-  c('M.BPmeasured.2008','M.BPmeds.2008','F.BPmeasured.2008','F.BPmeds.2008',
-    'M.BPmeasured.2010','M.BPmeds.2010','F.BPmeasured.2010','F.BPmeds.2010',
-    'M.BPmeasured.2012','M.BPmeds.2012','F.BPmeasured.2012','F.BPmeds.2012',
-    'M.BPmeasured.2014','M.BPmeds.2014','F.BPmeasured.2014','F.BPmeds.2014'
-    )
-
-# Measurements taken
-HTmed$BP.measured.2008 = numeric(length=dim(HTmed)[1])
-HTmed$BP.measured.2008[HTmed$R0214800==1] = HTmed$M.BPmeasured.2008[HTmed$R0214800==1]
-HTmed$BP.measured.2008[HTmed$R0214800==2] = HTmed$F.BPmeasured.2008[HTmed$R0214800==2]
-HTmed$BP.measured.2008[HTmed$BP.measured.2008<0] = NA
-
-HTmed$BP.measured.2010 = numeric(length=dim(HTmed)[1])
-HTmed$BP.measured.2010[HTmed$R0214800==1] = HTmed$M.BPmeasured.2010[HTmed$R0214800==1]
-HTmed$BP.measured.2010[HTmed$R0214800==2] = HTmed$F.BPmeasured.2010[HTmed$R0214800==2]
-HTmed$BP.measured.2010[HTmed$BP.measured.2010<0] = NA
-
-HTmed$BP.measured.2012 = numeric(length=dim(HTmed)[1])
-HTmed$BP.measured.2012[HTmed$R0214800==1] = HTmed$M.BPmeasured.2012[HTmed$R0214800==1]
-HTmed$BP.measured.2012[HTmed$R0214800==2] = HTmed$F.BPmeasured.2012[HTmed$R0214800==2]
-HTmed$BP.measured.2012[HTmed$BP.measured.2012<0] = NA
-
-HTmed$BP.measured.2014 = numeric(length=dim(HTmed)[1])
-HTmed$BP.measured.2014[HTmed$R0214800==1] = HTmed$M.BPmeasured.2014[HTmed$R0214800==1]
-HTmed$BP.measured.2014[HTmed$R0214800==2] = HTmed$F.BPmeasured.2014[HTmed$R0214800==2]
-HTmed$BP.measured.2014[HTmed$BP.measured.2014<0] = NA
-
-# Taking medication
-HTmed$BP.meds.2008 = numeric(length=dim(HTmed)[1])
-HTmed$BP.meds.2008[HTmed$R0214800==1] = HTmed$M.BPmeds.2008[HTmed$R0214800==1]
-HTmed$BP.meds.2008[HTmed$R0214800==2] = HTmed$F.BPmeds.2008[HTmed$R0214800==2]
-HTmed$BP.meds.2008[HTmed$BP.meds.2008<0] = NA
-
-HTmed$BP.meds.2010 = numeric(length=dim(HTmed)[1])
-HTmed$BP.meds.2010[HTmed$R0214800==1] = HTmed$M.BPmeds.2010[HTmed$R0214800==1]
-HTmed$BP.meds.2010[HTmed$R0214800==2] = HTmed$F.BPmeds.2010[HTmed$R0214800==2]
-HTmed$BP.meds.2010[HTmed$BP.meds.2010<0] = NA
-
-HTmed$BP.meds.2012 = numeric(length=dim(HTmed)[1])
-HTmed$BP.meds.2012[HTmed$R0214800==1] = HTmed$M.BPmeds.2012[HTmed$R0214800==1]
-HTmed$BP.meds.2012[HTmed$R0214800==2] = HTmed$F.BPmeds.2012[HTmed$R0214800==2]
-HTmed$BP.meds.2012[HTmed$BP.meds.2012<0] = NA
-
-HTmed$BP.meds.2014 = numeric(length=dim(HTmed)[1])
-HTmed$BP.meds.2014[HTmed$R0214800==1] = HTmed$M.BPmeds.2014[HTmed$R0214800==1]
-HTmed$BP.meds.2014[HTmed$R0214800==2] = HTmed$F.BPmeds.2014[HTmed$R0214800==2]
-HTmed$BP.meds.2014[HTmed$BP.meds.2014<0] = NA
-
-
-### Merge into ht.df
-
-ht.df = merge(ht.df, HTmed[c(
-  'BP.measured.2008','BP.measured.2010','BP.measured.2012','BP.measured.2014',
-  'BP.meds.2008','BP.meds.2010','BP.meds.2012','BP.meds.2014','R0000100'
-  )], 
-              by.x='CASEID_1979', by.y='R0000100')
+# ht.df$H_activity[ht.df$H_activity<0] = NA
+# ht.df$H_activity = scale(5 - ht.df$H_activity)
+# 
+# ht.df$LM_activity[ht.df$LM_activity<0] = NA
+# ht.df$LM_activity = scale(5 - ht.df$LM_activity)
+# 
+# ht.df$Str_training[ht.df$Str_training<0] = NA
+# ht.df$Str_training = scale(5 - ht.df$Str_training)
+# 
+# ht.df$Smoked_atLeast100[ht.df$Smoked_atLeast100<0] = NA
+# ht.df$Smoked_atLeast100 = as.factor(ht.df$Smoked_atLeast100)
+# 
+# ht.df$Smoked_everDaily[ht.df$Smoked_everDaily<0] = NA
+# ht.df$Smoked_everDaily = as.factor(ht.df$Smoked_everDaily)
+# 
+# ht.df$Drinks_avgDay[ht.df$Drinks_avgDay == -4] = 0
+# ht.df$Drinks_avgDay[ht.df$Drinks_avgDay < 0] = NA
+# ht.df$Drinks_avgDay = scale(ht.df$Drinks_avgDay)
+# # above is possibly not the best way to construct variable
+# 
+# 
+# 
+# ### Diet variables
+# 
+# ht.df$Trying_to_lose[ht.df$Trying_to_lose<0] = NA
+# ht.df$Trying_to_lose[ht.df$Trying_to_lose==1] = -1 # consider dummy coding these
+# ht.df$Trying_to_lose[ht.df$Trying_to_lose==2] = 1
+# ht.df$Trying_to_lose[ht.df$Trying_to_lose==3] = 0
+# ht.df$Trying_to_lose[ht.df$Trying_to_lose==4] = 0
+# 
+# ht.df$Read_nutrition[ht.df$Read_nutrition<1] = NA
+# ht.df$Read_nutrition = scale(5 - ht.df$Read_nutrition)
+# 
+# ht.df$Read_ingredients[ht.df$Read_ingredients<1] = NA
+# ht.df$Read_ingredients = scale(5 - ht.df$Read_ingredients)
+# 
+# ht.df$Fast_food[ht.df$Fast_foods<0] = NA
+# ht.df$Fast_food = scale(ht.df$Fast_food)
+# 
+# ht.df$Snacked[ht.df$Snacked<0] = NA
+# ht.df$Snacked = scale(ht.df$Snacked)
+# 
+# ht.df$Skipped_meal[ht.df$Skipped_meal<0] = NA
+# ht.df$Skipped_meal = scale(ht.df$Skipped_meal)
+# 
+# ht.df$Sugary_drink[ht.df$Sugary_drink<0] = NA
+# ht.df$Sugary_drink = scale(ht.df$Sugary_drink)
+# 
+# 
+# 
+# 
+# 
+# ### Currently provisional - HT medication status and Dr visits ###
+# 
+# HTmed = read.csv('HTmed.csv')
+# 
+# colnames(HTmed)[c(6:21)] = 
+#   c('M.BPmeasured.2008','M.BPmeds.2008','F.BPmeasured.2008','F.BPmeds.2008',
+#     'M.BPmeasured.2010','M.BPmeds.2010','F.BPmeasured.2010','F.BPmeds.2010',
+#     'M.BPmeasured.2012','M.BPmeds.2012','F.BPmeasured.2012','F.BPmeds.2012',
+#     'M.BPmeasured.2014','M.BPmeds.2014','F.BPmeasured.2014','F.BPmeds.2014'
+#     )
+# 
+# # Measurements taken
+# HTmed$BP.measured.2008 = numeric(length=dim(HTmed)[1])
+# HTmed$BP.measured.2008[HTmed$R0214800==1] = HTmed$M.BPmeasured.2008[HTmed$R0214800==1]
+# HTmed$BP.measured.2008[HTmed$R0214800==2] = HTmed$F.BPmeasured.2008[HTmed$R0214800==2]
+# HTmed$BP.measured.2008[HTmed$BP.measured.2008<0] = NA
+# 
+# HTmed$BP.measured.2010 = numeric(length=dim(HTmed)[1])
+# HTmed$BP.measured.2010[HTmed$R0214800==1] = HTmed$M.BPmeasured.2010[HTmed$R0214800==1]
+# HTmed$BP.measured.2010[HTmed$R0214800==2] = HTmed$F.BPmeasured.2010[HTmed$R0214800==2]
+# HTmed$BP.measured.2010[HTmed$BP.measured.2010<0] = NA
+# 
+# HTmed$BP.measured.2012 = numeric(length=dim(HTmed)[1])
+# HTmed$BP.measured.2012[HTmed$R0214800==1] = HTmed$M.BPmeasured.2012[HTmed$R0214800==1]
+# HTmed$BP.measured.2012[HTmed$R0214800==2] = HTmed$F.BPmeasured.2012[HTmed$R0214800==2]
+# HTmed$BP.measured.2012[HTmed$BP.measured.2012<0] = NA
+# 
+# HTmed$BP.measured.2014 = numeric(length=dim(HTmed)[1])
+# HTmed$BP.measured.2014[HTmed$R0214800==1] = HTmed$M.BPmeasured.2014[HTmed$R0214800==1]
+# HTmed$BP.measured.2014[HTmed$R0214800==2] = HTmed$F.BPmeasured.2014[HTmed$R0214800==2]
+# HTmed$BP.measured.2014[HTmed$BP.measured.2014<0] = NA
+# 
+# # Taking medication
+# HTmed$BP.meds.2008 = numeric(length=dim(HTmed)[1])
+# HTmed$BP.meds.2008[HTmed$R0214800==1] = HTmed$M.BPmeds.2008[HTmed$R0214800==1]
+# HTmed$BP.meds.2008[HTmed$R0214800==2] = HTmed$F.BPmeds.2008[HTmed$R0214800==2]
+# HTmed$BP.meds.2008[HTmed$BP.meds.2008<0] = NA
+# 
+# HTmed$BP.meds.2010 = numeric(length=dim(HTmed)[1])
+# HTmed$BP.meds.2010[HTmed$R0214800==1] = HTmed$M.BPmeds.2010[HTmed$R0214800==1]
+# HTmed$BP.meds.2010[HTmed$R0214800==2] = HTmed$F.BPmeds.2010[HTmed$R0214800==2]
+# HTmed$BP.meds.2010[HTmed$BP.meds.2010<0] = NA
+# 
+# HTmed$BP.meds.2012 = numeric(length=dim(HTmed)[1])
+# HTmed$BP.meds.2012[HTmed$R0214800==1] = HTmed$M.BPmeds.2012[HTmed$R0214800==1]
+# HTmed$BP.meds.2012[HTmed$R0214800==2] = HTmed$F.BPmeds.2012[HTmed$R0214800==2]
+# HTmed$BP.meds.2012[HTmed$BP.meds.2012<0] = NA
+# 
+# HTmed$BP.meds.2014 = numeric(length=dim(HTmed)[1])
+# HTmed$BP.meds.2014[HTmed$R0214800==1] = HTmed$M.BPmeds.2014[HTmed$R0214800==1]
+# HTmed$BP.meds.2014[HTmed$R0214800==2] = HTmed$F.BPmeds.2014[HTmed$R0214800==2]
+# HTmed$BP.meds.2014[HTmed$BP.meds.2014<0] = NA
+# 
+# 
+# ### Merge into ht.df
+# 
+# ht.df = merge(ht.df, HTmed[c(
+#   'BP.measured.2008','BP.measured.2010','BP.measured.2012','BP.measured.2014',
+#   'BP.meds.2008','BP.meds.2010','BP.meds.2012','BP.meds.2014','R0000100'
+#   )], 
+#               by.x='CASEID_1979', by.y='R0000100')
 
 
 

@@ -180,6 +180,77 @@ ggplot(ht.df, aes(Adult_SES, indiv_income)) +
 
 
 
+### Round 3
+
+## Make the complete cases, based on the final model
+
+# A = !is.na(ht.df$hasHT)
+
+ccs = complete.cases(ht.df[,c('SAMPLE_SEX','AFQT89','age_1979','Child_SES','Adult_SES',
+                              'SES_Income_USE','SES_OccStatus_USE','SES_Education_USE',
+                              'hasHT','recordTime'
+                              )])
+table(ccs)
+
+y.ccs = Surv(ht.df$recordTime[ccs], ht.df$hasHT[ccs])
+
+
+
+aft.gd3.0 = aftreg(y.ccs ~ SAMPLE_SEX + AFQT89 #+ age_1979
+                 , data = ht.df[ccs,],
+                 dist = 'loglogistic')
+
+
+aft.gd3.1 = aftreg(y.ccs ~ SAMPLE_SEX * AFQT89 #+ age_1979
+                  , data = ht.df[ccs,], dist='loglogistic')
+
+aft.gd3.2 = aftreg(y.ccs ~ SAMPLE_SEX * AFQT89 #+ age_1979 
+                   + Child_SES
+                   , data = ht.df[ccs,], dist='loglogistic')
+
+aft.gd3.3 = aftreg(y ~ SAMPLE_SEX * AFQT89 #+ age_1979 
+                   + Child_SES + Adult_SES
+                   , data = ht.df[A,], dist='loglogistic')
+
+
+
+extractAIC(aft.gd3.0)
+extractAIC(aft.gd3.1)
+extractAIC(aft.gd3.2)
+extractAIC(aft.gd3.3)
+
+
+summary(aft.gd3.3)
+
+
+
+#######
+## 14-06-18: Something is very wrong with the data.
+## Need to retrace steps to see where things have gone wrong.
+#######
+
+colnames(cw.df)
+
+ret.2 = glm(H50_DR_HighBP_HT ~ SAMPLE_SEX * AFQT89 + Child_SES
+    , data = cw.df, family=binomial())
+
+ret.3 = glm(H50_DR_HighBP_HT ~ SAMPLE_SEX * AFQT89 + Child_SES + Adult_SES
+            , data = cw.df, family=binomial())
+
+summary(ret.3)
+
+
+
+#######
+
+
+
+
+
+
+
+### Extra ###
+
 
 ### explained variance of models, after Chan et al. 2018
 

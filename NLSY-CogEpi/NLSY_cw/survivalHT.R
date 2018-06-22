@@ -7,18 +7,6 @@ library(ggplot2)
 
 
 
-### getting the survival analyses setup
-### GD and CG revised
-
-#View(ht.df[(as.numeric(ht.df$HTdiagDate-as.Date("1970-01-01"))<0),])
-
-ht.df$recordTime = as.numeric(ht.df$HTdiagDate-as.Date("1970-01-01"))/365.25
-
-A = !is.na(ht.df$hasHT)
-
-y = Surv(ht.df$recordTime[A], ht.df$hasHT[A])
-
-
 
 # cor(ht.df$AFQT89, as.numeric(ht.df$age_1979), use='pairwise.complete.obs', method='spearman')
 

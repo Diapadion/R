@@ -14,9 +14,9 @@ library(jtools)
 
 ### Quartiles
 
-ht.df$IQquart <- with(ht.df,cut(AFQT89, 
-                                breaks=quantile(AFQT89, probs=seq(0,1, by=0.25), na.rm=TRUE), 
-                                include.lowest=TRUE))
+# ht.df$IQquart <- with(ht.df,cut(AFQT89, 
+#                                 breaks=quantile(AFQT89, probs=seq(0,1, by=0.25), na.rm=TRUE), 
+#                                 include.lowest=TRUE))
 
 
 # Tertiles
@@ -56,7 +56,7 @@ ht.df$sex_tert = interaction(ht.df$SAMPLE_SEX,ht.df$IQtert)
 
 levels(ht.df$sex_tert) <- c('M-Low','F-Low','M-Mid','F-Mid','M-High','F-High')
 
-npsf.2 = npsurv(y ~ sex_tert, data=ht.df)
+npsf.2 = npsurv(y ~ sex_tert, data=ht.df[A,])
 survplot(npsf.2, xlab='Age',ylab='Probability of developing hypertension',ylim=c(0.6,1),xlim=c(15,59),
          label.curves=F, col=c('skyblue3','coral2','skyblue3','coral2','skyblue3','coral2')
          , col.fill=c('skyblue','coral','skyblue','coral','skyblue','coral')
@@ -67,7 +67,7 @@ survplot(npsf.2, xlab='Age',ylab='Probability of developing hypertension',ylim=c
 
 ### ggplot attempt - this is the pub plot
 
-ggfit = survfit(y ~ sex_tert, data=ht.df)
+ggfit = survfit(Surv(recordTime, hasHT) ~ sex_tert, data=ht.df[A,])
 
 ggsurvplot(ggfit, conf.int=T,censor=F
            , linetype = c(1,1,2,2,3,3)
@@ -75,14 +75,14 @@ ggsurvplot(ggfit, conf.int=T,censor=F
            , palette = c('dodgerblue','violetred1','dodgerblue','violetred1','dodgerblue','violetred1')
            , legend = c(0.2, 0.2) #'none'
            ) + 
-  coord_cartesian(xlim=c(15,58),ylim=c(0.6,1.0))+
+  coord_cartesian(xlim=c(15,58),ylim=c(0.1,1.0))+
   xlab('Age')+ylab('Proportion that remains normotensive')+
   scale_x_continuous(limits = c(15,58), breaks=seq(15,57,6))
 
   #theme(axis.title.y='Risk of developing hypertension', axis.title.x='Age')
 
 
-# Try with only values with income var - why won't it work?
+## Try with only values with income var - why won't it work?
 ggfit = survfit(y[complete.cases(ht.df$SES_Income_USE)] ~ sex_tert, data=ht.df[complete.cases(ht.df$SES_Income_USE),])
 
 ggsurvplot(ggfit, conf.int=T,censor=F

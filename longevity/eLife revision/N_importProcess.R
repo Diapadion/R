@@ -2,15 +2,26 @@
 
 
 
+datX = read.csv('eLife-chimpLong.csv')
 
-### TODO: move to proper location, wherever that is
+
+
+### Convert numerics to factors
 datX$sex = as.factor(datX$sex)
-datX$origin = as.factor(datX$origin)
-
-# table(datX$origin)
+datX$sample = as.factor(datX$sample)
 
 
 
+### Make centred and scaled variables
+datX$Dom_CZ <- scale(datX$Dom)
+datX$Ext_CZ <- scale(datX$Ext)
+datX$Con_CZ <- scale(datX$Con)
+datX$Agr_CZ <- scale(datX$Agr)
+datX$Neu_CZ <- scale(datX$Neu)
+datX$Opn_CZ <- scale(datX$Opn)
 
 
-y = Surv(age_pr, age, status)
+## Special
+
+
+# y = Surv(age_pr, age, status)

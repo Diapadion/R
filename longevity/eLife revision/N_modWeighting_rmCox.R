@@ -3,7 +3,6 @@
 library(frailtypack)
 library(parfm)
 library(AICcmodavg)
-library(coxme)
 
 
 
@@ -29,49 +28,6 @@ library(coxme)
 
 
 ### All individuals
-
-
-
-### Cox
-
-
-## Uncorrected
-
-pf.u.o.s.cx = coxme(Surv(age_pr, age, status) ~ origin + sex +
-                      Agr_CZ + Dom_CZ + Ext_CZ + Con_CZ + Neu_CZ + Opn_CZ + (1|sample)
-                    , data=datX)
-
-pf.u.x.s.cx = coxme(Surv(age_pr, age, status) ~ sex +
-                      Agr_CZ + Dom_CZ + Ext_CZ + Con_CZ + Neu_CZ + Opn_CZ + (1|sample)
-                    , data=datX)
-
-pf.u.o.x.cx = coxme(Surv(age_pr, age, status) ~ origin +
-                      Agr_CZ + Dom_CZ + Ext_CZ + Con_CZ + Neu_CZ + Opn_CZ + (1|sample)
-                    , data=datX)
-
-pf.u.x.x.cx = coxme(Surv(age_pr, age, status) ~
-                      Agr_CZ + Dom_CZ + Ext_CZ + Con_CZ + Neu_CZ + Opn_CZ + (1|sample)
-                    , data=datX)
-
-
-## Residualized
-
-pf.r.o.s.cx = coxme(Surv(age_pr, age, status) ~ origin + sex +
-                      A.gr + D.gr + E.gr + C.gr + N.gr + O.gr + (1|sample)
-                    , data=datX)
-
-pf.r.x.s.cx = coxme(Surv(age_pr, age, status) ~ sex +
-                      A.gr + D.gr + E.gr + C.gr + N.gr + O.gr + (1|sample)
-                    , data=datX)
-
-pf.r.o.x.cx = coxme(Surv(age_pr, age, status) ~ origin +
-                      A.gr + D.gr + E.gr + C.gr + N.gr + O.gr + (1|sample)
-                    , data=datX)
-
-pf.r.x.x.cx = coxme(Surv(age_pr, age, status) ~
-                      A.gr + D.gr + E.gr + C.gr + N.gr + O.gr + (1|sample)
-                    , data=datX)
-
 
 
 ### Weibull
@@ -584,9 +540,6 @@ exp(mavg.r.O$Upper.CL)
 
 
 ### Males ###
-
-
-### Cox
 
 
 ### Weibull

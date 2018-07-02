@@ -1,4 +1,4 @@
-### Relative risk and conditional inference survival trees
+### Conditional Inference (CI) survival trees
 
 library(survival)
 library(LTRCtrees)
@@ -6,12 +6,7 @@ library(rpart.plot)
 
 
 
-
-
-
 ### Trees
-## CI = conditional inference
-
 
 set.seed(123)
 
@@ -40,9 +35,3 @@ plot(CI.u)
 
 ## Compare to:
 plot(CI.r)
-
-
-
-
-
-

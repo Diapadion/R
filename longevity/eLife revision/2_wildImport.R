@@ -6,9 +6,6 @@ library(lubridate)
 
 wch <- read.csv(file = 'WildChimp_biography.csv')
 
-#colnames(wch)
-#table(wch$departtype)
-#head(as.integer(as.character(wch$departdate)))
 
 wch$birthdate = as.Date(wch$birthdate,format='%Y-%m-%d')
 wch$departdate = as.Date(wch$departdate,format='%Y-%m-%d')
@@ -22,9 +19,9 @@ colnames(wch)[18] = 'status'
 wch = wch[wch$status==TRUE,]
 
 wch = rbind(datX[,c('age','status','sample')],wch[,c('age','status','sample')])
-wch$sample[wch$sample!= 'Wild'] = 'Captive'
+wch$sample[wch$sample!= 'Wild'] = '6'
+wch$sample = droplevels(wch$sample)
+levels(wch$sample) = c('Captive','Wild')
 colnames(wch)[3] = 'Sample'
 
 y.wild <- Surv(as.numeric(wch$age),wch$status)
-
-                        

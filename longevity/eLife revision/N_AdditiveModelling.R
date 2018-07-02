@@ -1,45 +1,57 @@
 ### GAM evaluation ###
 
-
-
 library(mgcv)
 
 
 
 ### Dominance
 gam.d = gamm(Dom ~ s(age_pr, k=20), data=datX)
-# plot(gam.d$gam, residuals=TRUE)
 gam.check(gam.d$gam)
+## Figure 2 - figure supplement 1
+plot(gam.d$gam, residuals=TRUE, 
+     xlab = "Age at personality rating",
+     ylab = "Dominance (scaled & centered)")
 
 
 ### Extraversion
 gam.e = gamm(Ext ~ s(age_pr, k=20), data=datX)
-plot(gam.e$gam, residuals=TRUE)
 gam.check(gam.e$gam)
+plot(gam.e$gam, residuals=TRUE,
+     xlab = "Age at personality rating",
+     ylab = "Extraversion (scaled & centered)")
 
 
 ### Conscientiousness
 gam.c = gamm(Con ~ s(age_pr, k=20), data=datX)
-plot(gam.c$gam, residuals=TRUE)
 gam.check(gam.c$gam)
+plot(gam.c$gam, residuals=TRUE,
+     xlab = "Age at personality rating",
+     ylab = "Conscientiousness (scaled & centered)")
 
 
 ### Agreeableness
 gam.a = gamm(Agr ~ s(age_pr, k=20), data=datX)
-plot(gam.a$gam, residuals=TRUE)
 gam.check(gam.a$gam)
+plot(gam.a$gam, residuals=TRUE,
+     xlab = "Age at personality rating",
+     ylab = "Agreeableness (scaled & centered)")
 
 
 ### Neuroticism
 gam.n = gamm(Neu ~ s(age_pr, k=20), data=datX)
-plot(gam.n$gam, residuals=TRUE)
 gam.check(gam.n$gam)
+plot(gam.n$gam, residuals=TRUE,
+     xlab = "Age at personality rating",
+     ylab = "Neuroticism (scaled & centered)")
 
 
 ### Openness
 gam.o = gamm(Opn ~ s(age_pr, k=20), data=datX)
-plot(gam.o$gam, residuals=TRUE)
 gam.check(gam.o$gam)
+plot(gam.o$gam, residuals=TRUE,
+     xlab = "Age at personality rating",
+     ylab = "Openness (scaled & centered)")
+
 
 
 ### Save residuals

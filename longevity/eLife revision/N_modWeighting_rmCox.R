@@ -1,4 +1,4 @@
-### Models to weight and aggregate
+### Parametric survival models to weight and aggregate
 
 library(frailtypack)
 library(parfm)

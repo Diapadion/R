@@ -21,7 +21,6 @@ datX$Neu_CZ <- scale(datX$Neu)
 datX$Opn_CZ <- scale(datX$Opn)
 
 
-## Special
 
-
-# y = Surv(age_pr, age, status)
+### Make a LHS survival outcome object
+y = Surv(datX$age_pr, datX$age, datX$status)

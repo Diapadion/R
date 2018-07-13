@@ -16,12 +16,6 @@ library(probemod)
 table(persage$Sex[persage$Facility.x=='ZX6012'] )
 table(persage$Sex[persage$Facility.x=='UQ6934'] )
 
-mean(persage$agenum[persage$Facility.x=='ZX6012'] )
-mean(persage$agenum[persage$Facility.x=='UQ6934'] )
-sd(persage$agenum[persage$Facility.x=='ZX6012'] )
-sd(persage$agenum[persage$Facility.x=='UQ6934'] )
-
-
 stripchart(Age ~ Facility.x * Sex, data=persage, method='jitter', jitter=0.3)
 
 
@@ -50,7 +44,10 @@ stripchart(fWHR ~ Facility.x, data=fWHR, method='jitter', jitter=0.3)
 # ===================================================================
 
 cormat = cor(fWHR[,c(16:17,25,32:34,93:102)],use='pairwise.complete.obs', method='spearman')
-corrplot(fWHR[,c(16:17,25,32:34,93:102)])
+cormat = cor(fWHR[fWHR$agenum < 8,c(16:17,25,32:34,93:102)],use='pairwise.complete.obs', method='spearman')
+
+corrplot(fWHR[fWHR$agenum < 8,c(16:17,25,32:34,93:102)])
+
 write.csv(cormat, file='correlatMatrix.csv')
 
 
@@ -72,27 +69,36 @@ plot(fWHR ~ agenum, data=fWHR[fWHR$Sex=='F',])
 plot(fWHR ~ Dominance.status, data=fWHR[fWHR$Sex=='F',])
 #plot(fWHR ~ Dominance.bin, data=fWHR[fWHR$Sex=='F',])
 
-plot(fWHR ~ agenum, data=fWHR[fWHR$agenum >= 5.5,])
+plot(fWHR ~ agenum, data=fWHR[fWHR$agenum >= 8,])
 
 
 plot(Short.dom ~ Sex , data=fWHR)
-plot(Short.dom ~ Sex , data=fWHR[fWHR$agenum >= 5.5,])
-plot(Short.dom ~ Sex , data=fWHR[fWHR$agenum < 5.5,])
+plot(Short.dom ~ Sex , data=fWHR[fWHR$agenum >= 8,])
+plot(Short.dom ~ Sex , data=fWHR[fWHR$agenum < 8,])
 
 plot(Short.con ~ Sex , data=fWHR)
-plot(Short.con ~ Sex , data=fWHR[fWHR$agenum >= 5.5,])
-plot(Short.con ~ Sex , data=fWHR[fWHR$agenum < 5.5,])
+plot(Short.con ~ Sex , data=fWHR[fWHR$agenum >= 8,])
+plot(Short.con ~ Sex , data=fWHR[fWHR$agenum < 8,])
 
 plot(Dominance ~ Sex , data=fWHR)
-plot(Dominance ~ Sex , data=fWHR[fWHR$agenum >= 5.5,])
-plot(Dominance ~ Sex , data=fWHR[fWHR$agenum < 5.5,])
+plot(Dominance ~ Sex , data=fWHR[fWHR$agenum >= 8,])
+plot(Dominance ~ Sex , data=fWHR[fWHR$agenum < 8,])
 
 plot(Confidence ~ Sex , data=fWHR)
-plot(Confidence ~ Sex , data=fWHR[fWHR$agenum >= 5.5,])
-plot(Confidence ~ Sex , data=fWHR[fWHR$agenum < 5.5,])
+plot(Confidence ~ Sex , data=fWHR[fWHR$agenum >= 8,])
+plot(Confidence ~ Sex , data=fWHR[fWHR$agenum < 8,])
 
-mean(fWHR$fWHR[fWHR$agenum>=5.5 & fWHR$Sex=='M'])
-mean(fWHR$fWHR[fWHR$agenum>=5.5 & fWHR$Sex=='F'], na.rm=T)
+mean(fWHR$fWHR[fWHR$agenum>=8 & fWHR$Sex=='M'])
+mean(fWHR$fWHR[fWHR$agenum>=8 & fWHR$Sex=='F'], na.rm=T)
+
+
+
+### Do confidence and doinance change with age?
+
+plot(Short.con ~ agenum, data=fWHR[fWHR$agenum < 8,])
+plot(Short.dom ~ agenum, data=fWHR[fWHR$agenum < 8,])
+plot(Confidence ~ agenum, data=fWHR[fWHR$agenum < 8,])
+plot(Dominance ~ agenum, data=fWHR[fWHR$agenum < 8,])
 
 
 
@@ -125,20 +131,20 @@ anova(m0,m1.a1,m1.a2,m1)
 ## Added splits into the young and old monkeys
 
 m0.o <- lmer(fWHR ~ 1 + (1|Facility.x/Rhesus)
-             , data=fWHR[fWHR$agenum >= 5.5,])
+             , data=fWHR[fWHR$agenum >= 8,])
 # m1.a1.o <- lmer(fWHR ~ Age + (1|Facility.x/Rhesus)
-#              , data=fWHR[fWHR$agenum >= 5.5,])
+#              , data=fWHR[fWHR$agenum >= 8,])
 # m1.a2.o <- lmer(fWHR ~ Age + Age2 + (1|Facility.x/Rhesus)
-#                 , data=fWHR[fWHR$agenum >= 5.5,])
+#                 , data=fWHR[fWHR$agenum >= 8,])
 # m1.a3.o <- lmer(fWHR ~ Age + Age2 + Age3 + (1|Facility.x/Rhesus)
-#                 , data=fWHR[fWHR$agenum >= 5.5,])
+#                 , data=fWHR[fWHR$agenum >= 8,])
 # anova(m0.o,m1.a1.o,m1.a2.o,m1.a3.o)
 
 summary(m1.o)
 confint(m1.o)
 
 m1.y <- lmer(fWHR ~ Age + Age2 + Age3 + (1|Facility.x/Rhesus)
-             , data=fWHR[fWHR$agenum < 5.5,])
+             , data=fWHR[fWHR$agenum < 8,])
 summary(m1.y)
 confint(m1.y, method='boot')
 
@@ -156,13 +162,13 @@ confint(m2)
 
 ## Young vs. Old
 m2.o <- lmer(fWHR ~ Sex * Age + Age2 + Age3 + (1|Facility.x/Rhesus)
-             , data=fWHR[fWHR$agenum >= 5.5,])
+             , data=fWHR[fWHR$agenum >= 8,])
 summary(m2.o)
 confint(m2.o, method='boot')
 
 
 m2.y <- lmer(fWHR ~ Sex * Age + Age2 + Age3 + (1|Facility.x/Rhesus)
-             , data=fWHR[fWHR$agenum < 5.5,])
+             , data=fWHR[fWHR$agenum < 8,])
 summary(m2.y)
 confint(m2.y, method='profile')
 
@@ -197,22 +203,22 @@ anova(m3,m3.x)
 
 ## Young vs. Old
 m3.o <- lmer(fWHR ~ Age + Age2 + Age3 +
-               Sex + Dominance.status + (1|Facility.x/Rhesus)
-             , data=fWHR[fWHR$agenum >= 5.5,])
+               Sex + Dominance.status + (1|Rhesus)
+             , data=fWHR[fWHR$agenum >= 8,])
 summary(m3.o)
 m3.o.x <- lmer(fWHR ~ Age + Age2 + Age3 + 
-                 Sex * Dominance.status + (1|Facility.x/Rhesus)
-               , data=fWHR[fWHR$agenum >= 5.5,])
+                 Sex * Dominance.status + (1|Rhesus)
+               , data=fWHR[fWHR$agenum >= 8,])
 summary(m3.o.x)
 anova(m3.o,m3.o.x)
 
 m3.y <- lmer(fWHR ~ Age + Age2 + Age3 + Sex + Dominance.status + (1|Facility.x/Rhesus)
-             , data=fWHR[fWHR$agenum < 5.5,])
+             , data=fWHR[fWHR$agenum < 8,])
 summary(m3.y)
 confint(m3.y)
 
-sjt.lmer(m3)
-sjt.lmer(m3.y, m3.o)
+#sjt.lmer(m3)
+#sjt.lmer(m3.y, m3.o)
 
 
 
@@ -236,14 +242,15 @@ anova(m4,m0.ZX)
 m4.y <- lmer(fWHR ~ Age + Age2 + Age3 + 
                Sex 
              + Confidence + Openness + Dominance + Friendliness + Activity + Anxiety
-             + (1|Rhesus), data=fWHR[(fWHR$Facility.x=='ZX6012')&(fWHR$agenum < 5.5),])
+             + (1|Rhesus), data=fWHR[(fWHR$Facility.x=='ZX6012')&(fWHR$agenum < 8),])
 summary(m4.y)
 Anova(m4.y)
 confint(m4.y)
+
 m4.o <- lmer(fWHR ~ Age + Age2 + Age3 + 
                Sex 
              + Confidence + Openness + Dominance + Friendliness + Activity + Anxiety
-             + (1|Rhesus), data=fWHR[(fWHR$Facility.x=='ZX6012')&(fWHR$agenum >= 5.5),])
+             + (1|Rhesus), data=fWHR[(fWHR$Facility.x=='ZX6012')&(fWHR$agenum >= 8),])
 summary(m4.o)
 confint(m4.o, method='boot')
 
@@ -274,7 +281,7 @@ m5.y <- lmer(fWHR ~ Age + Age2 + Age3 +
                Sex 
              + Short.con + Short.opn + Short.dom + Short.anx
              + (1|Facility.x/Rhesus)
-             , data=fWHR[(fWHR$agenum < 5.5),])
+             , data=fWHR[(fWHR$agenum < 8),])
 summary(m5.y)
 Anova(m5.y)
 confint(m5.y, method='profile')
@@ -283,7 +290,7 @@ m5.o <- lmer(fWHR ~ Age + Age2 + Age3 +
                Sex 
              + Short.con + Short.opn + Short.dom + Short.anx
              + (1|Facility.x/Rhesus)
-             , data=fWHR[(fWHR$agenum >= 5.5),])
+             , data=fWHR[(fWHR$agenum >= 8),])
 summary(m5.o)
 Anova(m5.o)
 confint(m5.o)
@@ -354,43 +361,43 @@ confint(m5.o)
 ### *** Testing fWHR ~ Dom + Conf, low end of rank impact
 
 
-#library(rockchalk)
-library(probemod)
-library(plyr)
-
-fWHR.avg = aggregate(fWHR, by=list(fWHR$Rhesus), FUN=mean)
-fWHR.avg$Sex = ddply(fWHR,.(Rhesus,Sex),mean)$Sex
-
-
-           
-
-lm4.y <- lm(fWHR ~ Age + Age2 + Age3 + 
-              Sex 
-            + Confidence + Openness + Dominance + Friendliness + Activity + Anxiety
-            , data=fWHR.avg[(fWHR.avg$agenum < 5.5),],
-            na.action=na.omit)
-summary(lm4.y)
-
-jn4.y = jn(lm4.y, 'fWHR', 'Dominance', 'Dominance.status')
-
-
-
-
-
-m4.y.low <- lmer(fWHR ~ Age + Age2 + Age3 + 
-               Sex 
-             + Confidence + Openness + Dominance + Friendliness + Activity + Anxiety
-             + (1|Rhesus), data=fWHR[(fWHR$Facility.x=='ZX6012')&(fWHR$agenum < 5.5),])
-summary(m4.y)
-Anova(m4.y)
-confint(m4.y)
-
-m4.o.low <- lmer(fWHR ~ Age + Age2 + Age3 + 
-               Sex 
-             + Confidence
-             + (1|Rhesus), data=fWHR[(fWHR$Facility.x=='ZX6012')&(fWHR$agenum >= 5.5)&(!fWHR$Dominance.bin),])
-summary(m4.o)
-confint(m4.o, method='boot')
+# library(rockchalk)
+# library(probemod)
+# library(plyr)
+# 
+# fWHR.avg = aggregate(fWHR, by=list(fWHR$Rhesus), FUN=mean)
+# fWHR.avg$Sex = ddply(fWHR,.(Rhesus,Sex),mean)$Sex
+# 
+# 
+#            
+# 
+# lm4.y <- lm(fWHR ~ Age + Age2 + Age3 + 
+#               Sex 
+#             + Confidence + Openness + Dominance + Friendliness + Activity + Anxiety
+#             , data=fWHR.avg[(fWHR.avg$agenum < 8),],
+#             na.action=na.omit)
+# summary(lm4.y)
+# 
+# jn4.y = jn(lm4.y, 'fWHR', 'Dominance')#, 'Dominance.status')
+# 
+# 
+# 
+# 
+# 
+# m4.y.low <- lmer(fWHR ~ Age + Age2 + Age3 + 
+#                Sex 
+#              + Confidence + Openness + Dominance + Friendliness + Activity + Anxiety
+#              + (1|Rhesus), data=fWHR[(fWHR$Facility.x=='ZX6012')&(fWHR$agenum < 8),])
+# summary(m4.y)
+# Anova(m4.y)
+# confint(m4.y)
+# 
+# m4.o.low <- lmer(fWHR ~ Age + Age2 + Age3 + 
+#                Sex 
+#              + Confidence
+#              + (1|Rhesus), data=fWHR[(fWHR$Facility.x=='ZX6012')&(fWHR$agenum >= 8)&(!fWHR$Dominance.bin),])
+# summary(m4.o)
+# confint(m4.o, method='boot')
 
 ### ***
 
@@ -418,9 +425,9 @@ confint(m1.LF)
 
 ## Young vs. Old
 m1.LF.o <- lmer(LFFH ~  Age + Age2 + Age3 + (1|Facility.x/Rhesus)
-                , data=fWHR[fWHR$agenum >= 5.5,])
+                , data=fWHR[fWHR$agenum >= 8,])
 m1.LF.y <- lmer(LFFH ~  Age + Age2 + Age3 + (1|Facility.x/Rhesus)
-                , data=fWHR[fWHR$agenum < 5.5,])
+                , data=fWHR[fWHR$agenum < 8,])
 summary(m1.LF.o)
 summary(m1.LF.y)
 confint(m1.LF.o, method='boot')
@@ -455,9 +462,9 @@ confint(m2.LF)
 ## Young vs. Old
 m2.LF.o <- lmer(LFFH ~ Sex * Age + Age2 + Age3 
                   + (1|Facility.x/Rhesus)
-                , data=fWHR[fWHR$agenum >= 5.5,])
+                , data=fWHR[fWHR$agenum >= 8,])
 m2.LF.y <- lmer(LFFH ~ Sex * Age + Age2 + Age3 + (1|Facility.x/Rhesus)
-                , data=fWHR[fWHR$agenum < 5.5,])
+                , data=fWHR[fWHR$agenum < 8,])
 summary(m2.LF.o)
 summary(m2.LF.y)
 confint(m2.LF.o, method='Wald')
@@ -484,11 +491,11 @@ Anova(m3.LF)
 
 ## Young vs. Old 
 m3.LF.o <- lmer(LFFH ~  Age + Age2 + Age3 + Dominance.status
-                + (1|Facility.x/Rhesus)
-                , data=fWHR[fWHR$agenum >= 5.5,])
+                + (1|Rhesus)
+                , data=fWHR[fWHR$agenum >= 8,])
 m3.LF.y <- lmer(LFFH ~  Age + Age2 + Age3 + Dominance.status
                 + (1|Facility.x/Rhesus)
-                , data=fWHR[fWHR$agenum < 5.5,])
+                , data=fWHR[fWHR$agenum < 8,])
 summary(m3.LF.o)
 summary(m3.LF.y)
 confint(m3.LF.o, method='boot')
@@ -506,10 +513,10 @@ confint(m4.LF)
 
 m4.LF.o <- lmer(LFFH ~  Age + Age2 + Age3
                 + Confidence + Openness + Dominance + Friendliness + Activity + Anxiety
-                + (1|Rhesus), data=fWHR[(fWHR$Facility.x=='ZX6012')&(fWHR$agenum >= 5.5),])
+                + (1|Rhesus), data=fWHR[(fWHR$Facility.x=='ZX6012')&(fWHR$agenum >= 8),])
 m4.LF.y <- lmer(LFFH ~  Age + Age2 + Age3
                 + Confidence + Openness + Dominance + Friendliness + Activity + Anxiety
-                + (1|Rhesus), data=fWHR[(fWHR$Facility.x=='ZX6012')&(fWHR$agenum < 5.5),])
+                + (1|Rhesus), data=fWHR[(fWHR$Facility.x=='ZX6012')&(fWHR$agenum < 8),])
 summary(m4.LF.o)
 summary(m4.LF.y)
 confint(m4.LF.o, method='boot')
@@ -529,11 +536,11 @@ confint(m5.LF)
 m5.LF.o <- lmer(LFFH ~  Age + Age2 + Age3 +
                   + Short.con + Short.opn + Short.dom + Short.anx
                 + (1|Facility.x/Rhesus)
-                , data=fWHR[fWHR$agenum >= 5.5,])
+                , data=fWHR[fWHR$agenum >= 8,])
 m5.LF.y <- lmer(LFFH ~  Age + Age2 + Age3 +
                   + Short.con + Short.opn + Short.dom + Short.anx
                 + (1|Facility.x/Rhesus)
-                , data=fWHR[fWHR$agenum < 5.5,])
+                , data=fWHR[fWHR$agenum < 8,])
 summary(m5.LF.o)
 summary(m5.LF.y)
 confint(m5.LF.o)
@@ -583,7 +590,7 @@ confint(m5.LF.y, method='boot')
 
 
 
-### Afterthoughts ###
+### Aftermaths ###
 
 
 m.af.1 = lmer(fWHR ~ Age + Age2 + Age3 + 
@@ -600,12 +607,12 @@ m.af.1 = lmer(fWHR ~ Age + Age2 + Age3 +
 m.af.1.o = lmer(fWHR ~ Age + Age2 + Age3 + 
                   Sex 
                 + Dominance.status * Short.anx
-                + (1|Facility.x/Rhesus), data=fWHR[(fWHR$agenum >= 5.5),])
+                + (1|Rhesus), data=fWHR[(fWHR$agenum >= 8),])
 
 
 m.af.1.y = lmer(fWHR ~ Age + Age2 + Age3 + 
                        Sex 
                      + Dominance.status * Short.anx
-                     + (1|Facility.x/Rhesus), data=fWHR[(fWHR$agenum < 5.5),])
+                     + (1|Facility.x/Rhesus), data=fWHR[(fWHR$agenum < 8),])
 
-summary(m.af.1)
+summary(m.af.1.y)

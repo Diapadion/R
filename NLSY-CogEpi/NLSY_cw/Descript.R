@@ -94,6 +94,46 @@ table(ht.df$indiv_income[ht.df$SAMPLE_SEX=='MALE'])
 
 
 
+## Analytic sample descriptives
+
+sum(ht.df[ccs,]$SAMPLE_SEX=='MALE')
+sum(ht.df[ccs,]$SAMPLE_SEX=='FEMALE')
+
+# IQ
+aggregate(AFQT89 ~ SAMPLE_SEX, data=ht.df[ccs,], FUN=mean)
+aggregate(AFQT89 ~ SAMPLE_SEX, data=ht.df[ccs,], FUN=sd)
+
+# Child SES
+aggregate(Child_SES ~ SAMPLE_SEX, data=ht.df[ccs,], FUN=mean)
+aggregate(Child_SES ~ SAMPLE_SEX, data=ht.df[ccs,], FUN=sd)
+
+# Adult SES
+aggregate(Adult_SES ~ SAMPLE_SEX, data=ht.df[ccs,], FUN=mean)
+aggregate(Adult_SES ~ SAMPLE_SEX, data=ht.df[ccs,], FUN=sd)
+
+# Income
+aggregate(SES_Income_USE ~ SAMPLE_SEX, data=ht.df[ccs,], FUN=mean)
+aggregate(SES_Income_USE ~ SAMPLE_SEX, data=ht.df[ccs,], FUN=sd)
+
+# Education
+aggregate(SES_Education_USE ~ SAMPLE_SEX, data=ht.df[ccs,], FUN=mean)
+aggregate(SES_Education_USE ~ SAMPLE_SEX, data=ht.df[ccs,], FUN=sd)
+
+# Occupation Status
+aggregate(SES_OccStatus_USE ~ SAMPLE_SEX, data=ht.df[ccs,], FUN=mean)
+aggregate(SES_OccStatus_USE ~ SAMPLE_SEX, data=ht.df[ccs,], FUN=sd)
+
+# Hypertension
+table(ht.df[ccs,]$hasHT,ht.df[ccs,]$SAMPLE_SEX)
+
+hist(ht.df[ccs,]$HTage50t[ht.df[ccs,]$hasHT])
+
+aggregate(HTage50t ~ SAMPLE_SEX, data=ht.df[ccs,][ht.df[ccs,]$hasHT,], FUN=mean)
+aggregate(HTage50t ~ SAMPLE_SEX, data=ht.df[ccs,][ht.df[ccs,]$hasHT,], FUN=sd)
+
+
+
+
 ### Some pub correlations
 
 cor(ht.df$Child_SES, ht.df$AFQT89, use='complete.obs')

@@ -186,31 +186,31 @@ ggplot(ht.df, aes(Adult_SES, indiv_income)) +
 
 # A = !is.na(ht.df$hasHT)
 
-ccs = complete.cases(ht.df[,c('SAMPLE_SEX','AFQT89','age_1979','Child_SES','Adult_SES',
-                              'SES_Income_USE','SES_OccStatus_USE','SES_Education_USE',
-                              'hasHT','recordTime'
-                              )])
+# ccs = complete.cases(ht.df[,c('SAMPLE_SEX','AFQT89','age_1979','Child_SES','Adult_SES',
+#                               'SES_Income_USE','SES_OccStatus_USE','SES_Education_USE',
+#                               'hasHT','recordTime'
+#                               )])
 table(ccs)
 
 y.ccs = Surv(ht.df$recordTime[ccs], ht.df$hasHT[ccs])
 
 
 
-aft.gd3.0 = aftreg(y.ccs ~ SAMPLE_SEX + AFQT89 #+ age_1979
+aft.gd3.0 = aftreg(y.ccs ~ SAMPLE_SEX + AFQT89 + age_1979
                  , data = ht.df[ccs,],
                  dist = 'loglogistic')
 
 
-aft.gd3.1 = aftreg(y.ccs ~ SAMPLE_SEX * AFQT89 #+ age_1979
+aft.gd3.1 = aftreg(y.ccs ~ SAMPLE_SEX * AFQT89 + age_1979
                   , data = ht.df[ccs,], dist='loglogistic')
 
-aft.gd3.2 = aftreg(y.ccs ~ SAMPLE_SEX * AFQT89 #+ age_1979 
+aft.gd3.2 = aftreg(y.ccs ~ SAMPLE_SEX * AFQT89 + age_1979 
                    + Child_SES
                    , data = ht.df[ccs,], dist='loglogistic')
 
-aft.gd3.3 = aftreg(y ~ SAMPLE_SEX * AFQT89 #+ age_1979 
+aft.gd3.3 = aftreg(y.ccs ~ SAMPLE_SEX * AFQT89 + age_1979 
                    + Child_SES + Adult_SES
-                   , data = ht.df[A,], dist='loglogistic')
+                   , data = ht.df[ccs,], dist='loglogistic')
 
 
 
@@ -219,8 +219,68 @@ extractAIC(aft.gd3.1)
 extractAIC(aft.gd3.2)
 extractAIC(aft.gd3.3)
 
-
 summary(aft.gd3.3)
+
+
+aft.gd3.4 = aftreg(y.ccs ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES
+                  + SES_Income_USE
+                  ,data = ht.df[ccs,], dist='loglogistic')
+extractAIC(aft.gd3.4)
+summary(aft.gd3.4)
+
+
+aft.gd3.5 = aftreg(y.ccs ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES
+                   + SES_Education_USE
+                   ,data = ht.df[ccs,], dist='loglogistic')
+extractAIC(aft.gd3.5)
+summary(aft.gd3.5)
+
+
+aft.gd3.6 = aftreg(y.ccs ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES
+                   + SES_OccStatus_USE
+                   ,data = ht.df[ccs,], dist='loglogistic')
+extractAIC(aft.gd3.6)
+summary(aft.gd3.6)
+
+
+## Potentially conditioning on a collider, the alternative is preferred 
+# aft.gd3.7 = aftreg(y.ccs ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES + Adult_SES
+#                    + SES_Income_USE
+#                    ,data = ht.df[ccs,], dist='loglogistic')
+# extractAIC(aft.gd3.7)
+# summary(aft.gd3.7)
+# 
+# 
+# aft.gd3.8 = aftreg(y.ccs ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES + Adult_SES
+#                   + SES_Income_USE*SAMPLE_SEX
+#                   ,data = ht.df[ccs,], dist='loglogistic')
+# extractAIC(aft.gd3.8)
+# summary(aft.gd3.8)
+
+
+## Consider that the income only model is now a better fit than the Adult SES model
+## so what if we were to cut Adult SES out of the later models and just use income?
+
+
+aft.gd3.8b = aftreg(y.ccs ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES +
+                                + SES_Income_USE * SAMPLE_SEX
+                                ,data = ht.df[ccs,], dist='loglogistic')
+extractAIC(aft.gd3.8b)
+summary(aft.gd3.8b)
+
+
+## removing sex * IQ to see if sex * income is significant
+aft.gd3.8c = aftreg(y.ccs ~ SAMPLE_SEX + AFQT89 + age_1979 + Child_SES +
+                      + SES_Income_USE * SAMPLE_SEX
+                    ,data = ht.df[ccs,], dist='loglogistic')
+extractAIC(aft.gd3.8c)
+summary(aft.gd3.8c)
+
+
+
+
+
+
 
 
 
@@ -305,8 +365,8 @@ R2
 
 ### Log-logistic extension
 
-aft.2.ll.r2 = survreg(y ~ SAMPLE_SEX + AFQT89 + age_1979 + Child_SES + lvIQsex,
-                      data = r.df[A,], dist='loglogistic') 
+aft.2.ll.r2 = survreg(y.ccs ~ SAMPLE_SEX + AFQT89 + age_1979 + Child_SES + lvIQsex,
+                      data = r.df[ccs,], dist='loglogistic') 
 
 
 betaz <- as.matrix(aft.2.ll.r2$coefficient[-1])     # coeff
@@ -329,8 +389,8 @@ R2
 
 ### Now for the actual models
 
-aft.ll.r2 = survreg(y ~ SAMPLE_SEX + AFQT89 + age_1979,
-                      data = r.df[A,], dist='loglogistic') 
+aft.ll.r2 = survreg(y.ccs ~ SAMPLE_SEX + AFQT89 + age_1979,
+                      data = r.df[ccs,], dist='loglogistic') 
 betaz <- as.matrix(aft.ll.r2$coefficient[-1])                 # coeff
 varz <- as.matrix(var(r.df[A, c('SAMPLE_SEX','AFQT89','age_1979')],
                       use='pairwise.complete.obs'))      # Cov-matrix
@@ -339,8 +399,8 @@ sigsq <- aft.ll.r2$scale^2 * 3                                                  
 R2.0 = 1- sigsq/ (vary + sigsq)
 R2.0
 
-aft.ll.r2 = survreg(y ~ SAMPLE_SEX + AFQT89 + age_1979 + lvIQsex,
-         data = r.df[A,], dist='loglogistic')
+aft.ll.r2 = survreg(y.ccs ~ SAMPLE_SEX + AFQT89 + age_1979 + lvIQsex,
+         data = r.df[ccs,], dist='loglogistic')
 betaz <- as.matrix(aft.ll.r2$coefficient[-1])                 # coeff
 varz <- as.matrix(var(r.df[A, c('SAMPLE_SEX','AFQT89','age_1979','lvIQsex')],
                       use='pairwise.complete.obs'))      # Cov-matrix

@@ -11,6 +11,13 @@ library(survminer)
 library(jtools)
 
 
+### Start detritus
+A = !is.na(ht.df$hasHT) ## includes Yes and No, just not missing individuals
+yA = Surv(ht.df$recordTime[A], ht.df$hasHT[A])
+
+y.ccs = Surv(ht.df$recordTime[ccs], ht.df$hasHT[ccs])
+
+
 
 ### Quartiles
 
@@ -56,8 +63,8 @@ ht.df$sex_tert = interaction(ht.df$SAMPLE_SEX,ht.df$IQtert)
 
 levels(ht.df$sex_tert) <- c('M-Low','F-Low','M-Mid','F-Mid','M-High','F-High')
 
-npsf.2 = npsurv(y ~ sex_tert, data=ht.df[A,])
-survplot(npsf.2, xlab='Age',ylab='Probability of developing hypertension',ylim=c(0.6,1),xlim=c(15,59),
+npsf.2 = npsurv(y.ccs ~ sex_tert, data=ht.df[ccs,])
+survplot(npsf.2, xlab='Age',ylab='Probability of developing hypertension',ylim=c(0.0,1),xlim=c(15,59),
          label.curves=F, col=c('skyblue3','coral2','skyblue3','coral2','skyblue3','coral2')
          , col.fill=c('skyblue','coral','skyblue','coral','skyblue','coral')
          , lty = c(1,1,2,2,3,3)

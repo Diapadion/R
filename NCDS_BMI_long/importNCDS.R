@@ -46,7 +46,7 @@ ncds5$n504734[ncds5$n504734<30] = NA # this needs review - would 40 be better?
 ncds5$n504734[ncds5$n504734>400] = NA
 ncds5$bmi33 = ncds5$n504734 / (ncds5$n504731^2)
 
-hist(ncds5$bmi33)
+hist(ncds5$bmi33, breaks=20)
 
 table(ncds6$htfeet)
 table(ncds6$htmetres)

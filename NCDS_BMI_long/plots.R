@@ -73,12 +73,12 @@ ggplot(subset(bmi.long, !is.na(BMI)&!is.na(IQ)), aes(x=age, y=BMI, group=sexIQ, 
 
 
 ## Completers only
-bmi.long = ncds[complete.cases(ncds[,c('g','bmi16','bmi55')]),]
+bmi.long = ncds[complete.cases(ncds[,c('g','bmi23','bmi55')]),]
 
 
 ## Long format
 bmi.long = rbindlist(list(
-  cbind(bmi.long[,c('ncdsid','sex','gtert','sextert','bmi16')],16),
+  #cbind(bmi.long[,c('ncdsid','sex','gtert','sextert','bmi16')],16),
   cbind(bmi.long[,c('ncdsid','sex','gtert','sextert','bmi23')],23),
   cbind(bmi.long[,c('ncdsid','sex','gtert','sextert','bmi33')],33),
   cbind(bmi.long[,c('ncdsid','sex','gtert','sextert','bmi42')],42),
@@ -95,7 +95,9 @@ ggplot(subset(bmi.long, !is.na(BMI)&!is.na(IQ)), aes(x=age, y=BMI, group=sexIQ, 
 ) + 
   stat_smooth(aes(linetype=IQ, color=sex), method='gam', formula = y~s(x, k=4), se=TRUE) +
   #stat_smooth(aes(linetype=IQ, color=sex), method='loess', se=TRUE) +
-  xlab('Average age')
+  xlab('Average age') + 
+  coord_cartesian(xlim=c(23,55), ylim=c(21.5,30)) + 
+  theme(legend.position = c(0.9,0.25))
 
 
 
@@ -112,7 +114,7 @@ bmi.long$sextert = interaction(bmi.long$sex,bmi.long$gtert.ySES.r)
 
 ## Long format
 bmi.long = rbindlist(list(
-  cbind(bmi.long[,c('ncdsid','sex','gtert.ySES.r','sextert','bmi16')],16),
+  #cbind(bmi.long[,c('ncdsid','sex','gtert.ySES.r','sextert','bmi16')],16),
   cbind(bmi.long[,c('ncdsid','sex','gtert.ySES.r','sextert','bmi23')],23),
   cbind(bmi.long[,c('ncdsid','sex','gtert.ySES.r','sextert','bmi33')],33),
   cbind(bmi.long[,c('ncdsid','sex','gtert.ySES.r','sextert','bmi42')],42),

@@ -15,22 +15,39 @@ ht.df <- read.csv(file = "HT.csv")
 
 ### Descriptive stuff for publication
 
-sum((ht.df$H0004700==-4)&(ht.df$H0017301==-4)) # Non-participants or normotensive
-sum((ht.df$H0004700==-1)|(ht.df$H0017301==-1)) # Non-participants or normotensive
+## H0004700 - age 40 HT Month
+## H0004701 - age 40 HT Year
+
+## H0017300 - age 50 HT Month
+## H0017301 - age 50 HT Year
+
+## -1 = refusal
+## -2 = don't know 
+## -4 = valid skip
+## -5 non-interview
+
+## How many individuals were not present at age 40 and 50?
+sum((ht.df$H0004701==-4)&(ht.df$H0017301==-4)) # Non-participants or normotensive (?)
+# 9578
+
+## How many individuals were not present at age 40 or 50?
+sum((ht.df$H0004701==-4)|(ht.df$H0017301==-4)) # Non-participants or normotensive (?)
+# 12686
+
+## How many individuals were present at either age 40 or 50?
+sum((ht.df$H0004800!=-4)|(ht.df$H0017200!=-4))
+# 7886
 
 
 
-# H0004700 - age 40 HT Month
-# H0004701 - age 40 HT Year
+## months coded -2 -> 12
+## years coded -2 -> 06/2015
 
-# H0017300 - age 50 HT Month
-# H0017301 - age 50 HT Year
-
-# months coded -2 -> 12
-# years coded -2 -> 06/2015
-# anything coded -1 or -4 -> NA
+## anything coded -1 or -4 -> NA # Is this the problem???
 
 
+
+### CONCERN - is this changing the model effects?
 
 ### Age 50 first
 ### GD revisions - UNDERWAY
@@ -169,6 +186,8 @@ ht.df$age_1979 = (pasteDate-ht.df$DOB)/365.25
 
 
 
+### Still important for longitudinal comparative analysis with NCDS:
+
 ### Create BMI - 2012
 ht.df$weight_12[ht.df$weight_12<0] = NA
 
@@ -258,16 +277,17 @@ ht.df$Youth_SES = scale(ht.df$Child_SES) # for max consistency with NCDS
 ### getting the survival analyses setup
 ### GD and CG revised
 
-#View(ht.df[(as.numeric(ht.df$HTdiagDate-as.Date("1970-01-01"))<0),])
+View(ht.df[(as.numeric(ht.df$HTdiagDate-as.Date("1970-01-01"))<0),])
 
+## What is happening here to change the models and plots???
 # ht.df$recordTime = as.numeric(ht.df$HTdiagDate-as.Date("1970-01-01"))/365.25
 ht.df$recordTime = as.numeric(ht.df$HTdiagDate-ht.df$DOB)/365.25
 
-hist(ht.df$recordTime)
-
-A = !is.na(ht.df$hasHT) ## includes Yes and No, just not missing individuals
-
-y = Surv(ht.df$recordTime[A], ht.df$hasHT[A])
+# hist(ht.df$recordTime)
+# 
+# A = !is.na(ht.df$hasHT) ## includes Yes and No, just not missing individuals
+# 
+# y = Surv(ht.df$recordTime[A], ht.df$hasHT[A])
 
 
 

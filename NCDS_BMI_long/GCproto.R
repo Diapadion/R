@@ -30,55 +30,95 @@ f.t1 = cfa(t1, data=ncds0123)
 
 summary(mt1)
 
-fitMeasures(mt1, c("chisq", "df", "pvalue", "cfi", "rmsea"))
+fitMeasures(mt1, c("chisq", "df", "pvalue", "cfi", "rmsea", 'srmr'))
 
 
 ###
+
+
+bmi.is.m1 <- '
+i =~ 1*bmi16 + 1*bmi23 + 1*bmi33 + 1*bmi42 + 1*bmi55
+s =~ 0*bmi16 + 0.7*bmi23 + 1.7*bmi33 + 2.6*bmi42 + 3.9*bmi55
+'
+
+is.f1 = lavaan(bmi.is.m1, data=ncds, meanstructure = TRUE, int.ov.free = FALSE, 
+            int.lv.free = TRUE, auto.fix.first = TRUE, auto.fix.single = TRUE, 
+            auto.var = TRUE, auto.cov.lv.x = TRUE, auto.th = TRUE, auto.delta = TRUE, 
+            auto.cov.y = TRUE,
+            missing = 'fiml', information='observed'
+)
+
+fitMeasures(is.f1, c("chisq", "df", "pvalue", "cfi", "tli", "srmr", "rmsea"))
+summary(f1)
+
+
+
+bmi.isq.m1 <- '
+i =~ 1*bmi16 + 1*bmi23 + 1*bmi33 + 1*bmi42 + 1*bmi55
+s =~ 0*bmi16 + 0.7*bmi23 + 1.7*bmi33 + 2.6*bmi42 + 3.9*bmi55
+q =~ 0*bmi16 + 0.49*bmi23 + 2.89*bmi33 + 6.76*bmi42 + 15.21*bmi55
+'
+
+isq.f1 = lavaan(bmi.isq.m1, data=ncds, meanstructure = TRUE, int.ov.free = FALSE, 
+               int.lv.free = TRUE, auto.fix.first = TRUE, auto.fix.single = TRUE, 
+               auto.var = TRUE, auto.cov.lv.x = TRUE, auto.th = TRUE, auto.delta = TRUE, 
+               auto.cov.y = TRUE,
+               missing = 'fiml', information='observed'
+)
+
+fitMeasures(isq.f1, c("chisq", "df", "pvalue", "cfi", "tli", "srmr", "rmsea"))
+summary(isq.f1)
+
+
 
 
 
 ncds$lvIQsex = ncds$g * (as.numeric(ncds$sex)-1)
 
 
-bmi.in.t.1 <- '
+bmi.isq.m2 <- '
 i =~ 1*bmi16 + 1*bmi23 + 1*bmi33 + 1*bmi42 + 1*bmi55
-s =~ 0*bmi16 + 7*bmi23 + 17*bmi33 + 26*bmi42 + 39*bmi55
+s =~ 0*bmi16 + 0.7*bmi23 + 1.7*bmi33 + 2.6*bmi42 + 3.9*bmi55
+q =~ 0*bmi16 + 0.49*bmi23 + 2.89*bmi33 + 6.76*bmi42 + 15.21*bmi55
 
 i ~ sex + g
 s ~ sex + g
+q ~ sex + g
 
 '
 
-f1 = lavaan(bmi.in.t.1, data=ncds, meanstructure = TRUE, int.ov.free = FALSE, 
+isq.f2 = lavaan(bmi.isq.m2, data=ncds, meanstructure = TRUE, int.ov.free = FALSE, 
             int.lv.free = TRUE, auto.fix.first = TRUE, auto.fix.single = TRUE, 
             auto.var = TRUE, auto.cov.lv.x = TRUE, auto.th = TRUE, auto.delta = TRUE, 
             auto.cov.y = TRUE,
             missing = 'fiml', information='observed'
             )
 
-fitMeasures(f1, c("chisq", "df", "pvalue", "cfi", "tli", "srmr", "rmsea"))
-summary(f1)
+fitMeasures(isq.f2, c("chisq", "df", "pvalue", "cfi", "tli", "srmr", "rmsea"))
+summary(isq.f2)
 
 
 
-bmi.in.t.2 <- '
+bmi.isq.m3 <- '
 i =~ 1*bmi16 + 1*bmi23 + 1*bmi33 + 1*bmi42 + 1*bmi55
-s =~ 0*bmi16 + 7*bmi23 + 17*bmi33 + 26*bmi42 + 39*bmi55
+s =~ 0*bmi16 + 0.7*bmi23 + 1.7*bmi33 + 2.6*bmi42 + 3.9*bmi55
+q =~ 0*bmi16 + 0.49*bmi23 + 2.89*bmi33 + 6.76*bmi42 + 15.21*bmi55
 
 i ~ sex + g + lvIQsex
 s ~ sex + g + lvIQsex
+q ~ sex + g + lvIQsex
 
 '
 
-f2 = lavaan(bmi.in.t.2, data=ncds, meanstructure = TRUE, int.ov.free = FALSE, 
+isq.f3 = lavaan(bmi.isq.m3, data=ncds, meanstructure = TRUE, int.ov.free = FALSE, 
             int.lv.free = TRUE, auto.fix.first = TRUE, auto.fix.single = TRUE, 
             auto.var = TRUE, auto.cov.lv.x = TRUE, auto.th = TRUE, auto.delta = TRUE, 
             auto.cov.y = TRUE,
             missing = 'fiml', information='observed'
             )
 
-fitMeasures(f2, c("chisq", "df", "pvalue", "cfi", "tli", "srmr", "rmsea"))
-summary(f2)
+fitMeasures(isq.f3, c("chisq", "df", "pvalue", "cfi", "tli", "srmr", "rmsea"))
+summary(isq.f3)
 
 
 

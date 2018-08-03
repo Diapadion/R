@@ -91,3 +91,9 @@ cor(reliabl$LFFH.a, reliabl$LFFH.b)
 alpha(reliabl[,c("fWHR.a","fWHR.b")])
 alpha(reliabl[,c("LFFH.a","LFFH.b")])
 
+
+
+### Point-by-point reliability, for revision
+
+### TODO
+

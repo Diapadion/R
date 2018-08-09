@@ -133,6 +133,38 @@ aggregate(HTage50t ~ SAMPLE_SEX, data=ht.df[ccs,][ht.df[ccs,]$hasHT,], FUN=sd)
 
 
 
+### Flow chart
+
+## This needs to be run specially, without running the code before creating 'hasHT'
+
+flow.df <- merge(cw.df, ht.df[c('R0000100','H0004600','H0017200','hasHT')],
+  by.x='CASEID_1979', by.y='R0000100')
+
+## Total sample
+dim(flow.df)
+
+## Complete Cases
+flow.ccs = complete.cases(flow.df[,c('AFQT89','Adult_SES','Child_SES','hasHT','SAMPLE_SEX')])
+table(flow.ccs)
+
+## Odd cases
+table(flow.df$H0017300[ht.df$H0017300 == -1 & flow.ccs]) # None, nor for -4 either.
+table(flow.df$H0017301[ht.df$H0017301 == -1 & flow.ccs]) # None, nor for -4 either.
+
+table(flow.df$H0004700[ht.df$H0004700 == -1 & flow.ccs]) # None, nor for -4 either.
+table(flow.df$H0004701[ht.df$H0004701 == -4 & flow.ccs]) # None, nor for -4 either.
+
+## Diagnoses before testing - again, needs to be run before removing 'indxs'
+
+table(as.numeric(as.Date("1970-01-01")) > as.numeric(ht.df$HTdiagDate[flow.ccs]))
+
+
+## Men and women, normo and hypertensive
+table(ccs.df$hasHT)
+table(ccs.df$hasHT[ccs.df$SAMPLE_SEX=='MALE'])
+table(ccs.df$hasHT[ccs.df$SAMPLE_SEX=='FEMALE'])
+
+
 
 ### Some pub correlations
 

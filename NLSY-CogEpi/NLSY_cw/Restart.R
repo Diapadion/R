@@ -133,6 +133,44 @@ colnames(ht.df)[c(90:96)] <- c('Trying_to_lose','Read_nutrition','Read_ingredien
 
 
 
+### A few BMI calculations
+
+## BMI - 1985
+ht.df$weight_85[ht.df$weight_85<0] = NA
+ht.df$height_85[ht.df$height_85<0] = NA
+
+ht.df$bmi_85 = ht.df$weight_85/(ht.df$height_85^2) * 703
+
+## trim implausible values
+ht.df$bmi_85[ht.df$bmi_85 > 70] = NA
+ht.df$bmi_85[ht.df$bmi_85 < 12] = NA
+
+## BMI - 2006
+
+ht.df$weight_06[ht.df$weight_06<0] = NA
+
+ht.df$height_06 = -1
+ht.df$feet_06 = ht.df$feet_06*12
+
+ht.df$height_06[ht.df$inches_06<12&ht.df$inches_06>-0.1] = rowSums(ht.df[,c('feet_06','inches_06')], na.rm=T)[ht.df$inches_06<12&ht.df$inches_06>-0.1]
+
+ht.df$height_06[ht.df$height_06<32] = NA
+
+ht.df$height_06[ht.df$inches_06>12] = ht.df$inches_06[ht.df$inches_06>12]
+
+ht.df$bmi_06 = ht.df$weight_06/(ht.df$height_06^2) * 703
+
+#hist(ht.df$bmi_06)
+
+## trim implausible values
+ht.df$bmi_06[ht.df$bmi_06 > 70] = NA
+ht.df$bmi_06[ht.df$bmi_06 < 12] = NA
+
+
+
+### DoB etc
+
+
 ht.df$DOB = as.Date(paste3(paste0('19',as.numeric(levels(ht.df$DOB_year))[ht.df$DOB_year]),
                            as.numeric(levels(ht.df$DOB_month))[ht.df$DOB_month],
                            '01',sep='-'), format='%Y-%m-%d')
@@ -227,7 +265,7 @@ levels(ccs.df$sex_tert) <- c('M-Low','F-Low','M-Mid','F-Mid','M-High','F-High')
 
 
 
-ggfit = survfit(Surv(recordTime, hasHT) ~ sex_tert, data=ht.df[ccs,])
+#ggfit = survfit(Surv(recordTime, hasHT) ~ sex_tert, data=ht.df[ccs,])
 ggfit = survfit(Surv(recordTime, hasHT) ~ sex_tert, data=ccs.df)
 
 g <- ggsurvplot(ggfit, conf.int=T,censor=F

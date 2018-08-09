@@ -1,0 +1,551 @@
+A00026.00    [VERSION_R26]                                  Survey Year: 2014
+  PRIMARY VARIABLE
+
+ 
+             VERSION_R26_1
+ 
+COMMENT: PUBLIC RELEASE IDENTIFICATION NUMBER
+ 
+    7071           1 TO 999
+  -------
+    7071
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>    7071   VALID SKIP(-4)       0     NON-INTERVIEW(-5)    5615
+ 
+Min:            458        Max:            458        Mean:                 458
+ 
+Lead In: None.
+Default Next Question: T50192.00
+--------------------------------------------------------------------------------
+R00001.00    [CASEID]                                       Survey Year: 1979
+  PRIMARY VARIABLE
+
+ 
+             IDENTIFICATION CODE
+ 
+ORIGINAL QUESTION NAME: CASEID
+ 
+NOTE: THIS NUMBER WAS ASSIGNED ACCORDING TO THE RECORD NUMBER OF EACH RESPONDENT
+ON THE TAPE. THE FIRST RESPONDENT WAS ASSIGNED ID#1, THE SECOND WAS ASSIGNED 
+ID#2, ETC.
+ 
+ACTUAL NUMBER
+ 
+UNIVERSE: All
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>   12686   VALID SKIP(-4)       0     NON-INTERVIEW(-5)       0
+ 
+Min:              1        Max:          12686        Mean:              6343.5
+ 
+Lead In: None.
+Default Next Question: R00001.49
+--------------------------------------------------------------------------------
+R01736.00    [SAMPLE_ID]                                    Survey Year: 1979
+  PRIMARY VARIABLE
+
+ 
+             SAMPLE IDENTIFICATION CODE
+ 
+ORIGINAL QUESTION NAME: S24Q01
+ 
+UNIVERSE: Entire Sample
+ 
+    2236       1 CROSS MALE WHITE
+     203       2 CROSS MALE WH. POOR
+     346       3 CROSS MALE BLACK
+     218       4 CROSS MALE HISPANIC
+    2279       5 CROSS FEMALE WHITE
+     198       6 CROSS FEMALE WH POOR
+     405       7 CROSS FEMALE BLACK
+     226       8 CROSS FEMALE HISPANIC
+     742       9 SUP MALE WH POOR
+    1105      10 SUP MALE BLACK
+     729      11 SUP MALE HISPANIC
+     901      12 SUP FEM WH POOR
+    1067      13 SUP FEMALE BLACK
+     751      14 SUP FEMALE HISPANIC
+     609      15 MIL MALE WHITE
+     162      16 MIL MALE BLACK
+      53      17 MIL MALE HISPANIC
+     342      18 MIL FEMALE WHITE
+      89      19 MIL FEMALE BLACK
+      25      20 MIL FEMALE HISPANIC
+  -------
+   12686
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>   12686   VALID SKIP(-4)       0     NON-INTERVIEW(-5)       0
+ 
+MARCH 1, 1986  NORC
+ 
+SEX CODE CHANGED ON 42 CASES
+ 
+Lead In: R01735.18[Default] R01735.19[Default] R01735.14[Default] 
+         R01735.16[Default] R01735.17[Default] R01735.15[Default] 
+         R01735.00[Default]
+Default Next Question: R01737.00
+--------------------------------------------------------------------------------
+R02147.00    [SAMPLE_RACE]                                  Survey Year: 78SCRN
+  PRIMARY VARIABLE
+
+ 
+             R'S RACIAL/ETHNIC COHORT FROM SCREENER
+ 
+UNIVERSE: Entire Sample
+ 
+    2002       1 HISPANIC
+    3174       2 BLACK
+    7510       3 NON-BLACK, NON-HISPANIC
+  -------
+   12686
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>   12686   VALID SKIP(-4)       0     NON-INTERVIEW(-5)       0
+ 
+AUGUST 26, 1980  DENNIS GREY
+ 
+DESCRIPTION:
+COHORT=3;
+IF R(1736.)=4 ! R(1736.)=8 ! R(1736.)=11 ! R(1736.)=14 THEN COHORT=1;
+IF R(1736.)=17 ! R(1736.)=20 THEN COHORT=1;
+IF R(1736.)=3 ! R(1736.)=7 ! R(1736.)=10 ! R(1736.)=13 THEN COHORT=2;
+IF R(1736.)=16 ! R(1736.)=19 THEN COHORT=2;
+R(2147.)=COHORT;
+ 
+Lead In: R02146.00[Default]
+Default Next Question: R02148.00
+--------------------------------------------------------------------------------
+R02148.00    [SAMPLE_SEX]                                   Survey Year: 1979
+  PRIMARY VARIABLE
+
+ 
+             SEX OF R
+ 
+UNIVERSE: Entire sample
+ 
+    6403       1 MALE
+    6283       2 FEMALE
+  -------
+   12686
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>   12686   VALID SKIP(-4)       0     NON-INTERVIEW(-5)       0
+ 
+AUGUST 26, 1980  DENNIS GREY
+MARCH 1, 1986  NORC
+ 
+DESCRIPTION:
+IF (R(1736.)>0 & R(1736.)<=4) ! (R(1736.)>=9 & R(1736.)<=11) THEN SEX=1;
+IF R(1736.)>=15 & R(1736.)<=17 THEN SEX=1;
+IF (R(1736.)>=5 & R(1736.)<=8) ! (R(1736.)>=12 & R(1736.)<=14) THEN SEX=
+IF R(1736.)>=18 & R(1736.)<=20 THEN SEX=2;
+R(2148.)=SEX;
+SEX CODE CHANGED ON 42 CASES
+ 
+Lead In: R02147.00[Default]
+Default Next Question: R02149.00
+--------------------------------------------------------------------------------
+R18006.00    [TNFI_HHI_TRUNC]                               Survey Year: 1985
+  PRIMARY VARIABLE
+
+ 
+             TOTAL NET FAMILY INCOME IN PAST CALENDAR YEAR FROM HOUSEHOLD 
+             INTERVIEW (TRUNCATED)
+ 
+ORIGINAL QUESTION NAME: Q5738
+ 
+COUNTING THE INCOME FROM ALL SOURCES YOU HAVE MENTIONED--THAT IS,
+INCOME FROM--THE WORK DONE BY ((VERSION A, VERSION B NONMILITARY
+QUARTERS)(READ NAMES OF ALL VERSIONS CODED 'YES' IN Q.10 ON THE
+FACE SHEET WHO ARE RELATED TO YOUTH R)--AND FROM (READ ALL ITEMS
+CODED 'YES' IN Q.12)/(VERSION B MARRIED IN MILITARY QUARTERS) (READ
+NAMES OF ALL PERSONS CODED 'YES' IN Q.26 WHO ARE RELATED TO YOUTH R).
+--AND FROM (READ ALL ITEMS CODED 'YES' IN Q.28)), WHAT WAS THE TOTAL
+INCOME FOR ((VERSION A)(YOUTH R) AND THE MEMBERS OF THIS HOUSEHOLD
+WHO ARE RELATED TO (YOUTH R)/(VERSION B NONMILITARY QUARTERS) YOU
+AND THE MEMBERS OF YOUR HOUSEHOLD IN (CITY OF PERMANENT RESIDENCE)
+WHO ARE RELATED TO YOU/(VERSION B MARRIED IN MILITARY QUARTERS) YOUR
+(WIFE OR HUSBAND) AND THE MEMBERS OF THAT HOUSEHOLD IN (CITY OF
+SPOUSE'S RESIDENCE) WHO ARE RELATED TO YOU OR YOUR (WIFE OR HUSBAND))
+IN 1984--BEFORE TAXES OR OTHER DEDUCTIONS?
+ 
+ACTUAL DOLLARS
+ 
+       4           0
+      20           1 TO 999
+      22        1000 TO 1999
+      27        2000 TO 2999
+      39        3000 TO 3999
+      49        4000 TO 4999
+      53        5000 TO 5999
+      48        6000 TO 6999
+      36        7000 TO 7999
+      61        8000 TO 8999
+      33        9000 TO 9999
+     305       10000 TO 14999
+     267       15000 TO 19999
+     252       20000 TO 24999
+     954       25000 TO 49999
+     560       50000 TO 9999999: 50000+
+  -------
+    2730
+ 
+Refusal(-1)           62
+Don't Know(-2)      1040
+Invalid Skip(-3)       8
+TOTAL =========>    3840   VALID SKIP(-4)    7054     NON-INTERVIEW(-5)    1792
+ 
+Min:              0        Max:         100001        Mean:            31516.08
+ 
+NOTE: INCOME QUESTION ASKED IN VERSIONS A, B AND B2 OF THE HOUSEHOLD ROSTER FOR 
+RESPONDENTS NOT LIVING ON THEIR OWN.
+ 
+Lead In: R18005.00[Default]
+Default Next Question: R18007.00
+--------------------------------------------------------------------------------
+R18904.00    [TNFI_TRUNC]                                   Survey Year: 1985
+  PRIMARY VARIABLE
+
+ 
+             TOTAL NET FAMILY INCOME IN PAST CALENDAR YEAR *KEY* (TRUNCATED)
+ 
+ORIGINAL QUESTION NAME: *CREATED
+ 
+NOTE: FOR VARIABLE CREATION, SEE APPENDIX 2: TOTAL NET FAMILY INCOME
+ 
+ACTUAL DOLLARS
+ 
+      64           0
+      96           1 TO 999
+     140        1000 TO 1999
+     165        2000 TO 2999
+     214        3000 TO 3999
+     252        4000 TO 4999
+     299        5000 TO 5999
+     287        6000 TO 6999
+     278        7000 TO 7999
+     310        8000 TO 8999
+     298        9000 TO 9999
+    1406       10000 TO 14999
+    1169       15000 TO 19999
+     971       20000 TO 24999
+    2344       25000 TO 49999
+     717       50000 TO 9999999: 50000+
+  -------
+    9010
+ 
+Refusal(-1)          109
+Don't Know(-2)      1715
+Invalid Skip(-3)      60
+TOTAL =========>   10894   VALID SKIP(-4)       0     NON-INTERVIEW(-5)    1792
+ 
+Min:              0        Max:         100001        Mean:            22065.23
+ 
+Lead In: R18903.00[Default]
+Default Next Question: R18905.00
+--------------------------------------------------------------------------------
+R18910.10    [AGEATINT]                                     Survey Year: 1985
+  PRIMARY VARIABLE
+
+ 
+             AGE OF R AT INTERVIEW DATE
+ 
+ORIGINAL QUESTION NAME: *CREATED
+ 
+ACTUAL AGE
+ 
+       0           0 TO 19: < 20
+     971          20
+    1492          21
+    1492          22
+    1443          23
+    1429          24
+    1351          25
+    1245          26
+    1248          27
+     223          28
+       0          29
+       0          30
+       0          31
+       0          32
+       0          33
+       0          34
+       0          35
+       0          36 TO 99999: 36+
+  -------
+   10894
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>   10894   VALID SKIP(-4)       0     NON-INTERVIEW(-5)    1792
+ 
+Min:             20        Max:             28        Mean:                23.6
+ 
+Lead In: R18910.01[Default]
+Default Next Question: R18911.00
+--------------------------------------------------------------------------------
+R50807.00    [TNFI_TRUNC]                                   Survey Year: 1994
+  PRIMARY VARIABLE
+
+ 
+             TOTAL NET FAMILY INCOME IN PAST CALENDAR YEAR *KEY* (TRUNCATED)
+ 
+COMMENT: Total Net Family Income in 1993
+NOTE: FOR VARIABLE CREATION, SEE APPENDIX 2: TOTAL NET FAMILY INCOME TRUNCATED 
+VALUES ARE EQUAL TO THE AVERAGE VALUE OF ALL RESPONDENTS WHO ARE U.S. RESIDENTS 
+AND WHO HAVE VALUES EXCEEDING THE TRADITIONAL
+TRUNCATION LEVEL OF 100,001 FOR THIS ITEM. PERSONS WITH OUT-OF-RANGE CODE 999,
+996 WERE ASSIGNED THIS VALUE AS AN APPROXIMATION. SINCE PERSONS WITH 
+OUT-OF-RANGE CODES HAVE VALUES GREATER THAN THIS CODE, OUR AVERAGE TOP-CODED 
+RESPONDENTS WILL BE TOO LOW TO THE EXTENT THAT OUT-OF-RANGE CODES ARE PRESENT IN
+THE RAW DATA. OVERSEAS RESPONDENTS WHOSE DOLLAR INCOME COULD NOT BE DETERMINED 
+ARE CODED -3.
+ 
+ACTUAL DOLLARS
+ 
+     120           0
+      41           1 TO 999
+      52        1000 TO 1999
+      49        2000 TO 2999
+      41        3000 TO 3999
+      46        4000 TO 4999
+      93        5000 TO 5999
+      83        6000 TO 6999
+      89        7000 TO 7999
+      92        8000 TO 8999
+      85        9000 TO 9999
+     586       10000 TO 14999
+     589       15000 TO 19999
+     590       20000 TO 24999
+    2541       25000 TO 49999
+    1907       50000 TO 99999999: 50000+
+  -------
+    7004
+ 
+Refusal(-1)          163
+Don't Know(-2)      1667
+Invalid Skip(-3)      57
+TOTAL =========>    8891   VALID SKIP(-4)       0     NON-INTERVIEW(-5)    3795
+ 
+Min:              0        Max:         189918        Mean:            40883.12
+ 
+Lead In: R50806.00[Default]
+Default Next Question: R50808.00
+--------------------------------------------------------------------------------
+R50817.00    [AGEATINT]                                     Survey Year: 1994
+  PRIMARY VARIABLE
+
+ 
+             AGE OF R AT INTERVIEW DATE
+ 
+COMMENT: Age at interview date
+ 
+       0           0 TO 26: < 26
+       0          27
+       0          28
+     276          29
+    1198          30
+    1291          31
+    1222          32
+    1240          33
+    1155          34
+     951          35
+     982          36
+     574          37
+       0          38
+       0          39
+       0          40 TO 99: 40+
+  -------
+    8889
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+Invalid Skip(-3)       2
+TOTAL =========>    8891   VALID SKIP(-4)       0     NON-INTERVIEW(-5)    3795
+ 
+Min:             29        Max:             37        Mean:               32.98
+ 
+Lead In: R50816.00[Default]
+Default Next Question: R50818.00
+--------------------------------------------------------------------------------
+T09878.00    [TNFI_TRUNC]                                   Survey Year: 2006
+  PRIMARY VARIABLE
+
+ 
+             TOTAL NET FAMILY INCOME IN PAST CALENDAR YEAR *KEY* (TRUNCATED)
+ 
+COMMENT: Total Net Family Income in 2005
+NOTE: FOR VARIABLE CREATION, SEE APPENDIX 2: TOTAL NET FAMILY INCOME TRUNCATED 
+VALUES ARE EQUAL TO THE AVERAGE VALUE OF THE TOP 2% OF RESPONDENTS WHO ARE U.S. 
+RESIDENTS.  IF THE NUMBER OF TRUNCATED VALUES EXCEEDS THAT WHICH WOULD HAVE BEEN
+TRUNCATED AT THE TRADITIONAL TRUNCATION LEVEL OF 100,001 FOR THIS ITEM, VALUES 
+OVER THAT TRADITIONAL TRUNCATION LEVEL ARE AVERAGED.  OVERSEAS RESPONDENTS WHOSE
+DOLLAR INCOME COULD NOT BE DETERMINED ARE CODED -3.
+ 
+NOTE: WHEREVER POSSIBLE, THIS VARIABLE INCORPORATES THE FOLLOW-UP SELF-REPORTED 
+RANGE AND UNFOLDING BRACKET QUESTIONS PRESENT FOR MANY INCOME AMOUNTS TO 
+ESTIMATE A VALUE FOR NON-RESPONDERS (THOSE RESPONDING DON'T KNOW OR REFUSE TO 
+ACTUAL INCOME AMOUNTS).  THE DECISION RULES FOR FILLING IN INDIVIDUAL MISSING 
+INCOME VALUES WITH ESTIMATES ARE AS FOLLOWS:
+ 
+IF SELF-REPORTED RANGES ARE GIVEN AND (EXAMPLE T09126.00, T09128.00):
+*UPPER/LOWER VALUES ARE IN PROPER ORDER, MIDPOINT IS USED;
+*RANGES ARE GIVEN BACKWARDS, THE VALUES ARE REVERSED AND MIDPOINT IS USED;
+*THE SAME VALUE IS GIVEN FOR UPPER/LOWER SELF-REPORTED RANGE VALUE, THAT SINGLE 
+VALUE IS USED;
+ 
+IF UNFOLDING BRACKETS ARE ANSWERED (LOW BRACKET < ENTRY VALUE < HIGH BRACKET) 
+AND (EXAMPLE T09129.00-T09131.00):
+*R REPORTS LESS THAN ENTRY VALUE AND LESS THAN LOW BRACKET, THEN HALF OF LOW 
+BRACKET VALUE IS USED (MIDPOINT BETWEEN LOW BRACKET AND 0)
+* R REPORTS LESS THAN ENTRY VALUE BUT GREATER THAN LOW BRACKET VALUE, MIDPOINT 
+BETWEEN LOW BRACKET AND ENTRY VALUE IS USED;
+*R REPORTS GREATER THAN ENTRY VALUE BUT LESS THAN HIGH BRACKET VALUE, MIDPOINT 
+BETWEEN ENTRY VALUE AND HIGH BRACKET IS USED;
+*R REPORTS GREATER THAN ENTRY VALUE AND GREATER THAN HIGH BRACKET VALUE, THE 
+MEAN OF VALID RESPONSES ABOVE THE HIGH BRACKET VALUE IS USED.
+ 
+ACTUAL DOLLARS
+ 
+     289           0
+      62           1 TO 999
+      44        1000 TO 1999
+      37        2000 TO 2999
+      37        3000 TO 3999
+      31        4000 TO 4999
+      39        5000 TO 5999
+      45        6000 TO 6999
+      83        7000 TO 7999
+      61        8000 TO 8999
+      62        9000 TO 9999
+     276       10000 TO 14999
+     318       15000 TO 19999
+     329       20000 TO 24999
+    1670       25000 TO 49999
+    3808       50000 TO 99999999: 50000+
+  -------
+    7191
+ 
+Refusal(-1)          179
+Don't Know(-2)       284
+TOTAL =========>    7654   VALID SKIP(-4)       0     NON-INTERVIEW(-5)    5032
+ 
+Min:              0        Max:         479983        Mean:            69372.05
+ 
+Lead In: T09876.00[Default]
+Default Next Question: T09879.00
+--------------------------------------------------------------------------------
+T09890.00    [AGEATINT]                                     Survey Year: 2006
+  PRIMARY VARIABLE
+
+ 
+             AGE OF R AT INTERVIEW DATE
+ 
+COMMENT: Age at interview date
+ 
+       0          40
+     482          41
+    1030          42
+    1122          43
+    1041          44
+    1088          45
+     958          46
+     821          47
+     827          48
+     283          49
+       2          50
+       0          51
+       0          52
+  -------
+    7654
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>    7654   VALID SKIP(-4)       0     NON-INTERVIEW(-5)    5032
+ 
+Min:             41        Max:             50        Mean:               44.73
+ 
+Lead In: T09889.00[Default]
+Default Next Question: T09891.00
+--------------------------------------------------------------------------------
+T50226.00    [TNFI_TRUNC]                                   Survey Year: 2014
+  PRIMARY VARIABLE
+
+ 
+             TOTAL NET FAMILY INCOME IN PAST CALENDAR YEAR *KEY* (TRUNCATED)
+ 
+COMMENT: Total Net Family Income in previous calendar year
+NOTE: FOR VARIABLE CREATION, SEE APPENDIX 2: TOTAL NET FAMILY INCOME TRUNCATED 
+VALUES ARE EQUAL TO THE AVERAGE VALUE OF THE TOP 2% OF RESPONDENTS WHO ARE U.S. 
+RESIDENTS.  IF THE NUMBER OF TRUNCATED VALUES EXCEEDS THAT WHICH WOULD HAVE BEEN
+TRUNCATED AT THE TRADITIONAL TRUNCATION LEVEL OF 100,001 FOR THIS ITEM, VALUES 
+OVER THAT TRADITIONAL TRUNCATION LEVEL ARE AVERAGED.  OVERSEAS RESPONDENTS WHOSE
+DOLLAR INCOME COULD NOT BE DETERMINED ARE CODED -3.
+ 
+ACTUAL DOLLARS
+ 
+     261           0
+      57           1 TO 999
+      49        1000 TO 1999
+      91        2000 TO 2999
+      33        3000 TO 3999
+      29        4000 TO 4999
+      30        5000 TO 5999
+      29        6000 TO 6999
+      38        7000 TO 7999
+      72        8000 TO 8999
+      77        9000 TO 9999
+     396       10000 TO 14999
+     268       15000 TO 19999
+     297       20000 TO 24999
+    1183       25000 TO 49999
+    3238       50000 TO 99999999: 50000+
+  -------
+    6148
+ 
+Refusal(-1)          247
+Don't Know(-2)       675
+Invalid Skip(-3)       1
+TOTAL =========>    7071   VALID SKIP(-4)       0     NON-INTERVIEW(-5)    5615
+ 
+Min:              0        Max:         595986        Mean:            77266.42
+ 
+Lead In: T50225.00[Default]
+Default Next Question: T50228.00
+--------------------------------------------------------------------------------
+T50236.00    [AGEATINT]                                     Survey Year: 2014
+  PRIMARY VARIABLE
+
+ 
+             AGE AT INTERVIEW
+ 
+COMMENT: Age at interview date
+ 
+       1          49
+     669          50
+     994          51
+    1007          52
+     978          53
+     986          54
+     837          55
+     762          56
+     742          57
+      95          58
+  -------
+    7071
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>    7071   VALID SKIP(-4)       0     NON-INTERVIEW(-5)    5615
+ 
+Min:             49        Max:             58        Mean:               53.48
+ 
+Lead In: T50235.00[Default]
+Default Next Question: T50237.00

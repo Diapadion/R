@@ -1,11 +1,10 @@
 ### BMI ###
 
 
-
-
 library(ggplot2)
 library(psych)
 library(data.table)
+
 
 
 bmi <- read.csv('./BMI/moreWtHt.csv')
@@ -75,7 +74,7 @@ bmi$bmi_14[bmi$bmi_14 < 12] = NA
 hist(bmi$bmi_81)
 hist(bmi$bmi_85)
 hist(bmi$bmi_94)
-
+hist(bmi$bmi_06)
 hist(bmi$bmi_14)
       
 
@@ -100,6 +99,48 @@ cor(ht.df$AFQT89[ht.df$SAMPLE_SEX=='MALE'], ht.df$bmi_12[ht.df$SAMPLE_SEX=='MALE
 cor(ht.df$AFQT89[ht.df$SAMPLE_SEX=='FEMALE'], ht.df$bmi_12[ht.df$SAMPLE_SEX=='FEMALE'], 'pairwise.complete.obs')
 
 
+
+### Age and net family income vars for the relevant waves
+
+## Import
+
+ageIncome = read.csv('./BMI/AgeIncome.csv')
+
+colnames(ageIncome)[c(2,6:14)] <- c('CASEID_1979','income.hhi.85','income.85','age.85',
+                                    'income.94','age.94','income.06','age.06','income.14','age.14'
+)
+                              
+
+bmi <- merge(bmi, ageIncome,
+             by.y='CASEID_1979', by.x='CASEID_1979')
+
+## Processing
+
+bmi$age.85[bmi$age.85<1] = NA
+bmi$age.94[bmi$age.94<1] = NA
+bmi$age.06[bmi$age.06<1] = NA
+bmi$age.14[bmi$age.14<1] = NA
+
+#table(bmi$age.06, useNA='ifany')
+
+bmi$income.85[bmi$income.85<0] = NA
+bmi$income.94[bmi$income.94<0] = NA
+bmi$income.06[bmi$income.06<0] = NA
+bmi$income.14[bmi$income.14<0] = NA
+
+temp = scale(bmi[,c('income.85','income.94','income.06','income.14')])
+
+bmi$income.85 = temp[,'income.85']
+bmi$income.94 = temp[,'income.94']
+bmi$income.06 = temp[,'income.06']
+bmi$income.14 = temp[,'income.14']
+
+table(bmi$income.hhi.85, useNA='ifany')
+table(bmi$income.85, useNA='ifany')
+
+
+
+## plots below have not been checked to see if these additions break anything
 
 
 
@@ -337,18 +378,29 @@ aggregate(bmi_12 ~ sextert, data=bmi[complete.cases(bmi[,c('sextert','bmi_85','b
 
 
 
+
+
+
+
+
+
 ### SEMs
 
 library(lavaan)
 library(semTools)
 
+bmi.lv = bmi[bmi$SAMPLE_ethnicity=='NON-BLACK, NON-HISPANIC',]
+
+bmi.lv$lvIQsex = bmi.lv$AFQT89 * (as.numeric(bmi.lv$SAMPLE_SEX)-1)
+
+
 
 bmi.is.m1 <- '
-i =~ 1*bmi_85 + 1*bmi_96 + 1*bmi_06 + 1*bmi_12
-s =~ 0*bmi_85 + 1.1*bmi_96 + 2.1*bmi_06 + 2.7*bmi_12
+i =~ 1*bmi_85 + 1*bmi_94 + 1*bmi_06 + 1*bmi_14
+s =~ 0*bmi_85 + 1.1*bmi_94 + 2.1*bmi_06 + 2.7*bmi_14
 '
 
-is.f1 = lavaan(bmi.is.m1, data=bmi, meanstructure = TRUE, int.ov.free = FALSE, 
+is.f1 = lavaan(bmi.is.m1, data=bmi.lv, meanstructure = TRUE, int.ov.free = FALSE, 
                int.lv.free = TRUE, auto.fix.first = TRUE, auto.fix.single = TRUE, 
                auto.var = TRUE, auto.cov.lv.x = TRUE, auto.th = TRUE, auto.delta = TRUE, 
                auto.cov.y = TRUE,
@@ -359,14 +411,26 @@ fitMeasures(is.f1, c("chisq", "df", "pvalue", "cfi", "tli", "srmr", "rmsea"))
 summary(is.f1)
 
 
+summary(bmi$age.85) # mean = 23.6
+summary(bmi$age.94) # mean = 32.98
+summary(bmi$age.06) # mean = 44.73
+summary(bmi$age.14) # mean = 53.48
+
+
 
 bmi.isq.m1 <- '
-i =~ 1*bmi_85 + 1*bmi_96 + 1*bmi_06 + 1*bmi_12
-s =~ 0*bmi_85 + 1.1*bmi_96 + 2.1*bmi_06 + 2.7*bmi_12
-q =~ 0*bmi_85 + 1.21*bmi_96 + 4.41*bmi_06 + 7.29*bmi_12
+i =~ 1*bmi_85 + 1*bmi_94 + 1*bmi_06 + 1*bmi_14
+s =~ 0*bmi_85 + 0.9*bmi_94 + 2.1*bmi_06 + 2.9*bmi_14
+q =~ 0*bmi_85 + 0.81*bmi_94 + 4.41*bmi_06 + 8.41*bmi_14
+
+bmi_85 ~ age.85
+bmi_94 ~ age.94
+bmi_06 ~ age.06
+bmi_14 ~ age.14
+
 '
 
-isq.f1 = lavaan(bmi.isq.m1, data=bmi, meanstructure = TRUE, int.ov.free = FALSE, 
+isq.f1 = lavaan(bmi.isq.m1, data=bmi.lv, meanstructure = TRUE, int.ov.free = FALSE, 
                 int.lv.free = TRUE, auto.fix.first = TRUE, auto.fix.single = TRUE, 
                 auto.var = TRUE, auto.cov.lv.x = TRUE, auto.th = TRUE, auto.delta = TRUE, 
                 auto.cov.y = TRUE,
@@ -378,20 +442,24 @@ summary(isq.f1)
 
 
 
-
 bmi.isq.m2 <- '
-i =~ 1*bmi_85 + 1*bmi_96 + 1*bmi_06 + 1*bmi_12
-s =~ 0*bmi_85 + 1.1*bmi_96 + 2.1*bmi_06 + 2.7*bmi_12
-q =~ 0*bmi_85 + 1.21*bmi_96 + 4.41*bmi_06 + 7.29*bmi_12
+i =~ 1*bmi_85 + 1*bmi_94 + 1*bmi_06 + 1*bmi_14
+s =~ 0*bmi_85 + 0.9*bmi_94 + 2.1*bmi_06 + 2.9*bmi_14
+q =~ 0*bmi_85 + 0.81*bmi_94 + 4.41*bmi_06 + 8.41*bmi_14
 
 i ~ SAMPLE_SEX + AFQT89 + age_1979
 s ~ SAMPLE_SEX + AFQT89 + age_1979
 q ~ SAMPLE_SEX + AFQT89 + age_1979
 
+bmi_85 ~ age.85
+bmi_94 ~ age.94
+bmi_06 ~ age.06
+bmi_14 ~ age.14
+
 '
 
 
-isq.f2 = lavaan(bmi.isq.m2, data=bmi, meanstructure = TRUE, int.ov.free = FALSE, 
+isq.f2 = lavaan(bmi.isq.m2, data=bmi.lv, meanstructure = TRUE, int.ov.free = FALSE, 
             int.lv.free = TRUE, auto.fix.first = TRUE, auto.fix.single = TRUE, 
             auto.var = TRUE, auto.cov.lv.x = TRUE, auto.th = TRUE, auto.delta = TRUE, 
             auto.cov.y = TRUE)
@@ -401,21 +469,24 @@ summary(isq.f2)
 
 
 
-bmi$lvIQsex = bmi$AFQT89 * (as.numeric(bmi$SAMPLE_SEX)-1)
-
 bmi.isq.m3 <- '
-i =~ 1*bmi_85 + 1*bmi_96 + 1*bmi_06 + 1*bmi_12
-s =~ 0*bmi_85 + 1.1*bmi_96 + 2.1*bmi_06 + 2.7*bmi_12
-q =~ 0*bmi_85 + 1.21*bmi_96 + 4.41*bmi_06 + 7.29*bmi_12
+i =~ 1*bmi_85 + 1*bmi_94 + 1*bmi_06 + 1*bmi_14
+s =~ 0*bmi_85 + 0.9*bmi_94 + 2.1*bmi_06 + 2.9*bmi_14
+q =~ 0*bmi_85 + 0.81*bmi_94 + 4.41*bmi_06 + 8.41*bmi_14
 
 i ~ SAMPLE_SEX + AFQT89 + age_1979 + lvIQsex
 s ~ SAMPLE_SEX + AFQT89 + age_1979 + lvIQsex 
 q ~ SAMPLE_SEX + AFQT89 + age_1979 + lvIQsex
 
+bmi_85 ~ age.85
+bmi_94 ~ age.94
+bmi_06 ~ age.06
+bmi_14 ~ age.14
+
 '
 
 
-isq.f3 = lavaan(bmi.isq.m3, data=bmi, meanstructure = TRUE, int.ov.free = FALSE, 
+isq.f3 = lavaan(bmi.isq.m3, data=bmi.lv, meanstructure = TRUE, int.ov.free = FALSE, 
             int.lv.free = TRUE, auto.fix.first = TRUE, auto.fix.single = TRUE, 
             auto.var = TRUE, auto.cov.lv.x = TRUE, auto.th = TRUE, auto.delta = TRUE, 
             auto.cov.y = TRUE)
@@ -425,6 +496,101 @@ fitMeasures(isq.f3, c("chisq", "df", "pvalue", "cfi", "tli", "srmr", "rmsea"))
 summary(isq.f3)
 
 
+
+bmi.isq.m4 <- '
+bm.i =~ 1*bmi_85 + 1*bmi_94 + 1*bmi_06 + 1*bmi_14
+bm.s =~ 0*bmi_85 + 0.9*bmi_94 + 2.1*bmi_06 + 2.9*bmi_14
+bm.q =~ 0*bmi_85 + 0.81*bmi_94 + 4.41*bmi_06 + 8.41*bmi_14
+
+bm.i ~ SAMPLE_SEX + AFQT89 + age_1979 + lvIQsex + Child_SES + SES_Education_USE
+bm.s ~ SAMPLE_SEX + AFQT89 + age_1979 + lvIQsex + Child_SES + SES_Education_USE 
+bm.q ~ SAMPLE_SEX + AFQT89 + age_1979 + lvIQsex + Child_SES + SES_Education_USE
+
+bmi_85 ~ age.85
+bmi_94 ~ age.94
+bmi_06 ~ age.06
+bmi_14 ~ age.14
+
+'
+
+isq.f4 = lavaan(bmi.isq.m4, data=bmi.lv, meanstructure = TRUE, int.ov.free = FALSE, 
+                int.lv.free = TRUE, auto.fix.first = TRUE, auto.fix.single = TRUE, 
+                auto.var = TRUE, auto.cov.lv.x = TRUE, auto.th = TRUE, auto.delta = TRUE, 
+                auto.cov.y = TRUE)
+
+
+fitMeasures(isq.f4, c("chisq", "df", "pvalue", "cfi", "tli", "srmr", "rmsea"))
+summary(isq.f4)
+
+
+
+### Incorportating income
+
+inc.isq.m1 <- '
+i =~ 1*income.85 + 1*income.94 + 1*income.06 + 1*income.14
+s =~ 0*income.85 + 0.9*income.94 + 2.1*income.06 + 2.9*income.14
+q =~ 0*income.85 + 0.81*income.94 + 4.41*income.06 + 8.41*income.14
+
+'
+
+inc.isq.f1 = lavaan(inc.isq.m1, data=bmi.lv, meanstructure = TRUE, int.ov.free = FALSE, 
+                    int.lv.free = TRUE, auto.fix.first = TRUE, auto.fix.single = TRUE, 
+                    auto.var = TRUE, auto.cov.lv.x = TRUE, auto.th = TRUE, auto.delta = TRUE, 
+                    auto.cov.y = TRUE,
+                    missing = 'fiml', information='observed'
+)
+
+fitMeasures(inc.isq.f1, c("chisq", "df", "pvalue", "cfi", "tli", "srmr", "rmsea"))
+summary(inc.isq.f1)
+
+
+
+bmi.isq.m5 <- '
+bm.i =~ 1*bmi_85 + 1*bmi_94 + 1*bmi_06 + 1*bmi_14
+bm.s =~ 0*bmi_85 + 0.9*bmi_94 + 2.1*bmi_06 + 2.9*bmi_14
+bm.q =~ 0*bmi_85 + 0.81*bmi_94 + 4.41*bmi_06 + 8.41*bmi_14
+
+inc.i =~ 1*income.85 + 1*income.94 + 1*income.06 + 1*income.14
+inc.s =~ 0*income.85 + 0.9*income.94 + 2.1*income.06 + 2.9*income.14
+inc.q =~ 0*income.85 + 0.81*income.94 + 4.41*income.06 + 8.41*income.14
+
+bm.i ~ SAMPLE_SEX + AFQT89 + age_1979 + lvIQsex + Child_SES + SES_Education_USE
+bm.s ~ SAMPLE_SEX + AFQT89 + age_1979 + lvIQsex + Child_SES + SES_Education_USE + inc.i  
+bm.q ~ SAMPLE_SEX + AFQT89 + age_1979 + lvIQsex + Child_SES + SES_Education_USE + inc.i + inc.s
+
+bm.i ~~ inc.i
+bm.s ~~ inc.s
+bm.q ~~ inc.q
+
+bmi_85 ~ age.85
+bmi_94 ~ age.94
+bmi_06 ~ age.06
+bmi_14 ~ age.14
+
+'
+
+isq.f5 = lavaan(bmi.isq.m5, data=bmi.lv, meanstructure = TRUE, int.ov.free = FALSE, 
+                int.lv.free = TRUE, auto.fix.first = TRUE, auto.fix.single = TRUE, 
+                auto.var = TRUE, auto.cov.lv.x = TRUE, auto.th = TRUE, auto.delta = TRUE, 
+                auto.cov.y = TRUE)
+
+
+fitMeasures(isq.f5, c("chisq", "df", "pvalue", "cfi", "tli", "srmr", "rmsea"))
+summary(isq.f5)
+
+
+
+
+
+
+
+
+
+
+
+
+
+########
 
 bmi.int.3 <-'
 i =~ 1*bmi_85 + 1*bmi_96 + 1*bmi_06 + 1*bmi_12
@@ -449,7 +615,7 @@ bmi.int.4 <-'
 i =~ 1*bmi_85 + 1*bmi_96 + 1*bmi_06 + 1*bmi_12
 s =~ 0*bmi_85 + 1.1*bmi_96 + 2.1*bmi_06 + 2.7*bmi_12
 
-i ~ SAMPLE_SEX + AFQT89 + age_1979 + lvIQsex + Child_SES + Adult_SES
+i ~ SAMPLE_SEX + AFQT89 + age_1979 + lvIQsex + Child_SES + 
 s ~ SAMPLE_SEX + AFQT89 + age_1979 + lvIQsex + Child_SES + Adult_SES
 
 '
@@ -463,6 +629,10 @@ fitMeasures(f4, c("chisq", "df", "pvalue", "cfi", "tli", "srmr", "rmsea"))
 summary(f4)
 
 
+
+
+
+### Old...
 
 
 

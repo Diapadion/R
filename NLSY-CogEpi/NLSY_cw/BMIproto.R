@@ -572,7 +572,9 @@ bmi_14 ~ age.14
 isq.f5 = lavaan(bmi.isq.m5, data=bmi.lv, meanstructure = TRUE, int.ov.free = FALSE, 
                 int.lv.free = TRUE, auto.fix.first = TRUE, auto.fix.single = TRUE, 
                 auto.var = TRUE, auto.cov.lv.x = TRUE, auto.th = TRUE, auto.delta = TRUE, 
-                auto.cov.y = TRUE)
+                auto.cov.y = TRUE, fixed.x=TRUE,
+                missing = 'fiml', information='observed'
+                )
 
 
 fitMeasures(isq.f5, c("chisq", "df", "pvalue", "cfi", "tli", "srmr", "rmsea"))

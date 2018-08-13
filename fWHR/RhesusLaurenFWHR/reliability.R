@@ -95,5 +95,20 @@ alpha(reliabl[,c("LFFH.a","LFFH.b")])
 
 ### Point-by-point reliability, for revision
 
+View(reliabl)
+
+## distance between points
+## - nothing to correlate distances with
+## - average distance and CI per point
+
+a.ed = apply
+euc.dist(reliabl$a.x,reliabl$a.y,reliabl$A.x,reliabl$A.y)
+a.ed = apply(reliabl[,c(2:3,17,18)],MARGIN=1,FUN=euc.dist)
+
+
+
+## correlation of coordinates?
+
+
 ### TODO
 

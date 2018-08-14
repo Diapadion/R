@@ -1,0 +1,236 @@
+model {
+  for(i in 1:N) {
+    Bullying[i] ~ dnorm(mu[i,1], 1/theta[1,1,g[i]])
+    Stingy.Greedy[i] ~ dnorm(mu[i,2], 1/theta[2,2,g[i]])
+    Aggressive[i] ~ dnorm(mu[i,3], 1/theta[3,3,g[i]])
+    Irritable[i] ~ dnorm(mu[i,4], 1/theta[4,4,g[i]])
+    Manipulative[i] ~ dnorm(mu[i,5], 1/theta[5,5,g[i]])
+    Defiant[i] ~ dnorm(mu[i,6], 1/theta[6,6,g[i]])
+    Excitable[i] ~ dnorm(mu[i,7], 1/theta[7,7,g[i]])
+    Reckless[i] ~ dnorm(mu[i,8], 1/theta[8,8,g[i]])
+    Dominant[i] ~ dnorm(mu[i,9], 1/theta[9,9,g[i]])
+    Independent[i] ~ dnorm(mu[i,10], 1/theta[10,10,g[i]])
+    Individualistic[i] ~ dnorm(mu[i,11], 1/theta[11,11,g[i]])
+    Gentle[i] ~ dnorm(mu[i,12], 1/theta[12,12,g[i]])
+    Fearful[i] ~ dnorm(mu[i,13], 1/theta[13,13,g[i]])
+    Submissive[i] ~ dnorm(mu[i,14], 1/theta[14,14,g[i]])
+    Timid[i] ~ dnorm(mu[i,15], 1/theta[15,15,g[i]])
+    Cautious[i] ~ dnorm(mu[i,16], 1/theta[16,16,g[i]])
+    Dependent.Follower[i] ~ dnorm(mu[i,17], 1/theta[17,17,g[i]])
+    Vulnerable[i] ~ dnorm(mu[i,18], 1/theta[18,18,g[i]])
+    Distractible[i] ~ dnorm(mu[i,19], 1/theta[19,19,g[i]])
+    Disorganized[i] ~ dnorm(mu[i,20], 1/theta[20,20,g[i]])
+    fWHR[i] ~ dnorm(mu[i,21], 1/theta[21,21,g[i]])
+    LFFH[i] ~ dnorm(mu[i,22], 1/theta[22,22,g[i]])
+
+    # lvs
+    eta[i,1:2] ~ dmnorm(mu_eta[i,1:2], ibpsi[1:2,1:2,g[i]])
+  }
+
+  # mu definitions
+  for(i in 1:N) {
+    mu[i,1] <- nu[1,1,g[i]] + lambda[1,1,g[i]]*eta[i,1] + lambda[1,2,g[i]]*eta[i,2]
+    mu[i,2] <- nu[2,1,g[i]] + lambda[2,1,g[i]]*eta[i,1] + lambda[2,2,g[i]]*eta[i,2]
+    mu[i,3] <- nu[3,1,g[i]] + lambda[3,1,g[i]]*eta[i,1] + lambda[3,2,g[i]]*eta[i,2]
+    mu[i,4] <- nu[4,1,g[i]] + lambda[4,1,g[i]]*eta[i,1] + lambda[4,2,g[i]]*eta[i,2]
+    mu[i,5] <- nu[5,1,g[i]] + lambda[5,1,g[i]]*eta[i,1] + lambda[5,2,g[i]]*eta[i,2]
+    mu[i,6] <- nu[6,1,g[i]] + lambda[6,1,g[i]]*eta[i,1] + lambda[6,2,g[i]]*eta[i,2]
+    mu[i,7] <- nu[7,1,g[i]] + lambda[7,1,g[i]]*eta[i,1] + lambda[7,2,g[i]]*eta[i,2]
+    mu[i,8] <- nu[8,1,g[i]] + lambda[8,1,g[i]]*eta[i,1] + lambda[8,2,g[i]]*eta[i,2]
+    mu[i,9] <- nu[9,1,g[i]] + lambda[9,1,g[i]]*eta[i,1] + lambda[9,2,g[i]]*eta[i,2]
+    mu[i,10] <- nu[10,1,g[i]] + lambda[10,1,g[i]]*eta[i,1] + lambda[10,2,g[i]]*eta[i,2]
+    mu[i,11] <- nu[11,1,g[i]] + lambda[11,1,g[i]]*eta[i,1] + lambda[11,2,g[i]]*eta[i,2]
+    mu[i,12] <- nu[12,1,g[i]] + lambda[12,1,g[i]]*eta[i,1] + lambda[12,2,g[i]]*eta[i,2]
+    mu[i,13] <- nu[13,1,g[i]] + lambda[13,1,g[i]]*eta[i,1] + lambda[13,2,g[i]]*eta[i,2]
+    mu[i,14] <- nu[14,1,g[i]] + lambda[14,1,g[i]]*eta[i,1] + lambda[14,2,g[i]]*eta[i,2]
+    mu[i,15] <- nu[15,1,g[i]] + lambda[15,1,g[i]]*eta[i,1] + lambda[15,2,g[i]]*eta[i,2]
+    mu[i,16] <- nu[16,1,g[i]] + lambda[16,1,g[i]]*eta[i,1] + lambda[16,2,g[i]]*eta[i,2]
+    mu[i,17] <- nu[17,1,g[i]] + lambda[17,1,g[i]]*eta[i,1] + lambda[17,2,g[i]]*eta[i,2]
+    mu[i,18] <- nu[18,1,g[i]] + lambda[18,1,g[i]]*eta[i,1] + lambda[18,2,g[i]]*eta[i,2]
+    mu[i,19] <- nu[19,1,g[i]] + lambda[19,1,g[i]]*eta[i,1] + lambda[19,2,g[i]]*eta[i,2]
+    mu[i,20] <- nu[20,1,g[i]] + lambda[20,1,g[i]]*eta[i,1] + lambda[20,2,g[i]]*eta[i,2]
+    mu[i,21] <- nu[21,1,g[i]]
+    mu[i,22] <- nu[22,1,g[i]]
+
+    mu_eta[i,1] <- alpha[1,1,g[i]]
+    mu_eta[i,2] <- alpha[2,1,g[i]]
+  }
+
+  # Assignments from parameter vector & equality constraints
+  lambda[1,1,1] <- 1
+  lambda[2,1,1] <- parvec[1]
+  lambda[3,1,1] <- parvec[2]
+  lambda[4,1,1] <- parvec[3]
+  lambda[5,1,1] <- parvec[4]
+  lambda[6,1,1] <- parvec[5]
+  lambda[7,1,1] <- parvec[6]
+  lambda[8,1,1] <- parvec[7]
+  lambda[9,1,1] <- parvec[8]
+  lambda[10,1,1] <- parvec[9]
+  lambda[11,1,1] <- parvec[10]
+  lambda[12,1,1] <- parvec[11]
+  lambda[13,1,1] <- parvec[12]
+  lambda[14,1,1] <- parvec[13]
+  lambda[15,1,1] <- parvec[14]
+  lambda[16,1,1] <- parvec[15]
+  lambda[17,1,1] <- parvec[16]
+  lambda[18,1,1] <- parvec[17]
+  lambda[19,1,1] <- parvec[18]
+  lambda[20,1,1] <- parvec[19]
+  lambda[13,2,1] <- 1
+  lambda[14,2,1] <- parvec[20]
+  lambda[15,2,1] <- parvec[21]
+  lambda[16,2,1] <- parvec[22]
+  lambda[17,2,1] <- parvec[23]
+  lambda[18,2,1] <- parvec[24]
+  lambda[19,2,1] <- parvec[25]
+  lambda[20,2,1] <- parvec[26]
+  lambda[1,2,1] <- parvec[27]
+  lambda[2,2,1] <- parvec[28]
+  lambda[3,2,1] <- parvec[29]
+  lambda[4,2,1] <- parvec[30]
+  lambda[5,2,1] <- parvec[31]
+  lambda[6,2,1] <- parvec[32]
+  lambda[7,2,1] <- parvec[33]
+  lambda[8,2,1] <- parvec[34]
+  lambda[9,2,1] <- parvec[35]
+  lambda[10,2,1] <- parvec[36]
+  lambda[11,2,1] <- parvec[37]
+  lambda[12,2,1] <- parvec[38]
+  nu[21,1,1] <- parvec[39]
+  nu[22,1,1] <- parvec[39]
+  theta[1,1,1] <- pow(parvec[40],-1)
+  theta[2,2,1] <- pow(parvec[41],-1)
+  theta[3,3,1] <- pow(parvec[42],-1)
+  theta[4,4,1] <- pow(parvec[43],-1)
+  theta[5,5,1] <- pow(parvec[44],-1)
+  theta[6,6,1] <- pow(parvec[45],-1)
+  theta[7,7,1] <- pow(parvec[46],-1)
+  theta[8,8,1] <- pow(parvec[47],-1)
+  theta[9,9,1] <- pow(parvec[48],-1)
+  theta[10,10,1] <- pow(parvec[49],-1)
+  theta[11,11,1] <- pow(parvec[50],-1)
+  theta[12,12,1] <- pow(parvec[51],-1)
+  theta[13,13,1] <- pow(parvec[52],-1)
+  theta[14,14,1] <- pow(parvec[53],-1)
+  theta[15,15,1] <- pow(parvec[54],-1)
+  theta[16,16,1] <- pow(parvec[55],-1)
+  theta[17,17,1] <- pow(parvec[56],-1)
+  theta[18,18,1] <- pow(parvec[57],-1)
+  theta[19,19,1] <- pow(parvec[58],-1)
+  theta[20,20,1] <- pow(parvec[59],-1)
+  theta[21,21,1] <- pow(parvec[60],-1)
+  theta[22,22,1] <- pow(parvec[61],-1)
+  nu[1,1,1] <- parvec[62]
+  nu[2,1,1] <- parvec[63]
+  nu[3,1,1] <- parvec[64]
+  nu[4,1,1] <- parvec[65]
+  nu[5,1,1] <- parvec[66]
+  nu[6,1,1] <- parvec[67]
+  nu[7,1,1] <- parvec[68]
+  nu[8,1,1] <- parvec[69]
+  nu[9,1,1] <- parvec[70]
+  nu[10,1,1] <- parvec[71]
+  nu[11,1,1] <- parvec[72]
+  nu[12,1,1] <- parvec[73]
+  nu[13,1,1] <- parvec[74]
+  nu[14,1,1] <- parvec[75]
+  nu[15,1,1] <- parvec[76]
+  nu[16,1,1] <- parvec[77]
+  nu[17,1,1] <- parvec[78]
+  nu[18,1,1] <- parvec[79]
+  nu[19,1,1] <- parvec[80]
+  nu[20,1,1] <- parvec[81]
+  alpha[1,1,1] <- 0
+  alpha[2,1,1] <- 0
+  psi[1,2,1] <- bpsi[1,2,1]
+  psi[1,1,1] <- bpsi[1,1,1]
+  psi[2,2,1] <- bpsi[2,2,1]
+  # Priors
+  parvec[1] ~ dnorm(0,.1)
+  parvec[2] ~ dnorm(0,.1)
+  parvec[3] ~ dnorm(0,.1)
+  parvec[4] ~ dnorm(0,.1)
+  parvec[5] ~ dnorm(0,.1)
+  parvec[6] ~ dnorm(0,.1)
+  parvec[7] ~ dnorm(0,.1)
+  parvec[8] ~ dnorm(0,.1)
+  parvec[9] ~ dnorm(0,.1)
+  parvec[10] ~ dnorm(0,.1)
+  parvec[11] ~ dnorm(0,.1)
+  parvec[12] ~ dnorm(0,100)
+  parvec[13] ~ dnorm(0,100)
+  parvec[14] ~ dnorm(0,100)
+  parvec[15] ~ dnorm(0,100)
+  parvec[16] ~ dnorm(0,100)
+  parvec[17] ~ dnorm(0,100)
+  parvec[18] ~ dnorm(0,100)
+  parvec[19] ~ dnorm(0,100)
+  parvec[20] ~ dnorm(0,.1)
+  parvec[21] ~ dnorm(0,.1)
+  parvec[22] ~ dnorm(0,.1)
+  parvec[23] ~ dnorm(0,.1)
+  parvec[24] ~ dnorm(0,.1)
+  parvec[25] ~ dnorm(0,.1)
+  parvec[26] ~ dnorm(0,.1)
+  parvec[27] ~ dnorm(0,100)
+  parvec[28] ~ dnorm(0,100)
+  parvec[29] ~ dnorm(0,100)
+  parvec[30] ~ dnorm(0,100)
+  parvec[31] ~ dnorm(0,100)
+  parvec[32] ~ dnorm(0,100)
+  parvec[33] ~ dnorm(0,100)
+  parvec[34] ~ dnorm(0,100)
+  parvec[35] ~ dnorm(0,100)
+  parvec[36] ~ dnorm(0,100)
+  parvec[37] ~ dnorm(0,100)
+  parvec[38] ~ dnorm(0,100)
+  parvec[39] ~ dnorm(0,1e-3)
+  parvec[40] ~ dgamma(1,.5)
+  parvec[41] ~ dgamma(1,.5)
+  parvec[42] ~ dgamma(1,.5)
+  parvec[43] ~ dgamma(1,.5)
+  parvec[44] ~ dgamma(1,.5)
+  parvec[45] ~ dgamma(1,.5)
+  parvec[46] ~ dgamma(1,.5)
+  parvec[47] ~ dgamma(1,.5)
+  parvec[48] ~ dgamma(1,.5)
+  parvec[49] ~ dgamma(1,.5)
+  parvec[50] ~ dgamma(1,.5)
+  parvec[51] ~ dgamma(1,.5)
+  parvec[52] ~ dgamma(1,.5)
+  parvec[53] ~ dgamma(1,.5)
+  parvec[54] ~ dgamma(1,.5)
+  parvec[55] ~ dgamma(1,.5)
+  parvec[56] ~ dgamma(1,.5)
+  parvec[57] ~ dgamma(1,.5)
+  parvec[58] ~ dgamma(1,.5)
+  parvec[59] ~ dgamma(1,.5)
+  parvec[60] ~ dgamma(1,.5)
+  parvec[61] ~ dgamma(1,.5)
+  parvec[62] ~ dnorm(0,1e-3)
+  parvec[63] ~ dnorm(0,1e-3)
+  parvec[64] ~ dnorm(0,1e-3)
+  parvec[65] ~ dnorm(0,1e-3)
+  parvec[66] ~ dnorm(0,1e-3)
+  parvec[67] ~ dnorm(0,1e-3)
+  parvec[68] ~ dnorm(0,1e-3)
+  parvec[69] ~ dnorm(0,1e-3)
+  parvec[70] ~ dnorm(0,1e-3)
+  parvec[71] ~ dnorm(0,1e-3)
+  parvec[72] ~ dnorm(0,1e-3)
+  parvec[73] ~ dnorm(0,1e-3)
+  parvec[74] ~ dnorm(0,1e-3)
+  parvec[75] ~ dnorm(0,1e-3)
+  parvec[76] ~ dnorm(0,1e-3)
+  parvec[77] ~ dnorm(0,1e-3)
+  parvec[78] ~ dnorm(0,1e-3)
+  parvec[79] ~ dnorm(0,1e-3)
+  parvec[80] ~ dnorm(0,1e-3)
+  parvec[81] ~ dnorm(0,1e-3)
+  for(k in 1:1) {
+    ibpsi[1:2,1:2,k] ~ dwish(iden,3)
+    bpsi[1:2,1:2,k] <- inverse(ibpsi[1:2,1:2,k])
+  }
+
+}

@@ -616,3 +616,41 @@ m.af.1.y = lmer(fWHR ~ Age + Age2 + Age3 +
                      + (1|Facility.x/Rhesus), data=fWHR[(fWHR$agenum < 8),])
 
 summary(m.af.1.y)
+
+
+
+### Collider conditioning testing
+
+mcc.1 <- lmer(fWHR ~ Age + Age2 + Age3 + 
+             Sex 
+           + Confidence
+           + (1|Rhesus)
+           , data=fWHR[fWHR$agenum<8,])
+summary(mcc.1)
+
+mcc.2 <- lmer(fWHR ~ Age + Age2 + Age3 + 
+                Sex 
+              + Dominance
+              + (1|Rhesus)
+              , data=fWHR[fWHR$agenum<8,])
+summary(mcc.2)
+
+
+
+  ## LFFH - full pers:
+
+mcc.10 <- lmer(LFFH ~ Age + Age2 + Age3 + 
+                Sex 
+              + Dominance
+              + (1|Rhesus)
+              , data=fWHR[fWHR$agenum<=8,])
+summary(mcc.10)
+
+mcc.11 <- lmer(LFFH ~ Age + Age2 + Age3 + 
+                 Sex 
+               + Confidence
+               + (1|Rhesus)
+               , data=fWHR[fWHR$agenum<=8,])
+summary(mcc.11)
+
+

@@ -81,7 +81,7 @@ ggsurvplot(ggfit, conf.int=T,censor=F
            #, color = c(1,2,1,2,1,2)
            , palette = c('dodgerblue','violetred1','dodgerblue','violetred1','dodgerblue','violetred1')
            , legend = c(0.2, 0.2) #'none'
-           ) + 
+           ) #+ 
   coord_cartesian(xlim=c(15,58),ylim=c(0.1,1.0))+
   xlab('Age')+ylab('Proportion that remains normotensive')+
   scale_x_continuous(limits = c(15,58), breaks=seq(15,57,6))
@@ -97,7 +97,7 @@ ggsurvplot(ggfit, conf.int=T,censor=F
            #, color = c(1,2,1,2,1,2)
            , palette = c('dodgerblue','violetred1','dodgerblue','violetred1','dodgerblue','violetred1')
            , legend = c(0.2, 0.2) #'none'
-) + 
+) #+ 
   coord_cartesian(xlim=c(15,58),ylim=c(0.6,1.0))+
   xlab('Age')+ylab('Proportion that remains normotensive')+
   scale_x_continuous(limits = c(15,58), breaks=seq(15,57,6))

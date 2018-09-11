@@ -236,6 +236,7 @@ table(ccs)
 table(ht.df$hasHT[ccs])
 
 
+
 ### Plotting functions
 
 ## Creating tertile variable

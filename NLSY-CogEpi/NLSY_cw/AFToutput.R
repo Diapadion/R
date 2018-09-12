@@ -327,6 +327,33 @@ extractAIC(aft.gd3.8c)
 aft.gd3.8c$loglik[2]
 
 
+### Supplement
+
+## S1: Youth x Sex
+exp(coefficients(aft.gd3.2.a)[1])
+confint(aft.gd3.2.a)
+exp(confint(aft.gd3.2.a)[1,2])
+
+exp(coefficients(aft.gd3.2.a)[2])
+exp(confint(aft.gd3.2.a)[2,1])
+exp(confint(aft.gd3.2.a)[2,2])
+
+exp(coefficients(aft.gd3.2.a)[3])
+exp(confint(aft.gd3.2.a)[3,1])
+exp(confint(aft.gd3.2.a)[3,2])
+
+exp(coefficients(aft.gd3.2.a)[4])
+exp(confint(aft.gd3.2.a)[4,1])
+exp(confint(aft.gd3.2.a)[4,2])
+
+exp(coefficients(aft.gd3.2.a)[5])
+exp(confint(aft.gd3.2.a)[5,1])
+exp(confint(aft.gd3.2.a)[5,2])
+
+extractAIC(aft.gd3.2.a)
+aft.gd3.2.a$loglik
+
+
 
 
 
@@ -674,7 +701,6 @@ exp(confint(aft.7.i)[10,2])
 
 extractAIC(aft.7.i)
 aft.7.i$loglik
-
 
 
 

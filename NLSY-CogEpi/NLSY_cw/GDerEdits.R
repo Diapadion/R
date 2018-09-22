@@ -230,6 +230,7 @@ summary(aft.gd3.3)
 
 extractAIC(aft.gd3.2.a)
 aft.gd3.2.a$loglik
+
 summary(aft.gd3.2.a)
 
 

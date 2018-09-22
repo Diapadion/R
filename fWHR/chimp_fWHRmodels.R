@@ -32,7 +32,7 @@ chFP = chFP[!is.na(chFP$fWHR),]
 ### Descriptive Statistics
 
 #levels(chFP$ID)
-table(droplevels(chFP$ID[chFP$location=='Edinburgh'])) # Number of Edi chimps and images/chimp
+table(droplevels(chFP$ID[chFP$location=='Edinburgh'|chFP$location=='Edinburgh.VADW'])) # Number of Edi chimps and images/chimp
 sum(table(droplevels(chFP$ID[chFP$location=='Bastrop']))) # Number of Bastrop chimps
 table(droplevels(chFP$ID[chFP$location=='Japan'])) # NUmber of Japanese chimps and images/
 
@@ -43,24 +43,36 @@ sd(chFP$Age[!duplicated(chFP$ID)], na.rm=TRUE) # SD age
 min(chFP$Age[!duplicated(chFP$ID)], na.rm=TRUE) # Min age
 max(chFP$Age[!duplicated(chFP$ID)], na.rm=TRUE) # Max age
 
-chFP$Age[!duplicated(chFP$ID[chFP$location=='Edinburgh'])]
-chFP$Age[!duplicated(chFP$ID=='Liberius')]
-mean(chFP$Age[!duplicated(chFP$ID[chFP$location=='Edinburgh'])], na.rm=TRUE) # Mean age
-sd(chFP$Age[!duplicated(chFP$ID[chFP$location=='Edinburgh'])], na.rm=TRUE) # Mean age
+# chFP$Age[chFP$location=='Edinburgh']
+# !duplicated(chFP$ID)&chFP$location=='Edinburgh'
+# chFP$ID[chFP$location=='Edinburgh']
+## What is the below for?
+#chFP$Age[!duplicated(chFP$ID[chFP$location=='Edinburgh'])] # WRONG
+chFP$Age[!duplicated(chFP$ID)&chFP$location=='Edinburgh']
+#chFP$Age[!duplicated(chFP$ID=='Liberius')] # WRONG
+chFP$Age[!duplicated(chFP$ID=='Liberius')&chFP$location=='Edinburgh'] # this is just the first observation of Lib...
+
+## Aggregate age across individuals then find the mean and SD for the group
+Edi = chFP$location=='Edinburgh'|chFP$location=='Edinburgh.VADW'
+aggEdi = aggregate(chFP[Edi,], by=list(chFP$ID[Edi]), FUN=mean)
+mean(aggEdi$Age) # Mean age
+sd(aggEdi$Age) # SD age
 
 mean(table(chFP$ID)) # Mean number of useable images
 sd(table(chFP$ID))   # SD of number of useable images
 
-mean(table(droplevels(chFP$ID[chFP$location=='Edinburgh'])))
-sd(table(droplevels(chFP$ID[chFP$location=='Edinburgh'])))
+mean(table(droplevels(chFP$ID[chFP$location=='Edinburgh'|chFP$location=='Edinburgh.VADW'])))
+sd(table(droplevels(chFP$ID[chFP$location=='Edinburgh'|chFP$location=='Edinburgh.VADW'])))
 
 mean(table(droplevels(chFP$ID[chFP$location=='Japan'])))
 sd(table(droplevels(chFP$ID[chFP$location=='Japan'])))
 
 
+mean(aggregate(chFP$fWHR, by=list(chFP$ID), FUN=mean)[,'x'], na.rm=TRUE) # Mean fWHR
+sd(aggregate(chFP$fWHR, by=list(chFP$ID), FUN=mean)[,'x'], na.rm=TRUE) # SD fWHR
 
-mean(chFP$fWHR[!duplicated(chFP$ID)], na.rm=TRUE) # Mean fWHR
-sd(chFP$fWHR[!duplicated(chFP$ID)], na.rm=TRUE) # SD fWHR
+  
+
 chFP$fWHR[chFP$ID=='Lennon']
 (chFP$fWHR[chFP$ID=='Lennon'][1] - mean(chFP$fWHR[!duplicated(chFP$ID)]) ) / sd(chFP$fWHR[!duplicated(chFP$ID)])
 
@@ -75,11 +87,11 @@ table(chFP$location[!duplicated(chFP$ID)])
 ### Zero-order correlation plots
 
 #colnames(chFP)
-corrplot(cor(chFP[,c(8,9,12,14,15,16,17,18,19),],use="pairwise.complete.obs")
+corrplot(cor(chFP[,c(8,9,12,13,14,15,16,17,18,19),],use="pairwise.complete.obs")
          ,  method = 'number')
 
-corrplot(cor(chFP[chFP$Sex==0,c(8,12,14,15,16,17,18,19),],use="pairwise.complete.obs"),  method = 'number')
-corrplot(cor(chFP[chFP$Sex==1,c(8,12,14,15,16,17,18,19),],use="pairwise.complete.obs"),  method = 'number')
+corrplot(cor(chFP[chFP$Sex==0,c(8,12,13,14,15,16,17,18,19),],use="pairwise.complete.obs"),  method = 'number')
+corrplot(cor(chFP[chFP$Sex==1,c(8,12,13,14,15,16,17,18,19),],use="pairwise.complete.obs"),  method = 'number')
 
 
 
@@ -114,8 +126,8 @@ chFP$Subspecies[!adults & !duplicated(chFP$ID)] # one of these is Lennon, who is
 ## Base: just subspecies random effects
 
 set.seed(1234567)
-m0 <- lmer(fWHR ~ 1 + (1|instrument) +
-             #(1 | location) + 
+m0 <- lmer(fWHR ~ 1 + #(1|instrument) +
+             (1 | location) + 
              (1 | Subspecies) + (1 | ID:Subspecies)
            #,data=chFP[adults,]
            ,data=chFP[chFP$ID!='Lennon',]
@@ -167,7 +179,7 @@ confint(m2, method='profile')
 
 ### Personality
 
-set.seed(1234567)
+set.seed(12345)
 mp1 <- lmer(fWHR ~ Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ +
               (1 | location) + (1 | Subspecies) + (1 | ID:Subspecies)
             ,data = chFP[adults,]
@@ -232,7 +244,7 @@ confint(mp3.v, method='profile')
 set.seed(1234567)
 mp4.f = lmer(fWHR ~ Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ +
                (1 | location) + (1 | ID)
-             ,data = chFP[indx&(chFP$Subspecies=='verus'&chFP$Sex==0),]
+             ,data = chFP[adults&(chFP$Subspecies=='verus'&chFP$Sex==0),]
              ,control=lmerControl(optimizer="Nelder_Mead")
 )
 # Covergence checks
@@ -247,7 +259,7 @@ mp4.f = lmer(fWHR ~ Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ +
 
 mp4.m = lmer(fWHR ~ Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ +
                (1 | location) + (1 | ID)
-             ,data = chFP[indx&(chFP$Subspecies=='verus'&chFP$Sex==1),]
+             ,data = chFP[adults&(chFP$Subspecies=='verus'&chFP$Sex==1),]
 )
 
 summary(mp4.f)

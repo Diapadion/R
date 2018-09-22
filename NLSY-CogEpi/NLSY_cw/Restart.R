@@ -273,7 +273,7 @@ g <- ggsurvplot(ggfit, conf.int=T,censor=F
             , linetype = c(1,1,2,2,3,3)
             #, color = c(1,2,1,2,1,2)
             , palette = c('dodgerblue','violetred1','dodgerblue','violetred1','dodgerblue','violetred1')
-            , legend = c(0.2, 0.2) #'none'
+            , legend = 'none' #c(0.2, 0.2) #'none'
             , xlim = c(19,55), ylim = c(0.5,1)
             , break.x.by = 5
 ) 
@@ -301,3 +301,9 @@ fit
 gg = ggsurvplot(fit, data = lung)
 
 gg + coord_cartesian(xlim=c(15,58),ylim=c(0.1,1.0))
+
+
+
+### Supplementary models
+
+## Youth SES x sex

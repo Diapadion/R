@@ -51,19 +51,20 @@ table(chFP$Sex[chFP$Subspecies=='verus'])
 
 m0.lf <- lmer(lffh ~ 1 +
              (1 | location) + (1 | Subspecies) + (1 | ID:Subspecies)
-           ,data=chFP
+           ,data=chFP[adults,]
            #,data = chFP[chFP$Age>7,]
            )
-summary(m0)
-confint(m0,method='profile')
+summary(m0.lf)
+confint(m0.lf,method='profile')
 
-ranef(m0)
+ranef(m0.lf)
 
 
 
-# basic age,sex index:
-adults = (chFP$Sex==0 & chFP$Age>7) | (chFP$Sex==1 & chFP$Age>9) | (chFP$ID == 'Gage')
-adults[is.na(adults)] = TRUE
+## basic age,sex index:
+# adults = (chFP$Sex==0 & chFP$Age>7) | (chFP$Sex==1 & chFP$Age>9) | (chFP$ID == 'Gage')
+# adults[is.na(adults)] = TRUE
+## Adults is generated from fWHR model file
 
 
 
@@ -116,7 +117,7 @@ summary(m2.lf.i0)
 
 anova(m2.lf,m2.lf.i,m2.lf.i0)
 
-# This is not asx straight-forward to interpret, but the best model includes 
+# This is not as straight-forward to interpret, but the best model includes 
 # only the age-sex interaction term, but no independent age or sex contribution.
 
 

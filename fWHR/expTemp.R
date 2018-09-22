@@ -121,20 +121,45 @@ ICtab(mp3.v, mp3.v.sx,
 
 library(mgcv)
 
-gam.p1 <- gamm(fWHR ~  s(Dom_CZ) + s(Ext_CZ) + s(Con_CZ) + s(Agr_CZ) + s(Neu_CZ) + s(Opn_CZ),
-               random = list(location =~ 1, ID =~ 1, Subspecies =~ 1),
+gam.p1 <- gamm(fWHR ~  s(Dom_CZ, bs='cs') + s(Ext_CZ, bs='cs') + s(Con_CZ, bs='cs') +
+                 s(Agr_CZ, bs='cs') + s(Neu_CZ, bs='cs') + s(Opn_CZ, bs='cs'),
+               random = list(location =~ 1, ID =~ 1, Subspecies =~ 1)
                ,data = chFP[adults,])
 summary(gam.p1$gam)
-
 plot(gam.p1$gam)
 
 
 gam.p2 <- gamm(fWHR ~  s(Dom_CZ, by = Sex) + s(Ext_CZ) + s(Con_CZ) + 
                  s(Agr_CZ) + s(Neu_CZ) + s(Opn_CZ)
-               ,random = list(location =~ 1, ID =~ 1, Subspecies =~ 1),
+               ,random = list(location =~ 1, ID =~ 1, Subspecies =~ 1)
                ,data = chFP[adults,])
 summary(gam.p2$gam)
 
+
+
+gam.p3 <- gamm(fWHR ~  s(Agr_CZ, bs='tp')
+               ,random = list(location =~ 1, ID =~ 1, Subspecies =~ 1)
+               ,data = chFP[adults,])
+plot(gam.p3$gam)
+
+##
+gam.p4 <- gam(fWHR ~  s(Agr_CZ, bs='cr') + s(location, bs='re') + s(ID, bs='re') +
+                s(Agr_CZ, location, bs='re') + s(Agr_CZ, ID, bs='re') + s(Agr_CZ, Subspecies, bs='re')
+               ,data = chFP[adults,])
+gam.check(gam.p4)
+summary(gam.p4)
+plot(gam.p4)
+
+
+gam.p5 <- gam(fWHR ~  ti(Neu_CZ, bs='cr') + ti(Dom_CZ, bs='cr') + ti(Neu_CZ, Dom_CZ, bs='cr')
+              + s(Neu_CZ, bs='re') + s(Neu_CZ, location, bs='re') 
+              + s(Neu_CZ, ID, bs='re') #+ s(Neu_CZ, Subspecies, bs='re')
+              + s(Dom_CZ, bs='re') + s(Dom_CZ, location, bs='re') 
+              + s(Dom_CZ, ID, bs='re') #+ s(Dom_CZ, Subspecies, bs='re')
+              ,data = chFP[adults&(chFP$Subspecies=='verus'|chFP$Subspecies=='schweinfurthii'),])
+gam.check(gam.p5)
+summary(gam.p5)
+plot(gam.p5)
 
 
 
@@ -161,12 +186,19 @@ library(REEMtree)
 library(lme4)
 
 
-set.seed(12345678)
+
+sort( sapply(ls(),function(x){object.size(get(x))})) 
+
+
+
+chFP$Sex = as.factor(chFP$Sex)
+
+set.seed(1234567890)
 tree.p1 = REEMtree(fWHR ~ Sex + Age + I(Age^2) + I(Age^3) + 
                      Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ + 
                      Subspecies,
-                   #data=chFP[adults,],
-                   data=chFP[chFP$ID!='Lennon',],
+                   data=chFP[adults,],
+                   #data=chFP[chFP$ID!='Lennon',],
                    #random=~1|ID/Subspecies
                    random = list(location =~ 1, ID =~ 1)#, Subspecies =~ 1)
                    ,cv=TRUE, method='ML'
@@ -176,6 +208,52 @@ print(tree.p1)
 plot(tree.p1)
 
 
+
+gb.tree.A = lmer(fWHR ~ Agr_CZ +
+                    (1 | location) +  (1 | ID),
+                  data=chFP[adults,])
+summary(gb.tree.A)
+plot(gb.tree.A)
+## Small, insignificant effect.
+
+
+
+
+
+gb.tree.vs.woA = lmer(fWHR ~ Dom_CZ * Neu_CZ +
+                    + (1 | location) +  (1 | ID),
+                  data=chFP[adults&(chFP$Subspecies=='verus'|chFP$Subspecies=='schweinfurthii')&chFP$Agr_CZ<1.051,]
+)
+summary(gb.tree.vs.woA)
+confint(gb.tree.vs.woA, method='profile')
+
+
+gb.tree.vs.wA = lmer(fWHR ~ Dom_CZ * Neu_CZ +
+                    + (1 | location) +  (1 | ID),
+                  data=chFP[adults&(chFP$Subspecies=='verus'|chFP$Subspecies=='schweinfurthii'),]
+)
+summary(gb.tree.vs.wA)
+
+
+## Testing...
+gb.tree.vs.woA.sx = lmer(fWHR ~ Dom_CZ * Sex * Neu_CZ * Sex +
+                       + (1 | location) +  (1 | ID),
+                     data=chFP[adults&(chFP$Subspecies=='verus'|chFP$Subspecies=='schweinfurthii')&chFP$Agr_CZ<1.051,]
+)
+summary(gb.tree.vs.woA.sx)
+
+
+gb.tree.vs.wA.sx = lmer(fWHR ~ Dom_CZ * Sex * Neu_CZ * Sex +
+                           + (1 | location) +  (1 | ID),
+                         data=chFP[adults&(chFP$Subspecies=='verus'|chFP$Subspecies=='schweinfurthii'),]
+)
+summary(gb.tree.vs.wA.sx)
+
+
+
+
+
+## Old
 gb.tree.vs = lmer(fWHR ~ Dom_CZ * Sex + Neu_CZ * Sex +
                  (1 | location) +  (1 | ID),
                  data=chFP[adults&(chFP$Subspecies=='verus'|chFP$Subspecies=='schweinfurthii'),]
@@ -203,19 +281,19 @@ summary(gb.tree.vs.x)
 
 ### CI tree version
 
-set.seed(12345678)
-cit.p1 = REEMctree(fWHR ~ Sex + Age + I(Age^2) + I(Age^3) + 
+set.seed(1234567)
+cit.p1 = REEMctree(fWHR ~ Sex + #Age + I(Age^2) + I(Age^3) + 
                      Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ + 
                      Subspecies,
-                   #data=chFP[adults,],
-                   data=chFP[chFP$ID!='Lennon',],
+                   data=chFP[adults,],
+                   #data=chFP[chFP$ID!='Lennon',],
                    #random=~1|ID/Subspecies
-                   random = list(location =~ 1, ID =~ 1)#, Subspecies =~ 1)
-                   , method='REML'
-                   
+                   random = list(instrument =~ 1, location =~1, ID =~ 1)#, Subspecies =~ 1)
+                   , method='ML'
 )
-plot(cit.p1$Tree)
 print(cit.p1$Tree)
+plot(cit.p1$Tree)
+
 
 
 
@@ -377,7 +455,7 @@ gbmi.test = gbm.step(chFP, c(8:9,20:26), 12,
                      )
 summary(gbmi.test)
 
-set.seed(1234567)
+set.seed(12345)
 find.int = gbm.interactions(gbmi.test)
 
 find.int$rank.list

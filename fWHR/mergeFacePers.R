@@ -81,7 +81,7 @@ cPers[ind,]$Opn <-
 
 
 
-ind = (cPers$sample == 'Japan' | cPers$sample == 'Edinburgh') 
+ind = (cPers$sample == 'Japan' | cPers$sample == 'Edinburgh' | cPers$sample == 'Edinburgh.VADW' ) 
 
 cPers[ind,]$Dom <-
   (cPers[ind,]$dom

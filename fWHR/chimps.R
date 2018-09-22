@@ -2,10 +2,60 @@
 
 library(alphahull)
 library(tidyr)
+library(readxl)
+
+
 
 ### TO MEASURE:
 
 cPoints = read.csv(file = "ChimpfWHR.csv")
+
+
+
+### Betsy's Edinburgh extras
+
+betsy <- read_xlsx('./Extra measures_Betsy photos_DMA.xlsx')
+
+betsy <- separate(data = betsy, col = A, into = c("A.x", "A.y"), sep = "\\,")
+betsy <- separate(data = betsy, col = B, into = c("B.x", "B.y"), sep = "\\,")
+betsy <- separate(data = betsy, col = C, into = c("C.x", "C.y"), sep = "\\,")
+betsy <- separate(data = betsy, col = D, into = c("D.x", "D.y"), sep = "\\,")
+betsy <- separate(data = betsy, col = E, into = c("E.x", "E.y"), sep = "\\,")
+betsy <- separate(data = betsy, col = F, into = c("F.x", "F.y"), sep = "\\,")
+betsy <- separate(data = betsy, col = G, into = c("G.x", "G.y"), sep = "\\,")
+
+betsy[,c(3:16)] <- data.frame(lapply(betsy[,c(3:16)], function(x) as.numeric(x)))
+
+tabl <- betsy
+fWHRbetsy <- NULL
+
+for (i in seq_len(dim(tabl)[1])){
+  points <- matrix(c(c(tabl$C.x[i], tabl$D.x[i], tabl$E.x[i], tabl$F.x[i], tabl$G.x[i]), 
+                     c(tabl$C.y[i], tabl$D.y[i], tabl$E.y[i], tabl$F.y[i], tabl$G.y[i]))
+                   ,nrow = 5, ncol = 2)
+  
+  
+  fWHRbetsy[i] =   fWHR(points, i)
+  
+}
+betsy = cbind(betsy, fWHRbetsy)
+
+
+i = 0
+for (i in (1:dim(betsy)[1])){
+  betsy$lower.face[i] = euc.dist(betsy$B.x[i],betsy$B.y[i],betsy$G.x[i],betsy$G.y[i])
+  
+}
+
+i = 0
+for (i in (1:dim(betsy)[1])){
+  betsy$face.height[i] = euc.dist(betsy$B.x[i],betsy$B.y[i],betsy$A.x[i],betsy$A.y[i])
+  
+}
+
+betsy$lffh = (betsy$lower.face)/(betsy$face.height)
+
+View(betsy$lffh)
 
 
 
@@ -149,7 +199,8 @@ yF = 88.7
 
 
 ########
-euc.dist <- function(x1, x2) sqrt(sum((x1 - x2) ^ 2))
+#euc.dist <- function(x1, x2) sqrt(sum((x1 - x2) ^ 2))
+euc.dist <- function(x1.1, x1.2, x2.1, x2.2) sqrt(sum((c(x1.1, x1.2) - c(x2.1, x2.2)) ^ 2))
 
 
 df2fWHR <- function(yCh){

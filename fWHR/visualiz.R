@@ -19,6 +19,7 @@ chAgr = chFP
 
 
 ## Aggreagate into individuals
+chAgr$Sex = as.numeric(chAgr$Sex)
 chAgr <- aggregate(chAgr[adults,], by=list(chAgr$ID[adults]), FUN=mean)
 
 
@@ -34,10 +35,13 @@ colnames(chAgr)[1] <- 'ID'
 ###
 
 plot(chAgr$fWHR ~ chAgr$Dom)
+plot(chAgr$fWHR ~ chAgr$Agr)
 
 cor(chAgr$fWHR, chAgr$Dom)
+cor(chAgr$fWHR, chAgr$Agr)
 
 xyplot(data=chAgr, fWHR ~ Dom | Sex)
+
 
 
 ## 
@@ -51,14 +55,38 @@ chAgr$Sex = as.factor(chAgr$Sex)
 levels(chAgr$Sex) <- c('Female','Male')
 
 
+### Publication Figure 2?
 
-### Publication Figure 2
+g <- ggplot(data=chAgr, aes(x=Agr, y=fWHR)) + geom_point() +
+  #facet_grid(verus ~ Sex) +
+  stat_smooth(method='gam') +
+  theme_bw() + xlab('Agreeableness')
+
+g
+
+
+### Publication Figure 2?
+
+g <- ggplot(data=subset(chAgr, chAgr$Agr_CZ<='other'))
+              chAgr, 
+              aes(x=Neu, y=fWHR)) + geom_point() +
+  facet_grid(. ~ verus) +
+  stat_smooth(method='gam') +
+  theme_bw() + xlab('Neuroticism')
+
+g
+
+
+
+### Publication Figure 3?
 
 g <- ggplot(data=subset(chAgr, !(chAgr$verus=='other')), 
             aes(x=Dom, y=fWHR)) + geom_point() +
   facet_grid(verus ~ Sex) +
   stat_smooth(method='gam') +
   theme_bw() + xlab('Dominance')
+
+g
 
 
 
@@ -69,7 +97,6 @@ g <- ggplot(data=subset(chAgr, !(chAgr$verus=='other')),
 #   theme_bw() + xlab('Dominance')
 
 
-g
 
 
 

@@ -208,6 +208,12 @@ aft.gd3.2 = aftreg(y.ccs ~ SAMPLE_SEX * AFQT89 + age_1979
                    + Child_SES
                    , data = ht.df[ccs,], dist='loglogistic')
 
+## S1
+aft.gd3.2.a = aftreg(y.ccs ~ SAMPLE_SEX * AFQT89 + age_1979 
+                   + Child_SES * SAMPLE_SEX
+                   , data = ht.df[ccs,], dist='loglogistic')
+
+
 aft.gd3.3 = aftreg(y.ccs ~ SAMPLE_SEX * AFQT89 + age_1979 
                    + Child_SES + Adult_SES
                    , data = ht.df[ccs,], dist='loglogistic')
@@ -220,6 +226,12 @@ extractAIC(aft.gd3.2)
 extractAIC(aft.gd3.3)
 
 summary(aft.gd3.3)
+
+
+extractAIC(aft.gd3.2.a)
+aft.gd3.2.a$loglik
+summary(aft.gd3.2.a)
+
 
 
 aft.gd3.4 = aftreg(y.ccs ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES
@@ -270,12 +282,23 @@ summary(aft.gd3.8b)
 
 
 ## removing sex * IQ to see if sex * income is significant
+## S2
 aft.gd3.8c = aftreg(y.ccs ~ SAMPLE_SEX + AFQT89 + age_1979 + Child_SES +
                       + SES_Income_USE * SAMPLE_SEX
                     ,data = ht.df[ccs,], dist='loglogistic')
 extractAIC(aft.gd3.8c)
+aft.gd3.8c$loglik[2]
 summary(aft.gd3.8c)
 
+
+## additional sensitivity for Adult SES interaction
+## S3
+aft.gd3.8d = aftreg(y.ccs ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES +
+                      + Adult_SES * SAMPLE_SEX
+                    ,data = ht.df[ccs,], dist='loglogistic')
+extractAIC(aft.gd3.8d)
+aft.gd3.8d$loglik[2]
+summary(aft.gd3.8d)
 
 
 

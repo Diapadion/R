@@ -193,12 +193,12 @@ sort( sapply(ls(),function(x){object.size(get(x))}))
 
 chFP$Sex = as.factor(chFP$Sex)
 
-set.seed(1234567890)
+set.seed(12345678)
 tree.p1 = REEMtree(fWHR ~ Sex + Age + I(Age^2) + I(Age^3) + 
                      Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ + 
                      Subspecies,
-                   data=chFP[adults,],
-                   #data=chFP[chFP$ID!='Lennon',],
+                   #data=chFP[adults,],
+                   data=chFP[chFP$ID!='Lennon',],
                    #random=~1|ID/Subspecies
                    random = list(location =~ 1, ID =~ 1)#, Subspecies =~ 1)
                    ,cv=TRUE, method='ML'
@@ -250,6 +250,27 @@ gb.tree.vs.wA.sx = lmer(fWHR ~ Dom_CZ * Sex * Neu_CZ * Sex +
 summary(gb.tree.vs.wA.sx)
 
 
+## Paper recreations
+gb.tree.v.wA.sx = lmer(scale(fWHR) ~ Dom_CZ * Neu_CZ * Sex +
+                           + (1 | location) +  (1 | ID),
+                       #data=chFP[adults&(chFP$Subspecies=='verus'),]
+                       data=chFP[(chFP$ID!='Lennon')&&(chFP$Subspecies=='verus'),]
+)
+summary(gb.tree.v.wA.sx)
+confint(gb.tree.v.wA.sx, method='profile')
+
+
+
+gb.tree.all.wA.sx = lmer(scale(fWHR) ~ Dom_CZ * Neu_CZ * Sex +
+                          + (1 | location) +  (1 | ID),
+                        data=chFP[adults,]
+                        #data=chFP[chFP$ID!='Lennon',]
+)
+summary(gb.tree.all.wA.sx)
+confint(gb.tree.all.wA.sx, method='profile')
+
+
+
 
 
 
@@ -282,11 +303,11 @@ summary(gb.tree.vs.x)
 ### CI tree version
 
 set.seed(1234567)
-cit.p1 = REEMctree(fWHR ~ Sex + #Age + I(Age^2) + I(Age^3) + 
+cit.p1 = REEMctree(fWHR ~ Sex + Age + I(Age^2) + I(Age^3) + 
                      Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ + 
                      Subspecies,
-                   data=chFP[adults,],
-                   #data=chFP[chFP$ID!='Lennon',],
+                   #data=chFP[adults,],
+                   data=chFP[chFP$ID!='Lennon',],
                    #random=~1|ID/Subspecies
                    random = list(instrument =~ 1, location =~1, ID =~ 1)#, Subspecies =~ 1)
                    , method='ML'

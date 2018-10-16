@@ -29,55 +29,7 @@ chFP = chFP[!is.na(chFP$fWHR),]
 
 
 
-### Descriptive Statistics
 
-#levels(chFP$ID)
-table(droplevels(chFP$ID[chFP$location=='Edinburgh'|chFP$location=='Edinburgh.VADW'])) # Number of Edi chimps and images/chimp
-sum(table(droplevels(chFP$ID[chFP$location=='Bastrop']))) # Number of Bastrop chimps
-table(droplevels(chFP$ID[chFP$location=='Japan'])) # NUmber of Japanese chimps and images/
-
-table(chFP$Sex[!duplicated(chFP$ID)]) # Number of males and females
-
-mean(chFP$Age[!duplicated(chFP$ID)], na.rm=TRUE) # Mean age
-sd(chFP$Age[!duplicated(chFP$ID)], na.rm=TRUE) # SD age
-min(chFP$Age[!duplicated(chFP$ID)], na.rm=TRUE) # Min age
-max(chFP$Age[!duplicated(chFP$ID)], na.rm=TRUE) # Max age
-
-# chFP$Age[chFP$location=='Edinburgh']
-# !duplicated(chFP$ID)&chFP$location=='Edinburgh'
-# chFP$ID[chFP$location=='Edinburgh']
-## What is the below for?
-#chFP$Age[!duplicated(chFP$ID[chFP$location=='Edinburgh'])] # WRONG
-chFP$Age[!duplicated(chFP$ID)&chFP$location=='Edinburgh']
-#chFP$Age[!duplicated(chFP$ID=='Liberius')] # WRONG
-chFP$Age[!duplicated(chFP$ID=='Liberius')&chFP$location=='Edinburgh'] # this is just the first observation of Lib...
-
-## Aggregate age across individuals then find the mean and SD for the group
-Edi = chFP$location=='Edinburgh'|chFP$location=='Edinburgh.VADW'
-aggEdi = aggregate(chFP[Edi,], by=list(chFP$ID[Edi]), FUN=mean)
-mean(aggEdi$Age) # Mean age
-sd(aggEdi$Age) # SD age
-
-mean(table(chFP$ID)) # Mean number of useable images
-sd(table(chFP$ID))   # SD of number of useable images
-
-mean(table(droplevels(chFP$ID[chFP$location=='Edinburgh'|chFP$location=='Edinburgh.VADW'])))
-sd(table(droplevels(chFP$ID[chFP$location=='Edinburgh'|chFP$location=='Edinburgh.VADW'])))
-
-mean(table(droplevels(chFP$ID[chFP$location=='Japan'])))
-sd(table(droplevels(chFP$ID[chFP$location=='Japan'])))
-
-
-mean(aggregate(chFP$fWHR, by=list(chFP$ID), FUN=mean)[,'x'], na.rm=TRUE) # Mean fWHR
-sd(aggregate(chFP$fWHR, by=list(chFP$ID), FUN=mean)[,'x'], na.rm=TRUE) # SD fWHR
-
-  
-
-chFP$fWHR[chFP$ID=='Lennon']
-(chFP$fWHR[chFP$ID=='Lennon'][1] - mean(chFP$fWHR[!duplicated(chFP$ID)]) ) / sd(chFP$fWHR[!duplicated(chFP$ID)])
-
-
-table(chFP$location[!duplicated(chFP$ID)])
 
 
 # t.test(chAgr$fWHR[chAgr$Sex=='Male'],chAgr$fWHR[chAgr$Sex=='Female'])
@@ -126,7 +78,7 @@ chFP$Subspecies[!adults & !duplicated(chFP$ID)] # one of these is Lennon, who is
 ## Base: just subspecies random effects
 
 set.seed(1234567)
-m0 <- lmer(fWHR ~ 1 + #(1|instrument) +
+m0 <- lmer(scale(fWHR) ~ 1 + #(1|instrument) +
              (1 | location) + 
              (1 | Subspecies) + (1 | ID:Subspecies)
            #,data=chFP[adults,]

@@ -56,6 +56,14 @@ write.csv(cormat, file='correlatMatrix.csv')
 # = Hypothesis testing: Is fWHR sexually dimorphic? Are there age differences?
 # ===================================================================
 
+
+## Individuals within each age group
+table(fWHR$Rhesus[!duplicated(fWHR$Rhesus)&fWHR$agenum<8])
+sum(!duplicated(fWHR$Rhesus)&fWHR$agenum<8)
+sum(!duplicated(fWHR$Rhesus)&fWHR$agenum>=8)
+
+
+##
 plot(fWHR ~ agenum, data=fWHR)
 plot(fWHR ~ Dominance.status, data=fWHR)
 plot(fWHR ~ Sex, data=fWHR)
@@ -140,6 +148,9 @@ m0.o <- lmer(fWHR ~ 1 + (1|Facility.x/Rhesus)
 #                 , data=fWHR[fWHR$agenum >= 8,])
 # anova(m0.o,m1.a1.o,m1.a2.o,m1.a3.o)
 
+
+m1.o <- lmer(fWHR ~ Age + Age2 + Age3 + (1|Facility.x/Rhesus)
+             , data=fWHR[fWHR$agenum >= 8,])
 summary(m1.o)
 confint(m1.o)
 
@@ -206,11 +217,13 @@ m3.o <- lmer(fWHR ~ Age + Age2 + Age3 +
                Sex + Dominance.status + (1|Rhesus)
              , data=fWHR[fWHR$agenum >= 8,])
 summary(m3.o)
+confint(m3.o)
 m3.o.x <- lmer(fWHR ~ Age + Age2 + Age3 + 
                  Sex * Dominance.status + (1|Rhesus)
                , data=fWHR[fWHR$agenum >= 8,])
 summary(m3.o.x)
 anova(m3.o,m3.o.x)
+
 
 m3.y <- lmer(fWHR ~ Age + Age2 + Age3 + Sex + Dominance.status + (1|Facility.x/Rhesus)
              , data=fWHR[fWHR$agenum < 8,])
@@ -226,12 +239,13 @@ confint(m3.y)
 
 fWHR.HPQ = fWHR[fWHR$Facility.x=='ZX6012',]
 
-m4 <- lmer(fWHR ~ Age +# Age2 + Age3 + 
+m4 <- lmer(fWHR ~ Age + Age2 + Age3 + 
              Sex 
            + Confidence + Openness + Dominance + Friendliness + Activity + Anxiety
            + (1|Rhesus), data=fWHR.HPQ)
 summary(m4)
 confint(m4)
+
 
 m0.ZX <- lmer(fWHR ~ 1 + (1|Rhesus), data=fWHR[fWHR$Facility.x=='ZX6012',])
 
@@ -245,14 +259,14 @@ m4.y <- lmer(fWHR ~ Age + Age2 + Age3 +
              + (1|Rhesus), data=fWHR[(fWHR$Facility.x=='ZX6012')&(fWHR$agenum < 8),])
 summary(m4.y)
 Anova(m4.y)
-confint(m4.y)
+confint(m4.y, method='boot')
 
 m4.o <- lmer(fWHR ~ Age + Age2 + Age3 + 
                Sex 
              + Confidence + Openness + Dominance + Friendliness + Activity + Anxiety
              + (1|Rhesus), data=fWHR[(fWHR$Facility.x=='ZX6012')&(fWHR$agenum >= 8),])
 summary(m4.o)
-confint(m4.o, method='boot')
+confint(m4.o, method='profile')
 
 
 ## Quadratic account?
@@ -428,10 +442,13 @@ m1.LF.o <- lmer(LFFH ~  Age + Age2 + Age3 + (1|Facility.x/Rhesus)
                 , data=fWHR[fWHR$agenum >= 8,])
 m1.LF.y <- lmer(LFFH ~  Age + Age2 + Age3 + (1|Facility.x/Rhesus)
                 , data=fWHR[fWHR$agenum < 8,])
-summary(m1.LF.o)
 summary(m1.LF.y)
-confint(m1.LF.o, method='boot')
-confint(m1.LF.y, method='boot')
+summary(m1.LF.o)
+
+confint(m1.LF.y, method='profile')
+confint(m1.LF.o, method='profile')
+
+
 
 
 m0.LF <- lmer(LFFH ~ 1 + (1|Facility.x/Rhesus)
@@ -465,10 +482,11 @@ m2.LF.o <- lmer(LFFH ~ Sex * Age + Age2 + Age3
                 , data=fWHR[fWHR$agenum >= 8,])
 m2.LF.y <- lmer(LFFH ~ Sex * Age + Age2 + Age3 + (1|Facility.x/Rhesus)
                 , data=fWHR[fWHR$agenum < 8,])
-summary(m2.LF.o)
 summary(m2.LF.y)
-confint(m2.LF.o, method='Wald')
-confint(m2.LF.y)
+summary(m2.LF.o)
+
+confint(m2.LF.y, method='boot')
+confint(m2.LF.o, method='profile')
 # No difference in split samples.
 
 
@@ -517,10 +535,13 @@ m4.LF.o <- lmer(LFFH ~  Age + Age2 + Age3
 m4.LF.y <- lmer(LFFH ~  Age + Age2 + Age3
                 + Confidence + Openness + Dominance + Friendliness + Activity + Anxiety
                 + (1|Rhesus), data=fWHR[(fWHR$Facility.x=='ZX6012')&(fWHR$agenum < 8),])
-summary(m4.LF.o)
+
 summary(m4.LF.y)
+summary(m4.LF.o)
+
+confint(m4.LF.y, method='Wald')
 confint(m4.LF.o, method='boot')
-confint(m4.LF.y, method='profile')
+
 
 
 
@@ -541,10 +562,12 @@ m5.LF.y <- lmer(LFFH ~  Age + Age2 + Age3 +
                   + Short.con + Short.opn + Short.dom + Short.anx
                 + (1|Facility.x/Rhesus)
                 , data=fWHR[fWHR$agenum < 8,])
-summary(m5.LF.o)
 summary(m5.LF.y)
-confint(m5.LF.o)
+summary(m5.LF.o)
+
 confint(m5.LF.y, method='boot')
+confint(m5.LF.o)
+
 
 
 
@@ -615,7 +638,14 @@ m.af.1.y = lmer(fWHR ~ Age + Age2 + Age3 +
                      + Dominance.status * Short.anx
                      + (1|Facility.x/Rhesus), data=fWHR[(fWHR$agenum < 8),])
 
+summary(m.af.1)
+confint(m.af.1)
+
 summary(m.af.1.y)
+confint(m.af.1.y)
+
+summary(m.af.1.o)
+confint(m.af.1.o)
 
 
 

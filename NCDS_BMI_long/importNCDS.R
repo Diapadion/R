@@ -155,48 +155,63 @@ table(ncds0123$n607)
 ### Later life SES
 
 ## Income
+## These are the derived variables from Bozena and Alissa at UCL ##
 
-## Age 23
-head(table(ncds4$famnet, useNA='ifany'))
-hist(ncds4$famnet) # net family income per *week*
+income.23 = read.dta13("./UCL-income/NCDS1981_final.dta", generate.factors = TRUE)
+income.33 = read.dta13("./UCL-income/NCDS1991_final.dta", generate.factors = TRUE)
+income.42 = read.dta13("./UCL-income/NCDS2000_final.dta", generate.factors = TRUE)
+income.50 = read.dta13("./UCL-income/NCDS2008_final.dta", generate.factors = TRUE)
+income.55 = read.dta13("./UCL-income/NCDS2013_final.dta", generate.factors = TRUE)
 
-
-## Age 33
-
-## have to make myself, which sucks
-table(ncds5$n500536, useNA='ifany') # usual take home pay
-table(ncds5$n500542, useNA='ifany') # usual take home pay period
-
-table(ncds5$n501060) # partner usual take home pay
-table(ncds5$n501066) # partner take home pay period
-
+colnames(income.23)[c(1,16)] = c("ncdsid","income23")
+colnames(income.33)[c(1,20)] = c("ncdsid","income33")
+colnames(income.42)[c(1,20)] = c("ncdsid","income42")
+colnames(income.50)[c(1,20)] = c("ncdsid","income50")
+colnames(income.55)[c(1,12)] = c("ncdsid","income55")
 
 
 
-## Age 42
-
-## unclear if the data are available
-hist(ncds6$cnetpay)
-
-table(ncds6$cnetpay, useNA='ifany')
-hist(ncds6$cnetpay)
-sum(table(ncds6$cnetpay))
-
-table(ncds6$cnetprd, useNA='ifany')
-
-table(ncds6$pnetpay, useNA='ifany')
-table(ncds6$pnetprd, useNA='ifany')
-
-
-
-## Age 55
-
-hist(ncds9.1$N9INCAMT)
-table(ncds9.1$N9INCAMT, useNA='ifany')
-table(ncds9.1$N9INCADR, useNA='ifany')
-
-table(ncds9.1$N9INCPER, useNA='ifany')
-table(ncds9.1$N9INCP2, useNA='ifany')
+# ## Age 23
+# head(table(ncds4$famnet, useNA='ifany'))
+# hist(ncds4$famnet) # net family income per *week*
+# 
+# 
+# ## Age 33
+# 
+# ## have to make myself, which sucks
+# table(ncds5$n500536, useNA='ifany') # usual take home pay
+# table(ncds5$n500542, useNA='ifany') # usual take home pay period
+# 
+# table(ncds5$n501060) # partner usual take home pay
+# table(ncds5$n501066) # partner take home pay period
+# 
+# 
+# 
+# 
+# ## Age 42
+# 
+# ## unclear if the data are available
+# hist(ncds6$cnetpay)
+# 
+# table(ncds6$cnetpay, useNA='ifany')
+# hist(ncds6$cnetpay)
+# sum(table(ncds6$cnetpay))
+# 
+# table(ncds6$cnetprd, useNA='ifany')
+# 
+# table(ncds6$pnetpay, useNA='ifany')
+# table(ncds6$pnetprd, useNA='ifany')
+# 
+# 
+# 
+# ## Age 55
+# 
+# hist(ncds9.1$N9INCAMT)
+# table(ncds9.1$N9INCAMT, useNA='ifany')
+# table(ncds9.1$N9INCADR, useNA='ifany')
+# 
+# table(ncds9.1$N9INCPER, useNA='ifany')
+# table(ncds9.1$N9INCP2, useNA='ifany')
 
 
 
@@ -213,9 +228,15 @@ ncds = merge(ncds,ncds9[,c('ncdsid','bmi55')], by="ncdsid", all=TRUE)
 names(ncds9.1)[names(ncds9.1) == 'NCDSID'] <- 'ncdsid'
 ncds = merge(ncds,ncds9.1[,c('ncdsid','N9INCAMT')], by='ncdsid', all=TRUE)
 
+ncds = merge(ncds,income.23[,c('ncdsid','income23')], by='ncdsid', all=TRUE)
+ncds = merge(ncds,income.33[,c('ncdsid','income33')], by='ncdsid', all=TRUE)
+ncds = merge(ncds,income.42[,c('ncdsid','income42')], by='ncdsid', all=TRUE)
+ncds = merge(ncds,income.50[,c('ncdsid','income50')], by='ncdsid', all=TRUE)
+ncds = merge(ncds,income.55[,c('ncdsid','income55')], by='ncdsid', all=TRUE)
+
+
 
 colnames(ncds)[2:7] <- c('sex','verbal','nonverbal','g','reading','maths')
-
 
 
 
@@ -249,6 +270,7 @@ ncds = ncds[!is.na(ncds$n2017),]
 ## Getting rid of biologically implausible values:
 ## seems like might be only necessary at ages 33 & 42
 ## Li et al. 2009: > 70, < 12
+## TODO: Remove, don't set to NA
 
 ncds$bmi33[ncds$bmi33 > 70] = NA
 ncds$bmi33[ncds$bmi33 < 12] = NA
@@ -281,114 +303,118 @@ table(ncds$actagel2)
 
 ## Adult income
 
-## -Age 23
-# 'n4262','n4267','n5164','n5169')
-table(ncds$famnet, useNA='ifany') # per WEEK
-
-summary(ncds$famnet)
 
 
 
-## - Age 33 -
 
-## - usual take home pay
-table(ncds$n500536, useNA='ifany') 
-ncds$n500536[ncds$n500536 > 900000] = NA
-
-## - usual take home pay period
-table(ncds$n500542, useNA='ifany') 
-## scale income by pay period:
-ncds$n500536[ncds$n500542=='1 week'&!is.na(ncds$n500542)] = 
-  ncds$n500536[ncds$n500542=='1 week'&!is.na(ncds$n500542)]/7
-ncds$n500536[ncds$n500542=='Fortnight'&!is.na(ncds$n500542)] = 
-  ncds$n500536[ncds$n500542=='Fortnight'&!is.na(ncds$n500542)]/14
-ncds$n500536[ncds$n500542=='Four weeks'&!is.na(ncds$n500542)] = 
-  ncds$n500536[ncds$n500542=='Four weeks'&!is.na(ncds$n500542)]/28
-ncds$n500536[ncds$n500542=='Calendar month'&!is.na(ncds$n500542)] = 
-  ncds$n500536[ncds$n500542=='Calendar month'&!is.na(ncds$n500542)]/30.44
-ncds$n500536[ncds$n500542=='Year'&!is.na(ncds$n500542)] = 
-  ncds$n500536[ncds$n500542=='Year'&!is.na(ncds$n500542)]/365.25
-ncds$n500536[ncds$n500542=='Other'&!is.na(ncds$n500542)] = NA
-## income is now per DAY
-
-table(ncds$n500536[!is.na(ncds$n500542)])
-
-
-
-table(ncds$n501060) # partner usual take home pay
-ncds$n501060[ncds$n501060 > 900000] = NA
-
-
-table(ncds$n501066) # partner take home pay period
-
-ncds$n501060[ncds$n501066=='1 week'&!is.na(ncds$n501066)] = 
-  ncds$n501060[ncds$n501066=='1 week'&!is.na(ncds$n501066)]/7
-ncds$n501060[ncds$n501066=='Fortnight'&!is.na(ncds$n501066)] = 
-  ncds$n501060[ncds$n501066=='Fortnight'&!is.na(ncds$n501066)]/14
-ncds$n501060[ncds$n501066=='Four weeks'&!is.na(ncds$n501066)] = 
-  ncds$n501060[ncds$n501066=='Four weeks'&!is.na(ncds$n501066)]/28
-ncds$n501060[ncds$n501066=='Calendar month'&!is.na(ncds$n501066)] = 
-  ncds$n501060[ncds$n501066=='Calendar month'&!is.na(ncds$n501066)]/30.44
-ncds$n501060[ncds$n501066=='Year'&!is.na(ncds$n501066)] = 
-  ncds$n501060[ncds$n501066=='Year'&!is.na(ncds$n501066)]/365.25
-ncds$n501060[ncds$n501066=='Other'&!is.na(ncds$n501066)] = NA
-
-tail(table(ncds$n501060[!is.na(ncds$n501066)]))
-hist(ncds$n501060[!is.na(ncds$n501066)])
-
-
-names(ncds)[names(ncds) == 'n500536'] <- 'usual.income.33'
-names(ncds)[names(ncds) == 'n501060'] <- 'partner.income.33'
-
-ncds$usual.income.33 = ncds$usual.income.33 * 7 # making it per WEEK
-ncds$partner.income.33 = ncds$partner.income.33 * 7 # making it per WEEK
-
-tail(table(ncds$partner.income.33))
-
-ncds$net.income.33 = apply(ncds[c('usual.income.33','partner.income.33')],1,sum,na.rm=TRUE)
-ncds$net.income.33[ncds$net.income.33==0] = NA
-  
-sum(table(ncds$net.income.33,useNA='ifany'))
-
-tail(table(ncds$net.income.33,useNA='ifany'))
-
-summary(ncds$net.income.33)
-
-
-
-## - Age 42 -
-## - take home (net) pay
-table(ncds$cnetpay, useNA='ifany')
-ncds$cnetpay[ncds$cnetpay > 900000] = NA
-#hist(ncds$cnetpay)
-#sum(table(ncds$cnetpay))
-
-table(ncds$cnetprd, useNA='ifany')
-
-ncds$cnetpay[ncds$cnetprd=='One week'&!is.na(ncds$cnetprd)] = 
-  ncds$cnetpay[ncds$cnetprd=='One week'&!is.na(ncds$cnetprd)]/7
-ncds$cnetpay[ncds$cnetprd=='A fortnight'&!is.na(ncds$cnetprd)] = 
-  ncds$cnetpay[ncds$cnetprd=='A fortnight'&!is.na(ncds$cnetprd)]/14
-ncds$cnetpay[ncds$cnetprd=='Four weeks'&!is.na(ncds$cnetprd)] = 
-  ncds$cnetpay[ncds$cnetprd=='Four weeks'&!is.na(ncds$cnetprd)]/28
-ncds$cnetpay[ncds$cnetprd=='A calendar month'&!is.na(ncds$cnetprd)] = 
-  ncds$cnetpay[ncds$cnetprd=='A calendar month'&!is.na(ncds$cnetprd)]/30.44
-ncds$cnetpay[ncds$cnetprd=='A year or'&!is.na(ncds$cnetprd)] = 
-  ncds$cnetpay[ncds$cnetprd=='A year or'&!is.na(ncds$cnetprd)]/365.25
-ncds$cnetpay[ncds$cnetprd=='Other period'&!is.na(ncds$cnetprd)] = NA
-
-tail(table(ncds$cnetpay)) #[!is.na(ncds$cnetprd)])
-
-
-
-## partner's take home (net) pay
-
-table(ncds6$pnetpay, useNA='ifany')
-table(ncds6$pnetprd, useNA='ifany')
-
-## - Age 55 - 
-## 
-tail(table(ncds$N9INCAMT))
+# ## -Age 23
+# # 'n4262','n4267','n5164','n5169')
+# table(ncds$famnet, useNA='ifany') # per WEEK
+# 
+# summary(ncds$famnet)
+# 
+# 
+# 
+# ## - Age 33 -
+# 
+# ## - usual take home pay
+# table(ncds$n500536, useNA='ifany') 
+# ncds$n500536[ncds$n500536 > 900000] = NA
+# 
+# ## - usual take home pay period
+# table(ncds$n500542, useNA='ifany') 
+# ## scale income by pay period:
+# ncds$n500536[ncds$n500542=='1 week'&!is.na(ncds$n500542)] = 
+#   ncds$n500536[ncds$n500542=='1 week'&!is.na(ncds$n500542)]/7
+# ncds$n500536[ncds$n500542=='Fortnight'&!is.na(ncds$n500542)] = 
+#   ncds$n500536[ncds$n500542=='Fortnight'&!is.na(ncds$n500542)]/14
+# ncds$n500536[ncds$n500542=='Four weeks'&!is.na(ncds$n500542)] = 
+#   ncds$n500536[ncds$n500542=='Four weeks'&!is.na(ncds$n500542)]/28
+# ncds$n500536[ncds$n500542=='Calendar month'&!is.na(ncds$n500542)] = 
+#   ncds$n500536[ncds$n500542=='Calendar month'&!is.na(ncds$n500542)]/30.44
+# ncds$n500536[ncds$n500542=='Year'&!is.na(ncds$n500542)] = 
+#   ncds$n500536[ncds$n500542=='Year'&!is.na(ncds$n500542)]/365.25
+# ncds$n500536[ncds$n500542=='Other'&!is.na(ncds$n500542)] = NA
+# ## income is now per DAY
+# 
+# table(ncds$n500536[!is.na(ncds$n500542)])
+# 
+# 
+# 
+# table(ncds$n501060) # partner usual take home pay
+# ncds$n501060[ncds$n501060 > 900000] = NA
+# 
+# 
+# table(ncds$n501066) # partner take home pay period
+# 
+# ncds$n501060[ncds$n501066=='1 week'&!is.na(ncds$n501066)] = 
+#   ncds$n501060[ncds$n501066=='1 week'&!is.na(ncds$n501066)]/7
+# ncds$n501060[ncds$n501066=='Fortnight'&!is.na(ncds$n501066)] = 
+#   ncds$n501060[ncds$n501066=='Fortnight'&!is.na(ncds$n501066)]/14
+# ncds$n501060[ncds$n501066=='Four weeks'&!is.na(ncds$n501066)] = 
+#   ncds$n501060[ncds$n501066=='Four weeks'&!is.na(ncds$n501066)]/28
+# ncds$n501060[ncds$n501066=='Calendar month'&!is.na(ncds$n501066)] = 
+#   ncds$n501060[ncds$n501066=='Calendar month'&!is.na(ncds$n501066)]/30.44
+# ncds$n501060[ncds$n501066=='Year'&!is.na(ncds$n501066)] = 
+#   ncds$n501060[ncds$n501066=='Year'&!is.na(ncds$n501066)]/365.25
+# ncds$n501060[ncds$n501066=='Other'&!is.na(ncds$n501066)] = NA
+# 
+# tail(table(ncds$n501060[!is.na(ncds$n501066)]))
+# hist(ncds$n501060[!is.na(ncds$n501066)])
+# 
+# 
+# names(ncds)[names(ncds) == 'n500536'] <- 'usual.income.33'
+# names(ncds)[names(ncds) == 'n501060'] <- 'partner.income.33'
+# 
+# ncds$usual.income.33 = ncds$usual.income.33 * 7 # making it per WEEK
+# ncds$partner.income.33 = ncds$partner.income.33 * 7 # making it per WEEK
+# 
+# tail(table(ncds$partner.income.33))
+# 
+# ncds$net.income.33 = apply(ncds[c('usual.income.33','partner.income.33')],1,sum,na.rm=TRUE)
+# ncds$net.income.33[ncds$net.income.33==0] = NA
+#   
+# sum(table(ncds$net.income.33,useNA='ifany'))
+# 
+# tail(table(ncds$net.income.33,useNA='ifany'))
+# 
+# summary(ncds$net.income.33)
+# 
+# 
+# 
+# ## - Age 42 -
+# ## - take home (net) pay
+# table(ncds$cnetpay, useNA='ifany')
+# ncds$cnetpay[ncds$cnetpay > 900000] = NA
+# #hist(ncds$cnetpay)
+# #sum(table(ncds$cnetpay))
+# 
+# table(ncds$cnetprd, useNA='ifany')
+# 
+# ncds$cnetpay[ncds$cnetprd=='One week'&!is.na(ncds$cnetprd)] = 
+#   ncds$cnetpay[ncds$cnetprd=='One week'&!is.na(ncds$cnetprd)]/7
+# ncds$cnetpay[ncds$cnetprd=='A fortnight'&!is.na(ncds$cnetprd)] = 
+#   ncds$cnetpay[ncds$cnetprd=='A fortnight'&!is.na(ncds$cnetprd)]/14
+# ncds$cnetpay[ncds$cnetprd=='Four weeks'&!is.na(ncds$cnetprd)] = 
+#   ncds$cnetpay[ncds$cnetprd=='Four weeks'&!is.na(ncds$cnetprd)]/28
+# ncds$cnetpay[ncds$cnetprd=='A calendar month'&!is.na(ncds$cnetprd)] = 
+#   ncds$cnetpay[ncds$cnetprd=='A calendar month'&!is.na(ncds$cnetprd)]/30.44
+# ncds$cnetpay[ncds$cnetprd=='A year or'&!is.na(ncds$cnetprd)] = 
+#   ncds$cnetpay[ncds$cnetprd=='A year or'&!is.na(ncds$cnetprd)]/365.25
+# ncds$cnetpay[ncds$cnetprd=='Other period'&!is.na(ncds$cnetprd)] = NA
+# 
+# tail(table(ncds$cnetpay)) #[!is.na(ncds$cnetprd)])
+# 
+# 
+# 
+# ## partner's take home (net) pay
+# 
+# table(ncds6$pnetpay, useNA='ifany')
+# table(ncds6$pnetprd, useNA='ifany')
+# 
+# ## - Age 55 - 
+# ## 
+# tail(table(ncds$N9INCAMT))
 
 
 

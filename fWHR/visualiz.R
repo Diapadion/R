@@ -3,6 +3,7 @@
 library(lme4)
 library(lattice)
 library(ggplot2)
+library(jtools)
 
 
 
@@ -78,7 +79,7 @@ g
 
 
 
-### Publication Figure 3?
+### Publication Figure 2
 
 g <- ggplot(data=subset(chAgr, !(chAgr$verus=='other')), 
             aes(x=Dom, y=fWHR)) + geom_point() +
@@ -111,4 +112,49 @@ g <- ggplot(data=subset(chAgr, !(chAgr$verus=='other')),
 g
 
 
+
+### Interaction plots with full sample ###
+
+chFull = chFP
+
+## Aggreagate into individuals
+chFull$Sex = as.numeric(chFull$Sex)
+chFull <- aggregate(chAgr, by=list(chAgr$ID), FUN=mean)
+
+
+## Reattach subspecies
+chFull <- merge(chFull[,c(1,8:26)],subsp[,c(1,2)], by.x='Group.1', by.y='Name')
+
+colnames(chFull)[1] <- 'ID'
+
+
+
+## Plotting
+
+interact_plot(lm(fWHR ~ Dom_CZ * Neu_CZ * Sex, data=chFull)
+  , pred='Dom_CZ', modx='Neu_CZ', mod2='Sex', plot.points=TRUE)
+
+interact_plot(lm(fWHR ~ Dom_CZ * Neu_CZ * Sex,
+                 data=chFull[(chFull$Subspecies=='verus'#|chFull$Subspecies=='schweinfurthii'
+                              ),])
+              , pred='Dom_CZ', modx='Neu_CZ', mod2='Sex', plot.points=TRUE)
+
+
+## This one may be the only important one
+colnames(chFull)[19] = 'Neuroticism'
+interact_plot(lm(fWHR ~ Dom_CZ * Neuroticism * Sex,
+                 data=chFull[(chFull$Subspecies=='troglodytes'),])
+              , pred='Dom_CZ', modx='Neuroticism', mod2='Sex', plot.points=TRUE,
+              x.label = 'Dominance'
+              )
+
+interact_plot(lm(fWHR ~ Dom_CZ * Neuroticism * Sex,
+                 data=chFull[(chFull$Subspecies=='troglodytes')&(chFull$ID!='Cordova'),])
+              , pred='Dom_CZ', modx='Neuroticism', mod2='Sex', plot.points=TRUE,
+              x.label = 'Dominance'
+)
+
+
+
+chFP[(chFP$Sex==1&chFP$fWHR>1.7&chFP$Dom_CZ<(-1)),]
 

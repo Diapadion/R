@@ -128,7 +128,10 @@ bmi$income.94[bmi$income.94<0] = NA
 bmi$income.06[bmi$income.06<0] = NA
 bmi$income.14[bmi$income.14<0] = NA
 
+## TODO: double check that this is putting them on the same scale
 temp = scale(bmi[,c('income.85','income.94','income.06','income.14')])
+
+
 
 bmi$income.85 = temp[,'income.85']
 bmi$income.94 = temp[,'income.94']
@@ -428,6 +431,9 @@ bmi_94 ~ age.94
 bmi_06 ~ age.06
 bmi_14 ~ age.14
 
+bmi_85 ~~ vbmi85 * bmi_85
+vbmi85 > 0.01 
+
 '
 
 isq.f1 = lavaan(bmi.isq.m1, data=bmi.lv, meanstructure = TRUE, int.ov.free = FALSE, 
@@ -456,6 +462,9 @@ bmi_94 ~ age.94
 bmi_06 ~ age.06
 bmi_14 ~ age.14
 
+bmi_85 ~~ vbmi85 * bmi_85
+vbmi85 > 0.01
+
 '
 
 
@@ -482,6 +491,9 @@ bmi_85 ~ age.85
 bmi_94 ~ age.94
 bmi_06 ~ age.06
 bmi_14 ~ age.14
+
+bmi_85 ~~ vbmi85 * bmi_85
+vbmi85 > 0.01
 
 '
 
@@ -510,6 +522,9 @@ bmi_85 ~ age.85
 bmi_94 ~ age.94
 bmi_06 ~ age.06
 bmi_14 ~ age.14
+
+bmi_85 ~~ vbmi85 * bmi_85
+vbmi85 > 0.01
 
 '
 
@@ -555,11 +570,17 @@ inc.s =~ 0*income.85 + 0.9*income.94 + 2.1*income.06 + 2.9*income.14
 inc.q =~ 0*income.85 + 0.81*income.94 + 4.41*income.06 + 8.41*income.14
 
 bm.i ~ SAMPLE_SEX + AFQT89 + age_1979 + lvIQsex + Child_SES + SES_Education_USE
-bm.s ~ SAMPLE_SEX + AFQT89 + age_1979 + lvIQsex + Child_SES + SES_Education_USE + inc.i  
-bm.q ~ SAMPLE_SEX + AFQT89 + age_1979 + lvIQsex + Child_SES + SES_Education_USE + inc.i + inc.s
+bm.s ~ SAMPLE_SEX + AFQT89 + age_1979 + lvIQsex + Child_SES + SES_Education_USE #+ inc.i  
+bm.q ~ SAMPLE_SEX + AFQT89 + age_1979 + lvIQsex + Child_SES + SES_Education_USE #+ inc.i + inc.s
 
 bm.i ~~ inc.i
+bm.i ~~ inc.s
+bm.i ~~ inc.q
+bm.s ~~ inc.i
 bm.s ~~ inc.s
+bm.s ~~ inc.q
+bm.q ~~ inc.i
+bm.q ~~ inc.s
 bm.q ~~ inc.q
 
 bmi_85 ~ age.85
@@ -567,13 +588,16 @@ bmi_94 ~ age.94
 bmi_06 ~ age.06
 bmi_14 ~ age.14
 
+bmi_85 ~~ vbmi85 * bmi_85
+vbmi85 > 0.01 
+
 '
 
 isq.f5 = lavaan(bmi.isq.m5, data=bmi.lv, meanstructure = TRUE, int.ov.free = FALSE, 
                 int.lv.free = TRUE, auto.fix.first = TRUE, auto.fix.single = TRUE, 
                 auto.var = TRUE, auto.cov.lv.x = TRUE, auto.th = TRUE, auto.delta = TRUE, 
                 auto.cov.y = TRUE, fixed.x=TRUE,
-                missing = 'fiml', information='observed'
+                missing = 'fiml', information='expected'
                 )
 
 
@@ -582,9 +606,15 @@ summary(isq.f5)
 
 
 
+library(xtable)
+library(R2HTML)
 
+myXtable <- xtable(parameterEstimates(isq.f5))
+coef_rl = print(myXtable, type = "html")
+# now here is the hack, i spit the file in html but with .doc ext so that it can be opened in word directly
 
-
+fname = 'isq5'
+HTML(coef_rl, paste(fname,"_model_coeff.doc", sep='')) 
 
 
 

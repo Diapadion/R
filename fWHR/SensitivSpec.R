@@ -8,16 +8,16 @@ library(lme4)
 ## - all adults
 
 ## - just Verus (of the adults)
-jV = adults&(chFP$Subspecies=='verus')
+jV = (chFP.std$Subspecies=='verus')
 
 ## - Verus & Schweinfurthii (of the adults)
-VS = adults&(chFP$Subspecies=='verus'|chFP$Subspecies=='schweinfurthii')
+VS = (chFP.std$Subspecies=='verus'|chFP.std$Subspecies=='schweinfurthii')
 
 ## - Verus & Schweinfurthii & Unknowns (of the adults)
-VSU = adults&(chFP$Subspecies=='verus'|chFP$Subspecies=='schweinfurthii'|chFP$Subspecies=='unknown')
+VSU = (chFP.std$Subspecies=='verus'|chFP.std$Subspecies=='schweinfurthii'|chFP.std$Subspecies=='unknown')
 
 ## - just Troglodytes (of the adults)
-jT = adults&(chFP$Subspecies=='troglodytes')
+jT = (chFP.std$Subspecies=='troglodytes')
 
 
 
@@ -25,34 +25,33 @@ jT = adults&(chFP$Subspecies=='troglodytes')
 
 ## - all vars
 
-## Sex * Dom * Neu
 
 
 
-m.all = lmer(fWHR ~ Age + I(Age^2) + I(Age^3) + Sex + Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ +
+m.all = lmer(fWHR ~ Age + Age2 + Age3 + Sex + Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ +
                  (1 | location) + (1 | ID),
-               data = chFP[adults,]
+               data = chFP.std
 )
 
-jV.all = lmer(fWHR ~ Age + I(Age^2) + I(Age^3) + Sex + Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ +
+jV.all = lmer(fWHR ~ Age + Age2 + Age3 + Sex + Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ +
                (1 | location) + (1 | ID),
-             data = chFP[jV,]
+             data = chFP.std[jV,]
 )
 
-VS.all = lmer(fWHR ~ Age + I(Age^2) + I(Age^3) + Sex + Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ +
+VS.all = lmer(fWHR ~ Age + Age2 + Age3 + Sex + Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ +
                 (1 | location) + (1 | ID),
-              data = chFP[VS,]
+              data = chFP.std[VS,]
 )
 
-VSU.all = lmer(fWHR ~ Age + I(Age^2) + I(Age^3) + Sex + Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ +
+VSU.all = lmer(fWHR ~ Age + Age2 + Age3 + Sex + Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ +
                 (1 | location) + (1 | ID),
-              data = chFP[VSU,]
+              data = chFP.std[VSU,]
 )
 
-jT.all = lmer(fWHR ~ Age + I(Age^2) + #I(Age^3) + 
+jT.all = lmer(fWHR ~ #Age  + #Age2 + #Age3 +
                 Sex + Dom_CZ + Ext_CZ + Con_CZ + Agr_CZ + Neu_CZ + Opn_CZ +
                 (1 | location) + (1 | ID),
-              data = chFP[jT,]
+              data = chFP.std[jT,]
 )
 
 
@@ -84,33 +83,34 @@ ci.jT.all
 
 
 
+## Sex * Dom * Neu
 
 
 
 m.3way = lmer(fWHR ~ Sex * Dom_CZ * Neu_CZ +
                  (1 | location) + (1 | ID),
-               data = chFP[adults,]
+               data = chFP.std
 )
 
 # mp3.tree = "jV.3way"
 jV.3way = lmer(fWHR ~ Sex * Dom_CZ * Neu_CZ +
                (1 | location) + (1 | ID),
-             data = chFP[jV,]
+             data = chFP.std[jV,]
 )
 
 VS.3way = lmer(fWHR ~ Sex * Dom_CZ * Neu_CZ +
                 (1 | location) + (1 | ID),
-              data = chFP[VS,]
+              data = chFP.std[VS,]
 )
 
 VSU.3way = lmer(fWHR ~ Sex * Dom_CZ * Neu_CZ +
                  (1 | location) + (1 | ID),
-               data = chFP[VSU,]
+               data = chFP.std[VSU,]
 )
 
 jT.3way = lmer(fWHR ~ Sex * Dom_CZ * Neu_CZ +
                 (1 | location) + (1 | ID),
-              data = chFP[jT,]
+              data = chFP.std[jT,]
 )
 
 
@@ -122,11 +122,11 @@ ci.VS.3way = confint(VS.3way, method='boot')
 ci.VSU.3way = confint(VSU.3way, method='boot')
 ci.jT.3way = confint(jT.3way, method='boot')
 
-fixef(m.3way)
-ci.m.3way
+# fixef(m.3way)
+# ci.m.3way
 
-fixef(jV.3way)
-ci.jV.3way
+# fixef(jV.3way)
+# ci.jV.3way
 
 fixef(VS.3way)
 ci.VS.3way
@@ -136,4 +136,6 @@ ci.VSU.3way
 
 fixef(jT.3way)
 ci.jT.3way
+
+summary(jT.3way)
 

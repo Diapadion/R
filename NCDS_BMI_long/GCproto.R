@@ -3,6 +3,104 @@
 library(lavaan)
 
 
+
+### Trying out income growth curves 
+
+## TODO: this needs to be in the import file
+## should it be applied to other variables? (e.g. BMI)
+temp = scale(ncds[,c('income23','income33','income42','income50','income55')])
+
+ncds$income23 = temp[,'income23']
+ncds$income33 = temp[,'income33']
+ncds$income42 = temp[,'income42']
+ncds$income50 = temp[,'income50']
+ncds$income55 = temp[,'income55']
+
+
+
+inc.is.m1 <- '
+# inc.i =~ 1*income23 + 1*income33 + 1*income42 + 1*income55
+# inc.s =~ 0*income23 + 1*income33 + 1.9*income42 + 3.2*income55
+
+# inc.i =~ 1*income23 + 1*income33 + 1*income42 + 1*income50
+# inc.s =~ 0*income23 + 1*income33 + 1.9*income42 + 2.7*income50
+
+inc.i =~ 1*income23 + 1*income33 + 1*income42 + 1*income50 + 1*income55
+inc.s =~ 0*income23 + 1*income33 + 1.9*income42 + 2.7*income50 + 3.2*income55
+
+
+#inc.q =~ 0*income23 + 1*income33 + 3.61*income42 + 10.24*income55
+
+'
+
+inc.is.f1 = lavaan(inc.is.m1, data=ncds, meanstructure = TRUE, int.ov.free = FALSE, 
+                int.lv.free = TRUE, auto.fix.first = TRUE, auto.fix.single = TRUE, 
+                auto.var = TRUE, auto.cov.lv.x = TRUE, auto.th = TRUE, auto.delta = TRUE, 
+                auto.cov.y = TRUE, #fixed.x = F, # is this okay???
+                missing = 'fiml', information='observed'
+)
+lavInspect(inc.is.f1, "cor.lv")
+
+fitMeasures(inc.is.f1, c("chisq", "df", "pvalue", "cfi", "tli", "srmr", "rmsea"))
+summary(inc.is.f1)
+
+
+
+inc.isq.m1 <- '
+inc.i =~ 1*income23 + 1*income33 + 1*income42 + 1*income50 + 1*income55
+inc.s =~ 0*income23 + 1*income33 + 1.9*income42 + 2.7*income50 + 3.2*income55
+inc.q =~ 0*income23 + 1*income33 + 3.61*income42 + 7.29*income50 + 10.24*income55
+
+# inc.i =~ 1*income23 + 1*income33 + 1*income42 + 1*income50
+# inc.s =~ 0*income23 + 1*income33 + 1.9*income42 + 2.7*income50
+# inc.q =~ 0*income23 + 1*income33 + 3.61*income42 + 7.29*income50
+
+# inc.i ~ sex + g
+# inc.s ~ sex + g
+# inc.q ~ sex + g
+
+'
+
+inc.isq.f1 = lavaan(inc.isq.m1, data=ncds, meanstructure = TRUE, int.ov.free = FALSE, 
+                   int.lv.free = TRUE, auto.fix.first = TRUE, auto.fix.single = TRUE, 
+                   auto.var = TRUE, auto.cov.lv.x = TRUE, auto.th = TRUE, auto.delta = TRUE, 
+                   auto.cov.y = TRUE, #fixed.x = F, # is this okay???
+                   missing = 'fiml', information='observed'
+)
+lavInspect(inc.isq.f1, "cor.lv")
+
+fitMeasures(inc.isq.f1, c("chisq", "df", "pvalue", "cfi", "tli", "srmr", "rmsea"))
+summary(inc.isq.f1)
+
+
+
+inc.isq.m2 <- '
+inc.i =~ 1*income23 + 1*income33 + 1*income42 + 1*income55
+inc.s =~ 0*income23 + 1*income33 + 1.9*income42 + 3.2*income55
+inc.q =~ 0*income23 + 1*income33 + 3.61*income42 + 10.24*income55
+
+inc.i ~ sex + g
+inc.s ~ sex + g
+inc.q ~ sex + g
+
+'
+
+inc.isq.f2 = lavaan(inc.isq.m2, data=ncds, meanstructure = TRUE, int.ov.free = FALSE, 
+                    int.lv.free = TRUE, auto.fix.first = TRUE, auto.fix.single = TRUE, 
+                    auto.var = TRUE, auto.cov.lv.x = TRUE, auto.th = TRUE, auto.delta = TRUE, 
+                    auto.cov.y = TRUE, #fixed.x = F, # is this okay???
+                    missing = 'fiml', information='observed'
+)
+lavInspect(inc.isq.f2, "cor.lv")
+
+fitMeasures(inc.isq.f2, c("chisq", "df", "pvalue", "cfi", "tli", "srmr", "rmsea"))
+summary(inc.isq.f2)
+
+
+
+
+#######
+
 ncds0123$n914 = as.numeric(ncds0123$n914) - 2
 ncds0123$n917 = as.numeric(ncds0123$n917) - 2
 ncds0123$n923 = as.numeric(ncds0123$n923) - 2

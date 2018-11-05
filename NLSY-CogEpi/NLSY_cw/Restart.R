@@ -188,12 +188,16 @@ head(ht.df$age_1979)
 
 ### Setting AGE when hypertension was diagnosed
 ht.df$HTdiagDate = ht.df$HTage50t
+hist(ht.df$HTdiagDate, breaks=30)
+
+
 ht.df$HTage50t = as.numeric(ht.df$HTage50t)
 ht.df$HTage50t = ht.df$HTage50t/365.25
 
 hist(ht.df$HTage50t)
 ## See negatives?
 ## This isn't centered properly yet, its based on POSIX 0 point...
+## SEE 'recordTime' 
 
 
 
@@ -214,11 +218,11 @@ hist(ht.df$HTage50t)
 # View(ht.df[(as.numeric(ht.df$HTdiagDate-as.Date("1970-01-01"))<0),])
 
 ## What is happening here to change the models and plots???
-ht.df$recordTime = as.numeric(ht.df$HTdiagDate-as.Date("1970-01-01"))/365.25
+#ht.df$recordTime = as.numeric(ht.df$HTdiagDate-as.Date("1970-01-01"))/365.25
 ht.df$recordTime = as.numeric(ht.df$HTdiagDate-ht.df$DOB)/365.25
 ## Swapping between these two seems not to be the solution, though it does do some interesting stuff
 
-hist(ht.df$recordTime)
+hist(ht.df$recordTime, breaks=30)
 
 
 

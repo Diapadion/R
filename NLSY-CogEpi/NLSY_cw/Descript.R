@@ -58,8 +58,12 @@ table(ht.df$hasHT,ht.df$SAMPLE_SEX)
 
 hist(ht.df$HTage50t[ht.df$hasHT])
 
-aggregate(HTage50t ~ SAMPLE_SEX, data=ht.df[ht.df$hasHT,], FUN=mean)
-aggregate(HTage50t ~ SAMPLE_SEX, data=ht.df[ht.df$hasHT,], FUN=sd)
+#aggregate(HTage50t ~ SAMPLE_SEX, data=ht.df[ht.df$hasHT,], FUN=mean)
+#aggregate(HTage50t ~ SAMPLE_SEX, data=ht.df[ht.df$hasHT,], FUN=sd)
+
+## FIXED:
+aggregate(recordTime ~ SAMPLE_SEX, data=ht.df[ht.df$hasHT,], FUN=mean)
+aggregate(recordTime ~ SAMPLE_SEX, data=ht.df[ht.df$hasHT,], FUN=sd)
 
 
 
@@ -128,8 +132,9 @@ table(ht.df[ccs,]$hasHT,ht.df[ccs,]$SAMPLE_SEX)
 
 hist(ht.df[ccs,]$HTage50t[ht.df[ccs,]$hasHT])
 
-aggregate(HTage50t ~ SAMPLE_SEX, data=ht.df[ccs,][ht.df[ccs,]$hasHT,], FUN=mean)
-aggregate(HTage50t ~ SAMPLE_SEX, data=ht.df[ccs,][ht.df[ccs,]$hasHT,], FUN=sd)
+## FIXED:
+aggregate(recordTime ~ SAMPLE_SEX, data=ht.df[ccs,][ht.df[ccs,]$hasHT,], FUN=mean)
+aggregate(recordTime ~ SAMPLE_SEX, data=ht.df[ccs,][ht.df[ccs,]$hasHT,], FUN=sd)
 
 
 

@@ -169,3 +169,109 @@ BMIQ + geom_hex(bins = 50) + facet_grid(~ SAMPLE_SEX) +
   geom_smooth(aes(linetype=SAMPLE_SEX), method='gam', colour="black") +
   #  scale_y_continuous(limits = c(10, 70)) + 
   theme_bw() + ylab('BMI in 2012') 
+
+
+
+
+### Income
+
+income.long = ncds
+
+income.long$edtert <- with(ncds,cut(education,
+                            breaks=quantile(education, probs=seq(0,1, by=1/3), na.rm=TRUE), 
+                            include.lowest=TRUE))
+income.long$ySEStert <- with(ncds,cut(Youth_SES,
+                                    breaks=quantile(Youth_SES, probs=seq(0,1, by=1/3), na.rm=TRUE), 
+                                    include.lowest=TRUE))
+
+income.long$gxEd = interaction(income.long$edtert, income.long$gtert)
+income.long$ySESxEd = interaction(income.long$edtert, income.long$ySEStert)
+
+
+income.long = income.long[complete.cases(income.long[,c('g','bmi23','bmi55')]),] # to get Completers
+
+income.long = rbindlist(list(
+  cbind(income.long[,c('ncdsid','sex','gtert','edtert','ySEStert','gxEd','ySESxEd','income23')],23),
+  cbind(income.long[,c('ncdsid','sex','gtert','edtert','ySEStert','gxEd','ySESxEd','income33')],33),
+  cbind(income.long[,c('ncdsid','sex','gtert','edtert','ySEStert','gxEd','ySESxEd','income42')],42),
+  cbind(income.long[,c('ncdsid','sex','gtert','edtert','ySEStert','gxEd','ySESxEd','income50')],50)
+  #,cbind(income.long[,c('ncdsid','sex','gtert','sextert','income55')],55)
+), use.names=FALSE
+)
+colnames(income.long) <- c('id','sex','IQ','education','Youth_SES','gxEd','ySESxEd','income','age') 
+
+
+
+
+
+ggplot(subset(income.long, !is.na(income)&!is.na(IQ)), aes(x=age, y=income, group=IQ, color=IQ)
+       # , linetype = c(1,1,2,2,3,3)
+       # , palette = c('dodgerblue','violetred1','dodgerblue','violetred1','dodgerblue','violetred1')
+) + facet_grid(. ~ sex) +
+  stat_smooth(aes(linetype=IQ, color=IQ), method='gam', formula = y~s(x, k=4), se=TRUE) +
+  #stat_smooth(aes(linetype=IQ, color=sex), method='loess', se=TRUE) +
+  xlab('Average age')  
+#coord_cartesian(xlim=c(23,55), ylim=c(21.5,30)) + 
+#theme(legend.position = c(0.9,0.25))
+
+
+
+ggplot(subset(income.long, !is.na(income)&!is.na(education)), aes(x=age, y=income, group=education, color=education)
+       # , linetype = c(1,1,2,2,3,3)
+       # , palette = c('dodgerblue','violetred1','dodgerblue','violetred1','dodgerblue','violetred1')
+) + facet_grid(. ~ sex) +
+  stat_smooth(aes(linetype=education, color=education), method='gam', formula = y~s(x, k=4), se=TRUE) +
+  #stat_smooth(aes(linetype=IQ, color=sex), method='loess', se=TRUE) +
+  xlab('Average age')  
+#coord_cartesian(xlim=c(23,55), ylim=c(21.5,30)) + 
+#theme(legend.position = c(0.9,0.25))
+
+
+
+ggplot(subset(income.long, !is.na(income)&!is.na(Youth_SES)), aes(x=age, y=income, group=Youth_SES, color=Youth_SES)
+       # , linetype = c(1,1,2,2,3,3)
+       # , palette = c('dodgerblue','violetred1','dodgerblue','violetred1','dodgerblue','violetred1')
+) + facet_grid(. ~ sex) +
+  stat_smooth(aes(linetype=Youth_SES, color=Youth_SES), method='gam', formula = y~s(x, k=4), se=TRUE) +
+  #stat_smooth(aes(linetype=IQ, color=sex), method='loess', se=TRUE) +
+  xlab('Average age')  
+
+
+
+ggplot(subset(income.long, !is.na(income)&!is.na(gxEd)), aes(x=age, y=income, group=gxEd, color=gxEd)
+       # , linetype = c(1,1,2,2,3,3)
+       # , palette = c('dodgerblue','violetred1','dodgerblue','violetred1','dodgerblue','violetred1')
+) + facet_grid(. ~ sex) +
+  stat_smooth(aes(linetype=IQ, color=education), method='gam', formula = y~s(x, k=4), se=TRUE) +
+  #stat_smooth(aes(linetype=IQ, color=sex), method='loess', se=TRUE) +
+  xlab('Average age')  
+#coord_cartesian(xlim=c(23,55), ylim=c(21.5,30)) + 
+#theme(legend.position = c(0.9,0.25))
+
+
+
+ggplot(subset(income.long, !is.na(income)&!is.na(ySESxEd)), aes(x=age, y=income, group=ySESxEd, color=ySESxEd)
+       # , linetype = c(1,1,2,2,3,3)
+       # , palette = c('dodgerblue','violetred1','dodgerblue','violetred1','dodgerblue','violetred1')
+) + facet_grid(. ~ sex) +
+  stat_smooth(aes(linetype=Youth_SES, color=education), method='gam', formula = y~s(x, k=4), se=TRUE) +
+  #stat_smooth(aes(linetype=IQ, color=sex), method='loess', se=TRUE) +
+  xlab('Average age')  
+
+
+
+
+
+
+
+ggplot(subset(income.long, !is.na(income)&!is.na(IQ)), aes(x=age, y=income, group=sexIQ, color=sexIQ)
+       # , linetype = c(1,1,2,2,3,3)
+       # , palette = c('dodgerblue','violetred1','dodgerblue','violetred1','dodgerblue','violetred1')
+) + 
+  stat_smooth(aes(linetype=IQ, color=sex), method='gam', formula = y~s(x, k=4), se=TRUE) +
+  #stat_smooth(aes(linetype=IQ, color=sex), method='loess', se=TRUE) +
+  xlab('Average age')  
+  #coord_cartesian(xlim=c(23,55), ylim=c(21.5,30)) + 
+  #theme(legend.position = c(0.9,0.25))
+
+

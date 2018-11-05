@@ -55,7 +55,7 @@ inc.q =~ 0*income23 + 1*income33 + 3.61*income42 + 7.29*income50 + 10.24*income5
 # inc.s =~ 0*income23 + 1*income33 + 1.9*income42 + 2.7*income50
 # inc.q =~ 0*income23 + 1*income33 + 3.61*income42 + 7.29*income50
 
-# inc.i ~ sex + g
+# inc.i ~ sex + g + 
 # inc.s ~ sex + g
 # inc.q ~ sex + g
 
@@ -74,14 +74,24 @@ summary(inc.isq.f1)
 
 
 
-inc.isq.m2 <- '
-inc.i =~ 1*income23 + 1*income33 + 1*income42 + 1*income55
-inc.s =~ 0*income23 + 1*income33 + 1.9*income42 + 3.2*income55
-inc.q =~ 0*income23 + 1*income33 + 3.61*income42 + 10.24*income55
 
-inc.i ~ sex + g
-inc.s ~ sex + g
-inc.q ~ sex + g
+ncds$lvIQeducation = ncds$g * ncds$education
+ncds$lvIQySES = ncds$g * ncds$Youth_SES
+ncds$lvySESedu = ncds$education * ncds$Youth_SES
+ncds$lvIQySESedu = ncds$g * ncds$Youth_SES * ncds$education
+
+ncds$lvIQsexedu = ncds$g * (as.numeric(ncds$sex)-1) * ncds$education
+
+
+
+inc.isq.m2 <- '
+inc.i =~ 1*income23 + 1*income33 + 1*income42 + 1*income50 #+ 1*income55
+inc.s =~ 0*income23 + 1*income33 + 1.9*income42 + 2.7*income50 #+ 3.2*income55
+inc.q =~ 0*income23 + 1*income33 + 3.61*income42 + 7.29*income50 #+ 10.24*income55
+
+inc.i ~ sex + g + education + Youth_SES + lvIQeducation + lvIQySES + lvySESedu + lvIQySESedu + lvIQsexedu
+inc.s ~ sex + g + education + Youth_SES + lvIQeducation + lvIQySES + lvySESedu + lvIQySESedu + lvIQsexedu
+inc.q ~ sex + g + education + Youth_SES + lvIQeducation + lvIQySES + lvySESedu + lvIQySESedu + lvIQsexedu
 
 '
 

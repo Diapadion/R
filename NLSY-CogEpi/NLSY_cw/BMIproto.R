@@ -365,6 +365,76 @@ summary(lm.test)
 
 
 
+
+### Income plots
+
+income.long = bmi
+
+income.long$edtert <- with(income.long,cut(SES_Education_USE,
+                                    breaks=quantile(SES_Education_USE, probs=seq(0,1, by=1/3), na.rm=TRUE), 
+                                    include.lowest=TRUE))
+income.long$ySEStert <- with(income.long,cut(Child_SES,
+                                      breaks=quantile(Child_SES, probs=seq(0,1, by=1/3), na.rm=TRUE), 
+                                      include.lowest=TRUE))
+
+table(income.long$edtert, income.long$IQtert, useNA='ifany')
+
+income.long$gxEd = interaction(income.long$edtert, income.long$IQtert)
+
+
+
+income.long$ySESxEd = interaction(income.long$edtert, income.long$ySEStert)
+
+colnames(income.long)[c(1,64,157)] = c('id','sex','gtert')
+
+
+income.long = income.long[complete.cases(income.long[,c('gtert','income.85','income.14')]),] # to get Completers
+
+income.long = rbindlist(list(
+  cbind(income.long[,c('id','sex','gtert','edtert','ySEStert','gxEd','ySESxEd','income.85')],24),
+  cbind(income.long[,c('id','sex','gtert','edtert','ySEStert','gxEd','ySESxEd','income.94')],33),
+  cbind(income.long[,c('id','sex','gtert','edtert','ySEStert','gxEd','ySESxEd','income.06')],45),
+  cbind(income.long[,c('id','sex','gtert','edtert','ySEStert','gxEd','ySESxEd','income.14')],53)
+  #,cbind(income.long[,c('ncdsid','sex','gtert','sextert','income55')],55)
+), use.names=FALSE
+)
+colnames(income.long) <- c('id','sex','IQ','education','Youth_SES','gxEd','ySESxEd','income','age') 
+
+
+
+ggplot(subset(income.long, !is.na(income)&!is.na(IQ)), aes(x=age, y=income, group=IQ, color=IQ)
+       ) + facet_grid(. ~ sex) +
+  stat_smooth(aes(linetype=IQ, color=IQ), method='gam', formula = y~s(x, k=4), se=TRUE) +
+  xlab('Average age')  
+
+
+ggplot(subset(income.long, !is.na(income)&!is.na(education)), aes(x=age, y=income, group=education, color=education)
+) + facet_grid(. ~ sex) +
+  stat_smooth(aes(linetype=education, color=education), method='gam', formula = y~s(x, k=4), se=TRUE) +
+  xlab('Average age')  
+
+ggplot(subset(income.long, !is.na(income)&!is.na(Youth_SES)), aes(x=age, y=income, group=Youth_SES, color=Youth_SES)
+) + facet_grid(. ~ sex) +
+  stat_smooth(aes(linetype=Youth_SES, color=Youth_SES), method='gam', formula = y~s(x, k=4), se=TRUE) +
+  xlab('Average age')  
+
+
+ggplot(subset(income.long, !is.na(income)&!is.na(gxEd)), aes(x=age, y=income, group=gxEd, color=gxEd)
+) + facet_grid(. ~ sex) +
+  stat_smooth(aes(linetype=IQ, color=education), method='gam', formula = y~s(x, k=4, bs='cr'), 
+              #method='loess',
+              se=TRUE) +
+  xlab('Average age')  
+
+
+ggplot(subset(income.long, !is.na(income)&!is.na(Youth_SES)), aes(x=age, y=income, group=Youth_SES, color=Youth_SES)
+) + facet_grid(. ~ sex) +
+  stat_smooth(aes(linetype=Youth_SES, color=Youth_SES), method='gam', formula = y~s(x, k=4), se=TRUE) +
+  xlab('Average age')  
+
+
+
+
 ### Descriptive Table(s)
 
 #table(bmi$sextert, bmi$bmi_85)

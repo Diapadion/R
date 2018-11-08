@@ -187,6 +187,7 @@ income.long$ySEStert <- with(ncds,cut(Youth_SES,
 income.long$gxEd = interaction(income.long$edtert, income.long$gtert)
 income.long$ySESxEd = interaction(income.long$edtert, income.long$ySEStert)
 
+colnames(income.long)
 
 income.long = income.long[complete.cases(income.long[,c('g','bmi23','bmi55')]),] # to get Completers
 
@@ -213,7 +214,7 @@ ggplot(subset(income.long, !is.na(income)&!is.na(IQ)), aes(x=age, y=income, grou
   xlab('Average age')  
 #coord_cartesian(xlim=c(23,55), ylim=c(21.5,30)) + 
 #theme(legend.position = c(0.9,0.25))
-
+  
 
 
 ggplot(subset(income.long, !is.na(income)&!is.na(education)), aes(x=age, y=income, group=education, color=education)

@@ -1,20 +1,27 @@
 ### Proto type analyses
 
 library(lavaan)
+library(psych)
 
 
 
 ### Trying out income growth curves 
 
-## TODO: this needs to be in the import file
-## should it be applied to other variables? (e.g. BMI)
-temp = scale(ncds[,c('income23','income33','income42','income50','income55')])
+## Scaling
+inc.m = mean(unlist(ncds[,c('income23','income33','income42','income50','income55')]), na.rm=TRUE)
+inc.sd = sd(unlist(ncds[,c('income23','income33','income42','income50','income55')]), na.rm=TRUE)
 
-ncds$income23 = temp[,'income23']
-ncds$income33 = temp[,'income33']
-ncds$income42 = temp[,'income42']
-ncds$income50 = temp[,'income50']
-ncds$income55 = temp[,'income55']
+ncds$income23 = (ncds$income23 - inc.m)/inc.sd
+ncds$income33 = (ncds$income33 - inc.m)/inc.sd
+ncds$income42 = (ncds$income42 - inc.m)/inc.sd
+ncds$income50 = (ncds$income50 - inc.m)/inc.sd
+ncds$income55 = (ncds$income55 - inc.m)/inc.sd
+
+
+describe(ncds[,c('income23','income33','income42','income50','income55')], na.rm=TRUE)
+
+
+
 
 
 
@@ -47,9 +54,9 @@ summary(inc.is.f1)
 
 
 inc.isq.m1 <- '
-inc.i =~ 1*income23 + 1*income33 + 1*income42 + 1*income50 + 1*income55
-inc.s =~ 0*income23 + 1*income33 + 1.9*income42 + 2.7*income50 + 3.2*income55
-inc.q =~ 0*income23 + 1*income33 + 3.61*income42 + 7.29*income50 + 10.24*income55
+inc.i =~ 1*income23 + 1*income33 + 1*income42 + 1*income50 #+ 1*income55
+inc.s =~ 0*income23 + 1*income33 + 1.9*income42 + 2.7*income50 #+ 3.2*income55
+inc.q =~ 0*income23 + 1*income33 + 3.61*income42 + 7.29*income50 #+ 10.24*income55
 
 # inc.i =~ 1*income23 + 1*income33 + 1*income42 + 1*income50
 # inc.s =~ 0*income23 + 1*income33 + 1.9*income42 + 2.7*income50

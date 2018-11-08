@@ -270,7 +270,9 @@ ncds = ncds[!is.na(ncds$n2017),]
 ## Getting rid of biologically implausible values:
 ## seems like might be only necessary at ages 33 & 42
 ## Li et al. 2009: > 70, < 12
-## TODO: Remove, don't set to NA
+
+ncds$bmi23[ncds$bmi23 > 70] = NA
+ncds$bmi23[ncds$bmi23 < 12] = NA
 
 ncds$bmi33[ncds$bmi33 > 70] = NA
 ncds$bmi33[ncds$bmi33 < 12] = NA
@@ -281,6 +283,20 @@ ncds$bmi42[ncds$bmi42 < 12] = NA
 ## some are also out of range for age 55
 ncds$bmi55[ncds$bmi55 > 70] = NA
 ncds$bmi55[ncds$bmi55 < 12] = NA
+
+
+
+# ncds = ncds[!(ncds$bmi23 > 70),]
+# ncds = ncds[!(ncds$bmi23 < 12),]
+# 
+# ncds = ncds[!(ncds$bmi33 > 70),]
+# ncds = ncds[!(ncds$bmi33 < 12),]
+# 
+# ncds = ncds[!(ncds$bmi42 > 70),]
+# ncds = ncds[!(ncds$bmi42 < 12),]
+# 
+# ncds = ncds[!(ncds$bmi55 > 70),]
+# ncds = ncds[!(ncds$bmi55 < 12),]
 
 
 

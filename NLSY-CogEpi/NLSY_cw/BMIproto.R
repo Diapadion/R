@@ -61,17 +61,32 @@ bmi$bmi_14 = bmi$weight_14/(bmi$height_14^2) * 703
 
 
 ## trim implausible values
-bmi$bmi_81[bmi$bmi_81 > 70] = NA
-bmi$bmi_81[bmi$bmi_81 < 12] = NA
+bmi$bmi_81[bmi$bmi_85 > 70] = NA
+bmi$bmi_81[bmi$bmi_85 < 12] = NA
 
 bmi$bmi_94[bmi$bmi_94 > 70] = NA
 bmi$bmi_94[bmi$bmi_94 < 12] = NA
+
+bmi$bmi_06[bmi$bmi_94 < 12] = NA
+bmi$bmi_06[bmi$bmi_94 > 70] = NA
 
 bmi$bmi_14[bmi$bmi_14 > 70] = NA
 bmi$bmi_14[bmi$bmi_14 < 12] = NA
 
 
-hist(bmi$bmi_81)
+# bmi = bmi[!(bmi$bmi_85 > 70),]
+# bmi = bmi[!(bmi$bmi_85 < 12),]
+# 
+# bmi = bmi[!(bmi$bmi_94 > 70),]
+# bmi = bmi[!(bmi$bmi_94 < 12),]
+# 
+# bmi = bmi[!(bmi$bmi_06 > 70),]
+# bmi = bmi[!(bmi$bmi_06 < 12),]
+# 
+# bmi = bmi[!(bmi$bmi_14 > 70),]
+# bmi = bmi[!(bmi$bmi_14 < 12),]
+
+# hist(bmi$bmi_81)
 hist(bmi$bmi_85)
 hist(bmi$bmi_94)
 hist(bmi$bmi_06)
@@ -95,8 +110,8 @@ cor(ht.df$AFQT89[ht.df$SAMPLE_SEX=='FEMALE'], ht.df$bmi_85[ht.df$SAMPLE_SEX=='FE
 cor(ht.df$AFQT89[ht.df$SAMPLE_SEX=='MALE'], ht.df$bmi_06[ht.df$SAMPLE_SEX=='MALE'], 'pairwise.complete.obs')
 cor(ht.df$AFQT89[ht.df$SAMPLE_SEX=='FEMALE'], ht.df$bmi_06[ht.df$SAMPLE_SEX=='FEMALE'], 'pairwise.complete.obs')
 
-cor(ht.df$AFQT89[ht.df$SAMPLE_SEX=='MALE'], ht.df$bmi_12[ht.df$SAMPLE_SEX=='MALE'], 'pairwise.complete.obs')
-cor(ht.df$AFQT89[ht.df$SAMPLE_SEX=='FEMALE'], ht.df$bmi_12[ht.df$SAMPLE_SEX=='FEMALE'], 'pairwise.complete.obs')
+cor(ht.df$AFQT89[ht.df$SAMPLE_SEX=='MALE'], ht.df$bmi_14[ht.df$SAMPLE_SEX=='MALE'], 'pairwise.complete.obs')
+cor(ht.df$AFQT89[ht.df$SAMPLE_SEX=='FEMALE'], ht.df$bmi_14[ht.df$SAMPLE_SEX=='FEMALE'], 'pairwise.complete.obs')
 
 
 
@@ -128,18 +143,27 @@ bmi$income.94[bmi$income.94<0] = NA
 bmi$income.06[bmi$income.06<0] = NA
 bmi$income.14[bmi$income.14<0] = NA
 
-## TODO: double check that this is putting them on the same scale
-temp = scale(bmi[,c('income.85','income.94','income.06','income.14')])
+## Scaling
+inc.m = mean(unlist(bmi[,c('income.85','income.94','income.06','income.14')]), na.rm=TRUE)
+inc.sd= sd(unlist(bmi[,c('income.85','income.94','income.06','income.14')]), na.rm=TRUE)
+
+bmi$income.85 = (bmi$income.85 - inc.m)/inc.sd
+bmi$income.94 = (bmi$income.94 - inc.m)/inc.sd
+bmi$income.06 = (bmi$income.06 - inc.m)/inc.sd
+bmi$income.14 = (bmi$income.14 - inc.m)/inc.sd
+
+describe(bmi[,c('income.85','income.94','income.06','income.14')]) # Good.
 
 
 
-bmi$income.85 = temp[,'income.85']
-bmi$income.94 = temp[,'income.94']
-bmi$income.06 = temp[,'income.06']
-bmi$income.14 = temp[,'income.14']
 
-table(bmi$income.hhi.85, useNA='ifany')
-table(bmi$income.85, useNA='ifany')
+#table(bmi$income.hhi.85, useNA='ifany')
+#table(bmi$income.85, useNA='ifany')
+
+
+### Export to include with NCDS
+write.csv(bmi, 'NLSY_bmi_inc.csv')
+
 
 
 
@@ -385,7 +409,7 @@ income.long$gxEd = interaction(income.long$edtert, income.long$IQtert)
 
 income.long$ySESxEd = interaction(income.long$edtert, income.long$ySEStert)
 
-colnames(income.long)[c(1,64,157)] = c('id','sex','gtert')
+colnames(income.long)[c(1,64,158)] = c('id','sex','gtert')
 
 
 income.long = income.long[complete.cases(income.long[,c('gtert','income.85','income.14')]),] # to get Completers
@@ -427,9 +451,9 @@ ggplot(subset(income.long, !is.na(income)&!is.na(gxEd)), aes(x=age, y=income, gr
   xlab('Average age')  
 
 
-ggplot(subset(income.long, !is.na(income)&!is.na(Youth_SES)), aes(x=age, y=income, group=Youth_SES, color=Youth_SES)
+ggplot(subset(income.long, !is.na(income)&!is.na(ySESxEd)), aes(x=age, y=income, group=ySESxEd, color=ySESxEd)
 ) + facet_grid(. ~ sex) +
-  stat_smooth(aes(linetype=Youth_SES, color=Youth_SES), method='gam', formula = y~s(x, k=4), se=TRUE) +
+  stat_smooth(aes(linetype=Youth_SES, color=education), method='gam', formula = y~s(x, k=4), se=TRUE) +
   xlab('Average age')  
 
 
@@ -440,14 +464,14 @@ ggplot(subset(income.long, !is.na(income)&!is.na(Youth_SES)), aes(x=age, y=incom
 #table(bmi$sextert, bmi$bmi_85)
 
 aggregate(bmi_85 ~ sextert, data=bmi, FUN=mean)
-aggregate(bmi_96 ~ sextert, data=bmi, FUN=mean)
+aggregate(bmi_94 ~ sextert, data=bmi, FUN=mean)
 aggregate(bmi_06 ~ sextert, data=bmi, FUN=mean)
-aggregate(bmi_12 ~ sextert, data=bmi, FUN=mean)
+aggregate(bmi_14 ~ sextert, data=bmi, FUN=mean)
 
 aggregate(bmi_85 ~ sextert, data=bmi[complete.cases(bmi[,c('sextert','bmi_85','bmi_96','bmi_06','bmi_12')]),], FUN=mean)
-aggregate(bmi_96 ~ sextert, data=bmi[complete.cases(bmi[,c('sextert','bmi_85','bmi_96','bmi_06','bmi_12')]),], FUN=mean)
+aggregate(bmi_94 ~ sextert, data=bmi[complete.cases(bmi[,c('sextert','bmi_85','bmi_96','bmi_06','bmi_12')]),], FUN=mean)
 aggregate(bmi_06 ~ sextert, data=bmi[complete.cases(bmi[,c('sextert','bmi_85','bmi_96','bmi_06','bmi_12')]),], FUN=mean)
-aggregate(bmi_12 ~ sextert, data=bmi[complete.cases(bmi[,c('sextert','bmi_85','bmi_96','bmi_06','bmi_12')]),], FUN=mean)
+aggregate(bmi_14 ~ sextert, data=bmi[complete.cases(bmi[,c('sextert','bmi_85','bmi_96','bmi_06','bmi_12')]),], FUN=mean)
 
 
 
@@ -659,7 +683,7 @@ bmi_06 ~ age.06
 bmi_14 ~ age.14
 
 bmi_85 ~~ vbmi85 * bmi_85
-vbmi85 > 0.01 
+vbmi85 > 0.01
 
 '
 
@@ -673,6 +697,39 @@ isq.f5 = lavaan(bmi.isq.m5, data=bmi.lv, meanstructure = TRUE, int.ov.free = FAL
 
 fitMeasures(isq.f5, c("chisq", "df", "pvalue", "cfi", "tli", "srmr", "rmsea"))
 summary(isq.f5)
+
+
+
+bmi.isq.m6 <- '
+bm.i =~ 1*bmi_85 + 1*bmi_94 + 1*bmi_06 + 1*bmi_14
+bm.s =~ 0*bmi_85 + 0.9*bmi_94 + 2.1*bmi_06 + 2.9*bmi_14
+bm.q =~ 0*bmi_85 + 0.81*bmi_94 + 4.41*bmi_06 + 8.41*bmi_14
+
+bm.i ~ SAMPLE_SEX + AFQT89 + age_1979 + lvIQsex + Child_SES + SES_Education_USE
+bm.s ~ SAMPLE_SEX + AFQT89 + age_1979 + lvIQsex + Child_SES + SES_Education_USE 
+bm.q ~ SAMPLE_SEX + AFQT89 + age_1979 + lvIQsex + Child_SES + SES_Education_USE 
+
+bmi_85 ~ age.85 + income.85
+bmi_94 ~ age.94 + income.94
+bmi_06 ~ age.06 + income.06
+bmi_14 ~ age.14 + income.14
+
+bmi_85 ~~ vbmi85 * bmi_85
+vbmi85 > 0.01
+
+'
+
+isq.f6 = lavaan(bmi.isq.m6, data=bmi.lv, meanstructure = TRUE, int.ov.free = FALSE, 
+                int.lv.free = TRUE, auto.fix.first = TRUE, auto.fix.single = TRUE, 
+                auto.var = TRUE, auto.cov.lv.x = TRUE, auto.th = TRUE, auto.delta = TRUE, 
+                auto.cov.y = TRUE, fixed.x=TRUE,
+                missing = 'fiml', information='expected'
+)
+
+
+fitMeasures(isq.f6, c("chisq", "df", "pvalue", "cfi", "tli", "srmr", "rmsea"))
+summary(isq.f6)
+
 
 
 

@@ -7,21 +7,8 @@ library(psych)
 
 ### Trying out income growth curves 
 
-## Scaling
-inc.m = mean(unlist(ncds[,c('income23','income33','income42','income50','income55')]), na.rm=TRUE)
-inc.sd = sd(unlist(ncds[,c('income23','income33','income42','income50','income55')]), na.rm=TRUE)
 
-ncds$income23 = (ncds$income23 - inc.m)/inc.sd
-ncds$income33 = (ncds$income33 - inc.m)/inc.sd
-ncds$income42 = (ncds$income42 - inc.m)/inc.sd
-ncds$income50 = (ncds$income50 - inc.m)/inc.sd
-ncds$income55 = (ncds$income55 - inc.m)/inc.sd
-
-
-describe(ncds[,c('income23','income33','income42','income50','income55')], na.rm=TRUE)
-
-
-
+# describe(ncds[,c('income23','income33','income42','income50','income55')], na.rm=TRUE)
 
 
 

@@ -7,30 +7,74 @@ library(semTools)
 
 ### Setup
 
+setwd('C:/Users/daltschu/Dropbox/NCDS data/')
 nlsy = read.csv('NLSY_bmi_inc.csv')
 
 colnames(nlsy)[c(65,83,89,93)] = c('sex','g','education','Youth_SES')
 
 
-describe(nlsy[,c('sex','g','education','Youth_SES',
+nlsy.other = nlsy[nlsy$SAMPLE_ethnicity!='NON-BLACK, NON-HISPANIC',]
+nlsy = nlsy[nlsy$SAMPLE_ethnicity=='NON-BLACK, NON-HISPANIC',]
+
+
+## now make Table 1 (GOTO descript.R)
+
+
+## Sqrt and scale
+nlsy$income.85 = sqrt(nlsy$income.85)
+nlsy$income.94 = sqrt(nlsy$income.94)
+nlsy$income.06 = sqrt(nlsy$income.06)
+nlsy$income.14 = sqrt(nlsy$income.14)
+
+
+## Mean center and scale
+inc.m = mean(unlist(nlsy[,c('income.85','income.94','income.06','income.14')]), na.rm=TRUE)
+inc.sd= sd(unlist(nlsy[,c('income.85','income.94','income.06','income.14')]), na.rm=TRUE)
+
+nlsy$income.85 = (nlsy$income.85 - inc.m)/inc.sd
+nlsy$income.94 = (nlsy$income.94 - inc.m)/inc.sd
+nlsy$income.06 = (nlsy$income.06 - inc.m)/inc.sd
+nlsy$income.14 = (nlsy$income.14 - inc.m)/inc.sd
+
+
+## How many implausible BMI values?
+length(which((nlsy$bmi_85 > 70) | (nlsy$bmi_85 < 12)))
+length(which((nlsy$bmi_94 > 70) | (nlsy$bmi_94 < 12)))
+length(which((nlsy$bmi_06 > 70) | (nlsy$bmi_06 < 12)))
+length(which((nlsy$bmi_14 > 70) | (nlsy$bmi_14 < 12)))
+
+
+## invert SES to make it SED
+nlsy$Youth_SES = -1 * nlsy$Youth_SES
+
+
+
+summary(nlsy[,c('sex','g','education','Youth_SES',
                  'bmi_85','bmi_94','bmi_06','bmi_14',
                  'age.85','age.94','age.06','age.14','age_1979',
                  'income.85','income.94','income.06','income.14'
                  )])
 
+
+
+
+
+# table(nlsy$sex)
+# table(as.integer(nlsy$sex))
+# table(as.integer(nlsy$sex)*-1 + 2) 
+
+nlsy.lv = nlsy
+#nlsy.lv$sex = as.integer(nlsy.lv$sex) - 1 # women are 0, men are 1
+nlsy.lv$sex = as.integer(nlsy.lv$sex)*(-1) + 2 # men are 0, women are 1
+nlsy.lv$lvIQsex = nlsy.lv$g * nlsy.lv$sex
+
+
 ## divide age by 10 to scale it on decade, same as the growth scale
-nlsy$age.85 = nlsy$age.85/10
-nlsy$age.94 = nlsy$age.94/10
-nlsy$age.06 = nlsy$age.06/10
-nlsy$age.14 = nlsy$age.14/10
-nlsy$age_1979 = nlsy$age_1979/10
-
-
-
-nlsy.lv = nlsy[nlsy$SAMPLE_ethnicity=='NON-BLACK, NON-HISPANIC',]
-
-nlsy.lv$lvIQsex = nlsy.lv$g * (as.numeric(nlsy.lv$sex)-1)
-
+nlsy.lv$age.85 = nlsy.lv$age.85/10
+nlsy.lv$age.94 = nlsy.lv$age.94/10
+nlsy.lv$age.06 = nlsy.lv$age.06/10
+nlsy.lv$age.14 = nlsy.lv$age.14/10
+nlsy.lv$age_1979 = nlsy.lv$age_1979/10
 
 
 ### Growth curve models
@@ -248,9 +292,9 @@ bm.i =~ 1*bmi_85 + 1*bmi_94 + 1*bmi_06 + 1*bmi_14
 bm.s =~ 0*bmi_85 + 0.9*bmi_94 + 2.1*bmi_06 + 2.9*bmi_14
 bm.q =~ 0*bmi_85 + 0.81*bmi_94 + 4.41*bmi_06 + 8.41*bmi_14
 
-bm.i ~ sex + g + age_1979 + lvIQsex + Youth_SES + education
-bm.s ~ sex + g + age_1979 + lvIQsex + Youth_SES + education
-bm.q ~ sex + g + age_1979 + lvIQsex + Youth_SES + education
+bm.i ~ sex + g + lvIQsex + age_1979 + Youth_SES + education
+bm.s ~ sex + g + lvIQsex + age_1979 + Youth_SES + education
+bm.q ~ sex + g + lvIQsex + age_1979 + Youth_SES + education 
 
 bmi_85 ~ age.85 + income.85
 bmi_94 ~ age.94 + income.94
@@ -262,13 +306,15 @@ vbmi85 > 0.01
 
 '
 
+
 isq.f6 = lavaan(nlsy.isq.m6, data=nlsy.lv, meanstructure = TRUE, int.ov.free = FALSE, 
                 int.lv.free = TRUE, auto.fix.first = TRUE, auto.fix.single = TRUE, 
                 auto.var = TRUE, auto.cov.lv.x = TRUE, auto.th = TRUE, auto.delta = TRUE, 
                 auto.cov.y = TRUE, fixed.x=TRUE,
+                estimator='MLF', #se='robust.sem',test='Yuan.Bentler',
                 missing = 'fiml', information='expected'
+                
 )
-
 
 fitMeasures(isq.f6, c("chisq", "df", "pvalue", "cfi", "tli", "srmr", "rmsea"))
 summary(isq.f6)

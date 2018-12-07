@@ -3,11 +3,62 @@
 library(survival)
 library(eha)
 library(ggplot2)
+library(survminer)
 
 
 
 ### Missing sample descriptives
-summary(ht.df[!ccs,c('AFQT89','SAMPLE_SEX','Child_SES','Adult_SES','SES_Education_USE','SES_OccStatus_USE','SES_Income_USE')])
+#summary(ht.df[!ccs,c('AFQT89','SAMPLE_SEX','Child_SES','Adult_SES','SES_Education_USE','SES_OccStatus_USE','SES_Income_USE')])
+
+sum(ht.df[!ccs,]$SAMPLE_SEX=='MALE')
+sum(ht.df[!ccs,]$SAMPLE_SEX=='FEMALE')
+
+## IQ
+aggregate(AFQT89 ~ SAMPLE_SEX, data=ht.df[!ccs,], FUN=mean)
+aggregate(AFQT89 ~ SAMPLE_SEX, data=ht.df[!ccs,], FUN=sd)
+
+## Child SES
+aggregate(Child_SES ~ SAMPLE_SEX, data=ht.df[!ccs,], FUN=mean)
+aggregate(Child_SES ~ SAMPLE_SEX, data=ht.df[!ccs,], FUN=sd)
+
+## Adult SES
+aggregate(Adult_SES ~ SAMPLE_SEX, data=ht.df[!ccs,], FUN=mean)
+aggregate(Adult_SES ~ SAMPLE_SEX, data=ht.df[!ccs,], FUN=sd)
+
+## Income
+aggregate(SES_Income_USE ~ SAMPLE_SEX, data=ht.df[!ccs,], FUN=mean)
+aggregate(SES_Income_USE ~ SAMPLE_SEX, data=ht.df[!ccs,], FUN=sd)
+
+## Education
+aggregate(SES_Education_USE ~ SAMPLE_SEX, data=ht.df[!ccs,], FUN=mean)
+aggregate(SES_Education_USE ~ SAMPLE_SEX, data=ht.df[!ccs,], FUN=sd)
+
+## Occupation Status
+aggregate(SES_OccStatus_USE ~ SAMPLE_SEX, data=ht.df[!ccs,], FUN=mean)
+aggregate(SES_OccStatus_USE ~ SAMPLE_SEX, data=ht.df[!ccs,], FUN=sd)
+
+## Hypertension
+# table(ht.df[ccs,]$hasHT,ht.df[!ccs,]$SAMPLE_SEX)
+# 
+# hist(ht.df[ccs,]$HTage50t[ht.df[ccs,]$hasHT])
+
+## FIXED:
+aggregate(recordTime ~ SAMPLE_SEX, data=ht.df[!ccs,][ht.df[!ccs,]$hasHT,], FUN=mean)
+aggregate(recordTime ~ SAMPLE_SEX, data=ht.df[!ccs,][ht.df[!ccs,]$hasHT,], FUN=sd)
+
+
+### Comparing analytic and non-analytic means
+(aggregate(AFQT89 ~ SAMPLE_SEX, data=ht.df[!ccs,], FUN=mean) - aggregate(AFQT89 ~ SAMPLE_SEX, data=ht.df[ccs,], FUN=mean))/aggregate(AFQT89 ~ SAMPLE_SEX, data=ht.df[!ccs,], FUN=sd)
+
+(aggregate(Child_SES ~ SAMPLE_SEX, data=ht.df[!ccs,], FUN=mean) - aggregate(Child_SES ~ SAMPLE_SEX, data=ht.df[ccs,], FUN=mean))/aggregate(Child_SES ~ SAMPLE_SEX, data=ht.df[!ccs,], FUN=sd)
+
+(aggregate(Adult_SES ~ SAMPLE_SEX, data=ht.df[!ccs,], FUN=mean) - aggregate(Adult_SES ~ SAMPLE_SEX, data=ht.df[ccs,], FUN=mean))/aggregate(Adult_SES ~ SAMPLE_SEX, data=ht.df[!ccs,], FUN=sd)
+
+(aggregate(SES_Income_USE ~ SAMPLE_SEX, data=ht.df[!ccs,], FUN=mean) - aggregate(SES_Income_USE ~ SAMPLE_SEX, data=ht.df[ccs,], FUN=mean))/aggregate(SES_Income_USE ~ SAMPLE_SEX, data=ht.df[!ccs,], FUN=sd)
+
+(aggregate(SES_Education_USE ~ SAMPLE_SEX, data=ht.df[!ccs,], FUN=mean) - aggregate(SES_Education_USE ~ SAMPLE_SEX, data=ht.df[ccs,], FUN=mean))/aggregate(SES_Education_USE ~ SAMPLE_SEX, data=ht.df[!ccs,], FUN=sd)
+
+(aggregate(SES_OccStatus_USE ~ SAMPLE_SEX, data=ht.df[!ccs,], FUN=mean) - aggregate(SES_OccStatus_USE ~ SAMPLE_SEX, data=ht.df[ccs,], FUN=mean))/aggregate(SES_OccStatus_USE ~ SAMPLE_SEX, data=ht.df[!ccs,], FUN=sd)
 
 
 
@@ -52,6 +103,11 @@ partn.df$partner.status[partn.df$partner.status==33] = 1 # just 'partner's
 aft.gd3.4.partn = aftreg(y.ccs ~ SAMPLE_SEX * AFQT89 + age_1979 + Child_SES
                    + SES_Income_USE + partner.status
                    ,data = partn.df[ccs,], dist='loglogistic')
+
+aft.gd3.4.partn$n
+aft.gd3.4$n
+
+aft.gd3.4.partn$loglik
 extractAIC(aft.gd3.4.partn)
 summary(aft.gd3.4.partn)
 ## nothing at all...

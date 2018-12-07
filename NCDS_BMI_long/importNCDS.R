@@ -1,8 +1,10 @@
 ### Import
 
 library(readstata13)
+library(psych)
 library(dplyr)
 library(magrittr)
+library(ggplot2)
 source("https://raw.githubusercontent.com/janhove/janhove.github.io/master/RCode/sortLvls.R")
 
 
@@ -27,8 +29,6 @@ ncds8 <- read.dta13("ncds_2008_followup.dta", generate.factors = FALSE)
 #ncds9 <- read.dta13("ncds_2013_flatfile.dta", generate.factors = FALSE)
 ncds9 <- read.dta13("ncds_2013_derived.dta", generate.factors = FALSE)
 ncds9.1 <- read.dta13("ncds_2013_flatfile.dta", generate.factors = FALSE)
-
-table(ncds0123$dvht16)
 
 
 
@@ -216,6 +216,7 @@ colnames(income.55)[c(1,12)] = c("ncdsid","income55")
 
 
 ### Merging them together
+### - can restart from here 
 
 ncds = merge(ncds0123[,c('ncdsid','n622','n914','n917','n920','n923','n926','bmi16',
                          'n236','n190','n194','n195','n537','n200','n607',
@@ -249,27 +250,28 @@ colnames(ncds)[2:7] <- c('sex','verbal','nonverbal','g','reading','maths')
 
 ## Sex
 
+#table(ncds$sex)
 ncds$sex[ncds$sex == 'Not known'] = NA
 ncds$sex = droplevels(ncds$sex)
 
-table(ncds$sex, useNA='ifany')
+# table(ncds$sex, useNA='ifany')
 
 
 
-## Ethnicity
-# n1612
-# n2017
-table(ncds$n1612, useNA='ifany')
-table(ncds$n2017, useNA='ifany')
 
-ncds = ncds[ncds$n2017=='Euro-Caucasian',] # still need to take out NAs
-ncds = ncds[!is.na(ncds$n2017),]
 
 
 
 ## Getting rid of biologically implausible values:
 ## seems like might be only necessary at ages 33 & 42
 ## Li et al. 2009: > 70, < 12
+
+## How many?
+length(which((ncds$bmi23 > 70) | (ncds$bmi23 < 12)))
+length(which((ncds$bmi33 > 70) | (ncds$bmi33 < 12)))
+length(which((ncds$bmi42 > 70) | (ncds$bmi42 < 12)))
+length(which((ncds$bmi55 > 70) | (ncds$bmi55 < 12)))
+
 
 ncds$bmi23[ncds$bmi23 > 70] = NA
 ncds$bmi23[ncds$bmi23 < 12] = NA
@@ -303,10 +305,19 @@ ncds$bmi55[ncds$bmi55 < 12] = NA
 ### Post-processing covariates
 
 ## IQ
+# table(ncds$verbal, useNA='ifany')
+# table(ncds$nonverbal, useNA='ifany')
+# table(ncds$reading, useNA='ifany')
+# table(ncds$maths, useNA='ifany')
+# tail(table(ncds$verbal, ncds$nonverbal, useNA='ifany'))
+# table(ncds$g, useNA='ifany')
+
+# omega(as.numeric(ncds[,c('verbal','nonverbal','reading','maths')]))
+
 ncds$g = as.numeric(ncds$g) - 2
 ncds$g[ncds$g==-1] = NA
-
-table(ncds$g)
+ 
+table(ncds$g, useNA='ifany')
 sum(table(ncds$g))
 
 
@@ -504,6 +515,47 @@ hist(ncds$Youth_SES)
 ncds$g = scale(ncds$g)
 
 ncds$education = scale(ncds$actagel2)
+table(ncds$education, useNA='ifany')
+
+
+
+### Ethnicity
+# n1612
+# n2017
+table(ncds$n1612, useNA='ifany')
+table(ncds$n2017, useNA='ifany')
+table(ncds$n1612, ncds$n2017, useNA='ifany')
+
+## 'Others' - not used
+# ncds.other = ncds[ncds$n2017!='Euro-Caucasian',] 
+# ncds.other = ncds.other[ncds.other$n2017!='NA',] 
+# ncds.other = ncds.other[!is.na(ncds.other$n2017),] 
+# table(ncds.other$n2017, useNA='ifany')
+
+ncds = ncds[ncds$n2017!='African-Negroid',]
+ncds = ncds[ncds$n1612!='African,negroid',]
+ncds = ncds[ncds$n2017!='Indian-Pakistan',]
+ncds = ncds[ncds$n1612!='Indian,Pakistani',]
+ncds = ncds[ncds$n2017!='Other Asian',]
+ncds = ncds[ncds$n1612!='Other Asian',]
+ncds = ncds[ncds$n2017!='Other or unsure',]
+ncds = ncds[ncds$n1612!='Other',]
+ncds = ncds[ncds$n2017!='Mixed race',]
+
+ncds = ncds[(ncds$n2017!='NA')|(ncds$n1612!='NA'),]
+# still need to take out NAs
+ncds = ncds[!is.na(ncds$n2017),]
+
+table(ncds$n1612, ncds$n2017, useNA='ifany')
+
+
+table(!is.na(ncds$bmi55))
+
+
+
+### Where are the missing values?
+
+summary(ncds[,c("bmi23","bmi33","bmi42","bmi55","sex","g","Youth_SES","education","income23","income33","income42","income50","income55")])
 
 
 

@@ -51,9 +51,14 @@ g
 
 
 
+## Kurtosis...
 
+library(psych)
 
+describe(fWHR.avg[,c('fWHR','LFFH')])
 
+## fWHR
+sqrt(24/91)
 
 
 
@@ -67,4 +72,23 @@ maqAgr <- aggregate(maqAgr, by=list(maqAgr$Rhesus), FUN=mean)
 maqAgr <- merge(fWHR[,c(1,24)],maqAgr[,c(1,2:24,26:104)],by.x='Rhesus',by.y='Group.1')
 
 
-chAgr <- merge(chAgr[,c(1,8:26)],subsp[,c(1,2)], by.x='Group.1', by.y='Name')
+#chAgr <- merge(chAgr[,c(1,8:26)],subsp[,c(1,2)], by.x='Group.1', by.y='Name')
+
+
+hist(maqAgr$LFFH)
+hist(maqAgr$fWHR)
+
+sd(maqAgr$LFFH, na.rm=TRUE)
+sd(maqAgr$fWHR, na.rm=TRUE)
+
+mean(maqAgr$LFFH, na.rm=TRUE)
+mean(maqAgr$fWHR, na.rm=TRUE)
+
+
+
+### Ranges for JPC
+summary(fWHR$agenum[fWHR$Facility.x=='UQ6934'&!is.na(fWHR$agenum)])
+
+summary(fWHR$agenum[fWHR$Facility.x=='ZX6012'&!is.na(fWHR$agenum)])
+
+

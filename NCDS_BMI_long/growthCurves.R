@@ -9,8 +9,39 @@ library(semTools)
 
 
 
-table(as.numeric(ncds$sex))
-ncds$lvIQsex = ncds$g * (as.numeric(ncds$sex)-1)
+## Test if sqrt improves model fit(s)
+ncds$income23 = sqrt(ncds$income23)
+ncds$income33 = sqrt(ncds$income33)
+ncds$income42 = sqrt(ncds$income42)
+ncds$income50 = sqrt(ncds$income50)
+ncds$income55 = sqrt(ncds$income55)
+
+
+## Scaling
+inc.m = mean(unlist(ncds[,c('income23','income33','income42','income50','income55')]), na.rm=TRUE)
+inc.sd = sd(unlist(ncds[,c('income23','income33','income42','income50','income55')]), na.rm=TRUE)
+
+ncds$income23 = (ncds$income23 - inc.m)/inc.sd
+ncds$income33 = (ncds$income33 - inc.m)/inc.sd
+ncds$income42 = (ncds$income42 - inc.m)/inc.sd
+ncds$income50 = (ncds$income50 - inc.m)/inc.sd
+ncds$income55 = (ncds$income55 - inc.m)/inc.sd
+
+
+
+# table(ncds$sex)
+# table(as.integer(ncds$sex))
+# table(as.numeric(ncds$sex)-1)
+
+# ncds$sex = as.integer(ncds$sex)*-1 + 2 # women are 0, men are 1
+ncds$sex = as.integer(ncds$sex)-1 # men are 0, women are 1
+
+## invert SES to make it SED
+ncds$Youth_SES = -1 * ncds$Youth_SES
+
+ncds$lvIQsex = ncds$g * ncds$sex
+
+# table(ncds$lvIQsex, useNA='ifany')
 
 
 
@@ -19,9 +50,9 @@ bm.i =~ 1*bmi23 + 1*bmi33 + 1*bmi42 + 1*bmi55
 bm.s =~ 0*bmi23 + 1*bmi33 + 1.9*bmi42 + 3.2*bmi55
 bm.q =~ 0*bmi23 + 1*bmi33 + 3.61*bmi42 + 10.24*bmi55
 
-bm.i ~ sex + g
-bm.s ~ sex + g
-bm.q ~ sex + g
+# bm.i ~ sex + g
+# bm.s ~ sex + g
+# bm.q ~ sex + g
 
 #bmi23 ~ Vbmi23 * bmi23
 #Vbmi23 > 0
@@ -147,7 +178,7 @@ bm.q ~ sex + g + lvIQsex + Youth_SES + education
 bmi23 ~ income23
 bmi33 ~ income33
 bmi42 ~ income42
-bmi55 ~ income55
+bmi55 ~ income50
 
 bmi23 ~~ vbmi23 * bmi23
 vbmi23 > 0.01
@@ -159,11 +190,15 @@ isq.f5 = lavaan(ncds.isq.m5, data=ncds, meanstructure = TRUE, int.ov.free = FALS
                 int.lv.free = TRUE, auto.fix.first = TRUE, auto.fix.single = TRUE, 
                 auto.var = TRUE, auto.cov.lv.x = TRUE, auto.th = TRUE, auto.delta = TRUE, 
                 auto.cov.y = TRUE,
+                estimator='MLF', #se='robust',test='Yuan.Bentler',
                 missing = 'fiml', information='observed'
 )
 
 fitMeasures(isq.f5, c("chisq", "df", "pvalue", "cfi", "tli", "srmr", "rmsea"))
 summary(isq.f5)
+
+
+
 
 
 

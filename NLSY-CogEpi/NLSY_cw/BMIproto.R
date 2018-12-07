@@ -143,6 +143,13 @@ bmi$income.94[bmi$income.94<0] = NA
 bmi$income.06[bmi$income.06<0] = NA
 bmi$income.14[bmi$income.14<0] = NA
 
+
+
+### Export to include with NCDS
+write.csv(bmi, 'NLSY_bmi_inc.csv')
+
+
+
 ## Scaling
 inc.m = mean(unlist(bmi[,c('income.85','income.94','income.06','income.14')]), na.rm=TRUE)
 inc.sd= sd(unlist(bmi[,c('income.85','income.94','income.06','income.14')]), na.rm=TRUE)
@@ -161,8 +168,7 @@ describe(bmi[,c('income.85','income.94','income.06','income.14')]) # Good.
 #table(bmi$income.85, useNA='ifany')
 
 
-### Export to include with NCDS
-write.csv(bmi, 'NLSY_bmi_inc.csv')
+
 
 
 

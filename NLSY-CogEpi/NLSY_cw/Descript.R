@@ -67,7 +67,7 @@ aggregate(recordTime ~ SAMPLE_SEX, data=ht.df[ht.df$hasHT,], FUN=sd)
 
 
 
-# Questions of overlap
+## Questions of overlap
 
 table(ht.df$hasHT,is.na(ht.df$Adult_SES))
 
@@ -135,6 +135,60 @@ hist(ht.df[ccs,]$HTage50t[ht.df[ccs,]$hasHT])
 ## FIXED:
 aggregate(recordTime ~ SAMPLE_SEX, data=ht.df[ccs,][ht.df[ccs,]$hasHT,], FUN=mean)
 aggregate(recordTime ~ SAMPLE_SEX, data=ht.df[ccs,][ht.df[ccs,]$hasHT,], FUN=sd)
+
+
+
+
+### Revision 2, Table S2 - looking at analyzed and non-analyzed, collapsed by sex
+
+## IQ
+mean(ht.df$AFQT[ccs]) # analytic
+sd(ht.df$AFQT[ccs])
+mean(ht.df$AFQT[!ccs], na.rm=TRUE) # not
+sd(ht.df$AFQT[!ccs], na.rm=TRUE)
+
+## Youth SES
+mean(ht.df$Child_SES[ccs]) # analytic
+sd(ht.df$Child_SES[ccs])
+mean(ht.df$Child_SES[!ccs], na.rm=TRUE) # not
+sd(ht.df$Child_SES[!ccs], na.rm=TRUE)
+
+## Adult SES
+mean(ht.df$Adult_SES[ccs]) # analytic
+sd(ht.df$Adult_SES[ccs])
+mean(ht.df$Adult_SES[!ccs], na.rm=TRUE) # not
+sd(ht.df$Adult_SES[!ccs], na.rm=TRUE)
+
+## Family income
+mean(ht.df$SES_Income_USE[ccs]) # analytic
+sd(ht.df$SES_Income_USE[ccs])
+mean(ht.df$SES_Income_USE[!ccs], na.rm=TRUE) # not
+sd(ht.df$SES_Income_USE[!ccs], na.rm=TRUE)
+
+## Education
+mean(ht.df$SES_Education_USE[ccs]) # analytic
+sd(ht.df$SES_Education_USE[ccs])
+mean(ht.df$SES_Education_USE[!ccs], na.rm=TRUE) # not
+sd(ht.df$SES_Education_USE[!ccs], na.rm=TRUE)
+
+## Occupation
+mean(ht.df$SES_OccStatus_USE[ccs]) # analytic
+sd(ht.df$SES_OccStatus_USE[ccs])
+mean(ht.df$SES_OccStatus_USE[!ccs], na.rm=TRUE) # not
+sd(ht.df$SES_OccStatus_USE[!ccs], na.rm=TRUE)
+
+## Hypertension diagnoses
+table(ht.df$hasHT[ccs], useNA='ifany') # analytic
+table(ht.df$hasHT[ccs],ht.df$SAMPLE_SEX[ccs], useNA='ifany')
+
+table(ht.df$hasHT[!ccs], useNA='ifany') # analytic
+table(ht.df$hasHT[!ccs],ht.df$SAMPLE_SEX[!ccs], useNA='ifany')
+
+## Sample totals, table tops
+table(ht.df$SAMPLE_SEX[ccs], useNA='ifany')
+table(ht.df$SAMPLE_SEX[!ccs], useNA='ifany')
+
+
 
 
 

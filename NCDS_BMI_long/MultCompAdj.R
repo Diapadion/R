@@ -11,12 +11,21 @@ options(scipen = 999)
 options(digits=7)
 
 
+### Pre-adjustment outputs
+
+write.xlsx()
+
+
+
+
 
 ## NLSY
 
 fitMeasures(isq.f6, c("chisq", "df", "pvalue", "cfi", "tli", "srmr", "rmsea"))
 
 nlsy6.out = as.data.frame( unclass( parameterEstimates(isq.f6, ci=TRUE, level=0.95,boot.ci.type='perc')[,c('lhs','op','rhs','est','se','pvalue','ci.lower','ci.upper')] ) )
+write.xlsx(nlsy6.out, file='NLSY-fullGCparams.xlsx')
+
 nlsy6.out = nlsy6.out[as.character(nlsy6.out$lhs)!=as.character(nlsy6.out$rhs),]
 nlsy6.out = nlsy6.out[!is.na(nlsy6.out$pvalue),]
 nlsy6.out = nlsy6.out[(nlsy6.out$op=='~')|nlsy6.out$op=='~~',]
@@ -37,6 +46,8 @@ write.xlsx(nlsy6.out, file='NLSY-GCparams.xlsx')
 fitMeasures(isq.f5, c("chisq", "df", "pvalue", "cfi", "tli", "srmr", "rmsea"))
 
 ncds5.out = as.data.frame( unclass( parameterEstimates(isq.f5, ci=TRUE, level=0.95,boot.ci.type='perc')[,c('lhs','op','rhs','est','se','pvalue','ci.lower','ci.upper')] ) )
+write.xlsx(ncds5.out, file='NCDS-fullGCparams.xlsx')
+
 ncds5.out = ncds5.out[as.character(ncds5.out$lhs)!=as.character(ncds5.out$rhs),]
 ncds5.out = ncds5.out[!is.na(ncds5.out$pvalue),]
 ncds5.out = ncds5.out[ncds5.out$op=='~'|ncds5.out$op=='~~',]
@@ -69,6 +80,8 @@ is.num <- sapply(nlsy.noInc.out, is.numeric)
 nlsy.noInc.out = cbind(nlsy.noInc.out$lhs, nlsy.noInc.out$op, nlsy.noInc.out$rhs,
                   data.frame(lapply(nlsy.noInc.out[is.num], round, 7)))
 nlsy.noInc.out[,c(-5,-6)]
+write.xlsx(nlsy.noInc.out, file='NLSY_noIncome-GCparams.xlsx')
+
 
 
 ncds.noInc.out = as.data.frame( unclass( parameterEstimates(ncds.f.noInc, ci=TRUE, level=0.95,boot.ci.type='perc')[,c('lhs','op','rhs','est','se','pvalue','ci.lower','ci.upper')] ) )
@@ -83,7 +96,7 @@ is.num <- sapply(ncds.noInc.out, is.numeric)
 ncds.noInc.out = cbind(ncds.noInc.out$lhs, ncds.noInc.out$op, ncds.noInc.out$rhs,
                   data.frame(lapply(ncds.noInc.out[is.num], round, 7)))
 ncds.noInc.out[,c(-5,-6)]
-
+write.xlsx(ncds.noInc.out, file='NCDS_noIncome-GCparams.xlsx')
 
 
 
@@ -100,6 +113,7 @@ is.num <- sapply(nlsy.noIncEd.out, is.numeric)
 nlsy.noIncEd.out = cbind(nlsy.noIncEd.out$lhs, nlsy.noIncEd.out$op, nlsy.noIncEd.out$rhs,
                        data.frame(lapply(nlsy.noIncEd.out[is.num], round, 7)))
 nlsy.noIncEd.out[,c(-5,-6)]
+write.xlsx(nlsy.noIncEd.out, file='NLSY_noIncomeOrEdu-GCparams.xlsx')
 
 
 ncds.noIncEd.out = as.data.frame( unclass( parameterEstimates(ncds.f.noIncEd, ci=TRUE, level=0.95,boot.ci.type='perc')[,c('lhs','op','rhs','est','se','pvalue','ci.lower','ci.upper')] ) )
@@ -114,5 +128,6 @@ is.num <- sapply(ncds.noIncEd.out, is.numeric)
 ncds.noIncEd.out = cbind(ncds.noIncEd.out$lhs, ncds.noIncEd.out$op, ncds.noIncEd.out$rhs,
                        data.frame(lapply(ncds.noIncEd.out[is.num], round, 7)))
 ncds.noIncEd.out[,c(-5,-6)]
+write.xlsx(ncds.noIncEd.out, file='NCDS_noIncomeOrEdu-GCparams.xlsx')
 
 

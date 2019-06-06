@@ -54,4 +54,14 @@ cor(nB1$fWHR1, nB2$fWHR1)
 
 
 
+### IRR, out of "chimps.R"
+
+library(psych)
+
+cor.test(fwHRc[,1], fwHRc[,2])
+plot(fwHRc[,1], fwHRc[,2])
+t.test(fwHRc[,1], fwHRc[,2], paired=TRUE)
+
+ICC(fwHRc)
+
 

@@ -19,7 +19,7 @@ g <- ggplot(data=fWHR.avg, aes(x=agenum, y=Short.dom)) +
   #stat_smooth(method = "lm", formula = y ~ poly(x, 2)) +
   #stat_smooth(method = "loess") +
   scale_color_viridis(end=0.8) +
-  theme_bw() + xlab('Age') + ylab('Dominance')
+  theme_bw() + xlab('Age') + ylab('Assertiveness')
 
 g
 

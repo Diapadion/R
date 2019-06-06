@@ -4,6 +4,7 @@ library(ggplot2)
 library(data.table)
 
 library(semPlot)
+library(forcats)
 
 
 
@@ -226,6 +227,18 @@ ggplot(subset(bmi.nlsy, !is.na(BMI)&!is.na(Youth_SES)), aes(x=age, y=BMI, group=
   theme(legend.position = c(0.9,0.25))
 
 
+### spaghetti plot
+ggplot(subset(bmi.nlsy[c(1:500),], !is.na(BMI)&!is.na(IQ)), aes(x=age, y=BMI, group=id, color=id)
+       # , linetype = c(1,1,2,2,3,3)
+       # , palette = c('dodgerblue','violetred1','dodgerblue','violetred1','dodgerblue','violetred1')
+) + geom_line()
+  #stat_smooth(aes(linetype=IQ, color=Sex), method='lm', formula=y~x+I(x^2), size=1) +
+  #method='gam', formula = y~s(x, k=3), se=TRUE) +
+  #stat_smooth(aes(linetype=IQ, color=sex), method='loess', se=TRUE) +
+  xlab('Average age') + 
+  coord_cartesian(xlim=c(25,53), ylim=c(21.5,30)) + 
+  theme_bw() #+ theme(legend.position = 'none')
+
 
 
 
@@ -310,15 +323,16 @@ ggplot(subset(bmi.nlsy, !is.na(BMI)&!is.na(Sex)), aes(x=age, y=BMI, group=Sex, c
   stat_smooth(aes(linetype=Sex, color=Sex), method='lm', formula=y~x+I(x^2), size=1
   ) +
   xlab('Average age') + 
-  coord_cartesian(xlim=c(25,53), ylim=c(21.5,32)) + 
+  coord_cartesian(xlim=c(25,53), ylim=c(21.5,30)) + 
   theme_bw() + theme(legend.position = c(0.8,0.25))
 
 ## NCDS
+#bmi.long$Sex = fct_rev(bmi.long$Sex)
 ggplot(subset(bmi.long, !is.na(BMI)&!is.na(Sex)), aes(x=age, y=BMI, group=Sex, color=Sex)) + 
   stat_smooth(aes(linetype=Sex, color=Sex), method='lm', formula=y~x+I(x^2), size=1
   ) +
   xlab('Average age') + 
-  coord_cartesian(xlim=c(25,53), ylim=c(21.5,32)) + 
+  coord_cartesian(xlim=c(25,53), ylim=c(21.5,30)) + 
   theme_bw() + theme(legend.position = 'none')
 
 

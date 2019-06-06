@@ -2,7 +2,7 @@ library(psych)
 
 getOption("max.print")
 options(max.print=100000)
-options(scipen=999)
+options(scipen=5)
 options(digits=3)
 
 

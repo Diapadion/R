@@ -146,7 +146,7 @@ summary(aft.gd3.3.F)
 
 ### Make Figure 2 *taller*
 
-ggfit = survfit(Surv(recordTime, hasHT) ~ sex_tert, data=ccs.df)
+ggfit = survfit(Surv(recordTime, hasHT) ~ ccs.df$sex_tert, data=ccs.df)
 
 g <- ggsurvplot(ggfit, conf.int=T,censor=F
                 , linetype = c(1,1,2,2,3,3)
@@ -160,3 +160,21 @@ g <- ggsurvplot(ggfit, conf.int=T,censor=F
 g = g + xlab('Age') +ylab('Proportion that remains normotensive')
 
 g
+
+
+
+
+# ggfit = survfit(Surv(recordTime, hasHT) ~ ht.df$IQtert, data=ht.df)
+# 
+# g <- ggsurvplot(ggfit, conf.int=T,censor=F
+#                 , linetype = c(1,2,3)
+#                 #, color = c(1,2,1,2,1,2)
+#                 , palette = c('dodgerblue','violetred1','green','violetred1','dodgerblue','violetred1')
+#                 , legend = 'none' #c(0.2, 0.2) #'none'
+#                 , xlim = c(19,54), ylim = c(0.5,1)
+#                 , break.x.by = 5
+# ) 
+# 
+# g = g + xlab('Age') +ylab('Proportion that remains normotensive')
+# 
+# g

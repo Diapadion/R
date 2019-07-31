@@ -1,5 +1,8 @@
 ### MIDUS and MIDJA, BSEM with cross-loadings
 
+install.packages("blavaan", repos="http://faculty.missouri.edu/~merklee", type="source")
+install.packages("blavaan")
+
 library(blavaan)
 library(runjags)
 library(rjags)
@@ -32,6 +35,7 @@ AEOvars = c('Selfconfident','Forceful','Assertive','Outspoken','Dominant',
 )
 
 allNA = apply(m1con[,AEOvars], 1, function(x) sum(is.na(x)))
+noNA = (allNA == 0)
 allNA = !(allNA == 18)
 
 
@@ -80,33 +84,48 @@ Warm + Outgoing + Friendly + Lively + Talkative
 
 #View(as.matrix(m1con)[allNA,AEOvars])
 
-b.x.fit2 <- bcfa(fact2x, data=as.matrix(m1con)[allNA,AEOvars], 
+b.x.fit2 <- bcfa(fact2x, data=as.matrix(m1con)[noNA,AEOvars], 
                  dp=dpriors(lambda="dnorm(0,50)"),
-                 adapt=2000, burnin=5000, sample=10000,
+                 #adapt=2000, burnin=5000, sample=10000,
+                 adapt=500, burnin=500, sample=3000,
                  bcontrol=list(method='rjparallel'))
 
 #summary(b.x.fit2)
 
-b.x.fit3 <- bcfa(fact3x, data=as.matrix(m1con)[allNA,AEOvars], 
+b.x.fit3 <- bcfa(fact3x, data=as.matrix(m1con)[noNA,AEOvars], 
                  dp=dpriors(lambda="dnorm(0,50)"),
-                 adapt=2000, burnin=5000, sample=10000,
+                 #adapt=2000, burnin=5000, sample=10000,
+                 adapt=500, burnin=500, sample=3000,
                  bcontrol=list(method='rjparallel'))
+
+
+
+
 
 
 
 allNAj = apply(midja1[,AEOvars], 1, function(x) sum(is.na(x)))
+noNAj = (allNAj == 0)
 allNAj = !(allNAj == 18)
 
 
-b.x.fit2.j <- bcfa(fact2x, data=as.matrix(midja1)[allNAj,AEOvars], 
+
+b.x.fit2.j <- bcfa(fact2x, data=as.matrix(midja1)[noNAj,AEOvars], 
                  dp=dpriors(lambda="dnorm(0,50)"),
-                 adapt=2000, burnin=5000, sample=10000,
+                 #adapt=2000, burnin=5000, sample=10000,
+                 adapt=500, burnin=500, sample=3000,
                  bcontrol=list(method='rjparallel'))
 
-b.x.fit3.j <- bcfa(fact3x, data=as.matrix(midja1)[allNAj,AEOvars], 
-                 dp=dpriors(lambda="dnorm(0,50)"),
-                 adapt=2000, burnin=5000, sample=10000,
-                 bcontrol=list(method='rjparallel'))
+start.time <- Sys.time()
+b.x.fit3.j <- bcfa(fact3x, data=as.matrix(midja1)[noNAj,AEOvars], 
+                   dp=dpriors(lambda="dnorm(0,50)"),
+                   #adapt=2000, burnin=5000, sample=10000,
+                   adapt=500, burnin=500, sample=3000,
+                   bcontrol=list(method='rjparallel'))
+end.time <- Sys.time()
+time.taken <- end.time - start.time
+time.taken
+
      
                  
 
@@ -116,4 +135,20 @@ b.x.fit3.fm = fitMeasures(b.x.fit3)
 
 b.x.fit2.j.fm = fitMeasures(b.x.fit2.j)
 b.x.fit3.j.fm = fitMeasures(b.x.fit3.j)
+
+
+start.time <- Sys.time()
+b.x.fit3.fm.new = blavFitIndices(b.x.fit3, pD="loo", rescale="devM")
+#b.x.fit3.fm.new = blav_fit_measures(b.x.fit3)#, pD="loo", rescale="devM")
+end.time <- Sys.time()
+time.taken <- end.time - start.time
+time.taken
+
+
+
+b.x.fit3.j.fm.new = blavFitIndices(b.x.fit3.j, pD="loo")
+  
+
+b.x.fit3.fm.new
+b.x.fit3.j.fm.new
 

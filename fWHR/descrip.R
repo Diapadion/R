@@ -93,3 +93,20 @@ table(chFP$location[!adults], droplevels(chFP$ID[!adults]))
 table(chFP$Subspecies[!duplicated(chFP$ID[!adults])]) 
 
 
+
+
+
+### Double-checking Edinburgh ages from original personality data
+
+db.age.pers = read.csv('long_all.csv')
+
+db.age.pers = db.age.pers[db.age.pers$sample=='Edinburgh',]
+
+db.age.pers$age = as.Date(db.age.pers$DOPR, format='%m/%d/%Y') - as.Date(db.age.pers$DoB, format='%m/%d/%Y')
+
+db.age.pers$age.days = db.age.pers$age/365.25
+
+max(db.age.pers$age.days)
+min(db.age.pers$age.days)
+sd(db.age.pers$age.days)
+mean(db.age.pers$age.days)

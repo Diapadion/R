@@ -1,7 +1,7 @@
 library(psych)
-library(lavaan)
 library(semTools)
 library(blavaan)
+library(data.table)
 
 
 sort( sapply(ls(),function(x){object.size(get(x))})) 
@@ -506,16 +506,20 @@ head(mi2[order(mi2$mi, decreasing=TRUE), ], 10)
 #######
 
 fact3 <- '
-A =~ Dominant + Forceful + Assertive + Outspoken + Selfconfident
-E =~ Warm+Outgoing+Friendly+Lively+Active+Talkative
-O =~ Creative+Imaginative+Intelligent+Curious+Broadminded+
-           Sophisticated+Adventurous+Active
+A =~ Dominant + Forceful + Assertive + Outspoken + Selfconfident + Outgoing + Talkative
+E =~ Warm + Outgoing + Friendly + Lively + Active + Talkative + Selfconfident
+O =~ Creative + Imaginative + Intelligent + Curious + Broadminded +
+           Sophisticated + Adventurous + Active + Assertive + Selfconfident
+# A =~ Dominant + Forceful + Assertive + Outspoken + Selfconfident
+# E =~ Warm + Outgoing + Friendly + Lively + Active + Talkative
+# O =~ Creative + Imaginative + Intelligent + Curious + Broadminded +
+#            Sophisticated + Adventurous + Active
 
 '
 
 mod3 <- cfa(fact3, data=m1exp[,..AEOvars])
 
-#summary(mod3)
+summary(mod3)
 fitMeasures(mod3, fit.measures = c('chisq','df','RMSEA','SRMR','CFI','TLI','AIC','BIC'))
 mi3 = modificationindices(mod3)
 head(mi3[order(mi3$mi, decreasing=TRUE), ], 10)
@@ -523,11 +527,14 @@ head(mi3[order(mi3$mi, decreasing=TRUE), ], 10)
 
 
 fact3.1 <- '
-A =~ Dominant + Forceful + Assertive + Outspoken
-E =~ Warm+Outgoing+Friendly+Lively+Talkative #+ Active
-O =~ Creative+Imaginative+Intelligent+Curious+Broadminded+
-           Sophisticated+Adventurous
-
+A =~ Dominant + Forceful + Assertive + Outspoken + Selfconfident + Outgoing + Talkative
+E =~ Warm + Outgoing + Friendly + Lively + Active + Talkative + Selfconfident
+O =~ Imaginative + Intelligent + Curious + Broadminded +
+           Sophisticated + Adventurous + Active + Assertive + Selfconfident
+# A =~ Dominant + Forceful + Assertive + Outspoken
+# E =~ Warm+Outgoing+Friendly+Lively+Talkative #+ Active
+# O =~ Creative+Imaginative+Intelligent+Curious+Broadminded+
+#            Sophisticated+Adventurous
 #Warm ~~ Friendly
 
 '
@@ -542,13 +549,17 @@ head(mi3.1[order(mi3.1$mi, decreasing=TRUE), ], 10)
 
 
 fact3.2 <- '
-A =~ Selfconfident + Forceful + Assertive + Outspoken + Dominant
-E =~ Warm+Outgoing+Friendly+Lively+Active+Talkative
-O =~ Creative+Imaginative+Intelligent+Curious+Broadminded+
-           Sophisticated+Adventurous+Active
-
-Warm ~~ Friendly
-Creative ~~ Imaginative
+A =~ Dominant + Forceful + Assertive + Outspoken + Selfconfident + Outgoing + Talkative
+E =~ Warm + Outgoing + Lively + Active + Talkative + Selfconfident
+O =~ Imaginative + Intelligent + Curious + Broadminded +
+           Sophisticated + Adventurous + Active + Assertive + Selfconfident
+# A =~ Selfconfident + Forceful + Assertive + Outspoken + Dominant
+# E =~ Warm+Outgoing+Friendly+Lively+Active+Talkative
+# O =~ Creative+Imaginative+Intelligent+Curious+Broadminded+
+#            Sophisticated+Adventurous+Active
+# 
+# Warm ~~ Friendly
+# Creative ~~ Imaginative
 
 '
 
@@ -563,14 +574,18 @@ head(mi3.2[order(mi3.2$mi, decreasing=TRUE), ], 10)
 
 
 fact3.3 <- '
-A =~ Selfconfident + Forceful + Assertive + Outspoken + Dominant
-E =~ Warm+Outgoing+Friendly+Lively+Active+Talkative
-O =~ Creative+Imaginative+Intelligent+Curious+Broadminded+
-           Sophisticated+Adventurous+Active
-
-Warm ~~ Friendly
-Creative ~~ Imaginative
-Forceful ~~ Dominant
+A =~ Dominant + Forceful + Assertive + Outspoken + Selfconfident + Outgoing
+E =~ Warm + Outgoing + Lively + Active + Selfconfident
+O =~ Imaginative + Intelligent + Curious + Broadminded +
+           Sophisticated + Adventurous + Active + Assertive + Selfconfident
+# A =~ Selfconfident + Forceful + Assertive + Outspoken + Dominant
+# E =~ Warm+Outgoing+Friendly+Lively+Active+Talkative
+# O =~ Creative+Imaginative+Intelligent+Curious+Broadminded+
+#            Sophisticated+Adventurous+Active
+# 
+# Warm ~~ Friendly
+# Creative ~~ Imaginative
+# Forceful ~~ Dominant
 '
 
 
@@ -584,15 +599,19 @@ head(mi3.3[order(mi3.3$mi, decreasing=TRUE), ], 10)
 
 
 fact3.4 <- '
-A =~ Forceful + Assertive + Outspoken + Dominant
-E =~ Warm+Outgoing+Friendly+Lively+Active+Talkative
-O =~ Creative+Imaginative+Intelligent+Curious+Broadminded+
-           Sophisticated+Adventurous+Active
-
-Warm ~~ Friendly
-Creative ~~ Imaginative
-Forceful ~~ Dominant
-#Outspoken ~~ Talkative
+A =~ Dominant + Forceful + Assertive + Outspoken + Outgoing + Selfconfident
+E =~ Warm + Outgoing + Lively + Active + Selfconfident
+O =~ Imaginative + Curious + Broadminded +
+           Sophisticated + Adventurous + Active + Assertive + Selfconfident
+# A =~ Forceful + Assertive + Outspoken + Dominant
+# E =~ Warm+Outgoing+Friendly+Lively+Active+Talkative
+# O =~ Creative+Imaginative+Intelligent+Curious+Broadminded+
+#            Sophisticated+Adventurous+Active
+# 
+# Warm ~~ Friendly
+# Creative ~~ Imaginative
+# Forceful ~~ Dominant
+# #Outspoken ~~ Talkative
 '
 
 
@@ -605,48 +624,98 @@ head(mi3.4[order(mi3.4$mi, decreasing=TRUE), ], 10)
 
 
 
-fact3.5 <- '
-A =~ Selfconfident + Forceful + Assertive + Outspoken + Dominant
-E =~ Warm+Outgoing+Friendly+Lively+Active+Talkative
-O =~ Creative+Imaginative+Intelligent+Curious+Broadminded+
-           Sophisticated+Adventurous+Active
+## US
+cfa.fDEO.1.con <- cfa(fact3.4, data=m1con[,..AEOvars])
 
-Warm ~~ Friendly
-Creative ~~ Imaginative
-Forceful ~~ Dominant
-Outspoken ~~ Talkative
-Lively ~~ Active
+summary(cfa.fDEO.1.con)
+fitMeasures(cfa.fDEO.1.con, fit.measures = c('chisq','df','RMSEA','SRMR','CFI','TLI','AIC','BIC'))
+
+
+## Japan
+cfa.fDEO.1.j.con = cfa(fact3.4, data=midja1)
+
+summary(cfa.fDEO.1.j.con)
+fitMeasures(cfa.fDEO.1.j.con, fit.measures = c('chisq','df','RMSEA','SRMR','CFI','TLI','AIC','BIC'))
+
+mi3.4 = modificationindices(cfa.fDEO.1.j.con)
+head(mi3.4[order(mi3.4$mi, decreasing=TRUE), ], 10)
+
+### STOP - so far this is the best for confirmation in the Japanese sample
+
+
+
+fact3.5 <- '
+A =~ Dominant + Forceful + Assertive + Outspoken + Selfconfident
+E =~ Warm + Lively + Active + Selfconfident
+O =~ Imaginative + Curious + Broadminded +
+           Sophisticated + Adventurous + Active + Assertive + Selfconfident
+# A =~ Selfconfident + Forceful + Assertive + Outspoken + Dominant
+# E =~ Warm+Outgoing+Friendly+Lively+Active+Talkative
+# O =~ Creative+Imaginative+Intelligent+Curious+Broadminded+
+#            Sophisticated+Adventurous+Active
+# 
+# Warm ~~ Friendly
+# Creative ~~ Imaginative
+# Forceful ~~ Dominant
+# Outspoken ~~ Talkative
+# Lively ~~ Active
 '
 
 
-mod3.5 <- cfa(fact3.5, data=m1exp[,..AEOvars])
+mod3.5 <- cfa(fact3.5, data=m1exp)
 
-summary(compareFit(mod3.5,mod3.4))
+fitMeasures(mod3.5, fit.measures = c('chisq','df','RMSEA','SRMR','CFI','TLI','AIC','BIC'))
+#summary(compareFit(mod3.5,mod3.4))
 mi3.5 = modificationindices(mod3.5)
 head(mi3.5[order(mi3.5$mi, decreasing=TRUE), ], 10)
 
 
 
 fact3.6 <- '
-A =~ Selfconfident + Forceful + Assertive + Outspoken + Dominant
-E =~ Warm+Outgoing+Friendly+Lively+Active+Talkative
-O =~ Creative+Imaginative+Intelligent+Curious+Broadminded+
-           Sophisticated+Adventurous+Active
-
-Warm ~~ Friendly
-Creative ~~ Imaginative
-Forceful ~~ Dominant
-Outspoken ~~ Talkative
-Lively ~~ Active
-Intelligent ~~ Adventurous
+A =~ Dominant + Forceful + Assertive + Outspoken
+E =~ Warm + Lively + Active + Selfconfident
+O =~ Imaginative + Curious + Broadminded +
+           Sophisticated + Adventurous + Active + Assertive + Selfconfident
+# A =~ Selfconfident + Forceful + Assertive + Outspoken + Dominant
+# E =~ Warm+Outgoing+Friendly+Lively+Active+Talkative
+# O =~ Creative+Imaginative+Intelligent+Curious+Broadminded+
+#            Sophisticated+Adventurous+Active
+# 
+# Warm ~~ Friendly
+# Creative ~~ Imaginative
+# Forceful ~~ Dominant
+# Outspoken ~~ Talkative
+# Lively ~~ Active
+# Intelligent ~~ Adventurous
 '
 
 
 mod3.6 <- cfa(fact3.6, data=m1exp[,..AEOvars])
 
-summary(compareFit(mod3.6,mod3.5))
+fitMeasures(mod3.6, fit.measures = c('chisq','df','RMSEA','SRMR','CFI','TLI','AIC','BIC'))
+#summary(compareFit(mod3.6,mod3.5))
 mi3.6 = modificationindices(mod3.6)
 head(mi3.6[order(mi3.6$mi, decreasing=TRUE), ], 10)
+
+
+## US
+cfa.fDEO.1.con <- cfa(fact3.6, data=m1con[,..AEOvars])
+
+#summary(cfa.fDEO.1.con)
+fitMeasures(cfa.fDEO.1.con, fit.measures = c('chisq','df','RMSEA','SRMR','CFI','TLI','AIC','BIC'))
+
+
+## Japan
+cfa.fDEO.1.j.con = cfa(fact3.2, data=midja1)
+
+#summary(cfa.fDEO.1.j.con)
+fitMeasures(cfa.fDEO.1.j.con, fit.measures = c('chisq','df','RMSEA','SRMR','CFI','TLI','AIC','BIC'))
+
+mi3.4 = modificationindices(cfa.fDEO.1.j.con)
+head(mi3.4[order(mi3.4$mi, decreasing=TRUE), ], 10)
+
+
+
 
 
 

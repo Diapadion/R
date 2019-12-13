@@ -13,6 +13,7 @@ nlsy = read.csv('NLSY_bmi_inc.csv')
 colnames(nlsy)[c(65,83,89,93)] = c('sex','g','education','Youth_SES')
 
 
+nlsy.all = nlsy
 nlsy.other = nlsy[nlsy$SAMPLE_ethnicity!='NON-BLACK, NON-HISPANIC',]
 nlsy = nlsy[nlsy$SAMPLE_ethnicity=='NON-BLACK, NON-HISPANIC',]
 
@@ -331,6 +332,7 @@ coef_rl = print(myXtable, type = "html")
 
 fname = 'isq5'
 HTML(coef_rl, paste(fname,"_model_coeff.doc", sep='')) 
+
 
 
 

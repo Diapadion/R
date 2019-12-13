@@ -90,22 +90,22 @@ ggplot(subset(dep.long, !is.na(CES)&!is.na(IQ)), aes(x=time, y=CES, group=ethIQ,
 
 m1 <- '
 d.i =~ 1*CES_92 + 1*CES_94 + 1*CES.40 + 1*CES.50
-d.s =~ 0*CES_92 + 2*CES_94 + 10*CES.40 + 20*CES.50
-d.q =~ 0*CES_92 + 4*CES_94 + 100*CES.40 + 400*CES.50
+d.s =~ 0*CES_92 + 0.2*CES_94 + 1*CES.40 + 2*CES.50
+d.q =~ 0*CES_92 + 0.04*CES_94 + 1*CES.40 + 4*CES.50
 
 '
 
 
 
-f1 = lavaan(m1, data = dep, 
+f1.dep = lavaan(m1, data = dep, 
             meanstructure = TRUE, int.ov.free = FALSE, int.lv.free = TRUE, 
-            auto.fix.first = TRUE #std.lv = TRUE
+            auto.fix.first = TRUE #, std.lv = TRUE
             , auto.fix.single = TRUE, auto.var = TRUE, auto.cov.lv.x = TRUE, 
             auto.th = TRUE, auto.delta = TRUE, auto.cov.y = TRUE
 )
 
-fitMeasures(f1, c("chisq", "df", "pvalue", "cfi", 'srmr', "rmsea"))
-summary(f1)
+fitMeasures(f1.dep, c("chisq", "df", "pvalue", "cfi", 'srmr', "rmsea"))
+summary(f1.dep)
 
 
 
@@ -125,15 +125,15 @@ d.q ~ AFQT89 + SAMPLE_SEX + age_1979
 
 
 
-f2 = lavaan(m2, data = dep, 
+f2.dep = lavaan(m2, data = dep, 
             meanstructure = TRUE, int.ov.free = FALSE, int.lv.free = TRUE, 
             auto.fix.first = TRUE #std.lv = TRUE
             , auto.fix.single = TRUE, auto.var = TRUE, auto.cov.lv.x = TRUE, 
             auto.th = TRUE, auto.delta = TRUE, auto.cov.y = TRUE
 )
 
-fitMeasures(f2, c("chisq", "df", "pvalue", "cfi", 'srmr', "rmsea"))
-summary(f2)
+fitMeasures(f2.dep, c("chisq", "df", "pvalue", "cfi", 'srmr', "rmsea"))
+summary(f2.dep)
 
 
 
@@ -173,26 +173,26 @@ summary(f3)
 
 m4 <- '
 d.i =~ 1*CES_92 + 1*CES_94 + 1*CES.40 + 1*CES.50
-d.s =~ 0*CES_92 + 2*CES_94 + 10*CES.40 + 20*CES.50
-d.q =~ 0*CES_92 + 4*CES_94 + 100*CES.40 + 400*CES.50
+d.s =~ 0*CES_92 + 0.2*CES_94 + 1*CES.40 + 2*CES.50
+d.q =~ 0*CES_92 + 0.04*CES_94 + 1*CES.40 + 4*CES.50
 
-d.i ~ AFQT89 + SAMPLE_SEX + age_1979 + SexIQint + Child_SES + Adult_SES
-d.s ~ AFQT89 + SAMPLE_SEX + age_1979 + SexIQint + Child_SES + Adult_SES
-d.q ~ AFQT89 + SAMPLE_SEX + age_1979 + SexIQint + Child_SES + Adult_SES
+d.i ~ AFQT89 + SAMPLE_SEX + age_1979 + Child_SES + SES_Education_USE + SES_OccStatus_USE + SES_Income_USE
+d.s ~ AFQT89 + SAMPLE_SEX + age_1979 + Child_SES + SES_Education_USE + SES_OccStatus_USE + SES_Income_USE
+d.q ~ AFQT89 + SAMPLE_SEX + age_1979 + Child_SES + SES_Education_USE + SES_OccStatus_USE + SES_Income_USE
 
 '
 
 
 
-f4 = lavaan(m4, data = dep, 
+f4.dep = lavaan(m4, data = dep, 
             meanstructure = TRUE, int.ov.free = FALSE, int.lv.free = TRUE, 
             auto.fix.first = TRUE #std.lv = TRUE
             , auto.fix.single = TRUE, auto.var = TRUE, auto.cov.lv.x = TRUE, 
             auto.th = TRUE, auto.delta = TRUE, auto.cov.y = TRUE
 )
 
-fitMeasures(f4, c("chisq", "df", "pvalue", "cfi", 'srmr', "rmsea"))
-summary(f4)
+fitMeasures(f4.dep, c("chisq", "df", "pvalue", "cfi", 'srmr', "rmsea"))
+summary(f4.dep)
 
 
 

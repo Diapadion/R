@@ -5,6 +5,10 @@ library(ggridges)
 library(doBy)
 library(viridis)
 
+library(data.table)
+library(psych)
+library(lavaan)
+
 
 
 ncds.jobs = merge(ncds0123[,c('ncdsid','n622','n914','n917','n920','n923','n926','bmi16',
@@ -145,51 +149,140 @@ gjd+My_Theme
 
 ### Older attempt from from later age
 
+# 
+# ncds9.2 <- read.dta13("ncds_2013_employment.dta", generate.factors = FALSE)
+# 
+# table(ncds0123$dvht16)
+# 
+# table(ncds9.2$N9AS2010)
+# 
+# 
+# ncds.jobs = merge(ncds0123[,c('ncdsid','n622','n914','n917','n920','n923','n926','bmi16',
+#                               'n236','n190','n194','n195','n537','n200','n607',
+#                               'n1612','n2017')], 
+#                   ncds9.2, by.x="ncdsid", by.y="NCDSID", all=TRUE)
+# 
+# ncds.jobs$g = as.numeric(ncds.jobs$n920) - 2
+# ncds.jobs$g[ncds.jobs$g==-1] = NA
+# 
+# ncds.jobs$N9AS2010[table(ncds.jobs$N9AS2010) > 19]
+# 
+# ncds.jobs[ ncds.jobs$N9AS2010 %in%  names(table(ncds.jobs$N9AS2010))[table(ncds.jobs$N9AS2010) > 19] , ]
+# 
+# dim(ncds.jobs[(table(ncds.jobs$N9AS2010) > 19),])
+# 
+# g = ggplot(data = ncds.jobs[ ncds.jobs$N9AS2010 %in%  names(table(ncds.jobs$N9AS2010))[table(ncds.jobs$N9AS2010) > 19] , ],
+#            #data=ncds.jobs[(table(ncds.jobs$N9AS2010) > 19),], 
+#            aes(y=n920)) + geom_boxplot() +
+#   facet_grid(N9AS2010 ~ .)
+# 
+# g
+# 
+# 
+# table(droplevels(ncds.jobs[ ncds.jobs$N9AS2010 %in%  names(table(ncds.jobs$N9AS2010))[table(ncds.jobs$N9AS2010) > 19] , ])$N9AS2010)
+# 
+# 
+# 
+# ncds.jobs.cut = ncds.jobs[ ncds.jobs$N9AS2000 %in%  names(table(ncds.jobs$N9AS2000))[table(ncds.jobs$N9AS2000) > 19] , ]
+# 
+# table(ncds.jobs.cut$N9AS2000)
+# 
+# ncds.jobs.cut$N9AS2000 = droplevels(ncds.jobs.cut$N9AS2000)
+# 
+# describeBy(as.integer(ncds.jobs.cut$g),
+#            group=ncds.jobs.cut$N9AS2000)
 
-ncds9.2 <- read.dta13("ncds_2013_employment.dta", generate.factors = FALSE)
-
-table(ncds0123$dvht16)
-
-table(ncds9.2$N9AS2010)
 
 
-ncds.jobs = merge(ncds0123[,c('ncdsid','n622','n914','n917','n920','n923','n926','bmi16',
-                              'n236','n190','n194','n195','n537','n200','n607',
-                              'n1612','n2017')], 
-                  ncds9.2, by.x="ncdsid", by.y="NCDSID", all=TRUE)
+### UKBB version
 
-ncds.jobs$g = as.numeric(ncds.jobs$n920) - 2
-ncds.jobs$g[ncds.jobs$g==-1] = NA
+ukbb <- read.csv('jobsUKBB.csv')
+ukbb = as.data.table(ukbb)
 
-ncds.jobs$N9AS2010[table(ncds.jobs$N9AS2010) > 19]
+ukbb = ukbb[,c(2:15,34)]
 
-ncds.jobs[ ncds.jobs$N9AS2010 %in%  names(table(ncds.jobs$N9AS2010))[table(ncds.jobs$N9AS2010) > 19] , ]
+colnames(ukbb) <- c('eid','sex','YoB','MoD','assessment.date','education',
+                    'num.mem','vnr','RT','prosp.mem','vis.mem',
+                    'job.num.lvl4','job.aux1','job.aux2','deduced.job')
 
-dim(ncds.jobs[(table(ncds.jobs$N9AS2010) > 19),])
-
-g = ggplot(data = ncds.jobs[ ncds.jobs$N9AS2010 %in%  names(table(ncds.jobs$N9AS2010))[table(ncds.jobs$N9AS2010) > 19] , ],
-           #data=ncds.jobs[(table(ncds.jobs$N9AS2010) > 19),], 
-           aes(y=n920)) + geom_boxplot() +
-  facet_grid(N9AS2010 ~ .)
-
-g
+## Processing (in accordance with Lyall et al.)
+ukbb$prosp.mem[ukbb$prosp.mem==2] = 0 # making everything that was not correct on first try
+ukbb$RT.log = log(ukbb$RT)
+ukbb$vis.mem.log = log(ukbb$vis.mem+1)
 
 
-table(droplevels(ncds.jobs[ ncds.jobs$N9AS2010 %in%  names(table(ncds.jobs$N9AS2010))[table(ncds.jobs$N9AS2010) > 19] , ])$N9AS2010)
+m.g <- '
+g =~ vnr + num.mem + RT.log + vis.mem.log + prosp.mem
+
+'
+
+f.g = cfa(m.g, data=ukbb, estimator='ML', missing='fiml')
+
+fitMeasures(f.g, c("chisq", "df", "pvalue", "cfi", "tli", "srmr", "rmsea"))
+#summary(f.g)
+
+
+ukbb$g = as.numeric(lavPredict(f.g, method='EBM')) # ML has a much wider distr, maybe should stick with EBM...
+
+table(is.na(ukbb$g), useNA='ifany')
+hist(ukbb$g)
+
+
+hist(scale(ukbb$g))
+
+ukbb$g.IQ = ukbb$g*15
+ukbb$g.IQ = ukbb$g.IQ + 100
+
+hist(ukbb$g.IQ)
+
+
+ukbb$vnr.IQ = scale(ukbb$vnr)*15
+ukbb$vnr.IQ = ukbb$vnr.IQ + 100
+
+hist(ukbb$vnr.IQ)
+ 
 
 
 
-ncds.jobs.cut = ncds.jobs[ ncds.jobs$N9AS2000 %in%  names(table(ncds.jobs$N9AS2000))[table(ncds.jobs$N9AS2000) > 19] , ]
+## Declassifying job codes
 
-table(ncds.jobs.cut$N9AS2000)
+decoder = read.table("coding2.tsv", sep='\t', header=TRUE)
 
-ncds.jobs.cut$N9AS2000 = droplevels(ncds.jobs.cut$N9AS2000)
+## first, assign parent IDs
+ukbb$job.num.lvl3 <- decoder$parent_id[match(unlist(ukbb$job.num.lvl4), decoder$coding)]
+ukbb$job.num.lvl2 <- decoder$parent_id[match(unlist(ukbb$job.num.lvl3), decoder$coding)]
+ukbb$job.num.lvl1 <- decoder$parent_id[match(unlist(ukbb$job.num.lvl2), decoder$coding)]
+ukbb$job.num.lvl0 <- decoder$parent_id[match(unlist(ukbb$job.num.lvl1), decoder$coding)]
 
-describeBy(as.integer(ncds.jobs.cut$g),
-           group=ncds.jobs.cut$N9AS2000)
+## second, find the text for each level of code
+ukbb$job.lvl4 <- decoder$meaning[match(unlist(ukbb$job.num.lvl4), decoder$coding)]
+ukbb$job.lvl3 <- decoder$meaning[match(unlist(ukbb$job.num.lvl3), decoder$coding)]
+ukbb$job.lvl2 <- decoder$meaning[match(unlist(ukbb$job.num.lvl2), decoder$coding)]
+ukbb$job.lvl1 <- decoder$meaning[match(unlist(ukbb$job.num.lvl1), decoder$coding)]
+ukbb$job.lvl0 <- decoder$meaning[match(unlist(ukbb$job.num.lvl0), decoder$coding)]
+
+head(ukbb,10)
 
 
 
+## 1. Get the list of jobs from the NCDS ridge-line plot
+## 2. Add van drivers and medical practicioners
+## 3. Show off plots
+## 4. Fill in the remainder
+
+
+
+
+
+
+
+
+
+
+
+
+
+### Helper functions
 
 summarySE <- function(data=NULL, measurevar, groupvars=NULL, na.rm=FALSE, conf.interval=.95) {
   library(doBy)

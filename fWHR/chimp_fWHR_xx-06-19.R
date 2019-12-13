@@ -87,11 +87,20 @@ chFP$Salex[chFP$Salex==0] = -1
 ### Zero-order correlation plots
 
 #colnames(chFP)
-corrplot(cor(chFP[,c(8,9,12,13,14,15,16,17,18,19),],use="pairwise.complete.obs")
+# corrplot(cor(chFP[,c(8,9,12,13,14,15,16,17,18,19),],use="pairwise.complete.obs")
+#          ,  method = 'number')
+# 
+# corrplot(cor(chFP[chFP$Sex==0,c(8,12,13,14,15,16,17,18,19),],use="pairwise.complete.obs"),  method = 'number')
+# corrplot(cor(chFP[chFP$Sex==1,c(8,12,13,14,15,16,17,18,19),],use="pairwise.complete.obs"),  method = 'number')
+## Above seems to be outdated syntax.
+
+cor.plot(cor(chFP[,c(8,9,12,13,14,15,16,17,18,19),],use="pairwise.complete.obs")
          ,  method = 'number')
 
-corrplot(cor(chFP[chFP$Sex==0,c(8,12,13,14,15,16,17,18,19),],use="pairwise.complete.obs"),  method = 'number')
-corrplot(cor(chFP[chFP$Sex==1,c(8,12,13,14,15,16,17,18,19),],use="pairwise.complete.obs"),  method = 'number')
+cor.plot(cor(chFP[chFP$Sex==0,c(8,12,13,14,15,16,17,18,19),],use="pairwise.complete.obs"),  method = 'number')
+cor.plot(cor(chFP[chFP$Sex==1,c(8,12,13,14,15,16,17,18,19),],use="pairwise.complete.obs"),  method = 'number')
+
+
 
 
 
@@ -118,6 +127,8 @@ count(adults)
 #View(chFP[adults,])
 chFP$ID[!adults]
 chFP$Subspecies[!adults & !duplicated(chFP$ID)] # one of these is Lennon, who is verus
+
+
 
 
 
@@ -406,3 +417,18 @@ interact_plot(gb.full.tree.all.sx, pred='Dom_CZ', modx='Neu_CZ', mod2='Sex', plo
 interact_plot(gb.full.tree.vs.sx, pred='Dom_CZ', modx='Neu_CZ', mod2='Sex', plot.points=TRUE)
 
 interact_plot(gb.full.tree.t.sx, pred='Dom_CZ', modx='Neu_CZ', plot.points=TRUE)
+
+
+
+### Figuring out effect sizes...
+
+cor.test(chAgr$fWHR[chAgr$Sex=='Female'], chAgr$Dom[chAgr$Sex=='Female'])
+cor.test(chAgr$fWHR[chAgr$Sex=='Male'], chAgr$Dom[chAgr$Sex=='Male'])
+
+
+EffSz.SxD = lmer(fWHR ~ Dom_CZ * Sex +
+                   + (1 | location) +  (1 | ID),
+                 data=chFP.std
+)
+summary(EffSz.SxD)
+confint(gb.full.tree.t.sx, method='profile')

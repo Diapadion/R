@@ -131,3 +131,48 @@ ncds.noIncEd.out[,c(-5,-6)]
 write.xlsx(ncds.noIncEd.out, file='NCDS_noIncomeOrEdu-GCparams.xlsx')
 
 
+
+### With all ethnic groups
+
+
+## NLSY
+
+fitMeasures(isq.all.us.f1, c("chisq", "df", "pvalue", "cfi", "tli", "srmr", "rmsea"))
+
+nlsy.all.out = as.data.frame( unclass( parameterEstimates(isq.all.us.f1, ci=TRUE, level=0.95,boot.ci.type='perc')[,c('lhs','op','rhs','est','se','pvalue','ci.lower','ci.upper')] ) )
+
+nlsy.all.out = nlsy.all.out[as.character(nlsy.all.out$lhs)!=as.character(nlsy.all.out$rhs),]
+nlsy.all.out = nlsy.all.out[!is.na(nlsy.all.out$pvalue),]
+nlsy.all.out = nlsy.all.out[(nlsy.all.out$op=='~')|nlsy.all.out$op=='~~',]
+# nlsy.all.out = nlsy.all.out[(nlsy.all.out$lhs %in% c('gslop','dbi','dbs'))|(nlsy.all.out$rhs %in% c('gslop','dbi','dbs')),]
+nlsy.all.out = nlsy.all.out[!(nlsy.all.out$rhs %in% c('age_1979','age.85','age.94','age.06','age.14')),]
+nlsy.all.out$padj = p.adjust(nlsy.all.out$pvalue, 'fdr')
+
+is.num <- sapply(nlsy.all.out, is.numeric)
+nlsy.all.out = cbind(nlsy.all.out$lhs, nlsy.all.out$op, nlsy.all.out$rhs,
+                  data.frame(lapply(nlsy.all.out[is.num], round, 7)))
+nlsy.all.out
+write.xlsx(nlsy.all.out, file='NLSY-allGCparams.xlsx')
+
+
+
+## NCDS
+
+fitMeasures(isq.all.uk.f1, c("chisq", "df", "pvalue", "cfi", "tli", "srmr", "rmsea"))
+
+ncds.all.out = as.data.frame( unclass( parameterEstimates(isq.all.uk.f1, ci=TRUE, level=0.95,boot.ci.type='perc')[,c('lhs','op','rhs','est','se','pvalue','ci.lower','ci.upper')] ) )
+
+ncds.all.out = ncds.all.out[as.character(ncds.all.out$lhs)!=as.character(ncds.all.out$rhs),]
+ncds.all.out = ncds.all.out[!is.na(ncds.all.out$pvalue),]
+ncds.all.out = ncds.all.out[ncds.all.out$op=='~'|ncds.all.out$op=='~~',]
+# ncds.all.out = ncds.all.out[(ncds.all.out$lhs %in% c('gslop','dbi','dbs'))|(ncds.all.out$rhs %in% c('gslop','dbi','dbs')),]
+ncds.all.out = ncds.all.out[!(ncds.all.out$rhs %in% c('age_1979','age.85','age.94','age.06','age.14')),]
+ncds.all.out$padj = p.adjust(ncds.all.out$pvalue, 'fdr')
+
+is.num <- sapply(ncds.all.out, is.numeric)
+ncds.all.out = cbind(ncds.all.out$lhs, ncds.all.out$op, ncds.all.out$rhs,
+                  data.frame(lapply(ncds.all.out[is.num], round, 7)))
+ncds.all.out
+write.xlsx(ncds.all.out, file='NCDS-allGCparams.xlsx')
+
+

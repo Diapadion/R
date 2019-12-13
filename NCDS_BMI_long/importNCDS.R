@@ -520,11 +520,17 @@ table(ncds$education, useNA='ifany')
 
 
 ### Ethnicity
+
+## Set aside full df
+ncds.all = ncds
+
 # n1612
 # n2017
-table(ncds$n1612, useNA='ifany')
-table(ncds$n2017, useNA='ifany')
-table(ncds$n1612, ncds$n2017, useNA='ifany')
+table(ncds.all$n1612, useNA='ifany')
+table(ncds.all$n2017, useNA='ifany')
+table(ncds.all$n1612, ncds.all$n2017, useNA='ifany')
+
+
 
 ## 'Others' - not used
 # ncds.other = ncds[ncds$n2017!='Euro-Caucasian',] 

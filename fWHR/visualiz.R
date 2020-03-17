@@ -19,7 +19,7 @@ chAgr = chFP
 #chAgr$fWHR[chAgr$instrument=='Bas'] = chAgr$fWHR[chAgr$instrument=='Bas'] + 0.2313963
 
 
-## Aggreagate into individuals
+## Aggregate into individuals
 chAgr$Sex = as.numeric(chAgr$Sex)
 chAgr <- aggregate(chAgr[adults,], by=list(chAgr$ID[adults]), FUN=mean)
 
@@ -85,7 +85,7 @@ g <- ggplot(data=subset(chAgr, !(chAgr$verus=='other')),
             aes(x=Dom, y=fWHR)) + geom_point() +
   facet_grid(verus ~ Sex) +
   stat_smooth(method='gam') +
-  theme_bw() + xlab('Dominance')
+  theme_bw(base_size=20) + xlab('Dominance')
 
 g
 

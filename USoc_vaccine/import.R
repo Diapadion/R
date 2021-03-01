@@ -96,7 +96,37 @@ df$vax.cat = as.integer(df$vax.cat) - 6
 
 
 ### Shielding
-#table(df$cc_hhshield, useNA='ifany')
+table(df$ca_nhsshield,df$cb_nhsshield, useNA='ifany')
+
+df$shield = df$ca_nhsshield
+
+for (i in 1:dim(df)[1]){
+ind[i] = isTRUE(df$cc_hhshield[i] == 'Yes')|isTRUE(df$cb_nhsshield[i] == 'Yes')|
+  isTRUE(df$cc_nhsshield[i] == 'Yes')|isTRUE(df$cd_nhsshield[i] == 'Yes')|
+  isTRUE(df$ce_nhsshield[i] == 'Yes')
+}
+table(ind, useNA='ifany')
+
+
+# for (i in 1:dim(df)[1]){
+#   if(isTRUE(df$cc_hhshield[i] == 'Yes')|isTRUE(df$cb_nhsshield[i] == 'Yes')|
+#      isTRUE(df$cc_nhsshield[i] == 'Yes')|isTRUE(df$cd_nhsshield[i] == 'Yes')|
+#      isTRUE(df$ce_nhsshield[i] == 'Yes')){
+#     df$shield[i] == 'Yes'
+#     
+#   }
+# }
+
+#table(df$ca_nhsshield, useNA='ifany')
+
+df$shield[ind] = 'Yes'
+
+table(df$shield, useNA='ifany')
+
+
+
+
+table(df$cc_hhshield, useNA='ifany')
 df$shield.hh = df$cc_hhshield
 df$shield.hh[df$shield.hh %in% c('Missing','Inapplicable','Refusal','Don\'t know')] = NA
 df$shield.hh = -1 * (as.numeric(df$shield.hh) - 6)
@@ -305,7 +335,7 @@ table(df$c_big5o_dv, useNA='ifany')
 df$c_big5a_dv[df$c_big5a_dv %in% c(-9,-7,-8)] = NA
 table(df$c_big5a_dv, useNA='ifany')
 
-
+  
 
 ### Cognitive variables
 

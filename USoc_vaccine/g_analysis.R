@@ -8,7 +8,7 @@ library(stargazer)
 ind = complete.cases(df[,c('g','j_age_dv','female','non.white',
                            'cmds' , 'cancer' , 'respir' ,
                             'Edu',
-                           'cf_scghq1_dv' , 'shield'
+                           'cf_scghq1_dv' , 'shield.hh'
                            )])
 table(ind)
 

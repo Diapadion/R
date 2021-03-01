@@ -63,7 +63,7 @@ df.s[ind] = lapply(df.s[ind], scale)
 
 
 
-### Split data into testing and training halfs
+### Split data into testing and training halves
 set.seed(779)
 splits = createFolds(y=df$hatch_nest_breed_ID, k=2)
 
@@ -579,6 +579,7 @@ lme.w.reduce.test = lmer(day_14_weight ~
 )
 summary(lme.w.reduce.test)
 #                                               Estimate Std. Error t value
+# (Intercept)                                 -0.046554   0.086652  -0.537
 # rear_Cs_at_start_of_rearing                 -0.619738   0.068228  -9.083 *
 # net_rearing_manipulation                    -0.242515   0.047854  -5.068 *
 # rear_nest_LD                                -0.052688   0.030213  -1.744 

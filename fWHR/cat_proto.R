@@ -60,6 +60,63 @@ tabl[chk2,c('Unique Identifier','Photo name')]
 write.csv(tabl[chk1,c('Unique Identifier','Photo name')], 'Redo1cats.csv')
 
 
+## "Final" check
+#redone1 <- read_xls("./Redo1cats.xls")
+redone1 <- read_xls("./Redo1cats-fix2.xls")
+
+redone1 <- separate(data = redone1, col = A, into = c("A.x", "A.y"), sep = "\\,")
+redone1 <- separate(data = redone1, col = B, into = c("B.x", "B.y"), sep = "\\,")
+redone1 <- separate(data = redone1, col = C, into = c("C.x", "C.y"), sep = "\\,")
+redone1 <- separate(data = redone1, col = D, into = c("D.x", "D.y"), sep = "\\,")
+redone1 <- separate(data = redone1, col = E, into = c("E.x", "E.y"), sep = "\\,")
+
+redone1[,c(4:13)] <- lapply(redone1[,c(4:13)], as.numeric)
+
+fWHRedo <- NULL
+#i = 28
+
+#for (i in seq_len(dim(tabl)[1])){
+for (i in 1:10){ 
+  points <- matrix(c(c(redone1$A.x[i], redone1$B.x[i], redone1$C.x[i], redone1$D.x[i], redone1$E.x[i]), 
+                     c(redone1$A.y[i], redone1$B.y[i], redone1$C.y[i], redone1$D.y[i], redone1$E.y[i]))
+                   ,nrow = 5, ncol = 2)
+  
+  
+  fWHRedo[i] =   calcfWHR(points, i)
+  
+}
+
+
+
+## Second rater
+rater2 <- read_xlsx("./CatImages_RepeatMeasure.xlsx")
+
+rater2 <- separate(data = rater2, col = A, into = c("A.x", "A.y"), sep = "\\,")
+rater2 <- separate(data = rater2, col = B, into = c("B.x", "B.y"), sep = "\\,")
+rater2 <- separate(data = rater2, col = C, into = c("C.x", "C.y"), sep = "\\,")
+rater2 <- separate(data = rater2, col = D, into = c("D.x", "D.y"), sep = "\\,")
+rater2 <- separate(data = rater2, col = E, into = c("E.x", "E.y"), sep = "\\,")
+
+rater2[,c(2:11)] <- lapply(rater2[,c(2:11)], as.numeric)
+
+fWHRater2 <- NULL
+#i = 28
+
+#for (i in seq_len(dim(tabl)[1])){
+for (i in 1:10){ 
+  points <- matrix(c(c(rater2$A.x[i], rater2$B.x[i], rater2$C.x[i], rater2$D.x[i], rater2$E.x[i]), 
+                     c(rater2$A.y[i], rater2$B.y[i], rater2$C.y[i], rater2$D.y[i], rater2$E.y[i]))
+                   ,nrow = 5, ncol = 2)
+  
+  
+  fWHRedo[i] =   calcfWHR(points, i)
+  
+}
+
+
+
+
+
 
 
 ### Personality checks
@@ -87,6 +144,11 @@ fitMeasures(f.cat.D, c("chisq", "df", "pvalue", "cfi", "rmsea", "srmr"))
 
 summary(f.cat.D)
 
+
+
+
+
+### OLD PRIMATE CODE ###
 
 
 ### OHSU PRC

@@ -13,6 +13,10 @@ print(object.size(x=lapply(ls(), get)), units="Mb")
 
 
 
+### post-processed import
+df.MH = readRDS('df_MH.RDS')
+
+
 
 ## Wave 10 - COVID
 
@@ -45,8 +49,6 @@ df.nov = read.dta13("../../../../ownCloud/DocSyncUoE/data/UnderstandingSociety/s
 
 
 
-
-
 ## Wave 1 - social class?
 #df.w1 = read.dta13("../../../../ownCloud/DocSyncUoE/data/UnderstandingSociety/stata/stata13_se/ukhls_w1/a_indresp.dta")
 
@@ -72,7 +74,7 @@ df = merge(df, df.sept, by.x='pidp', by.y='pidp', all=TRUE)
 df = merge(df, df.nov, by.x='pidp', by.y='pidp', all=FALSE)
 
 
-rm(df.nov)
+rm(df.w10)
 #...
 
 
@@ -100,37 +102,28 @@ table(df$ca_nhsshield,df$cb_nhsshield, useNA='ifany')
 
 df$shield = df$ca_nhsshield
 
+ind=NULL
+
 for (i in 1:dim(df)[1]){
 ind[i] = isTRUE(df$cc_hhshield[i] == 'Yes')|isTRUE(df$cb_nhsshield[i] == 'Yes')|
   isTRUE(df$cc_nhsshield[i] == 'Yes')|isTRUE(df$cd_nhsshield[i] == 'Yes')|
   isTRUE(df$ce_nhsshield[i] == 'Yes')
 }
-table(ind, useNA='ifany')
-
-
-# for (i in 1:dim(df)[1]){
-#   if(isTRUE(df$cc_hhshield[i] == 'Yes')|isTRUE(df$cb_nhsshield[i] == 'Yes')|
-#      isTRUE(df$cc_nhsshield[i] == 'Yes')|isTRUE(df$cd_nhsshield[i] == 'Yes')|
-#      isTRUE(df$ce_nhsshield[i] == 'Yes')){
-#     df$shield[i] == 'Yes'
-#     
-#   }
-# }
-
-#table(df$ca_nhsshield, useNA='ifany')
+#table(ind, useNA='ifany')
 
 df$shield[ind] = 'Yes'
 
+df$shield[df$shield=='Don\'t know'] = NA
+df$shield = -1 *(as.integer(df$shield) - 6)
+
 table(df$shield, useNA='ifany')
 
+# table(df$cc_hhshield, useNA='ifany')
+# df$shield.hh = df$cc_hhshield
+# df$shield.hh[df$shield.hh %in% c('Missing','Inapplicable','Refusal','Don\'t know')] = NA
+# df$shield.hh = -1 * (as.numeric(df$shield.hh) - 6)
+# table(df$shield.hh, useNA='ifany')
 
-
-
-table(df$cc_hhshield, useNA='ifany')
-df$shield.hh = df$cc_hhshield
-df$shield.hh[df$shield.hh %in% c('Missing','Inapplicable','Refusal','Don\'t know')] = NA
-df$shield.hh = -1 * (as.numeric(df$shield.hh) - 6)
-table(df$shield.hh, useNA='ifany')
 
 
 ### Age
@@ -161,7 +154,7 @@ df$non.white[df$non.white>4] = 1
 
 
 
-## Education - TODO
+## Education
 table(df$j_qfhigh_dv, useNA='ifany')
 ## University ed = Higher degree, 1st degree..., thru Other higher degree
 # table(df.w3$c_qfhighfl_dv, useNA='ifany') #?
@@ -189,6 +182,9 @@ df$HigherEd = 0
 df$HigherEd[df$Edu=='Higher degree'] = 1
 df$HigherEd[is.na(df$Edu)] = NA
 table(df$HigherEd, useNA='ifany')
+
+df$NoHigherEd = (df$HigherEd - 1) * -1
+table(df$NoHigherEd, useNA='ifany')
 
 
 
@@ -295,6 +291,70 @@ df$respir[df$j_hcondever21=='Yes mentioned'] = 'Yes'
 table(df$respir)
 
 
+## Any of the above physical health morbidities
+df$anyMorb = df$respir
+df$anyMorb[df$cmds=='Yes'] = 'Yes'
+df$anyMorb[df$cancer=='Yes'] = 'Yes'
+table(df$anyMorb)
+
+
+
+### Mental health diagnoses
+table(df$j_hcondncode37, useNA='ifany') # anxiety
+df$anxiety = df$j_hcondncode37
+df$anxiety[df$anxiety %in% c('inapplicable','proxy','refusal','don\'t know')] = NA
+df$anxiety = droplevels(df$anxiety)
+levels(df$anxiety) = c('No','Yes')
+
+table(df$j_hcondncode38, useNA='ifany') # depression
+df$depress = df$j_hcondncode38
+df$depress[df$depress %in% c('inapplicable','proxy','refusal','don\'t know')] = NA
+df$depress = droplevels(df$depress)
+levels(df$depress) = c('No','Yes')
+
+table(df$j_hcondncode39, useNA='ifany') # psychosis/schiz
+df$schiz = df$j_hcondncode39
+df$schiz[df$schiz %in% c('inapplicable','proxy','refusal','don\'t know')] = NA
+df$schiz = droplevels(df$schiz)
+levels(df$schiz) = c('No','Yes')
+
+table(df$j_hcondncode40, useNA='ifany') # bipolar/manic
+df$manic = df$j_hcondncode40
+df$manic[df$manic %in% c('inapplicable','proxy','refusal','don\'t know')] = NA
+df$manic = droplevels(df$manic)
+levels(df$manic) = c('No','Yes')
+
+table(df$j_hcondncode41, useNA='ifany') # eating
+df$eating = df$j_hcondncode41
+df$eating[df$eating %in% c('inapplicable','proxy','refusal','don\'t know')] = NA
+df$eating = droplevels(df$eating)
+levels(df$eating) = c('No','Yes')
+
+table(df$j_hcondncode42, useNA='ifany') # PTSD
+df$ptsd = df$j_hcondncode42
+df$ptsd[df$ptsd %in% c('inapplicable','proxy','refusal','don\'t know')] = NA
+df$ptsd = droplevels(df$ptsd)
+levels(df$ptsd) = c('No','Yes')
+
+table(df$j_hcondncode43, useNA='ifany') # other
+df$otherMH = df$j_hcondncode43
+df$otherMH[df$otherMH %in% c('inapplicable','proxy','refusal','don\'t know')] = NA
+df$otherMH = droplevels(df$otherMH)
+levels(df$otherMH) = c('No','Yes')
+df$otherMH[df$schiz=='Yes'] = 'Yes'
+df$otherMH[df$manic=='Yes'] = 'Yes'
+df$otherMH[df$eating=='Yes'] = 'Yes'
+df$otherMH[df$ptsd=='Yes'] = 'Yes'
+table(df$otherMH)
+
+df$anyMH = df$anxiety
+df$anyMH[df$depress=='Yes'] = 'Yes'
+df$anyMH[df$schiz=='Yes'] = 'Yes'
+df$anyMH[df$manic=='Yes'] = 'Yes'
+df$anyMH[df$eating=='Yes'] = 'Yes'
+df$anyMH[df$ptsd=='Yes'] = 'Yes'
+df$anyMH[df$otherMH=='Yes'] = 'Yes'
+table(df$anyMH)
 
 
 
@@ -306,6 +366,17 @@ table(df$cf_scghq2_dv, useNA='ifany')
 df$cf_scghq1_dv[df$cf_scghq1_dv==-9] = NA
 df$cf_scghq2_dv[df$cf_scghq2_dv==-9] = NA
 
+df$ghq.bin = df$cf_scghq2_dv 
+df$ghq.bin[df$ghq.bin<=0] = 0 
+df$ghq.bin[df$ghq.bin>0.5] = 1 
+table(df$ghq.bin, useNA='ifany')
+
+df$ghq.cat = cut(df$cf_scghq2_dv, c(-1,0.5,3.5,6.5,12.5))
+levels(df$ghq.cat) = c('Asymptomatic','Subclinical','Symptomatic','High symptomatic')
+table(df$ghq.cat)
+
+df$ghq.fact = as.factor(df$cf_scghq2_dv)
+table(df$ghq.fact)
 
 
 # Life satisfaction
@@ -379,10 +450,39 @@ table(df$c_cgna_dv, useNA='ifany')
 
 
 
+### Loneliness
+df$cf_sclonely_cv[df$cf_sclonely_cv %in% c('missing','inapplicable','refusal','don\'t know')] = NA
+df$cf_sclonely_cv = droplevels(df$cf_sclonely_cv)
+levels(df$cf_sclonely_cv) 
+
+## (Before)
+df$j_sclonely[df$j_sclonely %in% c('proxy','missing','inapplicable','refusal','don\'t know')] = NA
+df$j_sclonely = droplevels(df$j_sclonely)
+levels(df$j_sclonely) 
+
+
+
+### Social isolation (before)
+df$j_scisolate[df$j_scisolate %in% c('missing','inapplicable','refusal','don\'t know','proxy')] = NA
+df$j_scisolate = droplevels(df$j_scisolate)
+levels(df$j_scisolate) 
+
+
+### Life satisfaction (before and during)
+table(df$j_sclfsato, useNA='ifany')
+df$j_sclfsato[df$j_sclfsato %in% c('proxy','missing','inapplicable','refusal','don\'t know')] = NA
+df$j_sclfsato = droplevels(df$j_sclfsato)
+levels(df$j_sclfsato) 
+
+table(df$cf_sclfsato, useNA='ifany')
+df$cf_sclfsato[df$cf_sclfsato %in% c('proxy','missing','inapplicable','refusal','don\'t know')] = NA
+df$cf_sclfsato = droplevels(df$cf_sclfsato)
+levels(df$cf_sclfsato) 
+
+
 
 ### Area deprivation - Carstairs index
 ## https://bmcpublichealth.biomedcentral.com/articles/10.1186/s12889-018-5667-3
 ## would need to link to census
-
 
 

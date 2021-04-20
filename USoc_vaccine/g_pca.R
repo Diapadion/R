@@ -18,6 +18,9 @@ hist(g.pca$scores)
 
 df$g = g.pca$scores
 
+df$g = scale(df$g)*15 + 100
+
+
 g.m = median(df$g, na.rm=TRUE)
 g.sd = sd(df$g, na.rm=TRUE)
 
@@ -27,8 +30,18 @@ levels(df$g.cut) = c('3','2','1 (low)')
 
 table(df$g.cut)
 
+describe(df$g[df$g.cut=='3'])
+describe(df$g[df$g.cut=='2'])
+describe(df$g[df$g.cut=='1 (low)'])
+
 
 df$g.dec = quantcut(df$g, q=10)
 df$g.dec = fct_rev(df$g.dec)
 
 table(df$g.dec)
+
+
+
+### Saving df after processing - useful ###
+
+saveRDS(df.MH, file='df_MH.RDS')

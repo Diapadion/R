@@ -16,12 +16,26 @@ df2 = as.data.table(df2)
 nfactors(df1[,c(1:85)]) # Felix's (?) scales only
 fa.parallel(df1[,c(1:85)])
 
-
-
 nfactors(df1[,c(1:153)]) # Everything thru Altruism
-fa.parallel(df1[,c(1:153)]) # Felix's (?) scales only
+fa.parallel(df1[,c(1:153)]) # 
 
 
+
+omega(datpow2[,c('X13','X3','X10','X16','X20','X32','X33','X42','X54','X71','X26',
+                 'X6','X17','X19','X23','X30','X39','X45','X69','X77','X5','X8','X25','X34',
+                 'X36','X47','X50','X56','X58','X66')], nfactors=2)
+
+omega(datpow2[,c('X13','X3','X10','X16','X20','X32','X33','X42','X54','X71','X26',
+'X6','X17','X19','X23','X30','X39','X45','X69','X77','X5','X8','X25','X34',
+'X36','X47','X50','X56','X58','X66')])
+
+omega(datpow2[,c('X13','X3','X10','X16','X20','X32','X33','X42','X54','X71','X26',
+                 'X6','X17','X19','X23','X30','X39','X45','X69','X77','X5','X8','X25','X34',
+                 'X36','X47','X50','X56','X58','X66')], nfactors=4)
+
+omega(datpow2[,c('X13','X3','X10','X16','X20','X32','X33','X42','X54','X71','X26',
+                 'X6','X17','X19','X23','X30','X39','X45','X69','X77','X5','X8','X25','X34',
+                 'X36','X47','X50','X56','X58','X66')], nfactors=5)
 
 
 ### following Script_Study1 CFA.R ###

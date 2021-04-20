@@ -1,8 +1,11 @@
 ### Descriptives
 
 
-
 library(doBy)
+
+
+
+options(scipen=999)
 
 
 
@@ -16,6 +19,9 @@ t.test(j_age_dv ~ vax.cat, df)
 
 
 ## Sex (female)
+table(df$female, 
+      #df$vax.cat, 
+      useNA='ifany')
 summaryBy(df, formula = female ~ vax.cat, FUN = c(sum), na.rm=TRUE)
 #sum(!is.na(df$female))
 #rev(table(df$vax.cat) )
@@ -30,15 +36,16 @@ chisq.test(df$non.white, df$vax.cat)
 
 
 ## Higher education
-summaryBy(df, formula = HigherEd ~ vax.cat, FUN = c(sum), na.rm=TRUE)
-summaryBy(df, formula = HigherEd ~ vax.cat, FUN = c(sum), na.rm=TRUE) / rev(table(df$vax.cat))
-chisq.test(df$HigherEd, df$vax.cat)
+table(df$HigherEd, useNA='ifany')
+summaryBy(df, formula = NoHigherEd ~ vax.cat, FUN = c(sum), na.rm=TRUE)
+summaryBy(df, formula = NoHigherEd ~ vax.cat, FUN = c(sum), na.rm=TRUE) / rev(table(df$vax.cat))
+chisq.test(df$NoHigherEd, df$vax.cat)
 
 
 ## Occupational social class
-summaryBy(df, formula = low.soc.class ~ vax.cat, FUN = c(sum), na.rm=TRUE)
-summaryBy(df, formula = low.soc.class ~ vax.cat, FUN = c(sum), na.rm=TRUE) / rev(table(df$vax.cat))
-chisq.test(df$low.soc.class, df$vax.cat) 
+# summaryBy(df, formula = low.soc.class ~ vax.cat, FUN = c(sum), na.rm=TRUE)
+# summaryBy(df, formula = low.soc.class ~ vax.cat, FUN = c(sum), na.rm=TRUE) / rev(table(df$vax.cat))
+# chisq.test(df$low.soc.class, df$vax.cat) 
 
 
 ## Cardiometabolic conditions
@@ -68,7 +75,18 @@ t.test(g.100 ~ vax.cat, df)
 
 
 ## Psychological distress
-summaryBy(df, formula = cf_scghq1_dv ~ vax.cat, FUN = c(mean,sd), na.rm=TRUE)
-t.test(cf_scghq1_dv ~ vax.cat, df)
+# summaryBy(df, formula = cf_scghq1_dv ~ vax.cat, FUN = c(mean,sd), na.rm=TRUE)
+# t.test(cf_scghq1_dv ~ vax.cat, df)
+summaryBy(df, formula = ghq.bin ~ vax.cat, FUN = c(sum), na.rm=TRUE)
+summaryBy(df, formula = ghq.bin ~ vax.cat, FUN = c(sum), na.rm=TRUE) / rev(table(df$vax.cat))
+chisq.test(df$ghq.bin, df$vax.cat) 
 
 
+
+## Shielding
+summaryBy(df, formula = shield ~ vax.cat, FUN = c(sum), na.rm=TRUE)
+summaryBy(df, formula = shield ~ vax.cat, FUN = c(sum), na.rm=TRUE) / rev(table(df$vax.cat))
+chisq.test(df$cancer, df$vax.cat) 
+
+cor.test(as.integer(df$shield), as.integer(df$anyMorb), method='spearman')
+sum(complete.cases(df[,c('shield','anyMorb')]))

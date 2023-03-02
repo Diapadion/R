@@ -13,6 +13,8 @@ AEOvars = c('Selfconfident','Forceful','Assertive','Outspoken','Dominant',
            'Outgoing','Friendly','Lively','Active','Talkative'
            )
 
+colnames(EFAdat)[c(147,167)] = c('Selfconfident','Broadminded')
+
 
 cor(m1exp[,..AEOvars], use='pairwise.complete.obs',method='spearman')
 
@@ -27,15 +29,14 @@ EFA.Comp.Data(as.data.frame(ECdat[,AEOvars,with=FALSE]), F.Max=10, Graph=T, Spea
 
 
 
-m.2.fa = fa(m1exp[,AEOvars], 2, rotate = 'varimax')
-m.3.fa = fa(m1exp[,AEOvars], 3, rotate = 'varimax')
+m.2.fa = fa(EFAdat[,..AEOvars], 2, rotate = 'varimax')
+m.3.fa = fa(EFAdat[,..AEOvars], 3, rotate = 'varimax')
 
-m.2.fa.ob = fa(m1exp[,AEOvars], 2, rotate = 'oblimin')
-m.3.fa.ob = fa(m1exp[,AEOvars], 3, rotate = 'oblimin')
-
-
+m.2.fa.ob = fa(m1exp[,..AEOvars], 2, rotate = 'oblimin')
+m.3.fa.ob = fa(m1exp[,..AEOvars], 3, rotate = 'oblimin')
 
 
+print(m.3.fa.ob)
 
 
 
@@ -473,7 +474,6 @@ mi2 = modificationindices(mod2.16)
 head(mi2[order(mi2$mi, decreasing=TRUE), ], 10)
 
 
-
 fact2.17 <- '
 E =~ Selfconfident + Forceful + Assertive + Outspoken + Dominant+
 Warm+Outgoing+Friendly+Lively+Active+Talkative
@@ -502,18 +502,23 @@ summary(compareFit(mod2.17,mod2.16))
 mi2 = modificationindices(mod2.17)
 head(mi2[order(mi2$mi, decreasing=TRUE), ], 10)
 
+fitMeasures(mod2.17, fit.measures = c('chisq','df','RMSEA','SRMR','CFI','TLI','AIC','BIC','rmsea.ci.upper'))
+
 
 #######
 
 fact3 <- '
-A =~ Dominant + Forceful + Assertive + Outspoken + Selfconfident + Outgoing + Talkative
-E =~ Warm + Outgoing + Friendly + Lively + Active + Talkative + Selfconfident
-O =~ Creative + Imaginative + Intelligent + Curious + Broadminded +
-           Sophisticated + Adventurous + Active + Assertive + Selfconfident
-# A =~ Dominant + Forceful + Assertive + Outspoken + Selfconfident
-# E =~ Warm + Outgoing + Friendly + Lively + Active + Talkative
+# A =~ Dominant + Forceful + Assertive + Outspoken + Selfconfident + Outgoing + Talkative
+# E =~ Warm + Outgoing + Friendly + Lively + Active + Talkative + Selfconfident
 # O =~ Creative + Imaginative + Intelligent + Curious + Broadminded +
-#            Sophisticated + Adventurous + Active
+#            Sophisticated + Adventurous + Active + Assertive + Selfconfident
+A =~ Dominant + Forceful + Assertive + Outspoken + Selfconfident
+E =~ Warm + Outgoing + Friendly + Lively + Active + Talkative
+O =~ Creative + Imaginative + Intelligent + Curious + Broadminded +
+           Sophisticated + Adventurous + Active
+A ~~ E
+A ~~ O
+E ~~ O
 
 '
 

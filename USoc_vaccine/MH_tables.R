@@ -6,6 +6,7 @@ library(arm)
 
 
 
+
 options(scipen=999)
 
 
@@ -247,7 +248,7 @@ ci.any.4 = exp(confint(standardize(any.4)))
 ci.any.5 = exp(confint(standardize(any.5)))
 ci.any.6 = exp(confint(standardize(any.6)))
 any.cis = list(ci.any.1,
-               # ci.any.2,ci.any.3,ci.any.4,ci.any.5,
+               ci.any.2,ci.any.3,ci.any.4,ci.any.5,
                ci.any.6)
 
 
@@ -376,7 +377,7 @@ ci.ghq.4 = exp(confint(standardize(ghq.4)))
 ci.ghq.5 = exp(confint(standardize(ghq.5)))
 ci.ghq.6 = exp(confint(standardize(ghq.6)))
 ghq.cis = list(ci.ghq.1,
-               # ci.ghq.2,ci.ghq.3,ci.ghq.4,ci.ghq.5,
+               ci.ghq.2,ci.ghq.3,ci.ghq.4,ci.ghq.5,
                ci.ghq.6)
 
 ci.ghqCat1 = exp(confint(standardize(ghq.1cat)))
@@ -386,7 +387,7 @@ ci.ghqCat4 = exp(confint(standardize(ghq.4cat)))
 ci.ghqCat5 = exp(confint(standardize(ghq.5cat)))
 ci.ghqCat6 = exp(confint(standardize(ghq.6cat)))
 ghqCat.cis = list(ci.ghqCat1,
-                  # ci.ghqCat2,ci.ghqCat3,ci.ghqCat4,ci.ghqCat5,
+                  ci.ghqCat2,ci.ghqCat3,ci.ghqCat4,ci.ghqCat5,
                   ci.ghqCat6)
 
 
@@ -431,7 +432,7 @@ ci.cmds.4 = exp(confint(standardize(cmds.4)))
 ci.cmds.5 = exp(confint(standardize(cmds.5)))
 ci.cmds.6 = exp(confint(standardize(cmds.6)))
 cmds.cis = list(ci.cmds.1,
-                # ci.cmds.2,ci.cmds.3,ci.cmds.4,ci.cmds.5,
+                ci.cmds.2,ci.cmds.3,ci.cmds.4,ci.cmds.5,
                 ci.cmds.6)
 
 ci.cancer.1 = exp(confint(standardize(cancer.1)))
@@ -441,7 +442,7 @@ ci.cancer.4 = exp(confint(standardize(cancer.4)))
 ci.cancer.5 = exp(confint(standardize(cancer.5)))
 ci.cancer.6 = exp(confint(standardize(cancer.6)))
 cancer.cis = list(ci.cancer.1,
-                  # ci.cancer.2,ci.cancer.3,ci.cancer.4,ci.cancer.5,
+                  ci.cancer.2,ci.cancer.3,ci.cancer.4,ci.cancer.5,
                   ci.cancer.6)
 
 ci.respir.1 = exp(confint(standardize(respir.1)))
@@ -451,7 +452,7 @@ ci.respir.4 = exp(confint(standardize(respir.4)))
 ci.respir.5 = exp(confint(standardize(respir.5)))
 ci.respir.6 = exp(confint(standardize(respir.6)))
 respir.cis = list(ci.respir.1,
-                  # ci.respir.2,ci.respir.3,ci.respir.4,ci.respir.5,
+                  ci.respir.2,ci.respir.3,ci.respir.4,ci.respir.5,
                   ci.respir.6)
 
 ci.anyMorb.1 = exp(confint(standardize(anyMorb.1)))
@@ -461,7 +462,7 @@ ci.anyMorb.4 = exp(confint(standardize(anyMorb.4)))
 ci.anyMorb.5 = exp(confint(standardize(anyMorb.5)))
 ci.anyMorb.6 = exp(confint(standardize(anyMorb.6)))
 anyMorb.cis = list(ci.anyMorb.1,
-                   # ci.anyMorb.2,ci.anyMorb.3,ci.anyMorb.4,ci.anyMorb.5,
+                   ci.anyMorb.2,ci.anyMorb.3,ci.anyMorb.4,ci.anyMorb.5,
                    ci.anyMorb.6)
 
 
@@ -523,15 +524,15 @@ stargazer(
 
 
 
-ci.shield.1 = exp(confint(standardize(cmds.1)))
-ci.shield.2 = exp(confint(standardize(cmds.2)))
-ci.shield.3 = exp(confint(standardize(cmds.3)))
-ci.cmds.4 = exp(confint(standardize(cmds.4)))
-ci.cmds.5 = exp(confint(standardize(cmds.5)))
-ci.cmds.6 = exp(confint(standardize(cmds.6)))
-cmds.cis = list(ci.cmds.1,
-                # ci.cmds.2,ci.cmds.3,ci.cmds.4,ci.cmds.5,
-                ci.cmds.6)
+# ci.shield.1 = exp(confint(standardize(cmds.1)))
+# ci.shield.2 = exp(confint(standardize(cmds.2)))
+# ci.shield.3 = exp(confint(standardize(cmds.3)))
+# ci.cmds.4 = exp(confint(standardize(cmds.4)))
+# ci.cmds.5 = exp(confint(standardize(cmds.5)))
+# ci.cmds.6 = exp(confint(standardize(cmds.6)))
+# cmds.cis = list(ci.cmds.1,
+#                 # ci.cmds.2,ci.cmds.3,ci.cmds.4,ci.cmds.5,
+#                 ci.cmds.6)
 
 
 

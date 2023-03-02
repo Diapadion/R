@@ -42,6 +42,13 @@ table(df$g.dec)
 
 
 
-### Saving df after processing - useful ###
+### for when this needs to be done on df.MH
 
-saveRDS(df.MH, file='df_MH.RDS')
+df.MH$g.cut = cut(df.MH$g, breaks = c(-500, g.m-0.5*g.sd, g.m+0.5*g.sd, 500))
+df.MH$g.cut = fct_rev(df.MH$g.cut)
+levels(df.MH$g.cut) = c('3','2','1 (low)')
+
+table(df.MH$g.cut)
+sum(table(df.MH$g.cut))
+table(df.MH$g.cut, df.MH$vax.cat)
+sum(table(df.MH$g.cut, df.MH$vax.cat))

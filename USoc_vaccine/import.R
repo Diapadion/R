@@ -8,6 +8,7 @@ library(forcats)
 
 sort( sapply(ls(),function(x){object.size(get(x))})) 
 
+gc()
 object.size(x=lapply(ls(), get))
 print(object.size(x=lapply(ls(), get)), units="Mb")
 
@@ -71,7 +72,8 @@ df = merge(df, df.june, by.x='pidp', by.y='pidp', all=TRUE)
 df = merge(df, df.july, by.x='pidp', by.y='pidp', all=TRUE)
 df = merge(df, df.sept, by.x='pidp', by.y='pidp', all=TRUE)
 ## >
-df = merge(df, df.nov, by.x='pidp', by.y='pidp', all=FALSE)
+#df = merge(df, df.nov, by.x='pidp', by.y='pidp', all=FALSE)
+df = merge(df, df.nov, by.x='pidp', by.y='pidp', all=TRUE) # for inverse probability weighting
 
 
 rm(df.w10)

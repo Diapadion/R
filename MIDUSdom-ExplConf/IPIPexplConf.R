@@ -2,12 +2,38 @@ library(foreign)
 library(psych)
 library(lavaan)
 library(blavaan)
+library(caret)
+
+
+### TODO rename file
+
+
+ipip <- read.spss("M:/GitHub-not in use/R/MIDUSdom-ExplConf/IPIP300.por", to.data.frame=TRUE)
+
+table(ipip$I299, useNA = 'ifany')
+table(!is.na(ipip$I299))
+ipip <- ipip[!is.na(ipip$I300),]
+
+set.seed(1234567)
+sub.ipip = createDataPartition(c(ipip$AGE,ipip$SEX), times=1, p=0.017, list=TRUE)
+head(sub.ipip[[1]])
+length(sub.ipip[[1]])
+table(ipip[sub.ipip[[1]],'I299'], useNA = 'ifany')
+
+saveRDS(ipip[sub.ipip[[1]],], file="ipip-subset.RDS")
+
+ipip.sub <- readRDS("ipip-subset.RDS")
+ipip.sub <- ipip.sub[!is.na(ipip.sub$I299),]
+ipip <- ipip.sub
+
+gc()
 
 
 
-#df = read.spss("IPIP300.por", to.data.frame=T)
+### CUT BELOW #################################################################
 
-set.seed(12345)
+
+
 ipip.samp = sample(dim(df)[1], 20000)
 ipipExpl = df[ipip.samp[1:10000],]
 ipipConf = df[ipip.samp[10001:20000],]

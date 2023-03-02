@@ -6,7 +6,10 @@ library(effsize)
 
 
 
-MHcols = c('g','vax.cat','j_age_dv','female','non.white',
+saveRDS(df, file='USoc.RDS')
+
+
+MHcols = c('pidp','g','vax.cat','j_age_dv','female','non.white',
          'cmds' , 'cancer' , 'respir' , 'anyMorb',
          'Edu','shield','ghq.cat','cf_scghq2_dv','ghq.fact','ghq.bin',
          'anxiety','depress',#'schiz','manic','eating','ptsd',
@@ -21,11 +24,17 @@ df.MH = df[ind,..MHcols]
 
 
 
+### Saving df after processing - useful ###
+
+#saveRDS(df.MH, file='df_MH-2.RDS')
+
+
+
 ### Test
 # mh2test = glm(vax.cat ~ I(-1*g) + j_age_dv + female + non.white
 #          , data = df.MH
 #          , family=binomial())
-# summary(mh2test)
+# # summary(mh2test)
 
 
 
@@ -35,35 +44,35 @@ df.MH = df[ind,..MHcols]
 anx.1 = glm(vax.cat ~ anxiety + j_age_dv + female + non.white
                     , data = df.MH
                     , family=binomial())
-summary(anx.1)
+# summary(anx.1)
 
 
 anx.2 = glm(vax.cat ~ anxiety + j_age_dv + female + non.white
             + cmds + cancer + respir
             , data = df.MH
             , family=binomial())
-summary(anx.2)
+# summary(anx.2)
 
 
 anx.3 = glm(vax.cat ~ anxiety + j_age_dv + female + non.white
             + shield
             , data = df.MH
             , family=binomial())
-summary(anx.3)
+# summary(anx.3)
 
 
 anx.4 = glm(vax.cat ~ anxiety + j_age_dv + female + non.white
             + Edu
             , data = df.MH
             , family=binomial())
-summary(anx.4)
+# summary(anx.4)
 
 
 anx.5 = glm(vax.cat ~ anxiety + j_age_dv + female + non.white
             + g
             , data = df.MH
             , family=binomial())
-summary(anx.5)
+# summary(anx.5)
 
 
 anx.6 = glm(vax.cat ~ anxiety + j_age_dv + female + non.white
@@ -71,7 +80,7 @@ anx.6 = glm(vax.cat ~ anxiety + j_age_dv + female + non.white
             + shield + Edu + g
             , data = df.MH
             , family=binomial())
-summary(anx.6)
+# summary(anx.6)
 
 
 
@@ -79,35 +88,35 @@ summary(anx.6)
 dep.1 = glm(vax.cat ~ depress + j_age_dv + female + non.white
             , data = df.MH
             , family=binomial())
-summary(dep.1)
+# summary(dep.1)
 
 
 dep.2 = glm(vax.cat ~ depress + j_age_dv + female + non.white
             + cmds + cancer + respir
             , data = df.MH
             , family=binomial())
-summary(dep.2)
+# summary(dep.2)
 
 
 dep.3 = glm(vax.cat ~ depress + j_age_dv + female + non.white
             + shield
             , data = df.MH
             , family=binomial())
-summary(dep.3)
+# summary(dep.3)
 
 
 dep.4 = glm(vax.cat ~ depress + j_age_dv + female + non.white
             + Edu
             , data = df.MH
             , family=binomial())
-summary(dep.4)
+# summary(dep.4)
 
 
 dep.5 = glm(vax.cat ~ depress + j_age_dv + female + non.white
             + g
             , data = df.MH
             , family=binomial())
-summary(dep.5)
+# summary(dep.5)
 
 
 dep.6 = glm(vax.cat ~ depress + j_age_dv + female + non.white
@@ -115,7 +124,7 @@ dep.6 = glm(vax.cat ~ depress + j_age_dv + female + non.white
             + shield + Edu + g
             , data = df.MH
             , family=binomial())
-summary(dep.6)
+# summary(dep.6)
 
 
 
@@ -123,35 +132,35 @@ summary(dep.6)
 # scz.1 = glm(vax.cat ~ schiz + j_age_dv + female + non.white
 #             , data = df.MH
 #             , family=binomial())
-# summary(scz.1)
+# # summary(scz.1)
 # 
 # 
 # scz.2 = glm(vax.cat ~ schiz + j_age_dv + female + non.white
 #             + cmds + cancer + respir
 #             , data = df.MH
 #             , family=binomial())
-# summary(scz.2)
+# # summary(scz.2)
 # 
 # 
 # scz.3 = glm(vax.cat ~ schiz + j_age_dv + female + non.white
 #             + shield
 #             , data = df.MH
 #             , family=binomial())
-# summary(scz.3)
+# # summary(scz.3)
 # 
 # 
 # scz.4 = glm(vax.cat ~ schiz + j_age_dv + female + non.white
 #             + Edu
 #             , data = df.MH
 #             , family=binomial())
-# summary(scz.4)
+# # summary(scz.4)
 # 
 # 
 # scz.5 = glm(vax.cat ~ schiz + j_age_dv + female + non.white
 #             + g
 #             , data = df.MH
 #             , family=binomial())
-# summary(scz.5)
+# # summary(scz.5)
 # 
 # 
 # scz.6 = glm(vax.cat ~ schiz + j_age_dv + female + non.white
@@ -159,7 +168,7 @@ summary(dep.6)
 #             + shield + Edu + g
 #             , data = df.MH
 #             , family=binomial())
-# summary(scz.6)
+# # summary(scz.6)
 # 
 # 
 # 
@@ -167,35 +176,35 @@ summary(dep.6)
 # bip.1 = glm(vax.cat ~ manic + j_age_dv + female + non.white
 #             , data = df.MH
 #             , family=binomial())
-# summary(bip.1)
+# # summary(bip.1)
 # 
 # 
 # bip.2 = glm(vax.cat ~ manic + j_age_dv + female + non.white
 #             + cmds + cancer + respir
 #             , data = df.MH
 #             , family=binomial())
-# summary(bip.2)
+# # summary(bip.2)
 # 
 # 
 # bip.3 = glm(vax.cat ~ manic + j_age_dv + female + non.white
 #             + shield
 #             , data = df.MH
 #             , family=binomial())
-# summary(bip.3)
+# # summary(bip.3)
 # 
 # 
 # bip.4 = glm(vax.cat ~ manic + j_age_dv + female + non.white
 #             + Edu
 #             , data = df.MH
 #             , family=binomial())
-# summary(bip.4)
+# # summary(bip.4)
 # 
 # 
 # bip.5 = glm(vax.cat ~ manic + j_age_dv + female + non.white
 #             + g
 #             , data = df.MH
 #             , family=binomial())
-# summary(bip.5)
+# # summary(bip.5)
 # 
 # 
 # bip.6 = glm(vax.cat ~ manic + j_age_dv + female + non.white
@@ -203,7 +212,7 @@ summary(dep.6)
 #             + shield + Edu + g
 #             , data = df.MH
 #             , family=binomial())
-# summary(bip.6)
+# # summary(bip.6)
 # 
 # 
 # 
@@ -211,35 +220,35 @@ summary(dep.6)
 # eat.1 = glm(vax.cat ~ eating + j_age_dv + female + non.white
 #             , data = df.MH
 #             , family=binomial())
-# summary(eat.1)
+# # summary(eat.1)
 # 
 # 
 # eat.2 = glm(vax.cat ~ eating + j_age_dv + female + non.white
 #             + cmds + cancer + respir
 #             , data = df.MH
 #             , family=binomial())
-# summary(eat.2)
+# # summary(eat.2)
 # 
 # 
 # eat.3 = glm(vax.cat ~ eating + j_age_dv + female + non.white
 #             + shield
 #             , data = df.MH
 #             , family=binomial())
-# summary(eat.3)
+# # summary(eat.3)
 # 
 # 
 # eat.4 = glm(vax.cat ~ eating + j_age_dv + female + non.white
 #             + Edu
 #             , data = df.MH
 #             , family=binomial())
-# summary(eat.4)
+# # summary(eat.4)
 # 
 # 
 # eat.5 = glm(vax.cat ~ eating + j_age_dv + female + non.white
 #             + g
 #             , data = df.MH
 #             , family=binomial())
-# summary(eat.5)
+# # summary(eat.5)
 # 
 # 
 # eat.6 = glm(vax.cat ~ eating + j_age_dv + female + non.white
@@ -247,7 +256,7 @@ summary(dep.6)
 #             + shield + Edu + g
 #             , data = df.MH
 #             , family=binomial())
-# summary(eat.6)
+# # summary(eat.6)
 # 
 # 
 # 
@@ -255,35 +264,35 @@ summary(dep.6)
 # pts.1 = glm(vax.cat ~ ptsd + j_age_dv + female + non.white
 #             , data = df.MH
 #             , family=binomial())
-# summary(pts.1)
+# # summary(pts.1)
 # 
 # 
 # pts.2 = glm(vax.cat ~ ptsd + j_age_dv + female + non.white
 #             + cmds + cancer + respir
 #             , data = df.MH
 #             , family=binomial())
-# summary(pts.2)
+# # summary(pts.2)
 # 
 # 
 # pts.3 = glm(vax.cat ~ ptsd + j_age_dv + female + non.white
 #             + shield
 #             , data = df.MH
 #             , family=binomial())
-# summary(pts.3)
+# # summary(pts.3)
 # 
 # 
 # pts.4 = glm(vax.cat ~ ptsd + j_age_dv + female + non.white
 #             + Edu
 #             , data = df.MH
 #             , family=binomial())
-# summary(pts.4)
+# # summary(pts.4)
 # 
 # 
 # pts.5 = glm(vax.cat ~ ptsd + j_age_dv + female + non.white
 #             + g
 #             , data = df.MH
 #             , family=binomial())
-# summary(pts.5)
+# # summary(pts.5)
 # 
 # 
 # pts.6 = glm(vax.cat ~ ptsd + j_age_dv + female + non.white
@@ -291,7 +300,7 @@ summary(dep.6)
 #             + shield + Edu + g
 #             , data = df.MH
 #             , family=binomial())
-# summary(pts.6)
+# # summary(pts.6)
 
 
 
@@ -299,35 +308,35 @@ summary(dep.6)
 oth.1 = glm(vax.cat ~ otherMH + j_age_dv + female + non.white
             , data = df.MH
             , family=binomial())
-summary(oth.1)
+# summary(oth.1)
 
 
 oth.2 = glm(vax.cat ~ otherMH + j_age_dv + female + non.white
             + cmds + cancer + respir
             , data = df.MH
             , family=binomial())
-summary(oth.2)
+# summary(oth.2)
 
 
 oth.3 = glm(vax.cat ~ otherMH + j_age_dv + female + non.white
             + shield
             , data = df.MH
             , family=binomial())
-summary(oth.3)
+# summary(oth.3)
 
 
 oth.4 = glm(vax.cat ~ otherMH + j_age_dv + female + non.white
             + Edu
             , data = df.MH
             , family=binomial())
-summary(oth.4)
+# summary(oth.4)
 
 
 oth.5 = glm(vax.cat ~ otherMH + j_age_dv + female + non.white
             + g
             , data = df.MH
             , family=binomial())
-summary(oth.5)
+# summary(oth.5)
 
 
 oth.6 = glm(vax.cat ~ otherMH + j_age_dv + female + non.white
@@ -335,42 +344,42 @@ oth.6 = glm(vax.cat ~ otherMH + j_age_dv + female + non.white
             + shield + Edu + g
             , data = df.MH
             , family=binomial())
-summary(oth.6)
+# summary(oth.6)
 
 
 ### any MH condition
 any.1 = glm(vax.cat ~ anyMH + j_age_dv + female + non.white
             , data = df.MH
             , family=binomial())
-summary(any.1)
+# summary(any.1)
 
 
 any.2 = glm(vax.cat ~ anyMH + j_age_dv + female + non.white
             + cmds + cancer + respir
             , data = df.MH
             , family=binomial())
-summary(any.2)
+# summary(any.2)
 
 
 any.3 = glm(vax.cat ~ anyMH + j_age_dv + female + non.white
             + shield
             , data = df.MH
             , family=binomial())
-summary(any.3)
+# summary(any.3)
 
 
 any.4 = glm(vax.cat ~ anyMH + j_age_dv + female + non.white
             + Edu
             , data = df.MH
             , family=binomial())
-summary(any.4)
+# summary(any.4)
 
 
 any.5 = glm(vax.cat ~ anyMH + j_age_dv + female + non.white
             + g
             , data = df.MH
             , family=binomial())
-summary(any.5)
+# summary(any.5)
 
 
 any.6 = glm(vax.cat ~ anyMH + j_age_dv + female + non.white
@@ -378,7 +387,7 @@ any.6 = glm(vax.cat ~ anyMH + j_age_dv + female + non.white
             + shield + Edu + g
             , data = df.MH
             , family=binomial())
-summary(any.6)
+# summary(any.6)
 
 
 
@@ -388,35 +397,35 @@ summary(any.6)
 cmds.1 = glm(vax.cat ~ cmds + j_age_dv + female + non.white
             , data = df.MH
             , family=binomial())
-summary(cmds.1)
+# summary(cmds.1)
 
 
 cmds.2 = glm(vax.cat ~ cmds + j_age_dv + female + non.white
             + anyMH
             , data = df.MH
             , family=binomial())
-summary(cmds.2)
+# summary(cmds.2)
 
 
 cmds.3 = glm(vax.cat ~ cmds + j_age_dv + female + non.white
             + shield
             , data = df.MH
             , family=binomial())
-summary(cmds.3)
+# summary(cmds.3)
 
 
 cmds.4 = glm(vax.cat ~ cmds + j_age_dv + female + non.white
             + Edu
             , data = df.MH
             , family=binomial())
-summary(cmds.4)
+# summary(cmds.4)
 
 
 cmds.5 = glm(vax.cat ~ cmds + j_age_dv + female + non.white
             + g
             , data = df.MH
             , family=binomial())
-summary(cmds.5)
+# summary(cmds.5)
 
 
 cmds.6 = glm(vax.cat ~ cmds + j_age_dv + female + non.white
@@ -424,7 +433,7 @@ cmds.6 = glm(vax.cat ~ cmds + j_age_dv + female + non.white
             + shield + Edu + g
             , data = df.MH
             , family=binomial())
-summary(cmds.6)
+# summary(cmds.6)
 
 
 ## Cancer
@@ -445,21 +454,21 @@ cancer.3 = glm(vax.cat ~ cancer + j_age_dv + female + non.white
              + shield
              , data = df.MH
              , family=binomial())
-summary(cancer.3)
+# summary(cancer.3)
 
 
 cancer.4 = glm(vax.cat ~ cancer + j_age_dv + female + non.white
              + Edu
              , data = df.MH
              , family=binomial())
-summary(cancer.4)
+# summary(cancer.4)
 
 
 cancer.5 = glm(vax.cat ~ cancer + j_age_dv + female + non.white
              + g
              , data = df.MH
              , family=binomial())
-summary(cancer.5)
+# summary(cancer.5)
 
 
 cancer.6 = glm(vax.cat ~ cancer + j_age_dv + female + non.white
@@ -467,7 +476,7 @@ cancer.6 = glm(vax.cat ~ cancer + j_age_dv + female + non.white
              + shield + Edu + g
              , data = df.MH
              , family=binomial())
-summary(cancer.6)
+# summary(cancer.6)
 
 
 ## Respiratory
@@ -485,49 +494,49 @@ respir.0s = glm(vax.cat ~ respir + female
 respir.0e = glm(vax.cat ~ respir + non.white
                , data = df.MH
                , family=binomial())
-summary(respir.0)
+# summary(respir.0)
 
 
 t.test(vax.cat~cancer, data=df)
 chisq.test(df.MH$vax.cat,df.MH$cancer)
 cancer.0 = glm(vax.cat ~ cancer, data=df.MH)
 cancer.0as = glm(vax.cat ~ cancer + female, data=df.MH)
-summary(cancer.0as)
+# summary(cancer.0as)
 
 
 
 respir.1 = glm(vax.cat ~ respir + j_age_dv + female + non.white
              , data = df.MH
              , family=binomial())
-summary(respir.1)
+# summary(respir.1)
 
 
 respir.2 = glm(vax.cat ~ respir + j_age_dv + female + non.white
              + anyMH
              , data = df.MH
              , family=binomial())
-summary(respir.2)
+# summary(respir.2)
 
 
 respir.3 = glm(vax.cat ~ respir + j_age_dv + female + non.white
              + shield
              , data = df.MH
              , family=binomial())
-summary(respir.3)
+# summary(respir.3)
 
 
 respir.4 = glm(vax.cat ~ respir + j_age_dv + female + non.white
              + Edu
              , data = df.MH
              , family=binomial())
-summary(respir.4)
+# summary(respir.4)
 
 
 respir.5 = glm(vax.cat ~ respir + j_age_dv + female + non.white
              + g
              , data = df.MH
              , family=binomial())
-summary(respir.5)
+# summary(respir.5)
 
 
 respir.6 = glm(vax.cat ~ respir + j_age_dv + female + non.white
@@ -535,42 +544,42 @@ respir.6 = glm(vax.cat ~ respir + j_age_dv + female + non.white
              + shield + Edu + g
              , data = df.MH
              , family=binomial())
-summary(respir.6)
+# summary(respir.6)
 
 
 ## Any morbidity
 anyMorb.1 = glm(vax.cat ~ anyMorb + j_age_dv + female + non.white
              , data = df.MH
              , family=binomial())
-summary(anyMorb.1)
+# summary(anyMorb.1)
 
 
 anyMorb.2 = glm(vax.cat ~ anyMorb + j_age_dv + female + non.white
              + anyMH
              , data = df.MH
              , family=binomial())
-summary(anyMorb.2)
+# summary(anyMorb.2)
 
 
 anyMorb.3 = glm(vax.cat ~ anyMorb + j_age_dv + female + non.white
              + shield
              , data = df.MH
              , family=binomial())
-summary(anyMorb.3)
+# summary(anyMorb.3)
 
 
 anyMorb.4 = glm(vax.cat ~ anyMorb + j_age_dv + female + non.white
              + Edu
              , data = df.MH
              , family=binomial())
-summary(anyMorb.4)
+# summary(anyMorb.4)
 
 
 anyMorb.5 = glm(vax.cat ~ anyMorb + j_age_dv + female + non.white
              + g
              , data = df.MH
              , family=binomial())
-summary(anyMorb.5)
+# summary(anyMorb.5)
 
 
 anyMorb.6 = glm(vax.cat ~ anyMorb + j_age_dv + female + non.white
@@ -578,7 +587,7 @@ anyMorb.6 = glm(vax.cat ~ anyMorb + j_age_dv + female + non.white
              + shield + Edu + g
              , data = df.MH
              , family=binomial())
-summary(anyMorb.6)
+# summary(anyMorb.6)
 
 
 ### Shielding
@@ -631,13 +640,13 @@ ghq.1q = glm(vax.cat ~ I(-1*cf_scghq2_dv^2) + j_age_dv + female + non.white
             , data = df.MH
             , family=binomial())
 
-summary(standardize(ghq.1))
-summary(standardize(ghq.1q))
+# summary(standardize(ghq.1))
+# summary(standardize(ghq.1q))
 exp(ghq.1q$coefficients)
-summary(standardize(ghq.1cat))
+# summary(standardize(ghq.1cat))
 
 
-ghq.2 = glm(vax.cat ~ cf_scghq2_dv + j_age_dv + female + non.white
+ghq.2 = glm(vax.cat ~ I(-1*cf_scghq2_dv) + j_age_dv + female + non.white
             + cmds + cancer + respir
             , data = df.MH
             , family=binomial())
@@ -647,11 +656,11 @@ ghq.2cat = glm(vax.cat ~ ghq.cat + j_age_dv + female + non.white
                , data = df.MH
                , family=binomial())
 
-summary(standardize(ghq.2))
-summary(standardize(ghq.2cat))
+# summary(standardize(ghq.2))
+# summary(standardize(ghq.2cat))
 
 
-ghq.3 = glm(vax.cat ~ cf_scghq2_dv + j_age_dv + female + non.white
+ghq.3 = glm(vax.cat ~ I(-1*cf_scghq2_dv) + j_age_dv + female + non.white
             + shield
             , data = df.MH
             , family=binomial())
@@ -661,11 +670,11 @@ ghq.3cat = glm(vax.cat ~ ghq.cat + j_age_dv + female + non.white
                , data = df.MH
                , family=binomial())
 
-summary(standardize(ghq.3))
-summary(standardize(ghq.3cat))
+# summary(standardize(ghq.3))
+# summary(standardize(ghq.3cat))
 
 
-ghq.4 = glm(vax.cat ~ cf_scghq2_dv + j_age_dv + female + non.white
+ghq.4 = glm(vax.cat ~ I(-1*cf_scghq2_dv) + j_age_dv + female + non.white
             + Edu
               , data = df.MH
             , family=binomial())
@@ -675,8 +684,8 @@ ghq.4cat = glm(vax.cat ~ ghq.cat + j_age_dv + female + non.white
                  , data = df.MH
                , family=binomial())
 
-summary(standardize(ghq.4))
-summary(standardize(ghq.4cat))
+# summary(standardize(ghq.4))
+# summary(standardize(ghq.4cat))
 
 
 ghq.5 = glm(vax.cat ~ I(-1*cf_scghq2_dv) + j_age_dv + female + non.white
@@ -689,8 +698,8 @@ ghq.5cat = glm(vax.cat ~ ghq.cat + j_age_dv + female + non.white
                  , data = df.MH
                , family=binomial())
 
-summary(standardize(ghq.5))
-summary(standardize(ghq.5cat))
+# summary(standardize(ghq.5))
+# summary(standardize(ghq.5cat))
 
 
 ghq.6 = glm(vax.cat ~ I(-1*cf_scghq2_dv) + j_age_dv + female + non.white
@@ -711,9 +720,9 @@ ghq.6q = glm(vax.cat ~ I(-1*cf_scghq2_dv^2) + j_age_dv + female + non.white
             , data = df.MH
             , family=binomial())
 
-summary(standardize(ghq.6))
-summary(standardize(ghq.6q))
-summary(standardize(ghq.6cat))
+# summary(standardize(ghq.6))
+# summary(standardize(ghq.6q))
+# summary(standardize(ghq.6cat))
 
 
 
@@ -727,7 +736,7 @@ summary(standardize(ghq.6cat))
 # lone.b.1cat = glm(vax.cat ~ j_sclonely + j_age_dv + female + non.white
 #                 , data = df.MH
 #                 , family=binomial())
-# summary(lone.b.1cat)
+# # summary(lone.b.1cat)
 # confint(lone.b.1cat)
 # 
 # 
@@ -741,7 +750,7 @@ summary(standardize(ghq.6cat))
 #                 + shield + Edu + g                
 #                 , data = df.MH
 #                 , family=binomial())
-# summary(lone.b.6cat)
+# # summary(lone.b.6cat)
 # 
 # 
 # ### Loneliness (during)
@@ -751,7 +760,7 @@ summary(standardize(ghq.6cat))
 # lone.1cat = glm(vax.cat ~ cf_sclonely_cv + j_age_dv + female + non.white
 #              , data = df.MH
 #              , family=binomial())
-# summary(lone.1cat)
+# # summary(lone.1cat)
 # confint(lone.1cat)
 # 
 # 
@@ -765,7 +774,7 @@ summary(standardize(ghq.6cat))
 #                 + shield + Edu + g                
 #                 , data = df.MH
 #                 , family=binomial())
-# summary(lone.6cat)
+# # summary(lone.6cat)
 # 
 # 
 # 
@@ -776,7 +785,7 @@ summary(standardize(ghq.6cat))
 # iso.1cat = glm(vax.cat ~ j_scisolate + j_age_dv + female + non.white
 #                 , data = df.MH
 #                 , family=binomial())
-# summary(iso.1cat)
+# # summary(iso.1cat)
 # 
 # 
 # iso.6 = glm(vax.cat ~ as.integer(j_scisolate) + j_age_dv + female + non.white
@@ -789,7 +798,7 @@ summary(standardize(ghq.6cat))
 #                + shield + Edu + g                   
 #                , data = df.MH
 #                , family=binomial())
-# summary(iso.6cat)
+# # summary(iso.6cat)
 # 
 # 
 # 
@@ -800,7 +809,7 @@ summary(standardize(ghq.6cat))
 # lsb.1cat = glm(vax.cat ~ j_sclfsato + j_age_dv + female + non.white
 #                , data = df.MH
 #                , family=binomial())
-# summary(lsb.1)
+# # summary(lsb.1)
 # 
 # 
 # 
@@ -811,7 +820,7 @@ summary(standardize(ghq.6cat))
 # lsd.1cat = glm(vax.cat ~ cf_sclfsato + j_age_dv + female + non.white
 #                , data = df.MH
 #                , family=binomial())
-# summary(lsd.1)
+# # summary(lsd.1)
 
 
 

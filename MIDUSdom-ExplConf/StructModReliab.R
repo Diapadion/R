@@ -149,7 +149,7 @@ omega(m1exp[,c('Outgoing','Friendly','Lively','Talkative')], nfactors=1) # good 
 ### Openness
 
 cfa.mO.1 <- '
-O =~ Creative+Imaginative+Intelligent+Curious+Broadminded+Sophisticated+Adventurous
+O =~ Creative+Broadminded+Intelligent+Curious+Sophisticated+Adventurous
 '
 
 cfa.fO.1 = cfa(cfa.mO.1, data=m1exp)
@@ -162,7 +162,7 @@ subset(mi.O[order(mi.O$mi, decreasing=TRUE), ], mi > 5)
 
 
 cfa.mO.2 <- '
-O =~ Creative+Intelligent+Curious+Broadminded+Sophisticated+Adventurous#+Imaginative
+O =~ Creative+Intelligent+Curious+Broadminded+Sophisticated+Adventurous+Imaginative
 #Creative ~~ Imaginative
 '
 
@@ -176,7 +176,8 @@ subset(mi.O[order(mi.O$mi, decreasing=TRUE), ], mi > 5)
 
 
 cfa.mO.3 <- '
-O =~ Creative+Curious+Broadminded+Sophisticated+Adventurous
+O =~ Creative+Curious+Broadminded+Sophisticated+Adventurous+Intelligent#??
+#O =~ Creative+Curious+Sophisticated+Adventurous+Imaginative#+Intelligent
 # O =~ Creative+Imaginative+Intelligent+Curious+Broadminded+Sophisticated+Adventurous
 # Creative ~~ Imaginative
 # Intelligent ~~ Curious
@@ -260,8 +261,9 @@ fitMeasures(cfa.fO.4.j.con, fit.measures = c('chisq','df','RMSEA','SRMR','CFI','
 
 cfa.mDEO.1 <- '
 D =~ Dominant + Forceful + Assertive + Outspoken
-O =~ Creative + Curious + Sophisticated + Adventurous + Broadminded
+O =~ Creative + Curious + Sophisticated + Adventurous + Broadminded #+ Intelligent
 E =~ Outgoing + Friendly + Lively + Talkative
+
 '
 
 cfa.fDEO.1 = cfa(cfa.mDEO.1, data=m1exp)
@@ -289,3 +291,5 @@ fitMeasures(cfa.fDEO.1.j.con, fit.measures = c('chisq','df','RMSEA','SRMR','CFI'
 
 # mi.O = modificationindices(cfa.fO.3.j.con)
 # subset(mi.O[order(mi.O$mi, decreasing=TRUE), ], mi > 5)
+
+

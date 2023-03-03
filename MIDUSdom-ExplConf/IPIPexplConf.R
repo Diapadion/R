@@ -20,6 +20,8 @@ head(sub.ipip[[1]])
 length(sub.ipip[[1]])
 table(ipip[sub.ipip[[1]],'I299'], useNA = 'ifany')
 
+ipip$SEX = -1*ipip$SEX + 2
+
 saveRDS(ipip[sub.ipip[[1]],], file="ipip-subset.RDS")
 
 ipip.sub <- readRDS("ipip-subset.RDS")

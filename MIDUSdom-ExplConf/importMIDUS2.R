@@ -72,6 +72,10 @@ vars=c(
   'B1PAGE_M2.x', #age at M2P1 ----------> change in pre-reg
   'B1PRSEX', #sex
   
+  # Affect
+  'B1SPOSPA', #positive
+  'B1SNEGPA', #negative
+  
   # Psychological well-being
   'B1SPWBA1', #autonomy
   'B1SPWBE1', #environmental mastery
@@ -157,6 +161,9 @@ midus2$B1PAGE_M2.x[midus2$B1PAGE_M2.x ==98] <- NA
 midus2$B1PRSEX[midus2$B1PRSEX ==8] <- NA
 midus2$B1PRSEX = -1*midus2$B1PRSEX + 2 # converts to 0 = female, 1 = male 
 
+midus2$B1SPOSPA[midus2$B1SPOSPA ==8] <- NA
+midus2$B1SNEGPA[midus2$B1SNEGPA ==8] <- NA
+
 midus2$B1SPWBA1[midus2$B1SPWBA1 ==98] <- NA
 midus2$B1SPWBE1[midus2$B1SPWBE1 ==98] <- NA
 midus2$B1SPWBG1[midus2$B1SPWBG1 ==98] <- NA
@@ -210,6 +217,7 @@ newnames = c('M2ID',
   'Broadminded','Sympathetic','Talkative','Sophisticated','Adventurous','Dominant','Thorough',
   'like_to_lead','talk_people_into','influencing','decisions',
   'Age','Sex',
+  'positive_affect','negative_affect',
   'autonomy','environmental_mastery','personal_growth',
   'affectual_relations','purpose_in_life','self_acceptance',
   'SoC_Mastery','SoC_Constraints',

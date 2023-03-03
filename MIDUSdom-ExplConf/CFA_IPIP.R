@@ -17,7 +17,7 @@ I282 #+ # Hold back my opinions. (BFI)
 
 f.Ast.1 = cfa(m.Ast.1, data=ipip, estimator="WLSMV", ordered=TRUE)
 
-fitMeasures(f.Ast.1, fit.measures = c('chisq','df','RMSEA','SRMR','CFI','TLI','AIC','BIC','rmsea.ci.upper'))
+fitMeasures(f.Ast.1, fit.measures = c('chisq','df','SRMR','CFI'))
 
 
 
@@ -27,7 +27,7 @@ E =~ I2 + I57 + I32 + I272 + I152
 
 f.Ent.1 = cfa(m.Ent.1, data=ipip, estimator="WLSMV", ordered=TRUE)
 
-fitMeasures(f.Ent.1, fit.measures = c('chisq','df','RMSEA','SRMR','CFI','TLI','AIC','BIC','rmsea.ci.upper'))
+fitMeasures(f.Ent.1, fit.measures = c('chisq','df','SRMR','CFI'))
 
 
 m.Opn.1 <- '
@@ -36,7 +36,7 @@ O =~ I8 + I68 + I188 + I128 + I153 + I183 #+ I243
 
 f.Opn.1 = cfa(m.Opn.1, data=ipip, estimator="WLSMV", ordered=TRUE)
 
-fitMeasures(f.Opn.1, fit.measures = c('chisq','df','RMSEA','SRMR','CFI','TLI','AIC','BIC','rmsea.ci.upper'))
+fitMeasures(f.Opn.1, fit.measures = c('chisq','df','SRMR','CFI'))
 
 
 m.Int.1 <- '
@@ -45,7 +45,7 @@ I =~ I203 + I23 + I83 + I113 + I293
 
 f.Int.1 = cfa(m.Int.1, data=ipip, estimator="WLSMV", ordered=TRUE)
 
-fitMeasures(f.Int.1, fit.measures = c('chisq','df','RMSEA','SRMR','CFI','TLI','AIC','BIC','rmsea.ci.upper'))
+fitMeasures(f.Int.1, fit.measures = c('chisq','df','SRMR','CFI'))
 
 
 ### M1 - combined, 4 oblique factors
@@ -58,7 +58,7 @@ E =~ I2 + I57 + I32 + I272 + I152
 
 f.I.1 = cfa(m.I.1, data=ipip, estimator="WLSMV", ordered=TRUE)
 
-fitMeasures(f.I.1, fit.measures = c('chisq','df','RMSEA','SRMR','CFI','TLI','AIC','BIC','rmsea.ci.upper'))
+fitMeasures(f.I.1, fit.measures = c('chisq','df','SRMR','CFI'))
 
 
 ### M2 - second order Beta
@@ -72,7 +72,7 @@ B=~ E + A + I + O
 
 f.I.2 = cfa(m.I.2, data=ipip, estimator="WLSMV", ordered=TRUE, optim.method='L-BFGS-B', check.gradient = FALSE)
 
-fitMeasures(f.I.2, fit.measures = c('chisq','df','RMSEA','SRMR','CFI','TLI','AIC','BIC','rmsea.ci.upper'))
+fitMeasures(f.I.2, fit.measures = c('chisq','df','SRMR','CFI'))
 #summary(f.I.2)
 
 
@@ -97,7 +97,7 @@ I ~~ 0*B
 
 f.I.3 = cfa(m.I.3, data=ipip, estimator="WLSMV", ordered=TRUE, optim.method='L-BFGS-B', check.gradient = FALSE)
 
-fitMeasures(f.I.3, fit.measures = c('chisq','df','RMSEA','SRMR','CFI','TLI','AIC','BIC','rmsea.ci.upper'))
+fitMeasures(f.I.3, fit.measures = c('chisq','df','SRMR','CFI'))
 
 
 
@@ -113,7 +113,7 @@ Bo =~ O + I
 
 f.I.4 = cfa(m.I.4, data=ipip, estimator="WLSMV", ordered=TRUE, optim.method='L-BFGS-B', check.gradient = FALSE)
 
-fitMeasures(f.I.4, fit.measures = c('chisq','df','RMSEA','SRMR','CFI','TLI','AIC','BIC','rmsea.ci.upper'))
+fitMeasures(f.I.4, fit.measures = c('chisq','df','SRMR','CFI'))
 #summary(f.I.4)
 
 
@@ -137,7 +137,7 @@ I ~~ 0*Bo
 f.I.5 = cfa(m.I.5, data=ipip, estimator="WLSMV", ordered=TRUE#, optim.method='L-BFGS-B', check.gradient = FALSE
             )
 
-fitMeasures(f.I.5, fit.measures = c('chisq','df','RMSEA','SRMR','CFI','TLI','AIC','BIC','rmsea.ci.upper'))
+fitMeasures(f.I.5, fit.measures = c('chisq','df','SRMR','CFI'))
 #summary(f.I.5)
 
 
@@ -152,7 +152,7 @@ Bo =~ O + I
 
 f.I.6 = cfa(m.I.6, data=ipip, estimator="WLSMV", ordered=TRUE, optim.method='L-BFGS-B', check.gradient = FALSE
             )
-fitMeasures(f.I.6, fit.measures = c('chisq','df','RMSEA','SRMR','CFI','TLI','AIC','BIC','rmsea.ci.upper'))
+fitMeasures(f.I.6, fit.measures = c('chisq','df','SRMR','CFI'))
 
 
 
@@ -171,17 +171,17 @@ I ~~ 0*Bo
 f.I.7 = cfa(m.I.7, data=ipip, estimator="WLSMV", ordered=TRUE#, optim.method='L-BFGS-B', check.gradient = FALSE
 )
 
-fitMeasures(f.I.7, fit.measures = c('chisq','df','RMSEA','SRMR','CFI','TLI','AIC','BIC','rmsea.ci.upper'))
+fitMeasures(f.I.7, fit.measures = c('chisq','df','SRMR','CFI'))
 summary(f.I.7)
 
 
 ### note: even numbered (secord order) fits have negative variances for LVs
 
 ###
-fitMeasures(f.I.1, fit.measures = c('chisq','df','RMSEA','SRMR','CFI','TLI','AIC','BIC','rmsea.ci.upper'))
-fitMeasures(f.I.2, fit.measures = c('chisq','df','RMSEA','SRMR','CFI','TLI','AIC','BIC','rmsea.ci.upper'))
-fitMeasures(f.I.3, fit.measures = c('chisq','df','RMSEA','SRMR','CFI','TLI','AIC','BIC','rmsea.ci.upper'))
-fitMeasures(f.I.4, fit.measures = c('chisq','df','RMSEA','SRMR','CFI','TLI','AIC','BIC','rmsea.ci.upper'))
-fitMeasures(f.I.5, fit.measures = c('chisq','df','RMSEA','SRMR','CFI','TLI','AIC','BIC','rmsea.ci.upper'))
-fitMeasures(f.I.6, fit.measures = c('chisq','df','RMSEA','SRMR','CFI','TLI','AIC','BIC','rmsea.ci.upper'))
-fitMeasures(f.I.7, fit.measures = c('chisq','df','RMSEA','SRMR','CFI','TLI','AIC','BIC','rmsea.ci.upper'))
+fitMeasures(f.I.1, fit.measures = c('chisq','df','SRMR','CFI'))
+fitMeasures(f.I.2, fit.measures = c('chisq','df','SRMR','CFI'))
+fitMeasures(f.I.3, fit.measures = c('chisq','df','SRMR','CFI'))
+fitMeasures(f.I.4, fit.measures = c('chisq','df','SRMR','CFI'))
+fitMeasures(f.I.5, fit.measures = c('chisq','df','SRMR','CFI')) #***
+fitMeasures(f.I.6, fit.measures = c('chisq','df','SRMR','CFI'))
+fitMeasures(f.I.7, fit.measures = c('chisq','df','SRMR','CFI'))

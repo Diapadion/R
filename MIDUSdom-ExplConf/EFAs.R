@@ -16,7 +16,7 @@ AEOvars = c('Selfconfident','Forceful','Assertive','Outspoken','Dominant',
 
 
 
-m.fa.2 = fa(midus2[,AEOvars], 2, rotate = 'oblimin')
+m.fa.2 = fa(midus2[,..AEOvars], 2, rotate = 'oblimin')
 # The root mean square of the residuals (RMSR) is  0.07 
 # The df corrected root mean square of the residuals is  0.08 
 # 
@@ -28,7 +28,7 @@ m.fa.2 = fa(midus2[,AEOvars], 2, rotate = 'oblimin')
 # BIC =  5265.53
 # Fit based upon off diagonal values = 0.95
 
-m.fa.3 = fa(midus2[,AEOvars], 3, rotate = 'oblimin')
+m.fa.3 = fa(midus2[,..AEOvars], 3, rotate = 'oblimin')
 # The root mean square of the residuals (RMSR) is  0.04 
 # The df corrected root mean square of the residuals is  0.05 
 # 
@@ -40,7 +40,7 @@ m.fa.3 = fa(midus2[,AEOvars], 3, rotate = 'oblimin')
 # BIC =  2514.69
 # Fit based upon off diagonal values = 0.98
 
-m.fa.4 = fa(midus2[,AEOvars], 4, rotate = 'oblimin')
+m.fa.4 = fa(midus2[,..AEOvars], 4, rotate = 'oblimin')
 # The root mean square of the residuals (RMSR) is  0.03 
 # The df corrected root mean square of the residuals is  0.04 
 # 

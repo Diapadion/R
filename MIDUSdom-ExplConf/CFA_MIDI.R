@@ -19,7 +19,7 @@ f.D.1 = cfa(m.D.1, midus2,
             , ordered=TRUE
 )
 
-fitMeasures(f.D.1, fit.measures = c('chisq','df','RMSEA','SRMR','CFI','TLI','AIC','BIC','rmsea.ci.upper'))
+fitMeasures(f.D.1, fit.measures = c('chisq','df','SRMR','CFI'))
 #summary(f.D.1)
 
 
@@ -33,7 +33,7 @@ f.E.1 = cfa(m.E.1, midus2,
             , ordered=TRUE
 )
 
-fitMeasures(f.E.1, fit.measures = c('chisq','df','RMSEA','SRMR','CFI','TLI','AIC','BIC','rmsea.ci.upper'))
+fitMeasures(f.E.1, fit.measures = c('chisq','df','SRMR','CFI'))
 summary(f.E.1)
 
 
@@ -48,7 +48,7 @@ f.O.1 = cfa(m.O.1, midus2,
             , ordered=TRUE
 )
 
-fitMeasures(f.O.1, fit.measures = c('chisq','df','RMSEA','SRMR','CFI','TLI','AIC','BIC','rmsea.ci.upper'))
+fitMeasures(f.O.1, fit.measures = c('chisq','df','SRMR','CFI'))
 summary(f.O.1)
 
 
@@ -66,7 +66,7 @@ f.M.1 = cfa(m.M.1, midus2,
               , ordered=TRUE
 )
 
-fitMeasures(f.M.1, fit.measures = c('chisq','df','RMSEA','SRMR','CFI','TLI','AIC','BIC','rmsea.ci.upper'))
+fitMeasures(f.M.1, fit.measures = c('chisq','df','SRMR','CFI'))
 #summary(f.DEO.1)
 
 
@@ -82,7 +82,7 @@ f.M.2 = cfa(m.M.2, midus2,
             , ordered=TRUE
 )
 
-fitMeasures(f.M.2, fit.measures = c('chisq','df','RMSEA','SRMR','CFI','TLI','AIC','BIC','rmsea.ci.upper'))
+fitMeasures(f.M.2, fit.measures = c('chisq','df','SRMR','CFI'))
 #summary(f.DEO.2)
 
 
@@ -99,7 +99,7 @@ f.M.3 = cfa(m.M.3, midus2,
             , ordered=TRUE
 )
 
-fitMeasures(f.M.3, fit.measures = c('chisq','df','RMSEA','SRMR','CFI','TLI','AIC','BIC','rmsea.ci.upper'))
+fitMeasures(f.M.3, fit.measures = c('chisq','df','SRMR','CFI'))
 
 
 ### M4 - bifactor Beta
@@ -122,7 +122,7 @@ f.M.4 = cfa(m.M.4, midus2,
             , ordered=TRUE
 )
 
-fitMeasures(f.M.4, fit.measures = c('chisq','df','RMSEA','SRMR','CFI','TLI','AIC','BIC','rmsea.ci.upper'))
+fitMeasures(f.M.4, fit.measures = c('chisq','df','SRMR','CFI'))
 summary(f.M.4)
 
 
@@ -159,9 +159,9 @@ f.M.6 = cfa(m.M.6, midus2,
 
 
 ## Fit
-fitMeasures(f.M.1, fit.measures = c('chisq','df','RMSEA','SRMR','CFI','TLI','AIC','BIC','rmsea.ci.upper'))
-fitMeasures(f.M.2, fit.measures = c('chisq','df','RMSEA','SRMR','CFI','TLI','AIC','BIC','rmsea.ci.upper'))
-fitMeasures(f.M.3, fit.measures = c('chisq','df','RMSEA','SRMR','CFI','TLI','AIC','BIC','rmsea.ci.upper'))
-fitMeasures(f.M.4, fit.measures = c('chisq','df','RMSEA','SRMR','CFI','TLI','AIC','BIC','rmsea.ci.upper')) #***
-fitMeasures(f.M.5, fit.measures = c('chisq','df','RMSEA','SRMR','CFI','TLI','AIC','BIC','rmsea.ci.upper'))
-fitMeasures(f.M.6, fit.measures = c('chisq','df','RMSEA','SRMR','CFI','TLI','AIC','BIC','rmsea.ci.upper'))
+fitMeasures(f.M.1, fit.measures = c('chisq','df','SRMR','CFI'))
+fitMeasures(f.M.2, fit.measures = c('chisq','df','SRMR','CFI'))
+fitMeasures(f.M.3, fit.measures = c('chisq','df','SRMR','CFI'))
+fitMeasures(f.M.4, fit.measures = c('chisq','df','SRMR','CFI')) #***
+fitMeasures(f.M.5, fit.measures = c('chisq','df','SRMR','CFI'))
+fitMeasures(f.M.6, fit.measures = c('chisq','df','SRMR','CFI'))

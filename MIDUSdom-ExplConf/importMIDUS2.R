@@ -1,8 +1,8 @@
 library(Hmisc)
-library(SAScii)
 library(data.table)
 library(psych)
 
+#library(SAScii)
 
 
 sort( sapply(ls(),function(x){object.size(get(x))})) 
@@ -224,7 +224,7 @@ newnames = c('M2ID',
   'anger_in','anger_out','anger_control',
   'memory','executive_function',
   'spirituality','religiosity','religious_coping',
-  'marital_risk','s/p_disagreement','support_from_s/p','strain from s/p','affectual_solidarity'
+  'marital_risk','sp_disagreement','support_from_sp','strain_from_sp','affectual_solidarity'
 
   
 )

@@ -42,14 +42,10 @@ O ~~ Age
 f.DEO.age.1 = cfa(m.DEO.age.1, midus2,
               estimator="WLSMV" #, missing='fiml'
               #, optim.method='L-BFGS-B', check.gradient = FALSE
-              , ordered=c('Dominant','Outspoken','Assertive','Forceful','Selfconfident',
-                          'Lively','Friendly','Active','Talkative','Outgoing',
-                          'Creative','Imaginative','Curious','Broadminded','Sophisticated',
-                          'Intelligent','Adventurous')
-                
-)
+              , ordered=AEOvars
+              )
 
-fitMeasures(f.DEO.age.1, fit.measures = c('chisq','df','RMSEA','SRMR','CFI','TLI','AIC','BIC','rmsea.ci.upper'))
+fitMeasures(f.DEO.age.1, fit.measures = c('chisq','df','SRMR','CFI'))
 summary(f.DEO.age.1)
 
 
@@ -109,7 +105,7 @@ f.DEO.sex.1 = cfa(m.DEO.sex.2, midus2,
                    , ordered=AEOvars
 )
 
-fitMeasures(f.DEO.sex.1, fit.measures = c('chisq','df','RMSEA','SRMR','CFI','TLI','AIC','BIC','rmsea.ci.upper'))
+fitMeasures(f.DEO.sex.1, fit.measures = c('chisq','df','SRMR','CFI'))
 summary(f.DEO.sex.1)
 
 
@@ -163,12 +159,10 @@ E ~~ positive_affect
 O ~~ positive_affect
 '
 
-
 f.DEO.affect.1 = cfa(m.DEO.affect.1, midus2,
                   estimator="WLSMV"
                   , ordered=AEOvars
 )
-
 fitMeasures(f.DEO.affect.1, fit.measures = c('chisq','df','SRMR','CFI'))
 summary(f.DEO.affect.1)
 
@@ -222,13 +216,9 @@ O ~~ autonomy
 
 f.DEO.spwb.1 = cfa(m.DEO.spwb.1, midus2,
               estimator="WLSMV"
-              ,ordered=c('Dominant','Outspoken','Assertive','Forceful','Selfconfident',
-                                  'Lively','Friendly','Active','Talkative','Outgoing',
-                                  'Creative','Imaginative','Curious','Broadminded','Sophisticated',
-                                  'Intelligent','Adventurous')
+              , ordered=AEOvars
 )
-
-fitMeasures(f.DEO.spwb.1, fit.measures = c('chisq','df','RMSEA','SRMR','CFI','TLI','AIC','BIC','rmsea.ci.upper'))
+fitMeasures(f.DEO.spwb.1, fit.measures = c('chisq','df','SRMR','CFI'))
 summary(f.DEO.spwb.1)
 
 
@@ -247,29 +237,118 @@ B ~~ 0*O
 D ~~ environmental_mastery
 E ~~ environmental_mastery
 O ~~ environmental_mastery
+'
+
+f.DEO.spwb.2 = cfa(m.DEO.spwb.2, midus2,
+                   estimator="WLSMV"
+                   , ordered=AEOvars
+)
+fitMeasures(f.DEO.spwb.2, fit.measures = c('chisq','df','SRMR','CFI'))
+summary(f.DEO.spwb.2)
+
+
+m.DEO.spwb.3 <-'
+D =~ Dominant + Outspoken + Assertive + Forceful + Selfconfident
+E =~ Lively + Friendly + Active + Talkative + Outgoing
+O =~ Creative + Imaginative + Curious + Broadminded + Sophisticated + Intelligent + Adventurous
+B =~ Dominant + Outspoken + Assertive + Forceful + Selfconfident + Lively + Friendly + Active + Talkative + Outgoing + Creative + Imaginative + Curious + Broadminded + Sophisticated + Intelligent + Adventurous
+D ~~ 0*E
+O ~~ 0*E
+O ~~ 0*D
+B ~~ 0*E
+B ~~ 0*D
+B ~~ 0*O
 
 D ~~ personal_growth
 E ~~ personal_growth
 O ~~ personal_growth
+'
+
+f.DEO.spwb.3 = cfa(m.DEO.spwb.3, midus2,
+                   estimator="WLSMV"
+                   , ordered=AEOvars
+)
+fitMeasures(f.DEO.spwb.3, fit.measures = c('chisq','df','SRMR','CFI'))
+summary(f.DEO.spwb.3, standardized=TRUE)
+
+
+m.DEO.spwb.4 <-'
+D =~ Dominant + Outspoken + Assertive + Forceful + Selfconfident
+E =~ Lively + Friendly + Active + Talkative + Outgoing
+O =~ Creative + Imaginative + Curious + Broadminded + Sophisticated + Intelligent + Adventurous
+B =~ Dominant + Outspoken + Assertive + Forceful + Selfconfident + Lively + Friendly + Active + Talkative + Outgoing + Creative + Imaginative + Curious + Broadminded + Sophisticated + Intelligent + Adventurous
+D ~~ 0*E
+O ~~ 0*E
+O ~~ 0*D
+B ~~ 0*E
+B ~~ 0*D
+B ~~ 0*O
 
 D ~~ affectual_relations
 E ~~ affectual_relations
 O ~~ affectual_relations
+'
+
+f.DEO.spwb.4 = cfa(m.DEO.spwb.4, midus2,
+                   estimator="WLSMV"
+                   , ordered=AEOvars
+)
+fitMeasures(f.DEO.spwb.4, fit.measures = c('chisq','df','SRMR','CFI'))
+summary(f.DEO.spwb.4)
+
+
+m.DEO.spwb.5 <-'
+D =~ Dominant + Outspoken + Assertive + Forceful + Selfconfident
+E =~ Lively + Friendly + Active + Talkative + Outgoing
+O =~ Creative + Imaginative + Curious + Broadminded + Sophisticated + Intelligent + Adventurous
+B =~ Dominant + Outspoken + Assertive + Forceful + Selfconfident + Lively + Friendly + Active + Talkative + Outgoing + Creative + Imaginative + Curious + Broadminded + Sophisticated + Intelligent + Adventurous
+D ~~ 0*E
+O ~~ 0*E
+O ~~ 0*D
+B ~~ 0*E
+B ~~ 0*D
+B ~~ 0*O
 
 D ~~ purpose_in_life
 E ~~ purpose_in_life
 O ~~ purpose_in_life
+'
+
+f.DEO.spwb.5 = cfa(m.DEO.spwb.5, midus2,
+                   estimator="WLSMV"
+                   , ordered=AEOvars
+)
+fitMeasures(f.DEO.spwb.5, fit.measures = c('chisq','df','SRMR','CFI'))
+summary(f.DEO.spwb.5)
+
+
+m.DEO.spwb.6 <-'
+D =~ Dominant + Outspoken + Assertive + Forceful + Selfconfident
+E =~ Lively + Friendly + Active + Talkative + Outgoing
+O =~ Creative + Imaginative + Curious + Broadminded + Sophisticated + Intelligent + Adventurous
+B =~ Dominant + Outspoken + Assertive + Forceful + Selfconfident + Lively + Friendly + Active + Talkative + Outgoing + Creative + Imaginative + Curious + Broadminded + Sophisticated + Intelligent + Adventurous
+D ~~ 0*E
+O ~~ 0*E
+O ~~ 0*D
+B ~~ 0*E
+B ~~ 0*D
+B ~~ 0*O
 
 D ~~ self_acceptance
 E ~~ self_acceptance
 O ~~ self_acceptance
 '
 
+f.DEO.spwb.6 = cfa(m.DEO.spwb.6, midus2,
+                   estimator="WLSMV"
+                   , ordered=AEOvars
+)
+fitMeasures(f.DEO.spwb.6, fit.measures = c('chisq','df','SRMR','CFI'))
+summary(f.DEO.spwb.6)
 
 
 
 ### Sense of Control
-
 m.DEO.soc.1 <- '
 D =~ Dominant + Outspoken + Assertive + Forceful + Selfconfident
 E =~ Lively + Friendly + Active + Talkative + Outgoing
@@ -289,14 +368,10 @@ O ~~ SoC_Mastery
 
 f.DEO.soc.1 = cfa(m.DEO.soc.1, midus2,
                    estimator="WLSMV"
-                   ,ordered=c('Dominant','Outspoken','Assertive','Forceful','Selfconfident',
-                              'Lively','Friendly','Active','Talkative','Outgoing',
-                              'Creative','Imaginative','Curious','Broadminded','Sophisticated',
-                              'Intelligent','Adventurous')
+                   ,ordered=AEOvars
 )
-
 fitMeasures(f.DEO.soc.1, fit.measures = c('chisq','df','SRMR','CFI'))
-summary(f.DEO.soc.1)
+summary(f.DEO.soc.1, standardize=TRUE)
 
 
 m.DEO.soc.2 <- '
@@ -318,19 +393,14 @@ O ~~ SoC_Constraints
 
 f.DEO.soc.2 = cfa(m.DEO.soc.2, midus2,
                    estimator="WLSMV"
-                   ,ordered=c('Dominant','Outspoken','Assertive','Forceful','Selfconfident',
-                              'Lively','Friendly','Active','Talkative','Outgoing',
-                              'Creative','Imaginative','Curious','Broadminded','Sophisticated',
-                              'Intelligent','Adventurous')
+                   ,ordered=AEOvars
 )
-
 fitMeasures(f.DEO.soc.2, fit.measures = c('chisq','df','SRMR','CFI'))
-summary(f.DEO.soc.2)
+summary(f.DEO.soc.2, standardize=TRUE)
 
 
 
 ### Anger
-
 m.DEO.anger.1 <- '
 D =~ Dominant + Outspoken + Assertive + Forceful + Selfconfident
 E =~ Lively + Friendly + Active + Talkative + Outgoing
@@ -346,31 +416,94 @@ B ~~ 0*O
 D ~~ anger_in
 E ~~ anger_in
 O ~~ anger_in
+'
+
+f.DEO.anger.1 = cfa(m.DEO.anger.1, midus2,
+                   estimator="WLSMV"
+                   ,ordered=AEOvars
+)
+fitMeasures(f.DEO.anger.1, fit.measures = c('chisq','df','SRMR','CFI'))
+summary(f.DEO.anger.1, standardize=TRUE)
+
+
+m.DEO.anger.2 <- '
+D =~ Dominant + Outspoken + Assertive + Forceful + Selfconfident
+E =~ Lively + Friendly + Active + Talkative + Outgoing
+O =~ Creative + Imaginative + Curious + Broadminded + Sophisticated + Intelligent + Adventurous
+B =~ Dominant + Outspoken + Assertive + Forceful + Selfconfident + Lively + Friendly + Active + Talkative + Outgoing + Creative + Imaginative + Curious + Broadminded + Sophisticated + Intelligent + Adventurous
+D ~~ 0*E
+O ~~ 0*E
+O ~~ 0*D
+B ~~ 0*E
+B ~~ 0*D
+B ~~ 0*O
 
 D ~~ anger_out
 E ~~ anger_out
 O ~~ anger_out
+'
+
+f.DEO.anger.2 = cfa(m.DEO.anger.2, midus2,
+                    estimator="WLSMV"
+                    ,ordered=AEOvars
+)
+fitMeasures(f.DEO.anger.2, fit.measures = c('chisq','df','SRMR','CFI'))
+summary(f.DEO.anger.2, standardize=TRUE)
+
+
+m.DEO.anger.3 <- '
+D =~ Dominant + Outspoken + Assertive + Forceful + Selfconfident
+E =~ Lively + Friendly + Active + Talkative + Outgoing
+O =~ Creative + Imaginative + Curious + Broadminded + Sophisticated + Intelligent + Adventurous
+B =~ Dominant + Outspoken + Assertive + Forceful + Selfconfident + Lively + Friendly + Active + Talkative + Outgoing + Creative + Imaginative + Curious + Broadminded + Sophisticated + Intelligent + Adventurous
+D ~~ 0*E
+O ~~ 0*E
+O ~~ 0*D
+B ~~ 0*E
+B ~~ 0*D
+B ~~ 0*O
 
 D ~~ anger_control
 E ~~ anger_control
 O ~~ anger_control
 '
 
-f.DEO.corr.P = cfa(m.DEO.corr.P, midus2,
-                   estimator="WLSMV" #, missing='fiml'
-                   ,ordered=c('Dominant','Outspoken','Assertive','Forceful','Selfconfident',
-                              'Lively','Friendly','Active','Talkative','Outgoing',
-                              'Creative','Imaginative','Curious','Broadminded','Sophisticated',
-                              'Intelligent','Adventurous')
+f.DEO.anger.3 = cfa(m.DEO.anger.3, midus2,
+                    estimator="WLSMV"
+                    ,ordered=AEOvars
 )
+fitMeasures(f.DEO.anger.3, fit.measures = c('chisq','df','SRMR','CFI'))
+summary(f.DEO.anger.3, standardize=TRUE)
 
-fitMeasures(f.DEO.corr.P, fit.measures = c('chisq','df','RMSEA','SRMR','CFI','TLI','AIC','BIC','rmsea.ci.upper'))
-summary(f.DEO.corr.P)
 
 
 ### Exective functions
+m.DEO.ef.1 <- '
+D =~ Dominant + Outspoken + Assertive + Forceful + Selfconfident
+E =~ Lively + Friendly + Active + Talkative + Outgoing
+O =~ Creative + Imaginative + Curious + Broadminded + Sophisticated + Intelligent + Adventurous
+B =~ Dominant + Outspoken + Assertive + Forceful + Selfconfident + Lively + Friendly + Active + Talkative + Outgoing + Creative + Imaginative + Curious + Broadminded + Sophisticated + Intelligent + Adventurous
+D ~~ 0*E
+O ~~ 0*E
+O ~~ 0*D
+B ~~ 0*E
+B ~~ 0*D
+B ~~ 0*O
 
-m.DEO.corr.M <- '
+D ~~ executive_function
+E ~~ executive_function
+O ~~ executive_function
+'
+
+f.DEO.ef.1 = cfa(m.DEO.ef.1, midus2,
+                   estimator="WLSMV" #, missing='fiml'
+                   ,ordered=AEOvars
+)
+fitMeasures(f.DEO.ef.1, fit.measures = c('chisq','df','SRMR','CFI'))
+summary(f.DEO.ef.1, standardize=TRUE)
+
+
+m.DEO.ef.2 <- '
 D =~ Dominant + Outspoken + Assertive + Forceful + Selfconfident
 E =~ Lively + Friendly + Active + Talkative + Outgoing
 O =~ Creative + Imaginative + Curious + Broadminded + Sophisticated + Intelligent + Adventurous
@@ -385,23 +518,15 @@ B ~~ 0*O
 D ~~ memory
 E ~~ memory
 O ~~ memory
-
-D ~~ executive_function
-E ~~ executive_function
-O ~~ executive_function
-
 '
 
-f.DEO.corr.M = cfa(m.DEO.corr.M, midus2,
-                   estimator="WLSMV" #, missing='fiml'
-                   ,ordered=c('Dominant','Outspoken','Assertive','Forceful','Selfconfident',
-                              'Lively','Friendly','Active','Talkative','Outgoing',
-                              'Creative','Imaginative','Curious','Broadminded','Sophisticated',
-                              'Intelligent','Adventurous')
+f.DEO.ef.2 = cfa(m.DEO.ef.2, midus2,
+                 estimator="WLSMV" #, missing='fiml'
+                 ,ordered=AEOvars
 )
+fitMeasures(f.DEO.ef.2, fit.measures = c('chisq','df','SRMR','CFI'))
+summary(f.DEO.ef.2, standardize=TRUE)
 
-fitMeasures(f.DEO.corr.M, fit.measures = c('chisq','df','RMSEA','SRMR','CFI','TLI','AIC','BIC','rmsea.ci.upper'))
-summary(f.DEO.corr.M)
 
 
 ### Religiosity & spirituality
@@ -425,10 +550,7 @@ O ~~ spirituality
 
 f.DEO.relig.1 = cfa(m.DEO.relig.1, midus2,
                    estimator="WLSMV"
-                   ,ordered=c('Dominant','Outspoken','Assertive','Forceful','Selfconfident',
-                              'Lively','Friendly','Active','Talkative','Outgoing',
-                              'Creative','Imaginative','Curious','Broadminded','Sophisticated',
-                              'Intelligent','Adventurous')
+                   ,ordered=AEOvars
 )
 fitMeasures(f.DEO.relig.1, fit.measures = c('chisq','df','SRMR','CFI'))
 summary(f.DEO.relig.1)
@@ -453,14 +575,10 @@ O ~~ religiosity
 
 f.DEO.relig.2 = cfa(m.DEO.relig.2, midus2,
                     estimator="WLSMV"
-                    ,ordered=c('Dominant','Outspoken','Assertive','Forceful','Selfconfident',
-                               'Lively','Friendly','Active','Talkative','Outgoing',
-                               'Creative','Imaginative','Curious','Broadminded','Sophisticated',
-                               'Intelligent','Adventurous')
+                    ,ordered=AEOvars
 )
 fitMeasures(f.DEO.relig.2, fit.measures = c('chisq','df','SRMR','CFI'))
 summary(f.DEO.relig.2)
-
 
 
 m.DEO.relig.3 <- '
@@ -482,10 +600,7 @@ O ~~ religious_coping
 
 f.DEO.relig.3 = cfa(m.DEO.relig.3, midus2,
                     estimator="WLSMV"
-                    ,ordered=c('Dominant','Outspoken','Assertive','Forceful','Selfconfident',
-                               'Lively','Friendly','Active','Talkative','Outgoing',
-                               'Creative','Imaginative','Curious','Broadminded','Sophisticated',
-                               'Intelligent','Adventurous')
+                    ,ordered=AEOvars
 )
 fitMeasures(f.DEO.relig.3, fit.measures = c('chisq','df','SRMR','CFI'))
 summary(f.DEO.relig.3)
@@ -513,10 +628,7 @@ O ~~ marital_risk
 
 f.DEO.rs.1 = cfa(m.DEO.rs.1, midus2,
                    estimator="WLSMV"
-                   ,ordered=c('Dominant','Outspoken','Assertive','Forceful','Selfconfident',
-                              'Lively','Friendly','Active','Talkative','Outgoing',
-                              'Creative','Imaginative','Curious','Broadminded','Sophisticated',
-                              'Intelligent','Adventurous')
+                   ,ordered=AEOvars
 )
 fitMeasures(f.DEO.rs.1, fit.measures = c('chisq','df','SRMR','CFI'))
 summary(f.DEO.rs.1)
@@ -541,10 +653,7 @@ O ~~ sp_disagreement
 
 f.DEO.rs.2 = cfa(m.DEO.rs.2, midus2,
                  estimator="WLSMV"
-                 ,ordered=c('Dominant','Outspoken','Assertive','Forceful','Selfconfident',
-                            'Lively','Friendly','Active','Talkative','Outgoing',
-                            'Creative','Imaginative','Curious','Broadminded','Sophisticated',
-                            'Intelligent','Adventurous')
+                 ,ordered=AEOvars
 )
 fitMeasures(f.DEO.rs.2, fit.measures = c('chisq','df','SRMR','CFI'))
 summary(f.DEO.rs.2)
@@ -569,10 +678,7 @@ O ~~ support_from_sp
 
 f.DEO.rs.3 = cfa(m.DEO.rs.3, midus2,
                  estimator="WLSMV"
-                 ,ordered=c('Dominant','Outspoken','Assertive','Forceful','Selfconfident',
-                            'Lively','Friendly','Active','Talkative','Outgoing',
-                            'Creative','Imaginative','Curious','Broadminded','Sophisticated',
-                            'Intelligent','Adventurous')
+                 ,ordered=AEOvars
 )
 fitMeasures(f.DEO.rs.3, fit.measures = c('chisq','df','SRMR','CFI'))
 summary(f.DEO.rs.3)
@@ -597,10 +703,7 @@ O ~~ strain_from_sp
 
 f.DEO.rs.4 = cfa(m.DEO.rs.4, midus2,
                  estimator="WLSMV"
-                 ,ordered=c('Dominant','Outspoken','Assertive','Forceful','Selfconfident',
-                            'Lively','Friendly','Active','Talkative','Outgoing',
-                            'Creative','Imaginative','Curious','Broadminded','Sophisticated',
-                            'Intelligent','Adventurous')
+                 ,ordered=AEOvars
 )
 fitMeasures(f.DEO.rs.4, fit.measures = c('chisq','df','SRMR','CFI'))
 summary(f.DEO.rs.4)
@@ -625,10 +728,7 @@ O ~~ affectual_solidarity
 
 f.DEO.rs.5 = cfa(m.DEO.rs.5, midus2,
                  estimator="WLSMV"
-                 ,ordered=c('Dominant','Outspoken','Assertive','Forceful','Selfconfident',
-                            'Lively','Friendly','Active','Talkative','Outgoing',
-                            'Creative','Imaginative','Curious','Broadminded','Sophisticated',
-                            'Intelligent','Adventurous')
+                 ,ordered=AEOvars
 )
 fitMeasures(f.DEO.rs.5, fit.measures = c('chisq','df','SRMR','CFI'))
 summary(f.DEO.rs.5)

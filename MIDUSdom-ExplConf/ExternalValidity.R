@@ -164,7 +164,32 @@ f.DEO.affect.1 = cfa(m.DEO.affect.1, midus2,
                   , ordered=AEOvars
 )
 fitMeasures(f.DEO.affect.1, fit.measures = c('chisq','df','SRMR','CFI'))
-summary(f.DEO.affect.1)
+ssol = standardizedSolution(f.DEO.affect.1)
+ssol[ssol$op=='~~',] # show standardized correlations only
+
+
+m.DEO.affect.1a <-'
+D =~ Dominant + Outspoken + Assertive + Forceful + Selfconfident
+E =~ Lively + Friendly + Active + Talkative + Outgoing
+O =~ Creative + Imaginative + Curious + Broadminded + Sophisticated + Intelligent + Adventurous
+B =~ Dominant + Outspoken + Assertive + Forceful + Selfconfident + Lively + Friendly + Active + Talkative + Outgoing + Creative + Imaginative + Curious + Broadminded + Sophisticated + Intelligent + Adventurous
+D ~~ 0*E
+O ~~ 0*E
+O ~~ 0*D
+B ~~ 0*E
+B ~~ 0*D
+B ~~ 0*O
+
+positive_affect ~ D + E + O + Age + Sex
+'
+
+f.DEO.affect.1a = cfa(m.DEO.affect.1a, midus2,
+                     estimator="WLSMV"
+                     , ordered=AEOvars
+)
+fitMeasures(f.DEO.affect.1a, fit.measures = c('chisq','df','SRMR','CFI'))
+ssol = standardizedSolution(f.DEO.affect.1a)
+ssol[ssol$op=='~',] # show standardized regressions only
 
 
 m.DEO.affect.2 <-'
@@ -190,9 +215,33 @@ f.DEO.affect.2= cfa(m.DEO.affect.2, midus2,
 )
 
 fitMeasures(f.DEO.affect.2, fit.measures = c('chisq','df','SRMR','CFI'))
-summary(f.DEO.affect.2)
+ssol = standardizedSolution(f.DEO.affect.2)
+ssol[ssol$op=='~~',] # show standardized correlations only
 
 
+m.DEO.affect.2a <-'
+D =~ Dominant + Outspoken + Assertive + Forceful + Selfconfident
+E =~ Lively + Friendly + Active + Talkative + Outgoing
+O =~ Creative + Imaginative + Curious + Broadminded + Sophisticated + Intelligent + Adventurous
+B =~ Dominant + Outspoken + Assertive + Forceful + Selfconfident + Lively + Friendly + Active + Talkative + Outgoing + Creative + Imaginative + Curious + Broadminded + Sophisticated + Intelligent + Adventurous
+D ~~ 0*E
+O ~~ 0*E
+O ~~ 0*D
+B ~~ 0*E
+B ~~ 0*D
+B ~~ 0*O
+
+negative_affect ~ D + E + O + Age + Sex
+'
+
+f.DEO.affect.2a = cfa(m.DEO.affect.2a, midus2,
+                    estimator="WLSMV"
+                    , ordered=AEOvars
+)
+
+fitMeasures(f.DEO.affect.2a, fit.measures = c('chisq','df','SRMR','CFI'))
+ssol = standardizedSolution(f.DEO.affect.2a)
+ssol[ssol$op=='~',] # show standardized regressions only
 
 
 ### Subjective psychological well-being
@@ -219,7 +268,32 @@ f.DEO.spwb.1 = cfa(m.DEO.spwb.1, midus2,
               , ordered=AEOvars
 )
 fitMeasures(f.DEO.spwb.1, fit.measures = c('chisq','df','SRMR','CFI'))
-summary(f.DEO.spwb.1)
+ssol = standardizedSolution(f.DEO.spwb.1)
+ssol[ssol$op=='~~',] # show standardized correlations only
+
+
+m.DEO.spwb.1a <-'
+D =~ Dominant + Outspoken + Assertive + Forceful + Selfconfident
+E =~ Lively + Friendly + Active + Talkative + Outgoing
+O =~ Creative + Imaginative + Curious + Broadminded + Sophisticated + Intelligent + Adventurous
+B =~ Dominant + Outspoken + Assertive + Forceful + Selfconfident + Lively + Friendly + Active + Talkative + Outgoing + Creative + Imaginative + Curious + Broadminded + Sophisticated + Intelligent + Adventurous
+D ~~ 0*E
+O ~~ 0*E
+O ~~ 0*D
+B ~~ 0*E
+B ~~ 0*D
+B ~~ 0*O
+
+autonomy ~ D + E + O + Age + Sex
+'
+
+f.DEO.spwb.1a = cfa(m.DEO.spwb.1a, midus2,
+                   estimator="WLSMV"
+                   , ordered=AEOvars
+)
+fitMeasures(f.DEO.spwb.1a, fit.measures = c('chisq','df','SRMR','CFI'))
+ssol = standardizedSolution(f.DEO.spwb.1a)
+ssol[ssol$op=='~',] # show standardized regressions only
 
 
 m.DEO.spwb.2 <- '
@@ -245,6 +319,32 @@ f.DEO.spwb.2 = cfa(m.DEO.spwb.2, midus2,
 )
 fitMeasures(f.DEO.spwb.2, fit.measures = c('chisq','df','SRMR','CFI'))
 summary(f.DEO.spwb.2)
+ssol = standardizedSolution(f.DEO.spwb.2)
+ssol[ssol$op=='~~',] # show standardized correlations only
+
+
+m.DEO.spwb.2a <-'
+D =~ Dominant + Outspoken + Assertive + Forceful + Selfconfident
+E =~ Lively + Friendly + Active + Talkative + Outgoing
+O =~ Creative + Imaginative + Curious + Broadminded + Sophisticated + Intelligent + Adventurous
+B =~ Dominant + Outspoken + Assertive + Forceful + Selfconfident + Lively + Friendly + Active + Talkative + Outgoing + Creative + Imaginative + Curious + Broadminded + Sophisticated + Intelligent + Adventurous
+D ~~ 0*E
+O ~~ 0*E
+O ~~ 0*D
+B ~~ 0*E
+B ~~ 0*D
+B ~~ 0*O
+
+environmental_mastery ~ D + E + O + Age + Sex
+'
+
+f.DEO.spwb.2a = cfa(m.DEO.spwb.2a, midus2,
+                   estimator="WLSMV"
+                   , ordered=AEOvars
+)
+fitMeasures(f.DEO.spwb.2a, fit.measures = c('chisq','df','SRMR','CFI'))
+ssol = standardizedSolution(f.DEO.spwb.2a)
+ssol[ssol$op=='~',] # show standardized regressions only
 
 
 m.DEO.spwb.3 <-'
@@ -269,7 +369,32 @@ f.DEO.spwb.3 = cfa(m.DEO.spwb.3, midus2,
                    , ordered=AEOvars
 )
 fitMeasures(f.DEO.spwb.3, fit.measures = c('chisq','df','SRMR','CFI'))
-summary(f.DEO.spwb.3, standardized=TRUE)
+ssol = standardizedSolution(f.DEO.spwb.3)
+ssol[ssol$op=='~~',] # show standardized correlations only
+
+
+m.DEO.spwb.3a <-'
+D =~ Dominant + Outspoken + Assertive + Forceful + Selfconfident
+E =~ Lively + Friendly + Active + Talkative + Outgoing
+O =~ Creative + Imaginative + Curious + Broadminded + Sophisticated + Intelligent + Adventurous
+B =~ Dominant + Outspoken + Assertive + Forceful + Selfconfident + Lively + Friendly + Active + Talkative + Outgoing + Creative + Imaginative + Curious + Broadminded + Sophisticated + Intelligent + Adventurous
+D ~~ 0*E
+O ~~ 0*E
+O ~~ 0*D
+B ~~ 0*E
+B ~~ 0*D
+B ~~ 0*O
+
+personal_growth ~ D + E + O + Age + Sex
+'
+
+f.DEO.spwb.3a = cfa(m.DEO.spwb.3a, midus2,
+                   estimator="WLSMV"
+                   , ordered=AEOvars
+)
+fitMeasures(f.DEO.spwb.3a, fit.measures = c('chisq','df','SRMR','CFI'))
+ssol = standardizedSolution(f.DEO.spwb.3a)
+ssol[ssol$op=='~',] # show standardized regressions only
 
 
 m.DEO.spwb.4 <-'
@@ -294,7 +419,32 @@ f.DEO.spwb.4 = cfa(m.DEO.spwb.4, midus2,
                    , ordered=AEOvars
 )
 fitMeasures(f.DEO.spwb.4, fit.measures = c('chisq','df','SRMR','CFI'))
-summary(f.DEO.spwb.4)
+ssol = standardizedSolution(f.DEO.spwb.4)
+ssol[ssol$op=='~~',] # show standardized correlations only
+
+
+m.DEO.spwb.4a <-'
+D =~ Dominant + Outspoken + Assertive + Forceful + Selfconfident
+E =~ Lively + Friendly + Active + Talkative + Outgoing
+O =~ Creative + Imaginative + Curious + Broadminded + Sophisticated + Intelligent + Adventurous
+B =~ Dominant + Outspoken + Assertive + Forceful + Selfconfident + Lively + Friendly + Active + Talkative + Outgoing + Creative + Imaginative + Curious + Broadminded + Sophisticated + Intelligent + Adventurous
+D ~~ 0*E
+O ~~ 0*E
+O ~~ 0*D
+B ~~ 0*E
+B ~~ 0*D
+B ~~ 0*O
+
+affectual_relations ~ D + E + O + Age + Sex
+'
+
+f.DEO.spwb.4a = cfa(m.DEO.spwb.4a, midus2,
+                   estimator="WLSMV"
+                   , ordered=AEOvars
+)
+fitMeasures(f.DEO.spwb.4a, fit.measures = c('chisq','df','SRMR','CFI'))
+ssol = standardizedSolution(f.DEO.spwb.4a)
+ssol[ssol$op=='~',] # show standardized regressions only
 
 
 m.DEO.spwb.5 <-'
@@ -319,7 +469,32 @@ f.DEO.spwb.5 = cfa(m.DEO.spwb.5, midus2,
                    , ordered=AEOvars
 )
 fitMeasures(f.DEO.spwb.5, fit.measures = c('chisq','df','SRMR','CFI'))
-summary(f.DEO.spwb.5)
+ssol = standardizedSolution(f.DEO.spwb.5)
+ssol[ssol$op=='~~',] # show standardized correlations only
+
+
+m.DEO.spwb.5a <-'
+D =~ Dominant + Outspoken + Assertive + Forceful + Selfconfident
+E =~ Lively + Friendly + Active + Talkative + Outgoing
+O =~ Creative + Imaginative + Curious + Broadminded + Sophisticated + Intelligent + Adventurous
+B =~ Dominant + Outspoken + Assertive + Forceful + Selfconfident + Lively + Friendly + Active + Talkative + Outgoing + Creative + Imaginative + Curious + Broadminded + Sophisticated + Intelligent + Adventurous
+D ~~ 0*E
+O ~~ 0*E
+O ~~ 0*D
+B ~~ 0*E
+B ~~ 0*D
+B ~~ 0*O
+
+purpose_in_life ~ D + E + O + Age + Sex
+'
+
+f.DEO.spwb.5a = cfa(m.DEO.spwb.5a, midus2,
+                   estimator="WLSMV"
+                   , ordered=AEOvars
+)
+fitMeasures(f.DEO.spwb.5a, fit.measures = c('chisq','df','SRMR','CFI'))
+ssol = standardizedSolution(f.DEO.spwb.5a)
+ssol[ssol$op=='~',] # show standardized regressions only
 
 
 m.DEO.spwb.6 <-'
@@ -344,7 +519,32 @@ f.DEO.spwb.6 = cfa(m.DEO.spwb.6, midus2,
                    , ordered=AEOvars
 )
 fitMeasures(f.DEO.spwb.6, fit.measures = c('chisq','df','SRMR','CFI'))
-summary(f.DEO.spwb.6)
+ssol = standardizedSolution(f.DEO.spwb.6)
+ssol[ssol$op=='~~',] # show standardized correlations only
+
+
+m.DEO.spwb.6a <-'
+D =~ Dominant + Outspoken + Assertive + Forceful + Selfconfident
+E =~ Lively + Friendly + Active + Talkative + Outgoing
+O =~ Creative + Imaginative + Curious + Broadminded + Sophisticated + Intelligent + Adventurous
+B =~ Dominant + Outspoken + Assertive + Forceful + Selfconfident + Lively + Friendly + Active + Talkative + Outgoing + Creative + Imaginative + Curious + Broadminded + Sophisticated + Intelligent + Adventurous
+D ~~ 0*E
+O ~~ 0*E
+O ~~ 0*D
+B ~~ 0*E
+B ~~ 0*D
+B ~~ 0*O
+
+self_acceptance ~ D + E + O + Age + Sex
+'
+
+f.DEO.spwb.6a = cfa(m.DEO.spwb.6a, midus2,
+                   estimator="WLSMV"
+                   , ordered=AEOvars
+)
+fitMeasures(f.DEO.spwb.6a, fit.measures = c('chisq','df','SRMR','CFI'))
+ssol = standardizedSolution(f.DEO.spwb.6a)
+ssol[ssol$op=='~',] # show standardized regressions only
 
 
 
@@ -371,7 +571,32 @@ f.DEO.soc.1 = cfa(m.DEO.soc.1, midus2,
                    ,ordered=AEOvars
 )
 fitMeasures(f.DEO.soc.1, fit.measures = c('chisq','df','SRMR','CFI'))
-summary(f.DEO.soc.1, standardize=TRUE)
+ssol = standardizedSolution(f.DEO.soc.1)
+ssol[ssol$op=='~~',] # show standardized correlations only
+
+
+m.DEO.soc.1a <-'
+D =~ Dominant + Outspoken + Assertive + Forceful + Selfconfident
+E =~ Lively + Friendly + Active + Talkative + Outgoing
+O =~ Creative + Imaginative + Curious + Broadminded + Sophisticated + Intelligent + Adventurous
+B =~ Dominant + Outspoken + Assertive + Forceful + Selfconfident + Lively + Friendly + Active + Talkative + Outgoing + Creative + Imaginative + Curious + Broadminded + Sophisticated + Intelligent + Adventurous
+D ~~ 0*E
+O ~~ 0*E
+O ~~ 0*D
+B ~~ 0*E
+B ~~ 0*D
+B ~~ 0*O
+
+SoC_Mastery ~ D + E + O + Age + Sex
+'
+
+f.DEO.soc.1a = cfa(m.DEO.soc.1a, midus2,
+                   estimator="WLSMV"
+                   , ordered=AEOvars
+)
+fitMeasures(f.DEO.soc.1a, fit.measures = c('chisq','df','SRMR','CFI'))
+ssol = standardizedSolution(f.DEO.soc.1a)
+ssol[ssol$op=='~',] # show standardized regressions only
 
 
 m.DEO.soc.2 <- '
@@ -396,7 +621,8 @@ f.DEO.soc.2 = cfa(m.DEO.soc.2, midus2,
                    ,ordered=AEOvars
 )
 fitMeasures(f.DEO.soc.2, fit.measures = c('chisq','df','SRMR','CFI'))
-summary(f.DEO.soc.2, standardize=TRUE)
+ssol = standardizedSolution(f.DEO.soc.2)
+ssol[ssol$op=='~~',] # show standardized correlations only
 
 
 

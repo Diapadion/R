@@ -3,6 +3,7 @@
 
 library(lavaan)
 
+options(max.print=10000)
 
 
 
@@ -114,8 +115,6 @@ Bo =~ O + I
 f.I.4 = cfa(m.I.4, data=ipip, estimator="WLSMV", ordered=TRUE, optim.method='L-BFGS-B', check.gradient = FALSE)
 
 fitMeasures(f.I.4, fit.measures = c('chisq','df','SRMR','CFI'))
-#summary(f.I.4)
-
 
 
 ### M5 - bifactor Betas (E & O)
@@ -185,3 +184,5 @@ fitMeasures(f.I.4, fit.measures = c('chisq','df','SRMR','CFI'))
 fitMeasures(f.I.5, fit.measures = c('chisq','df','SRMR','CFI')) #***
 fitMeasures(f.I.6, fit.measures = c('chisq','df','SRMR','CFI'))
 fitMeasures(f.I.7, fit.measures = c('chisq','df','SRMR','CFI'))
+
+standardizedsolution(f.I.5)

@@ -165,3 +165,5 @@ fitMeasures(f.M.3, fit.measures = c('chisq','df','SRMR','CFI'))
 fitMeasures(f.M.4, fit.measures = c('chisq','df','SRMR','CFI')) #***
 fitMeasures(f.M.5, fit.measures = c('chisq','df','SRMR','CFI'))
 fitMeasures(f.M.6, fit.measures = c('chisq','df','SRMR','CFI'))
+
+standardizedSolution(f.M.4)

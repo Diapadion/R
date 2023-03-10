@@ -233,6 +233,11 @@ setnames(midus2,vars,newnames)
 
 
 
+## PANAS vars need to be inverted 
+# midus2$positive_affect = 6 - midus2$positive_affect 
+# midus2$negative_affect = 6 - midus2$negative_affect 
+
+
 ## personality items should be reverse coded       
 persCols = c('Outgoing','Helpful','Moody','Organized','Selfconfident','Friendly','Warm','Worrying',
                'Responsible','Forceful','Lively','Caring','Nervous','Creative','Assertive','Hardworking',
@@ -241,6 +246,7 @@ persCols = c('Outgoing','Helpful','Moody','Organized','Selfconfident','Friendly'
                'like_to_lead','talk_people_into','influencing','decisions')
 
 midus2[,(persCols):= 5 - midus2[,..persCols]]
+
 
 
 

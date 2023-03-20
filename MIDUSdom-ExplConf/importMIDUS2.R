@@ -234,8 +234,8 @@ setnames(midus2,vars,newnames)
 
 
 ## PANAS vars need to be inverted 
-# midus2$positive_affect = 6 - midus2$positive_affect 
-# midus2$negative_affect = 6 - midus2$negative_affect 
+midus2$positive_affect = 6 - midus2$positive_affect
+midus2$negative_affect = 6 - midus2$negative_affect
 
 
 ## personality items should be reverse coded       

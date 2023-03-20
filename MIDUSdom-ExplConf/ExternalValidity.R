@@ -10,12 +10,24 @@ AEOvars = c('Selfconfident','Forceful','Assertive','Outspoken','Dominant',
             'Outgoing','Friendly','Lively','Active','Talkative'
 )
 
-
 AEOIvars = c('I8','I68','I188','I128','I153','I183', # Openness
              'I203','I23','I83','I113','I293', # Intellect
              'I12','I162','I72','I282', # Assertiveness
              'I2','I57','I32','I272','I152' # Enthusiasm
 )
+
+
+
+### Descriptives
+table(midus2$Sex)
+table(ipip$SEX)
+
+mean(midus2$Age, na.rm=TRUE)
+sd(midus2$Age, na.rm=TRUE)
+
+mean(ipip$AGE, na.rm=TRUE)
+sd(ipip$AGE, na.rm=TRUE)
+
 
 
 
@@ -44,7 +56,7 @@ f.DEO.age.1 = cfa(m.DEO.age.1, midus2,
               )
 fitMeasures(f.DEO.age.1, fit.measures = c('chisq','df','SRMR','CFI'))
 ssol = standardizedSolution(f.DEO.age.1)
-ssol[ssol$op=='~~',] # show standardized correlations only
+head(ssol[ssol$op=='~~',],9) # show standardized correlations only
 
 
 m.AEOI.age.1 <- '
@@ -73,7 +85,7 @@ f.AEOI.age.1 = cfa(m.AEOI.age.1, data=ipip, estimator="WLSMV",
                    )
 fitMeasures(f.AEOI.age.1, fit.measures = c('chisq','df','SRMR','CFI'))
 ssol = standardizedSolution(f.AEOI.age.1)
-ssol[ssol$op=='~~',] # show standardized correlations only
+head(ssol[ssol$op=='~~',],10) # show standardized correlations only
 
 
 ### Sex
@@ -95,8 +107,7 @@ O ~ Sex
 '
 
 f.DEO.sex.1 = cfa(m.DEO.sex.1, midus2,
-                   estimator="WLSMV" #, missing='fiml'
-                   #, optim.method='L-BFGS-B', check.gradient = FALSE
+                   estimator="WLSMV"
                    , ordered=AEOvars
 )
 fitMeasures(f.DEO.sex.1, fit.measures = c('chisq','df','SRMR','CFI'))
@@ -158,7 +169,7 @@ f.DEO.affect.1 = cfa(m.DEO.affect.1, midus2,
 )
 fitMeasures(f.DEO.affect.1, fit.measures = c('chisq','df','SRMR','CFI'))
 ssol = standardizedSolution(f.DEO.affect.1)
-ssol[ssol$op=='~~',] # show standardized correlations only
+head(ssol[ssol$op=='~~',],9) # show standardized correlations only
 
 
 m.DEO.affect.1a <-'
@@ -209,7 +220,7 @@ f.DEO.affect.2 = cfa(m.DEO.affect.2, midus2,
 
 fitMeasures(f.DEO.affect.2, fit.measures = c('chisq','df','SRMR','CFI'))
 ssol = standardizedSolution(f.DEO.affect.2)
-ssol[ssol$op=='~~',] # show standardized correlations only
+head(ssol[ssol$op=='~~',],9) # show standardized correlations only
 
 
 m.DEO.affect.2a <-'
@@ -262,7 +273,7 @@ f.DEO.spwb.1 = cfa(m.DEO.spwb.1, midus2,
 )
 fitMeasures(f.DEO.spwb.1, fit.measures = c('chisq','df','SRMR','CFI'))
 ssol = standardizedSolution(f.DEO.spwb.1)
-ssol[ssol$op=='~~',] # show standardized correlations only
+head(ssol[ssol$op=='~~',],9) # show standardized correlations only
 
 
 m.DEO.spwb.1a <-'
@@ -311,9 +322,8 @@ f.DEO.spwb.2 = cfa(m.DEO.spwb.2, midus2,
                    , ordered=AEOvars
 )
 fitMeasures(f.DEO.spwb.2, fit.measures = c('chisq','df','SRMR','CFI'))
-summary(f.DEO.spwb.2)
 ssol = standardizedSolution(f.DEO.spwb.2)
-ssol[ssol$op=='~~',] # show standardized correlations only
+head(ssol[ssol$op=='~~',],9) # show standardized correlations only
 
 
 m.DEO.spwb.2a <-'
@@ -363,7 +373,7 @@ f.DEO.spwb.3 = cfa(m.DEO.spwb.3, midus2,
 )
 fitMeasures(f.DEO.spwb.3, fit.measures = c('chisq','df','SRMR','CFI'))
 ssol = standardizedSolution(f.DEO.spwb.3)
-ssol[ssol$op=='~~',] # show standardized correlations only
+head(ssol[ssol$op=='~~',],9) # show standardized correlations only
 
 
 m.DEO.spwb.3a <-'
@@ -413,7 +423,7 @@ f.DEO.spwb.4 = cfa(m.DEO.spwb.4, midus2,
 )
 fitMeasures(f.DEO.spwb.4, fit.measures = c('chisq','df','SRMR','CFI'))
 ssol = standardizedSolution(f.DEO.spwb.4)
-ssol[ssol$op=='~~',] # show standardized correlations only
+head(ssol[ssol$op=='~~',],9) # show standardized correlations only
 
 
 m.DEO.spwb.4a <-'
@@ -463,7 +473,7 @@ f.DEO.spwb.5 = cfa(m.DEO.spwb.5, midus2,
 )
 fitMeasures(f.DEO.spwb.5, fit.measures = c('chisq','df','SRMR','CFI'))
 ssol = standardizedSolution(f.DEO.spwb.5)
-ssol[ssol$op=='~~',] # show standardized correlations only
+head(ssol[ssol$op=='~~',],9) # show standardized correlations only
 
 
 m.DEO.spwb.5a <-'
@@ -513,7 +523,7 @@ f.DEO.spwb.6 = cfa(m.DEO.spwb.6, midus2,
 )
 fitMeasures(f.DEO.spwb.6, fit.measures = c('chisq','df','SRMR','CFI'))
 ssol = standardizedSolution(f.DEO.spwb.6)
-ssol[ssol$op=='~~',] # show standardized correlations only
+head(ssol[ssol$op=='~~',],9) # show standardized correlations only
 
 
 m.DEO.spwb.6a <-'
@@ -565,7 +575,7 @@ f.DEO.soc.1 = cfa(m.DEO.soc.1, midus2,
 )
 fitMeasures(f.DEO.soc.1, fit.measures = c('chisq','df','SRMR','CFI'))
 ssol = standardizedSolution(f.DEO.soc.1)
-ssol[ssol$op=='~~',] # show standardized correlations only
+head(ssol[ssol$op=='~~',],9) # show standardized correlations only
 
 
 m.DEO.soc.1a <-'
@@ -615,7 +625,31 @@ f.DEO.soc.2 = cfa(m.DEO.soc.2, midus2,
 )
 fitMeasures(f.DEO.soc.2, fit.measures = c('chisq','df','SRMR','CFI'))
 ssol = standardizedSolution(f.DEO.soc.2)
-ssol[ssol$op=='~~',] # show standardized correlations only
+head(ssol[ssol$op=='~~',],9) # show standardized correlations only
+
+
+m.DEO.soc.2a <-'
+D =~ Dominant + Outspoken + Assertive + Forceful + Selfconfident
+E =~ Lively + Friendly + Active + Talkative + Outgoing
+O =~ Creative + Imaginative + Curious + Broadminded + Sophisticated + Intelligent + Adventurous
+B =~ Dominant + Outspoken + Assertive + Forceful + Selfconfident + Lively + Friendly + Active + Talkative + Outgoing + Creative + Imaginative + Curious + Broadminded + Sophisticated + Intelligent + Adventurous
+D ~~ 0*E
+O ~~ 0*E
+O ~~ 0*D
+B ~~ 0*E
+B ~~ 0*D
+B ~~ 0*O
+
+SoC_Constraints ~ D + E + O + Age + Sex
+'
+
+f.DEO.soc.2a = cfa(m.DEO.soc.2a, midus2,
+                   estimator="WLSMV"
+                   , ordered=AEOvars
+)
+fitMeasures(f.DEO.soc.2a, fit.measures = c('chisq','df','SRMR','CFI'))
+ssol = standardizedSolution(f.DEO.soc.2a)
+ssol[ssol$op=='~',] # show standardized regressions only
 
 
 
@@ -643,7 +677,7 @@ f.DEO.anger.1 = cfa(m.DEO.anger.1, midus2,
 )
 fitMeasures(f.DEO.anger.1, fit.measures = c('chisq','df','SRMR','CFI'))
 ssol = standardizedSolution(f.DEO.anger.1)
-ssol[ssol$op=='~~',] # show standardized correlations only
+head(ssol[ssol$op=='~~',],9) # show standardized correlations only
 
 
 m.DEO.anger.1a <-'
@@ -693,7 +727,7 @@ f.DEO.anger.2 = cfa(m.DEO.anger.2, midus2,
 )
 fitMeasures(f.DEO.anger.2, fit.measures = c('chisq','df','SRMR','CFI'))
 ssol = standardizedSolution(f.DEO.anger.2)
-ssol[ssol$op=='~~',] # show standardized correlations only
+head(ssol[ssol$op=='~~',],9) # show standardized correlations only
 
 
 m.DEO.anger.2a <-'
@@ -743,7 +777,7 @@ f.DEO.anger.3 = cfa(m.DEO.anger.3, midus2,
 )
 fitMeasures(f.DEO.anger.3, fit.measures = c('chisq','df','SRMR','CFI'))
 ssol = standardizedSolution(f.DEO.anger.3)
-ssol[ssol$op=='~~',] # show standardized correlations only
+head(ssol[ssol$op=='~~',],9) # show standardized correlations only
 
 
 m.DEO.anger.3a <-'
@@ -771,7 +805,7 @@ ssol[ssol$op=='~',] # show standardized regressions only
 
 
 
-### Exectuive functions
+### Cognitive functions
 m.DEO.ef.1 <- '
 D =~ Dominant + Outspoken + Assertive + Forceful + Selfconfident
 E =~ Lively + Friendly + Active + Talkative + Outgoing
@@ -795,7 +829,7 @@ f.DEO.ef.1 = cfa(m.DEO.ef.1, midus2,
 )
 fitMeasures(f.DEO.ef.1, fit.measures = c('chisq','df','SRMR','CFI'))
 ssol = standardizedSolution(f.DEO.ef.1)
-ssol[ssol$op=='~~',] # show standardized correlations only
+head(ssol[ssol$op=='~~',],9) # show standardized correlations only
 
 
 m.DEO.ef.1a <-'
@@ -845,7 +879,7 @@ f.DEO.ef.2 = cfa(m.DEO.ef.2, midus2,
 )
 fitMeasures(f.DEO.ef.2, fit.measures = c('chisq','df','SRMR','CFI'))
 ssol = standardizedSolution(f.DEO.ef.2)
-ssol[ssol$op=='~~',] # show standardized correlations only
+head(ssol[ssol$op=='~~',],9) # show standardized correlations only
 
 
 m.DEO.ef.2a <-'
@@ -898,7 +932,7 @@ f.DEO.relig.1 = cfa(m.DEO.relig.1, midus2,
 )
 fitMeasures(f.DEO.relig.1, fit.measures = c('chisq','df','SRMR','CFI'))
 ssol = standardizedSolution(f.DEO.relig.1)
-ssol[ssol$op=='~~',] # show standardized correlations only
+head(ssol[ssol$op=='~~',],9) # show standardized correlations only
 
 
 m.DEO.relig.1a <-'
@@ -948,7 +982,7 @@ f.DEO.relig.2 = cfa(m.DEO.relig.2, midus2,
 )
 fitMeasures(f.DEO.relig.2, fit.measures = c('chisq','df','SRMR','CFI'))
 ssol = standardizedSolution(f.DEO.relig.2)
-ssol[ssol$op=='~~',] # show standardized correlations only
+head(ssol[ssol$op=='~~',],9) # show standardized correlations only
 
 
 m.DEO.relig.2a <-'
@@ -998,7 +1032,7 @@ f.DEO.relig.3 = cfa(m.DEO.relig.3, midus2,
 )
 fitMeasures(f.DEO.relig.3, fit.measures = c('chisq','df','SRMR','CFI'))
 ssol = standardizedSolution(f.DEO.relig.3)
-ssol[ssol$op=='~~',] # show standardized correlations only
+head(ssol[ssol$op=='~~',],9) # show standardized correlations only
 
 
 m.DEO.relig.3a <-'
@@ -1051,7 +1085,7 @@ f.DEO.rs.1 = cfa(m.DEO.rs.1, midus2,
 )
 fitMeasures(f.DEO.rs.1, fit.measures = c('chisq','df','SRMR','CFI'))
 ssol = standardizedSolution(f.DEO.rs.1)
-ssol[ssol$op=='~~',] # show standardized correlations only
+head(ssol[ssol$op=='~~',],9) # show standardized correlations only
  
 
 m.DEO.rs.1a <-'
@@ -1101,7 +1135,7 @@ f.DEO.rs.2 = cfa(m.DEO.rs.2, midus2,
 )
 fitMeasures(f.DEO.rs.2, fit.measures = c('chisq','df','SRMR','CFI'))
 ssol = standardizedSolution(f.DEO.rs.2)
-ssol[ssol$op=='~~',] # show standardized correlations only
+head(ssol[ssol$op=='~~',],9) # show standardized correlations only
 
 
 m.DEO.rs.2a <-'
@@ -1145,13 +1179,13 @@ E ~~ support_from_sp
 O ~~ support_from_sp
 '
 
-f.DEO.rs.2 = cfa(m.DEO.rs.2, midus2,
+f.DEO.rs.3 = cfa(m.DEO.rs.3, midus2,
                  estimator="WLSMV"
                  ,ordered=AEOvars
 )
-fitMeasures(f.DEO.rs.2, fit.measures = c('chisq','df','SRMR','CFI'))
-ssol = standardizedSolution(f.DEO.rs.2)
-ssol[ssol$op=='~~',] # show standardized correlations only
+fitMeasures(f.DEO.rs.3, fit.measures = c('chisq','df','SRMR','CFI'))
+ssol = standardizedSolution(f.DEO.rs.3)
+head(ssol[ssol$op=='~~',],9) # show standardized correlations only
 
 
 m.DEO.rs.3a <-'
@@ -1201,7 +1235,7 @@ f.DEO.rs.4 = cfa(m.DEO.rs.4, midus2,
 )
 fitMeasures(f.DEO.rs.4, fit.measures = c('chisq','df','SRMR','CFI'))
 ssol = standardizedSolution(f.DEO.rs.4)
-ssol[ssol$op=='~~',] # show standardized correlations only
+head(ssol[ssol$op=='~~',],9) # show standardized correlations only
 
 
 m.DEO.rs.4a <-'
@@ -1251,7 +1285,7 @@ f.DEO.rs.5 = cfa(m.DEO.rs.5, midus2,
 )
 fitMeasures(f.DEO.rs.5, fit.measures = c('chisq','df','SRMR','CFI'))
 ssol = standardizedSolution(f.DEO.rs.5)
-ssol[ssol$op=='~~',] # show standardized correlations only
+head(ssol[ssol$op=='~~',],9) # show standardized correlations only
 
 
 m.DEO.rs.5a <-'

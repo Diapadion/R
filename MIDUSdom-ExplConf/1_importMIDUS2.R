@@ -1,14 +1,14 @@
+#### Import MIDUS2 datafile(s)
+
 library(Hmisc)
 library(data.table)
 library(psych)
-
-#library(SAScii)
-
-
-sort( sapply(ls(),function(x){object.size(get(x))})) 
+library(SAScii)
 
 
-## this only works when connected to the VPN or on a UoE desktop
+
+
+### Replace or adapt the below with appropriate code for reading raw data files
 # setwd("M:/")
 # midus2 <- read.SAScii('./data/04652-0001-Data.txt','./data/04652-0001-Setup.sas') # project 1
 # load('./data/29282-0001-Data.rda') # project 4
@@ -18,14 +18,14 @@ sort( sapply(ls(),function(x){object.size(get(x))}))
 # midus2 = merge(midus2, da29282.0001, by='M2ID', all=TRUE)
 # 
 # midus2 = as.data.table(midus2)
+# 
+# saveRDS(midus2, './data/merged.RDS')
+# midus2 <- readRDS('./data/merged.RDS')
+# rm(da25281.0001, da29282.0001)
+# gc()
 
-#saveRDS(midus2, './data/merged.RDS')
-midus2 <- readRDS('./data/merged.RDS')
-#rm(da25281.0001, da29282.0001)
-gc()
 
-
-
+### Select variables from full set
 vars=c(
   'M2ID',
   # Personality
@@ -69,7 +69,7 @@ vars=c(
   'B1SE7DD',
   
   # Demographics
-  'B1PAGE_M2.x', #age at M2P1 ----------> change in pre-reg
+  'B1PAGE_M2.x', #age at M2P1
   'B1PRSEX', #sex
   
   # Affect
@@ -104,8 +104,7 @@ vars=c(
   'B1SSPCRI', # strain from s/p
   'B1SSPSOL' # s/p affectual solidarity
   )
-  
-  
+
 midus2 = midus2[,..vars]
 
 
@@ -174,15 +173,6 @@ midus2$B1SPWBS1[midus2$B1SPWBS1 ==98] <- NA
 midus2$B1SMASTE[midus2$B1SMASTE ==8] <- NA
 midus2$B1SCONST[midus2$B1SCONST ==8] <- NA
 
-#table(midus2$B4QAE_AC,useNA = 'ifany')
-## already cleaned
-#midus2$B4QAE_AI[midus2$B4QAE_AI ==8] <- NA
-#midus2$B4QAE_AO[midus2$B4QAE_AO ==8] <- NA
-#midus2$B4QAE_AC[midus2$B4QAE_AC ==8] <- NA
-#table(midus2$B3TEMZ3,useNA = 'ifany')
-# 'B3TEMZ3', #memory
-# 'B3TEFZ3 #executive function
-
 table(midus2$B1SSPIRI, useNA='ifany') # on a weird scale for some reason
 midus2$B1SSPIRI = midus2$B1SSPIRI*100
 midus2$B1SSPIRI[midus2$B1SSPIRI ==98] <- NA
@@ -208,7 +198,6 @@ midus2$B1SSPSOL[midus2$B1SSPSOL ==8] <- NA
 
 describe(midus2)
 
-#setnames(midus1, c('A1SAGENC','A1SEXTRA'),c('Agency','Extraversion'))
 newnames = c('M2ID',
   'Agn','Ext','Agr','Con','Opn','Neu',
   'Outgoing','Helpful','Moody','Organized','Selfconfident','Friendly','Warm','Worrying',

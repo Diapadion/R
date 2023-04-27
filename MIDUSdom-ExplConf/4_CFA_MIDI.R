@@ -1,8 +1,6 @@
-### MIDUS CFAs
-
+#### CFAs to test possible structures with MIDUS2 data
 
 library(lavaan)
-
 
 
 
@@ -20,7 +18,7 @@ f.D.1 = cfa(m.D.1, midus2,
 )
 
 fitMeasures(f.D.1, fit.measures = c('chisq','df','SRMR','CFI'))
-#summary(f.D.1)
+
 
 
 m.E.1 <-'
@@ -34,7 +32,6 @@ f.E.1 = cfa(m.E.1, midus2,
 )
 
 fitMeasures(f.E.1, fit.measures = c('chisq','df','SRMR','CFI'))
-summary(f.E.1)
 
 
 
@@ -49,11 +46,10 @@ f.O.1 = cfa(m.O.1, midus2,
 )
 
 fitMeasures(f.O.1, fit.measures = c('chisq','df','SRMR','CFI'))
-summary(f.O.1)
 
 
 
-### M1 - combinded, 3 oblique factors 
+### M1 - combined, 3 oblique factors 
 m.M.1 <-'
 D =~ Dominant + Outspoken + Assertive + Forceful + Selfconfident
 E =~ Lively + Friendly + Active + Talkative + Outgoing
@@ -66,8 +62,6 @@ f.M.1 = cfa(m.M.1, midus2,
               , ordered=TRUE
 )
 
-fitMeasures(f.M.1, fit.measures = c('chisq','df','SRMR','CFI'))
-#summary(f.DEO.1)
 
 
 ### M2 - only O and E
@@ -82,8 +76,6 @@ f.M.2 = cfa(m.M.2, midus2,
             , ordered=TRUE
 )
 
-fitMeasures(f.M.2, fit.measures = c('chisq','df','SRMR','CFI'))
-#summary(f.DEO.2)
 
 
 ### M3 - second order Beta
@@ -99,7 +91,6 @@ f.M.3 = cfa(m.M.3, midus2,
             , ordered=TRUE
 )
 
-fitMeasures(f.M.3, fit.measures = c('chisq','df','SRMR','CFI'))
 
 
 ### M4 - bifactor Beta
@@ -122,8 +113,6 @@ f.M.4 = cfa(m.M.4, midus2,
             , ordered=TRUE
 )
 
-fitMeasures(f.M.4, fit.measures = c('chisq','df','SRMR','CFI'))
-summary(f.M.4)
 
 
 ### M5 - second order Beta-of-extraversion
@@ -138,6 +127,7 @@ f.M.5 = cfa(m.M.5, midus2,
             estimator="WLSMV"
             , ordered=TRUE
 )
+
 
 
 ### M6 - bifactor Beta-of-extraversion

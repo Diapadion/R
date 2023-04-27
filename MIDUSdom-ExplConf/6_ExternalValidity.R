@@ -1,6 +1,7 @@
-### External validity testing
+#### External validity testing
 
 library(lavaan)
+
 
 
 
@@ -27,7 +28,6 @@ sd(midus2$Age, na.rm=TRUE)
 
 mean(ipip$AGE, na.rm=TRUE)
 sd(ipip$AGE, na.rm=TRUE)
-
 
 
 

@@ -1,12 +1,12 @@
-### Exploratory Factor Analyses
-
+#### Exploratory Factor Analyses with both MIDUS2 & IPIP
+ 
 library(psych)
 library(GPArotation)
 
 
 
-### MIDUS2 ###
 
+### MIDUS2 ###
 
 AEOvars = c('Selfconfident','Forceful','Assertive','Outspoken','Dominant',
             'Creative','Imaginative','Intelligent','Curious','Broadminded',

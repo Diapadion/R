@@ -1,9 +1,9 @@
-### IPIP CFAs
-
+#### CFAs to test possible structures with IPIP data
 
 library(lavaan)
 
-options(max.print=10000)
+#options(max.print=10000) # useful
+
 
 
 
@@ -59,7 +59,6 @@ E =~ I2 + I57 + I32 + I272 + I152
 
 f.I.1 = cfa(m.I.1, data=ipip, estimator="WLSMV", ordered=TRUE)
 
-fitMeasures(f.I.1, fit.measures = c('chisq','df','SRMR','CFI'))
 
 
 ### M2 - second order Beta
@@ -73,8 +72,6 @@ B=~ E + A + I + O
 
 f.I.2 = cfa(m.I.2, data=ipip, estimator="WLSMV", ordered=TRUE, optim.method='L-BFGS-B', check.gradient = FALSE)
 
-fitMeasures(f.I.2, fit.measures = c('chisq','df','SRMR','CFI'))
-#summary(f.I.2)
 
 
 ### M3 - bifactor Beta
@@ -98,8 +95,6 @@ I ~~ 0*B
 
 f.I.3 = cfa(m.I.3, data=ipip, estimator="WLSMV", ordered=TRUE, optim.method='L-BFGS-B', check.gradient = FALSE)
 
-fitMeasures(f.I.3, fit.measures = c('chisq','df','SRMR','CFI'))
-
 
 
 ### M4 - second order Betas (E & O)
@@ -114,7 +109,6 @@ Bo =~ O + I
 
 f.I.4 = cfa(m.I.4, data=ipip, estimator="WLSMV", ordered=TRUE, optim.method='L-BFGS-B', check.gradient = FALSE)
 
-fitMeasures(f.I.4, fit.measures = c('chisq','df','SRMR','CFI'))
 
 
 ### M5 - bifactor Betas (E & O)
@@ -133,11 +127,8 @@ E ~~ 0*Be
 I ~~ 0*Bo
 '
 
-f.I.5 = cfa(m.I.5, data=ipip, estimator="WLSMV", ordered=TRUE#, optim.method='L-BFGS-B', check.gradient = FALSE
-            )
+f.I.5 = cfa(m.I.5, data=ipip, estimator="WLSMV", ordered=TRUE)
 
-fitMeasures(f.I.5, fit.measures = c('chisq','df','SRMR','CFI'))
-#summary(f.I.5)
 
 
 ### M6 - second order Beta (O)
@@ -149,10 +140,8 @@ E =~ I2 + I57 + I32 + I272 + I152
 Bo =~ O + I
 '
 
-f.I.6 = cfa(m.I.6, data=ipip, estimator="WLSMV", ordered=TRUE, optim.method='L-BFGS-B', check.gradient = FALSE
-            )
-fitMeasures(f.I.6, fit.measures = c('chisq','df','SRMR','CFI'))
-
+f.I.6 = cfa(m.I.6, data=ipip, estimator="WLSMV", ordered=TRUE, optim.method='L-BFGS-B', check.gradient = FALSE)
+            
 
 
 ### M7 - bifactor Beta (O)
@@ -167,14 +156,11 @@ O ~~ 0*Bo
 I ~~ 0*Bo
 '
 
-f.I.7 = cfa(m.I.7, data=ipip, estimator="WLSMV", ordered=TRUE#, optim.method='L-BFGS-B', check.gradient = FALSE
-)
-
-fitMeasures(f.I.7, fit.measures = c('chisq','df','SRMR','CFI'))
-summary(f.I.7)
+f.I.7 = cfa(m.I.7, data=ipip, estimator="WLSMV", ordered=TRUE)
 
 
-### note: even numbered (secord order) fits have negative variances for LVs
+
+## note: even numbered (second order) fits have negative variances for LVs
 
 ###
 fitMeasures(f.I.1, fit.measures = c('chisq','df','SRMR','CFI'))
